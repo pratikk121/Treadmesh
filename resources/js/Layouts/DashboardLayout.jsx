@@ -286,7 +286,7 @@ const DashboardLayout = ({ children }) => {
                 <BsTruck className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-bold">B2B Market</h2>
+                <h2 className="text-xl font-bold">TreadMesh</h2>
                 <p className="text-xs text-indigo-300">Enterprise Marketplace</p>
               </div>
             </div>

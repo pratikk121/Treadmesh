@@ -102,16 +102,16 @@ export default function Welcome({
 
     return (
         <>
-            <Head title="B2B মার্কেটপ্লেসে স্বাগতম" />
+            <Head title="Treadmesh - B2B Marketplace & Procurement Platform" />
 
-            {/* Navigation Bar -始终保持在最上方 */}
+            {/* Navigation Bar */}
             <nav className="bg-white border-b sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         {/* Logo and main navigation links */}
                         <div className="flex items-center space-x-8">
                             <Link href="/" className="text-2xl font-bold text-indigo-600">
-                                B2B<span className="text-gray-800">মার্কেট</span>
+                                Tread<span className="text-gray-800">mesh</span>
                             </Link>
 
                             <div className="hidden md:flex space-x-6">
@@ -847,9 +847,9 @@ export default function Welcome({
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                         <div>
-                            <h3 className="text-xl font-bold mb-4">B2Bমার্কেট</h3>
+                            <h3 className="text-xl font-bold mb-4">Treadmesh</h3>
                             <p className="text-gray-400 text-sm">
-                                বাংলাদেশের শীর্ষস্থানীয় B2B মার্কেটপ্লেস যা ভেরিফাইড সাপ্লায়ার এবং মানসম্পন্ন ক্রেতাদের সংযুক্ত করে।
+                                Enterprise B2B marketplace connecting verified suppliers and quality commercial buyers.
                             </p>
                         </div>
 
@@ -887,7 +887,7 @@ export default function Welcome({
                     <div className="border-t border-gray-800 mt-8 pt-8">
                         <div className="flex flex-col md:flex-row justify-between items-center">
                             <p className="text-gray-400 text-sm">
-                                &copy; {new Date().getFullYear()} B2Bমার্কেট। সর্বস্বত্ব সংরক্ষিত।
+                                &copy; {new Date().getFullYear()} Treadmesh. All rights reserved.
                             </p>
                             <div className="flex space-x-6 mt-4 md:mt-0">
                                 <Link href="#" className="text-gray-400 hover:text-white text-sm">গোপনীয়তা নীতি</Link>

@@ -1,4 +1,5 @@
 {
+    "name": "treadmesh",
     "private": true,
     "type": "module",
     "scripts": {

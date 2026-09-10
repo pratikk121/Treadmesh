@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "devlogic/treadmesh",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "TreadMesh - B2B E-Commerce Marketplace & Procurement Platform",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {

@@ -1,10 +1,10 @@
-# B2B Procurement Platform - Laravel React Application
+# Treadmesh — Enterprise B2B Marketplace & Procurement Platform
 
-A comprehensive B2B e-commerce platform facilitating seamless interactions between buyers and suppliers, featuring RFQ management, real-time messaging, order processing, and supplier verification.
+A comprehensive enterprise-grade B2B e-commerce platform facilitating seamless wholesale interactions between buyers and verified suppliers, featuring RFQ management, real-time messaging, order processing, and supplier verification.
 
 ## 📋 Overview
 
-This enterprise-grade B2B platform connects buyers with verified suppliers, streamlining the procurement process through a robust set of features including Request for Quotation (RFQ) management, supplier verification, bulk pricing, and real-time communication.
+**Treadmesh** connects commercial buyers with verified suppliers, streamlining the procurement process through a robust set of features including Request for Quotation (RFQ) management, supplier verification, bulk pricing, and real-time communication.
 
 ### Key Business Value
 
@@ -430,40 +430,20 @@ jobs:
               run: php artisan test
 ```
 
+## 🔑 Demo Seed Credentials
+
+Once `php artisan migrate --seed` is executed, the following pre-configured accounts are ready to test:
+
+| Role | Email | Password | Access Level |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin@treadmesh.com` | `password123` | Full administrative oversight & verification controls |
+| **Buyer** | `buyer@treadmesh.com` | `password123` | Active corporate procurement buyer |
+| **Supplier** | `supplier@treadmesh.com` | `password123` | Verified supplier (Apex Industrial Supplies LLC) |
+
 ## 📄 License
 
-This project is proprietary software owned by [Your Company Name]. All rights reserved.
-
-## 👥 Contributors
-
-- [Developer Name] - Lead Developer
-- [Developer Name] - Frontend Specialist
-- [Developer Name] - QA Engineer
-
-## 📞 Support
-
-For technical support or inquiries:
-
-- Email: support@yourcompany.com
-- Documentation: https://docs.yourcompany.com
-- Issue Tracker: https://github.com/yourcompany/b2b-platform/issues
-
-## 🗺️ Roadmap
-
-### Version 2.0 (Q3 2024)
-
-- [ ] Multi-currency support
-- [ ] Advanced analytics dashboard
-- [ ] API rate limiting improvements
-- [ ] Webhook integrations
-
-### Version 2.1 (Q4 2024)
-
-- [ ] Mobile applications (iOS/Android)
-- [ ] AI-powered quote recommendations
-- [ ] Automated supplier matching
-- [ ] Blockchain-based contract verification
+Proprietary software — Devlogic Systems HQ. All rights reserved.
 
 ---
 
-**Built with** ❤️ using Laravel and React
+**Treadmesh** — Enterprise B2B Marketplace & Procurement Platform
