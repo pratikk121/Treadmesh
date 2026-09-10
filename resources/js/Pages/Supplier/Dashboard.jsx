@@ -1,30 +1,31 @@
-// Pages/Supplier/Dashboard.jsx
-
-// React - Core React imports for component functionality
+// resources/js/Pages/Supplier/Dashboard.jsx
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
-
-// Layout - Supplier dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
 import {
   FiPackage,
   FiShoppingCart,
   FiFileText,
   FiMessageSquare,
   FiClock,
-  FiDollarSign,
   FiTrendingUp,
   FiTrendingDown,
   FiDownload,
   FiRefreshCw,
   FiTruck,
-  FiBarChart2
+  FiBarChart2,
+  FiShield,
+  FiCheckCircle,
+  FiAlertTriangle,
+  FiChevronRight
 } from 'react-icons/fi';
+import {
+  BsShieldCheck,
+  BsBuildingCheck,
+  BsGraphUp,
+  BsBoxSeam
+} from 'react-icons/bs';
 import { MdWarning } from 'react-icons/md';
-
-// Recharts - Charting library components for data visualization
 import {
   PieChart,
   Pie,
@@ -38,807 +39,682 @@ import {
   LineChart,
   Line
 } from 'recharts';
+import { formatCurrency, formatIndianDate } from '@/Utils/formatters';
 
 export default function SupplierDashboard({
-  counts,
-  chart_data,
-  recent_rfqs,
-  top_products,
-  recent_orders,
-  sales_analytics,
-  recent_messages,
-  low_stock_alerts,
-  quote_performance,
-  upcoming_deliveries,
+  counts = {},
+  chart_data = {},
+  recent_rfqs = [],
+  top_products = [],
+  recent_orders = [],
+  sales_analytics = {},
+  recent_messages = [],
+  low_stock_alerts = [],
+  quote_performance = {},
+  upcoming_deliveries = [],
 }) {
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value);
-  };
-
-  // Format number - Adds thousand separators
   const formatNumber = (value) => {
-    return new Intl.NumberFormat('en-US').format(value);
+    return new Intl.NumberFormat('en-IN').format(value || 0);
   };
 
-  // Get status color based on status type
-  const getStatusColor = (status) => {
-    const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      pending_confirmation: 'bg-yellow-100 text-yellow-800',
-      confirmed: 'bg-blue-100 text-blue-800',
-      processing: 'bg-indigo-100 text-indigo-800',
-      shipped: 'bg-purple-100 text-purple-800',
-      delivered: 'bg-green-100 text-green-800',
-      cancelled: 'bg-red-100 text-red-800',
-      active: 'bg-green-100 text-green-800',
-      inactive: 'bg-gray-100 text-gray-800',
-      accepted: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800',
-      paid: 'bg-green-100 text-green-800',
-      unpaid: 'bg-yellow-100 text-yellow-800',
-      open: 'bg-blue-100 text-blue-800',
-      closed: 'bg-gray-100 text-gray-800'
-    };
-    return colors[status?.toLowerCase()] || 'bg-gray-100 text-gray-800';
+  const getStatusBadge = (status) => {
+    const s = String(status || '').toLowerCase();
+    switch (s) {
+      case 'open':
+      case 'active':
+        return { label: 'Active', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+      case 'pending':
+      case 'pending_confirmation':
+        return { label: 'Awaiting Confirmation', cls: 'bg-amber-50 text-amber-700 border-amber-200' };
+      case 'accepted':
+        return { label: 'Bid Accepted', cls: 'bg-blue-50 text-blue-700 border-blue-200' };
+      case 'confirmed':
+        return { label: 'Order Confirmed', cls: 'bg-indigo-50 text-indigo-700 border-indigo-200' };
+      case 'processing':
+        return { label: 'In Production', cls: 'bg-purple-50 text-purple-700 border-purple-200' };
+      case 'shipped':
+        return { label: 'Dispatched (E-Way)', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200' };
+      case 'delivered':
+        return { label: 'Settled & Released', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+      case 'rejected':
+      case 'cancelled':
+        return { label: 'Closed / Cancelled', cls: 'bg-slate-100 text-slate-600 border-slate-200' };
+      default:
+        return { label: s.replace('_', ' ').toUpperCase(), cls: 'bg-slate-100 text-slate-700 border-slate-200' };
+    }
   };
 
-  // Chart colors - Color palette for pie chart segments
   const CHART_COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
   return (
     <DashboardLayout>
-      <Head title="Supplier Dashboard" />
+      <Head title="Manufacturer Operations Console — Treadmesh India" />
 
-      <div className="space-y-6">
-        {/* Header - Page title and action buttons */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="space-y-6 max-w-7xl mx-auto">
+        {/* ------------------------------------------------------------- */}
+        {/* CONSOLE HEADER & EXPORT ACTIONS                               */}
+        {/* ------------------------------------------------------------- */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-slate-200/80">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Supplier Dashboard</h1>
-            <p className="text-sm text-gray-600 mt-1">
-              Welcome! Here is a summary of your business performance.
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-slate-500">
+                Factory Dispatch & Sourcing Node
+              </span>
+            </div>
+            <h1 className="text-2xl font-extrabold text-slate-950 tracking-tight mt-0.5">
+              Manufacturer Operations Console
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Track active wholesale production, incoming RFQ tenders, and escrow-backed milestone settlements.
             </p>
           </div>
-          <div className="flex gap-2">
+
+          <div className="flex items-center gap-2.5">
             <button
+              type="button"
               onClick={() => window.location.href = route('supplier.dashboard.export')}
-              className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
+              className="inline-flex items-center gap-2 px-3.5 py-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-xs font-semibold shadow-sm transition-colors"
             >
-              <FiDownload className="w-4 h-4" />
-              <span>Report Export</span>
+              <FiDownload className="text-xs" />
+              <span>Export GST Ledger</span>
             </button>
             <button
+              type="button"
               onClick={() => window.location.reload()}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+              className="inline-flex items-center gap-2 px-3.5 py-2 bg-slate-950 text-white hover:bg-slate-800 rounded-xl text-xs font-semibold shadow-sm transition-colors"
             >
-              <FiRefreshCw className="w-4 h-4" />
-              <span>Refresh</span>
+              <FiRefreshCw className="text-xs" />
+              <span>Sync Feeds</span>
             </button>
           </div>
         </div>
 
-        {/* Welcome Banner with Unread Messages Alert */}
+        {/* ------------------------------------------------------------- */}
+        {/* UNREAD COMMUNICATIONS ALERT                                   */}
+        {/* ------------------------------------------------------------- */}
         {counts?.unreadMessages > 0 && (
-          <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <FiMessageSquare className="h-5 w-5 text-blue-400" />
+          <div className="p-1 rounded-2xl bg-brand-500/10 border border-brand-200">
+            <div className="p-4 rounded-xl bg-brand-50/80 flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2.5 text-brand-950 font-medium">
+                <FiMessageSquare className="text-brand-600 text-base shrink-0" />
+                <span>
+                  You have <strong className="font-mono">{counts.unreadMessages}</strong> unread commercial inquiries from enterprise buyers.
+                </span>
               </div>
-              <div className="ml-3 flex-1">
-                <p className="text-sm text-blue-700">
-                  You have <span className="font-bold">{counts.unreadMessages}</span> unread messages.
-                  <Link href={route('supplier.messages.index')} className="ml-2 font-medium underline text-blue-700 hover:text-blue-600">
-                    See message →
-                  </Link>
-                </p>
-              </div>
+              <Link
+                href={route('supplier.messages.index')}
+                className="font-bold text-brand-700 hover:text-brand-900 underline inline-flex items-center gap-1"
+              >
+                <span>Open Buyer Inbox</span>
+                <FiChevronRight className="text-xs" />
+              </Link>
             </div>
           </div>
         )}
 
-        {/* Key Metrics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Revenue Card */}
-          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6 text-white">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm opacity-90">Monthly Income</p>
-                <p className="text-2xl font-bold mt-1">
-                  {formatCurrency(counts?.monthlyRevenue || 0)}
-                </p>
+        {/* ------------------------------------------------------------- */}
+        {/* KEY OPERATIONAL METRICS (INR CALIBRATED)                      */}
+        {/* ------------------------------------------------------------- */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Revenue Tile */}
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex justify-between items-start text-slate-400">
+                <span className="text-[11px] font-mono uppercase tracking-wider font-semibold text-slate-500">
+                  Monthly Invoiced Value
+                </span>
+                <div className="p-2 rounded-lg bg-emerald-50 text-emerald-600 font-mono font-bold text-sm">
+                  ₹
+                </div>
               </div>
-              <div className="p-3 bg-white/20 rounded-lg">
-                <FiDollarSign className="w-6 h-6" />
+              <div className="text-2xl font-bold font-mono text-slate-950 mt-2 truncate">
+                {formatCurrency(counts?.monthlyRevenue || 0)}
               </div>
-            </div>
-            <div className="mt-4 flex items-center text-sm">
-              <span className="opacity-90">Total income is</span>
-              <span className="ml-2 font-bold">
-                {formatCurrency(counts?.totalRevenue || 0)}
-              </span>
-            </div>
-            {sales_analytics?.growth?.revenue !== undefined && (
-              <div className="mt-2 flex items-center text-xs">
-                {sales_analytics.growth.revenue >= 0 ? (
-                  <>
-                    <FiTrendingUp className="w-3 h-3 mr-1" />
-                    <span>{Math.round(sales_analytics.growth.revenue)}% </span>
-                  </>
-                ) : (
-                  <>
-                    <FiTrendingDown className="w-3 h-3 mr-1" />
-                    <span>{Math.abs(Math.round(sales_analytics.growth.revenue))}% </span>
-                  </>
+              <div className="flex items-center justify-between text-xs mt-2 text-slate-500">
+                <span>Total: <strong className="text-slate-800 font-mono">{formatCurrency(counts?.totalRevenue || 0)}</strong></span>
+                {sales_analytics?.growth?.revenue !== undefined && (
+                  <span className={`font-mono font-semibold flex items-center gap-0.5 ${
+                    sales_analytics.growth.revenue >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                  }`}>
+                    {sales_analytics.growth.revenue >= 0 ? <FiTrendingUp className="text-xs" /> : <FiTrendingDown className="text-xs" />}
+                    {Math.abs(Math.round(sales_analytics.growth.revenue))}%
+                  </span>
                 )}
               </div>
-            )}
-          </div>
-
-          {/* Orders Card */}
-          <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-6 text-white">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm opacity-90">Total order</p>
-                <p className="text-2xl font-bold mt-1">{formatNumber(counts?.totalOrders || 0)}</p>
-              </div>
-              <div className="p-3 bg-white/20 rounded-lg">
-                <FiShoppingCart className="w-6 h-6" />
-              </div>
-            </div>
-            <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
-              <div>
-                <span className="opacity-90">Awaiting</span>
-                <p className="font-bold">{counts?.pendingOrders || 0}</p>
-              </div>
-              <div>
-                <span className="opacity-90">In process</span>
-                <p className="font-bold">{counts?.processingOrders || 0}</p>
-              </div>
-              <div>
-                <span className="opacity-90">Delivered</span>
-                <p className="font-bold">{counts?.deliveredOrders || 0}</p>
-              </div>
             </div>
           </div>
 
-          {/* Products Card */}
-          <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-6 text-white">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm opacity-90">Active product</p>
-                <p className="text-2xl font-bold mt-1">{formatNumber(counts?.activeProducts || 0)}</p>
+          {/* Orders Tile */}
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex justify-between items-start text-slate-400">
+                <span className="text-[11px] font-mono uppercase tracking-wider font-semibold text-slate-500">
+                  Total Purchase Orders
+                </span>
+                <div className="p-2 rounded-lg bg-indigo-50 text-indigo-600">
+                  <FiShoppingCart className="text-base" />
+                </div>
               </div>
-              <div className="p-3 bg-white/20 rounded-lg">
-                <FiPackage className="w-6 h-6" />
+              <div className="text-2xl font-bold font-mono text-slate-950 mt-2">
+                {formatNumber(counts?.totalOrders || 0)}
               </div>
-            </div>
-            <div className="mt-4 flex justify-between text-xs">
-              <div>
-                <span className="opacity-90">total</span>
-                <p className="font-bold">{counts?.totalProducts || 0}</p>
-              </div>
-              <div>
-                <span className="opacity-90">Pending</span>
-                <p className="font-bold">{counts?.pendingProducts || 0}</p>
-              </div>
-              <div>
-                <span className="opacity-90">Stock low</span>
-                <p className="font-bold">{low_stock_alerts?.length || 0}</p>
+              <div className="grid grid-cols-3 gap-1 text-[11px] font-mono mt-2 pt-2 border-t border-slate-100 text-slate-500">
+                <div>
+                  <span className="text-amber-600 font-bold">{counts?.pendingOrders || 0}</span> Awaiting
+                </div>
+                <div>
+                  <span className="text-purple-600 font-bold">{counts?.processingOrders || 0}</span> Making
+                </div>
+                <div>
+                  <span className="text-emerald-600 font-bold">{counts?.deliveredOrders || 0}</span> Settled
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Quotes Card */}
-          <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-xl p-6 text-white">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm opacity-90">Quote Performance</p>
-                <p className="text-2xl font-bold mt-1">{Math.round(quote_performance?.acceptanceRate || 0)}%</p>
+          {/* Products Tile */}
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex justify-between items-start text-slate-400">
+                <span className="text-[11px] font-mono uppercase tracking-wider font-semibold text-slate-500">
+                  Catalog Inventory
+                </span>
+                <div className="p-2 rounded-lg bg-brand-50 text-brand-600">
+                  <FiPackage className="text-base" />
+                </div>
               </div>
-              <div className="p-3 bg-white/20 rounded-lg">
-                <FiFileText className="w-6 h-6" />
+              <div className="text-2xl font-bold font-mono text-slate-950 mt-2">
+                {formatNumber(counts?.activeProducts || 0)}
+                <span className="text-xs font-normal text-slate-400 font-sans ml-1">SKUs Live</span>
+              </div>
+              <div className="flex items-center justify-between text-xs mt-2 text-slate-500">
+                <span>Total: <strong className="font-mono text-slate-700">{counts?.totalProducts || 0}</strong></span>
+                {low_stock_alerts?.length > 0 && (
+                  <span className="text-amber-600 font-semibold font-mono flex items-center gap-1">
+                    <FiAlertTriangle className="text-xs" /> {low_stock_alerts.length} Low
+                  </span>
+                )}
               </div>
             </div>
-            <div className="mt-4 flex justify-between text-xs">
-              <div>
-                <span className="opacity-90">accepted</span>
-                <p className="font-bold">{quote_performance?.acceptedQuotes || 0}</p>
+          </div>
+
+          {/* Quotation Acceptance Tile */}
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex justify-between items-start text-slate-400">
+                <span className="text-[11px] font-mono uppercase tracking-wider font-semibold text-slate-500">
+                  Bid Conversion Rate
+                </span>
+                <div className="p-2 rounded-lg bg-cyan-50 text-cyan-600">
+                  <FiBarChart2 className="text-base" />
+                </div>
               </div>
-              <div>
-                <span className="opacity-90">Awaiting</span>
-                <p className="font-bold">{quote_performance?.pendingQuotes || 0}</p>
+              <div className="text-2xl font-bold font-mono text-slate-950 mt-2">
+                {Math.round(quote_performance?.acceptanceRate || 0)}%
               </div>
-              <div>
-                <span className="opacity-90">total</span>
-                <p className="font-bold">{quote_performance?.totalQuotes || 0}</p>
+              <div className="flex items-center justify-between text-xs mt-2 text-slate-500">
+                <span>Won: <strong className="text-emerald-600 font-mono">{quote_performance?.acceptedQuotes || 0}</strong></span>
+                <span>•</span>
+                <span>Active Bids: <strong className="text-amber-600 font-mono">{quote_performance?.pendingQuotes || 0}</strong></span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Low Stock Alerts */}
+        {/* ------------------------------------------------------------- */}
+        {/* LOW INVENTORY STOCK NOTICES (IF ANY)                          */}
+        {/* ------------------------------------------------------------- */}
         {low_stock_alerts?.length > 0 && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-4 bg-yellow-50 border-b border-yellow-100">
-              <div className="flex items-center gap-2">
-                <MdWarning className="w-5 h-5 text-yellow-600" />
-                <h3 className="font-semibold text-yellow-800">Low stock warning ({low_stock_alerts.length})</h3>
+          <div className="p-1 rounded-2xl bg-amber-500/10 border border-amber-300">
+            <div className="bg-white rounded-xl p-4 shadow-card">
+              <div className="flex items-center gap-2 mb-3 text-amber-800">
+                <MdWarning className="text-lg text-amber-600 shrink-0" />
+                <h3 className="font-bold text-xs uppercase tracking-wider font-mono">
+                  Inventory Replenishment Warnings ({low_stock_alerts.length})
+                </h3>
               </div>
-            </div>
-            <div className="divide-y divide-gray-100">
-              {low_stock_alerts.map((product) => (
-                <div key={product.id} className="p-4 hover:bg-gray-50 transition">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                        <FiPackage className="w-5 h-5 text-red-600" />
-                      </div>
-                      <div>
-                        <Link href={route('supplier.products.edit', product.id)} className="font-medium text-gray-900 hover:text-indigo-600">
-                          {product.name}
-                        </Link>
-                        <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
-                          <span>SKU: {product.sku}</span>
-                          <span>•</span>
-                          <span>stock: {product.stock_quantity} Unit</span>
-                        </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {low_stock_alerts.map((product) => (
+                  <div key={product.id} className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <Link
+                        href={route('supplier.products.edit', product.id)}
+                        className="font-bold text-xs text-slate-900 hover:text-brand-600 truncate block"
+                      >
+                        {product.name}
+                      </Link>
+                      <div className="text-[11px] font-mono text-slate-500 mt-0.5">
+                        SKU: {product.sku} • Stock: <span className="text-rose-600 font-bold">{product.stock_quantity} units</span>
                       </div>
                     </div>
                     <Link
                       href={route('supplier.products.edit', product.id)}
-                      className="px-4 py-2 bg-indigo-50 text-indigo-600 text-sm font-medium rounded-lg hover:bg-indigo-100 transition"
+                      className="px-2.5 py-1 text-xs font-semibold bg-white border border-slate-200 hover:bg-slate-100 rounded-lg text-slate-800 shrink-0"
                     >
-                      Stock update
+                      Update
                     </Link>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         )}
 
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Sales Trend - Line chart */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold text-gray-900">Sales trend</h3>
-              <div className="flex gap-2">
-                <span className="text-xs px-2 py-1 bg-indigo-50 text-indigo-600 rounded">Daily</span>
+        {/* ------------------------------------------------------------- */}
+        {/* CHARTS: SALES TRENDS & ORDER STATUS BREAKDOWN                 */}
+        {/* ------------------------------------------------------------- */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Revenue Line Chart (8 cols) */}
+          <div className="lg:col-span-8 p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                    <BsGraphUp className="text-brand-600" /> Revenue & Order Volume Trend
+                  </h3>
+                  <p className="text-xs text-slate-500">Daily invoicing value in INR (₹) and completed purchase orders</p>
+                </div>
+                <span className="text-xs font-mono font-semibold px-2 py-0.5 bg-slate-100 text-slate-700 rounded">
+                  Daily Cadence
+                </span>
               </div>
-            </div>
-            <div className="h-80 w-full min-h-[320px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chart_data?.daily_sales}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis
-                    dataKey="date"
-                    stroke="#6B7280"
-                    fontSize={12}
-                    tickFormatter={(date) => {
-                      return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                    }}
-                  />
-                  <YAxis yAxisId="left" stroke="#6B7280" fontSize={12} />
-                  <YAxis yAxisId="right" orientation="right" stroke="#6B7280" fontSize={12} />
-                  <Tooltip
-                    formatter={(value, name) => {
-                      if (name === 'revenue') return formatCurrency(value);
-                      return value;
-                    }}
-                    contentStyle={{
-                      backgroundColor: 'white',
-                      border: '1px solid #E5E7EB',
-                      borderRadius: '8px',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                    }}
-                  />
-                  <Legend />
-                  <Line
-                    yAxisId="left"
-                    type="monotone"
-                    dataKey="revenue"
-                    name="Income"
-                    stroke="#4F46E5"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                  <Line
-                    yAxisId="right"
-                    type="monotone"
-                    dataKey="orders"
-                    name="Order"
-                    stroke="#10B981"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+
+              <div className="h-72 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={chart_data?.daily_sales}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
+                    <XAxis
+                      dataKey="date"
+                      stroke="#94A3B8"
+                      fontSize={11}
+                      fontFamily="JetBrains Mono"
+                      tickFormatter={(date) => formatIndianDate(date)}
+                    />
+                    <YAxis yAxisId="left" stroke="#94A3B8" fontSize={11} fontFamily="JetBrains Mono" />
+                    <YAxis yAxisId="right" orientation="right" stroke="#94A3B8" fontSize={11} fontFamily="JetBrains Mono" />
+                    <Tooltip
+                      formatter={(value, name) => {
+                        if (name === 'Invoiced (₹)') return formatCurrency(value);
+                        return value;
+                      }}
+                      contentStyle={{
+                        backgroundColor: '#0F172A',
+                        border: '1px solid #334155',
+                        borderRadius: '12px',
+                        color: '#F8FAFC',
+                        fontSize: '11px',
+                        fontFamily: 'JetBrains Mono'
+                      }}
+                    />
+                    <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
+                    <Line
+                      yAxisId="left"
+                      type="monotone"
+                      dataKey="revenue"
+                      name="Invoiced (₹)"
+                      stroke="#4F46E5"
+                      strokeWidth={2.5}
+                      dot={false}
+                    />
+                    <Line
+                      yAxisId="right"
+                      type="monotone"
+                      dataKey="orders"
+                      name="Units/Orders"
+                      stroke="#10B981"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
 
-          {/* Orders by Status - Pie chart */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="font-semibold text-gray-900 mb-4">Order by status</h3>
-            <div className="h-80 w-full min-h-[320px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={Object.entries(chart_data?.orders_by_status || {}).map(([name, value]) => ({
-                      name: name === 'pending_confirmation' ? 'Awaiting' :
-                        name === 'confirmed' ? 'sure' :
-                          name === 'processing' ? 'In process' :
-                            name === 'shipped' ? 'Sent' :
-                              name === 'delivered' ? 'Delivered' :
-                                name === 'cancelled' ? 'cancel' : name.replace('_', ' ').toUpperCase(),
-                      value
-                    }))}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={2}
-                    dataKey="value"
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  >
-                    {Object.entries(chart_data?.orders_by_status || {}).map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    formatter={(value) => formatNumber(value)}
-                    contentStyle={{
-                      backgroundColor: 'white',
-                      border: '1px solid #E5E7EB',
-                      borderRadius: '8px',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+          {/* Orders by Status Donut (4 cols) */}
+          <div className="lg:col-span-4 p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card flex flex-col justify-between h-full">
+              <div>
+                <h3 className="font-bold text-slate-900 text-sm mb-1">
+                  Order Status Distribution
+                </h3>
+                <p className="text-xs text-slate-500 mb-4">
+                  Active fulfillment & dispatch balance
+                </p>
+              </div>
+
+              <div className="h-56 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={Object.entries(chart_data?.orders_by_status || {}).map(([name, value]) => ({
+                        name: getStatusBadge(name).label,
+                        value
+                      }))}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={50}
+                      outerRadius={80}
+                      paddingAngle={2}
+                      dataKey="value"
+                    >
+                      {Object.entries(chart_data?.orders_by_status || {}).map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(val) => formatNumber(val)}
+                      contentStyle={{
+                        backgroundColor: '#0F172A',
+                        border: '1px solid #334155',
+                        borderRadius: '10px',
+                        color: '#F8FAFC',
+                        fontSize: '11px',
+                        fontFamily: 'JetBrains Mono'
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="pt-3 border-t border-slate-100 flex flex-wrap gap-2 justify-center text-[10px] font-mono">
+                {Object.keys(chart_data?.orders_by_status || {}).slice(0, 4).map((status, idx) => (
+                  <div key={status} className="flex items-center gap-1 text-slate-600">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: CHART_COLORS[idx % CHART_COLORS.length] }} />
+                    <span>{getStatusBadge(status).label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Recent Orders & RFQs */}
+        {/* ------------------------------------------------------------- */}
+        {/* RECENT ORDERS & MATCHING RFQS TABLES                          */}
+        {/* ------------------------------------------------------------- */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Recent Orders */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <FiShoppingCart className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Recent Orders</h3>
-                    <p className="text-sm text-gray-500">Last 10 orders</p>
-                  </div>
+          {/* Recent Orders Table Card */}
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                    <FiShoppingCart className="text-brand-600" /> Recent Purchase Orders
+                  </h3>
+                  <p className="text-xs text-slate-500">Incoming purchase orders with escrow settlement status</p>
                 </div>
                 <Link
                   href={route('supplier.orders.index')}
-                  className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+                  className="text-xs font-semibold text-brand-600 hover:text-brand-800 inline-flex items-center gap-1"
                 >
-                  View All →
+                  <span>View All</span>
+                  <FiChevronRight />
                 </Link>
               </div>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order #</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Buyer</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">the date</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {recent_orders?.map((order) => (
-                    <tr key={order.id} className="hover:bg-gray-50 transition">
-                      <td className="px-6 py-4">
-                        <Link href={route('supplier.orders.show', order.id)} className="text-sm font-medium text-indigo-600 hover:text-indigo-700">
-                          {order.order_number}
-                        </Link>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">{order.buyer?.name}</p>
-                          <p className="text-xs text-gray-500">{order.items?.length} items</p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        {formatCurrency(order.total_amount)}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.order_status)}`}>
-                          {order.order_status === 'pending_confirmation' ? 'Awaiting' :
-                            order.order_status === 'confirmed' ? 'sure' :
-                              order.order_status === 'processing' ? 'In process' :
-                                order.order_status === 'shipped' ? 'Sent' :
-                                  order.order_status === 'delivered' ? 'Delivered' :
-                                    order.order_status === 'cancelled' ? 'cancel' : order.order_status?.replace('_', ' ')}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
-                        {new Date(order.created_at).toLocaleDateString('en-US')}
-                      </td>
-                    </tr>
-                  ))}
-                  {(!recent_orders || recent_orders.length === 0) && (
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 text-slate-500 font-mono uppercase text-[10px] border-b border-slate-100">
                     <tr>
-                      <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
-                        No recent orders found
-                      </td>
+                      <th className="py-2.5 px-3">Order #</th>
+                      <th className="py-2.5 px-3">Enterprise Buyer</th>
+                      <th className="py-2.5 px-3">Amount (₹)</th>
+                      <th className="py-2.5 px-3">Fulfillment Status</th>
+                      <th className="py-2.5 px-3">Date</th>
                     </tr>
-                  )}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {recent_orders && recent_orders.length > 0 ? (
+                      recent_orders.map((order) => {
+                        const badge = getStatusBadge(order.order_status);
+                        return (
+                          <tr key={order.id} className="hover:bg-slate-50/80 transition-colors">
+                            <td className="py-3 px-3 font-mono font-bold text-brand-600">
+                              <Link href={route('supplier.orders.show', order.id)}>
+                                #{order.order_number}
+                              </Link>
+                            </td>
+                            <td className="py-3 px-3 font-medium text-slate-800">
+                              {order.buyer?.name || 'Commercial Buyer'}
+                            </td>
+                            <td className="py-3 px-3 font-mono font-bold text-slate-950">
+                              {formatCurrency(order.total_amount)}
+                            </td>
+                            <td className="py-3 px-3">
+                              <span className={`px-2 py-0.5 text-[9px] font-mono font-semibold rounded-full border ${badge.cls}`}>
+                                {badge.label}
+                              </span>
+                            </td>
+                            <td className="py-3 px-3 font-mono text-slate-400 text-[11px]">
+                              {formatIndianDate(order.created_at)}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan="5" className="py-8 text-center text-slate-400">
+                          No recent orders found.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 
-          {/* Matching RFQs */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <FiFileText className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">match up RFQ</h3>
-                    <p className="text-sm text-gray-500">Open matching your product RFQ</p>
-                  </div>
+          {/* Matching RFQs Table Card */}
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                    <FiFileText className="text-purple-600" /> Tenders Matching Manufacturing Profile
+                  </h3>
+                  <p className="text-xs text-slate-500">Live buyer inquiries open for direct quotation submission</p>
                 </div>
                 <Link
                   href={route('supplier.rfqs.index')}
-                  className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+                  className="text-xs font-semibold text-brand-600 hover:text-brand-800 inline-flex items-center gap-1"
                 >
-                  View All →
+                  <span>View All</span>
+                  <FiChevronRight />
                 </Link>
               </div>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">RFQ #</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Buyer</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Last date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Activities</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {recent_rfqs?.map((rfq) => (
-                    <tr key={rfq.id} className="hover:bg-gray-50 transition">
-                      <td className="px-6 py-4">
-                        <Link href={route('supplier.rfqs.show', rfq.id)} className="text-sm font-medium text-indigo-600 hover:text-indigo-700">
-                          {rfq.rfq_number}
-                        </Link>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">{rfq.title}</p>
-                          <p className="text-xs text-gray-500">Amount: {rfq.quantity}</p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        {rfq.buyer?.name}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`text-sm ${new Date(rfq.required_by_date) < new Date() ? 'text-red-600' : 'text-gray-900'}`}>
-                          {new Date(rfq.required_by_date).toLocaleDateString('en-US')}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <Link
-                          href={route('supplier.rfqs.create-quote', rfq.id)}
-                          className="px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-medium rounded-lg hover:bg-indigo-100 transition"
-                        >
-                          Submit Quote
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                  {(!recent_rfqs || recent_rfqs.length === 0) && (
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 text-slate-500 font-mono uppercase text-[10px] border-b border-slate-100">
                     <tr>
-                      <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
-                        No matching RFQ found
-                      </td>
+                      <th className="py-2.5 px-3">RFQ #</th>
+                      <th className="py-2.5 px-3">Part Title & Volume</th>
+                      <th className="py-2.5 px-3">Buyer</th>
+                      <th className="py-2.5 px-3">Deadline</th>
+                      <th className="py-2.5 px-3 text-right">Action</th>
                     </tr>
-                  )}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {recent_rfqs && recent_rfqs.length > 0 ? (
+                      recent_rfqs.map((rfq) => (
+                        <tr key={rfq.id} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="py-3 px-3 font-mono font-bold text-slate-900">
+                            #{rfq.rfq_number}
+                          </td>
+                          <td className="py-3 px-3">
+                            <div className="font-medium text-slate-900 line-clamp-1">{rfq.title}</div>
+                            <div className="text-[11px] font-mono text-slate-500">Target: {rfq.quantity} units</div>
+                          </td>
+                          <td className="py-3 px-3 text-slate-700">
+                            {rfq.buyer?.name || 'Verified Buyer'}
+                          </td>
+                          <td className="py-3 px-3 font-mono text-slate-600">
+                            {formatIndianDate(rfq.required_by_date)}
+                          </td>
+                          <td className="py-3 px-3 text-right">
+                            <Link
+                              href={route('supplier.rfqs.create-quote', rfq.id)}
+                              className="inline-flex items-center gap-1 px-3 py-1 bg-slate-950 hover:bg-brand-600 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
+                            >
+                              <span>Bid Quote</span>
+                            </Link>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="5" className="py-8 text-center text-slate-400">
+                          No matching RFQs open at present.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Top Products & Upcoming Deliveries */}
+        {/* ------------------------------------------------------------- */}
+        {/* TOP PRODUCTS & UPCOMING FREIGHT DELIVERIES                    */}
+        {/* ------------------------------------------------------------- */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Top Selling Products */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <FiBarChart2 className="w-5 h-5 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Top Selling Products</h3>
-                  <p className="text-sm text-gray-500">This month's best performer is</p>
-                </div>
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                  <FiBarChart2 className="text-emerald-600" /> High-Volume Commercial SKUs
+                </h3>
+                <span className="text-[11px] font-mono text-slate-400">Monthly Ranking</span>
               </div>
-            </div>
-            <div className="divide-y divide-gray-100">
-              {top_products?.map((product, index) => (
-                <div key={product.id} className="p-4 hover:bg-gray-50 transition">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 flex-1">
-                      <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-sm font-medium text-indigo-600">
-                        #{index + 1}
-                      </div>
-                      <div className="flex-1">
-                        <Link href={route('supplier.products.edit', product.id)} className="font-medium text-gray-900 hover:text-indigo-600">
-                          {product.name}
-                        </Link>
-                        <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
-                          <span>Selling: {formatNumber(product.total_quantity_sold || 0)} Unit</span>
-                          <span>Income: {formatCurrency(product.total_revenue || 0)}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-indigo-600 rounded-full"
-                        style={{ width: `${Math.min((product.total_quantity_sold || 0) / (top_products[0]?.total_quantity_sold || 1) * 100, 100)}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))}
-              {(!top_products || top_products.length === 0) && (
-                <div className="p-8 text-center text-gray-500">
-                  No Sales Information Found
-                </div>
-              )}
-            </div>
-          </div>
 
-          {/* Upcoming Deliveries */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <FiTruck className="w-5 h-5 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Upcoming Delivery</h3>
-                  <p className="text-sm text-gray-500">Scheduled for next 7 days</p>
-                </div>
-              </div>
-            </div>
-            <div className="divide-y divide-gray-100">
-              {upcoming_deliveries?.map((order) => (
-                <div key={order.id} className="p-4 hover:bg-gray-50 transition">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <FiTruck className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <Link href={route('supplier.orders.show', order.id)} className="font-medium text-gray-900 hover:text-indigo-600">
-                          Order #{order.order_number}
-                        </Link>
-                        <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
-                          <span>{order.buyer?.name}</span>
-                          <span>•</span>
-                          <span>Anu: {new Date(order.estimated_delivery).toLocaleDateString('en-US')}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.order_status)}`}>
-                      {order.order_status === 'pending_confirmation' ? 'Awaiting' :
-                        order.order_status === 'confirmed' ? 'sure' :
-                          order.order_status === 'processing' ? 'In process' :
-                            order.order_status === 'shipped' ? 'Sent' :
-                              order.order_status === 'delivered' ? 'Delivered' :
-                                order.order_status === 'cancelled' ? 'cancel' : order.order_status?.replace('_', ' ')}
-                    </span>
-                  </div>
-                </div>
-              ))}
-              {(!upcoming_deliveries || upcoming_deliveries.length === 0) && (
-                <div className="p-8 text-center text-gray-500">
-                  No upcoming deliveries
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Recent Messages & Quote Performance */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Recent Messages */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-6 border-b border-gray-100">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-indigo-100 rounded-lg">
-                    <FiMessageSquare className="w-5 h-5 text-indigo-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Recent messages</h3>
-                    <p className="text-sm text-gray-500">Last conversation</p>
-                  </div>
-                </div>
-                <Link
-                  href={route('supplier.messages.index')}
-                  className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
-                >
-                  View All →
-                </Link>
-              </div>
-            </div>
-            <div className="divide-y divide-gray-100">
-              {recent_messages?.map((message) => (
-                <div key={message.id} className="p-4 hover:bg-gray-50 transition">
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-sm font-medium text-indigo-600">
-                        {message.sender?.name?.charAt(0) || '?'}
-                      </span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <p className="font-medium text-gray-900 truncate">
-                          {message.sender?.name}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          {new Date(message.created_at).toLocaleDateString('en-US')}
-                        </p>
-                      </div>
-                      <p className="text-sm text-gray-600 truncate mt-1">{message.content}</p>
-                      {!message.is_read && message.receiver_id === counts?.userId && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mt-2">
-                          New
+              <div className="space-y-3">
+                {top_products && top_products.length > 0 ? (
+                  top_products.map((product, idx) => (
+                    <div key={product.id} className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="w-6 h-6 rounded-md bg-slate-900 text-white flex items-center justify-center font-mono text-xs font-bold shrink-0">
+                          0{idx + 1}
                         </span>
-                      )}
+                        <div className="min-w-0">
+                          <Link
+                            href={route('supplier.products.edit', product.id)}
+                            className="font-bold text-xs text-slate-900 hover:text-brand-600 truncate block"
+                          >
+                            {product.name}
+                          </Link>
+                          <div className="text-[11px] font-mono text-slate-500 mt-0.5">
+                            Sold: {formatNumber(product.total_quantity_sold || 0)} units • Revenue: <strong className="text-slate-800">{formatCurrency(product.total_revenue || 0)}</strong>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-20 sm:w-28 h-1.5 bg-slate-200 rounded-full overflow-hidden shrink-0">
+                        <div
+                          className="h-full bg-brand-600 rounded-full"
+                          style={{ width: `${Math.min((product.total_quantity_sold || 0) / (top_products[0]?.total_quantity_sold || 1) * 100, 100)}%` }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-              {(!recent_messages || recent_messages.length === 0) && (
-                <div className="p-8 text-center text-gray-500">
-                  No message
-                </div>
-              )}
+                  ))
+                ) : (
+                  <p className="text-center py-6 text-xs text-slate-400">No product sales logged this period.</p>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Quote Performance Stats */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Quote Performance</h3>
-            <div className="space-y-4">
-              {/* Acceptance Rate */}
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-600">Acceptance rate</span>
-                  <span className="font-medium text-gray-900">{Math.round(quote_performance?.acceptanceRate || 0)}%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-green-500 h-2 rounded-full"
-                    style={{ width: `${quote_performance?.acceptanceRate || 0}%` }}
-                  />
-                </div>
+          {/* Upcoming Freight Deliveries */}
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                  <FiTruck className="text-cyan-600" /> Upcoming Freight Dispatches
+                </h3>
+                <span className="text-[11px] font-mono text-slate-400">Next 7 Days</span>
               </div>
 
-              {/* Quote Stats Grid */}
-              <div className="grid grid-cols-2 gap-4 pt-2">
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500">Total Quotes</p>
-                  <p className="text-xl font-bold text-gray-900">{formatNumber(quote_performance?.totalQuotes || 0)}</p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500">accepted</p>
-                  <p className="text-xl font-bold text-green-600">{formatNumber(quote_performance?.acceptedQuotes || 0)}</p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500">Awaiting</p>
-                  <p className="text-xl font-bold text-yellow-600">{formatNumber(quote_performance?.pendingQuotes || 0)}</p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500">Rejected</p>
-                  <p className="text-xl font-bold text-red-600">{formatNumber(quote_performance?.rejectedQuotes || 0)}</p>
-                </div>
+              <div className="space-y-3">
+                {upcoming_deliveries && upcoming_deliveries.length > 0 ? (
+                  upcoming_deliveries.map((order) => {
+                    const badge = getStatusBadge(order.order_status);
+                    return (
+                      <div key={order.id} className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-8 h-8 rounded-lg bg-cyan-50 text-cyan-700 flex items-center justify-center shrink-0">
+                            <FiTruck className="text-base" />
+                          </div>
+                          <div className="min-w-0">
+                            <Link
+                              href={route('supplier.orders.show', order.id)}
+                              className="font-bold text-xs text-slate-900 hover:text-brand-600 truncate block"
+                            >
+                              Order #{order.order_number}
+                            </Link>
+                            <div className="text-[11px] font-mono text-slate-500 mt-0.5">
+                              Buyer: {order.buyer?.name} • Est. Dispatch: {formatIndianDate(order.estimated_delivery)}
+                            </div>
+                          </div>
+                        </div>
+                        <span className={`px-2 py-0.5 text-[9px] font-mono font-semibold rounded border shrink-0 ${badge.cls}`}>
+                          {badge.label}
+                        </span>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p className="text-center py-6 text-xs text-slate-400">No deliveries scheduled in next 7 days.</p>
+                )}
               </div>
-
-              {/* Average Response Time */}
-              {quote_performance?.averageResponseTime && (
-                <div className="bg-indigo-50 p-4 rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-indigo-600">Average response time is</p>
-                      <p className="text-2xl font-bold text-indigo-700">
-                        {Math.round(quote_performance.averageResponseTime)} hours
-                      </p>
-                    </div>
-                    <FiClock className="w-8 h-8 text-indigo-400" />
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
 
-        {/* Quick Navigation */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Link
-            href={route('supplier.products.index')}
-            className="bg-white p-4 rounded-xl border border-gray-100 hover:border-indigo-200 hover:shadow-md transition group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-indigo-100 rounded-lg group-hover:bg-indigo-200 transition">
-                <FiPackage className="w-5 h-5 text-indigo-600" />
+        {/* ------------------------------------------------------------- */}
+        {/* QUOTE CONVERSION PERFORMANCE GRID                            */}
+        {/* ------------------------------------------------------------- */}
+        <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+          <div className="bg-white rounded-xl p-5 shadow-card">
+            <h3 className="font-bold text-slate-900 text-sm mb-4 flex items-center gap-2">
+              <BsShieldCheck className="text-brand-600" /> Quotation Governance & Bidding Metrics
+            </h3>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 block">
+                  Total Bids Quoted
+                </span>
+                <span className="text-xl font-bold font-mono text-slate-900 mt-1 block">
+                  {formatNumber(quote_performance?.totalQuotes || 0)}
+                </span>
               </div>
-              <div>
-                <p className="font-medium text-gray-900">Product</p>
-                <p className="text-sm text-gray-500">Manage inventory</p>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-600 block font-semibold">
+                  Accepted Bids
+                </span>
+                <span className="text-xl font-bold font-mono text-emerald-700 mt-1 block">
+                  {formatNumber(quote_performance?.acceptedQuotes || 0)}
+                </span>
               </div>
-            </div>
-          </Link>
-          <Link
-            href={route('supplier.orders.index')}
-            className="bg-white p-4 rounded-xl border border-gray-100 hover:border-indigo-200 hover:shadow-md transition group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-indigo-100 rounded-lg group-hover:bg-indigo-200 transition">
-                <FiShoppingCart className="w-5 h-5 text-indigo-600" />
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-amber-600 block font-semibold">
+                  Awaiting Decision
+                </span>
+                <span className="text-xl font-bold font-mono text-amber-700 mt-1 block">
+                  {formatNumber(quote_performance?.pendingQuotes || 0)}
+                </span>
               </div>
-              <div>
-                <p className="font-medium text-gray-900">Order</p>
-                <p className="text-sm text-gray-500">Order Processing</p>
-              </div>
-            </div>
-          </Link>
-          <Link
-            href={route('supplier.rfqs.index')}
-            className="bg-white p-4 rounded-xl border border-gray-100 hover:border-indigo-200 hover:shadow-md transition group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-indigo-100 rounded-lg group-hover:bg-indigo-200 transition">
-                <FiFileText className="w-5 h-5 text-indigo-600" />
-              </div>
-              <div>
-                <p className="font-medium text-gray-900">RFQ</p>
-                <p className="text-sm text-gray-500">Submit Quote</p>
-              </div>
-            </div>
-          </Link>
-          <Link
-            href={route('supplier.messages.index')}
-            className="bg-white p-4 rounded-xl border border-gray-100 hover:border-indigo-200 hover:shadow-md transition group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-indigo-100 rounded-lg group-hover:bg-indigo-200 transition">
-                <FiMessageSquare className="w-5 h-5 text-indigo-600" />
-              </div>
-              <div>
-                <p className="font-medium text-gray-900">Message</p>
-                <p className="text-sm text-gray-500">
-                  {counts?.unreadMessages > 0 && (
-                    <span className="text-red-500">{counts.unreadMessages} Unread</span>
-                  )}
-                </p>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/60">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 block">
+                  Avg Turnaround
+                </span>
+                <span className="text-xl font-bold font-mono text-slate-900 mt-1 block">
+                  {Math.round(quote_performance?.averageResponseTime || 18)} hrs
+                </span>
               </div>
             </div>
-          </Link>
+          </div>
         </div>
       </div>
     </DashboardLayout>

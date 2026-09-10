@@ -42,3 +42,70 @@ export const formatIndianDate = (dateString) => {
         year: 'numeric'
     }).format(date);
 };
+
+/**
+ * Enterprise B2B Order Status Label Normalizer
+ */
+export const formatOrderStatus = (status) => {
+    const s = (status || '').toLowerCase();
+    switch (s) {
+        case 'pending':
+        case 'pending_confirmation':
+            return 'Awaiting Confirmation';
+        case 'confirmed':
+        case 'sure':
+            return 'PO Confirmed';
+        case 'processing':
+            return 'In Production';
+        case 'shipped':
+            return 'Dispatched (E-Way Bill)';
+        case 'delivered':
+            return 'Delivered & Accepted';
+        case 'cancelled':
+        case 'cancel':
+            return 'Cancelled';
+        case 'completed':
+            return 'Settled & Completed';
+        default:
+            return status || 'Pending';
+    }
+};
+
+/**
+ * Enterprise B2B Payment Status Label Normalizer
+ */
+export const formatPaymentStatus = (status) => {
+    const s = (status || '').toLowerCase();
+    switch (s) {
+        case 'paid':
+            return 'Paid (Nodal Escrow)';
+        case 'unpaid':
+        case 'unrefined':
+            return 'Payment Pending';
+        case 'pending':
+            return 'Awaiting Escrow Settlement';
+        case 'refunded':
+            return 'Refunded to Source';
+        default:
+            return status || 'Pending';
+    }
+};
+
+/**
+ * Enterprise B2B RFQ Status Label Normalizer
+ */
+export const formatRfqStatus = (status) => {
+    const s = (status || '').toLowerCase();
+    switch (s) {
+        case 'open':
+            return 'Active Tender';
+        case 'quoted':
+            return 'Bids Received';
+        case 'closed':
+        case 'off':
+            return 'Closed Tender';
+        default:
+            return status || 'Open';
+    }
+};
+

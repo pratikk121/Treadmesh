@@ -1,94 +1,110 @@
-// Pages/Buyer/Dashboard.jsx
-
-// React - Core React imports for component functionality
+// resources/js/Pages/Buyer/Dashboard.jsx
 import React from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
-
-// Layout - Buyer dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
 import {
   FiPackage,
   FiShoppingCart,
   FiFileText,
   FiMessageCircle,
   FiClock,
-  FiDollarSign,
   FiTrendingUp,
   FiAlertCircle,
-  FiUsers
+  FiUsers,
+  FiArrowRight,
+  FiShield,
+  FiCheckCircle,
+  FiExternalLink
 } from 'react-icons/fi';
-import { BsGraphUp } from 'react-icons/bs';
+import { BsGraphUp, BsShieldCheck, BsBuildingCheck } from 'react-icons/bs';
 import { MdOutlineMessage } from 'react-icons/md';
+import { formatCurrency, formatIndianDate } from '@/Utils/formatters';
 
 export default function BuyerDashboard() {
-  // Destructure props from Inertia page
   const {
-    recentRfqs,
-    recentOrders,
-    recentQuotes,
-    unreadMessages,
-    recentMessages,
-    statistics,
+    recentRfqs = [],
+    recentOrders = [],
+    recentQuotes = [],
+    unreadMessages = 0,
+    recentMessages = [],
+    statistics = {},
     chartData,
-    recentActivity,
-    savedSuppliersCount,
-    pendingActions
+    recentActivity = [],
+    savedSuppliersCount = 0,
+    pendingActions = []
   } = usePage().props;
 
-  // Helper function to format currency in USD
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount);
-  };
-
-  // Helper function to get status color based on status type
-  const getStatusColor = (status) => {
-    const colors = {
-      'open': 'bg-green-100 text-green-700',
-      'pending': 'bg-yellow-100 text-yellow-700',
-      'accepted': 'bg-blue-100 text-blue-700',
-      'rejected': 'bg-red-100 text-red-700',
-      'pending_confirmation': 'bg-orange-100 text-orange-700',
-      'confirmed': 'bg-indigo-100 text-indigo-700',
-      'processing': 'bg-purple-100 text-purple-700',
-      'shipped': 'bg-cyan-100 text-cyan-700',
-      'delivered': 'bg-emerald-100 text-emerald-700',
-      'cancelled': 'bg-gray-100 text-gray-700'
-    };
-    return colors[status] || 'bg-gray-100 text-gray-700';
+  // Refined Status Pill Styles
+  const getStatusBadge = (status) => {
+    const s = String(status || '').toLowerCase();
+    switch (s) {
+      case 'open':
+      case 'active':
+        return { label: 'Active RFQ', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+      case 'pending':
+      case 'pending_confirmation':
+        return { label: 'Pending Review', cls: 'bg-amber-50 text-amber-700 border-amber-200' };
+      case 'accepted':
+        return { label: 'Bid Accepted', cls: 'bg-blue-50 text-blue-700 border-blue-200' };
+      case 'confirmed':
+        return { label: 'PO Confirmed', cls: 'bg-indigo-50 text-indigo-700 border-indigo-200' };
+      case 'processing':
+        return { label: 'In Production', cls: 'bg-purple-50 text-purple-700 border-purple-200' };
+      case 'shipped':
+        return { label: 'Dispatched (E-Way)', cls: 'bg-cyan-50 text-cyan-700 border-cyan-200' };
+      case 'delivered':
+        return { label: 'Escrow Released', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+      case 'rejected':
+      case 'cancelled':
+        return { label: 'Closed / Cancelled', cls: 'bg-slate-100 text-slate-600 border-slate-200' };
+      default:
+        return { label: s.replace('_', ' ').toUpperCase(), cls: 'bg-slate-100 text-slate-700 border-slate-200' };
+    }
   };
 
   return (
     <DashboardLayout>
-      <Head title="Buyer Dashboard" />
+      <Head title="Buyer Procurement Command Center — Treadmesh India" />
 
-      <div className="space-y-6">
-        {/* Header with Welcome Message and Action Buttons */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+      <div className="space-y-6 max-w-7xl mx-auto">
+        {/* ------------------------------------------------------------- */}
+        {/* HEADER: CONSOLE TITLE & QUICK ACTIONS                         */}
+        {/* ------------------------------------------------------------- */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-slate-200/80">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Buyer Dashboard</h2>
-            <p className="text-gray-600 mt-1">Welcome! Here is a summary of your marketplace activity.</p>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-slate-500">
+                Institutional Sourcing Terminal
+              </span>
+            </div>
+            <h1 className="text-2xl font-extrabold text-slate-950 tracking-tight mt-0.5">
+              Procurement Command Center
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Live overview of RFQs, competitive manufacturer bids, and orders secured in Nodal Escrow.
+            </p>
           </div>
-          <div className="flex space-x-3 mt-3 md:mt-0">
+
+          <div className="flex items-center gap-2.5">
             <Link
               href={route('buyer.rfqs.create')}
-              className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all flex items-center"
+              className="group inline-flex items-center gap-2 bg-slate-950 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm transition-all duration-200"
             >
-              <FiFileText className="mr-2" /> + New RFQ
+              <span>Publish New RFQ</span>
+              <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-brand-500 transition-colors">
+                <FiArrowRight className="text-xs" />
+              </span>
             </Link>
+
             <Link
               href={route('buyer.messages.index')}
-              className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all relative"
+              className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors relative"
+              title="Supplier Communications"
             >
-              <MdOutlineMessage className="text-xl" />
+              <MdOutlineMessage className="text-lg text-slate-700" />
               {unreadMessages > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-brand-600 text-white text-[10px] font-mono font-bold rounded-full h-4 w-4 flex items-center justify-center ring-2 ring-white">
                   {unreadMessages}
                 </span>
               )}
@@ -96,19 +112,27 @@ export default function BuyerDashboard() {
           </div>
         </div>
 
-        {/* Pending Actions Alert */}
+        {/* ------------------------------------------------------------- */}
+        {/* PENDING ACTIONS ALERT (IF ANY)                                */}
+        {/* ------------------------------------------------------------- */}
         {pendingActions?.length > 0 && (
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
-            <div className="flex items-start">
-              <FiAlertCircle className="text-yellow-600 text-xl mr-3 mt-0.5" />
+          <div className="p-1 rounded-2xl bg-amber-500/10 border border-amber-300/80">
+            <div className="p-4 rounded-xl bg-amber-50/80 flex items-start gap-3">
+              <FiAlertCircle className="text-amber-700 text-lg mt-0.5 shrink-0" />
               <div className="flex-1">
-                <h4 className="text-yellow-800 font-medium">pending work ({pendingActions.length})</h4>
-                <div className="mt-2 space-y-2">
+                <h4 className="text-xs font-bold text-amber-900 uppercase tracking-wider font-mono">
+                  Action Items Requiring Approval ({pendingActions.length})
+                </h4>
+                <div className="mt-2 space-y-1.5">
                   {pendingActions.map((action, index) => (
-                    <div key={index} className="flex items-center justify-between">
-                      <p className="text-yellow-700 text-sm">{action.message}</p>
-                      <Link href={action.url} className="text-sm text-yellow-800 hover:text-yellow-900 font-medium">
-                        See →
+                    <div key={index} className="flex items-center justify-between text-xs">
+                      <p className="text-amber-900 font-medium">{action.message}</p>
+                      <Link
+                        href={action.url}
+                        className="text-amber-800 hover:text-amber-950 font-bold underline inline-flex items-center gap-1"
+                      >
+                        <span>Review Item</span>
+                        <FiArrowRight className="text-xs" />
                       </Link>
                     </div>
                   ))}
@@ -118,112 +142,127 @@ export default function BuyerDashboard() {
           </div>
         )}
 
-        {/* Statistics Cards - Key metrics overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* RFQs Card */}
-          <div className="bg-white rounded-xl p-6 border hover:shadow-lg transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-gray-500 text-sm">total RFQ</p>
-                <h3 className="text-2xl font-bold mt-1">{statistics.total_rfqs}</h3>
-                <p className="text-sm mt-2">
-                  <span className="text-green-600">{statistics.active_rfqs} Active</span>
-                  <span className="text-gray-400 mx-2">•</span>
-                  <span className="text-indigo-600">{statistics.rfqs_this_month} This Month</span>
-                </p>
+        {/* ------------------------------------------------------------- */}
+        {/* KEY METRICS TILES (INDIAN NUMBERING & RUPEE STANDARDS)       */}
+        {/* ------------------------------------------------------------- */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* RFQs Tile */}
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex justify-between items-start text-slate-400">
+                <span className="text-[11px] font-mono uppercase tracking-wider font-semibold text-slate-500">
+                  Published RFQs
+                </span>
+                <div className="p-2 rounded-lg bg-brand-50 text-brand-600">
+                  <FiFileText className="text-base" />
+                </div>
               </div>
-              <div className="p-3 bg-indigo-50 rounded-lg">
-                <FiFileText className="text-indigo-600 text-xl" />
+              <div className="text-2xl font-bold font-mono text-slate-950 mt-2">
+                {statistics.total_rfqs || 0}
               </div>
-            </div>
-            <div className="mt-4 flex items-center text-sm">
-              <FiTrendingUp className={`mr-1 ${statistics.rfq_change >= 0 ? 'text-green-500' : 'text-red-500'}`} />
-              <span className={statistics.rfq_change >= 0 ? 'text-green-600' : 'text-red-600'}>
-                {statistics.rfq_change}%
-              </span>
-              <span className="text-gray-500 ml-1"></span>
-            </div>
-          </div>
-
-          {/* Quotes Card */}
-          <div className="bg-white rounded-xl p-6 border hover:shadow-lg transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-gray-500 text-sm">Quotes Received</p>
-                <h3 className="text-2xl font-bold mt-1">{statistics.total_quotes}</h3>
-                <p className="text-sm mt-2">
-                  <span className="text-green-600">{statistics.pending_quotes} Awaiting</span>
-                  <span className="text-gray-400 mx-2">•</span>
-                  <span className="text-indigo-600">{statistics.quotes_this_month} This Month</span>
-                </p>
-              </div>
-              <div className="p-3 bg-green-50 rounded-lg">
-                <FiPackage className="text-green-600 text-xl" />
+              <div className="flex items-center gap-2 text-xs mt-2 text-slate-500">
+                <span className="font-semibold text-emerald-600">{statistics.active_rfqs || 0} Active</span>
+                <span>•</span>
+                <span>{statistics.rfqs_this_month || 0} This Month</span>
               </div>
             </div>
           </div>
 
-          {/* Orders Card */}
-          <div className="bg-white rounded-xl p-6 border hover:shadow-lg transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-gray-500 text-sm">Total order</p>
-                <h3 className="text-2xl font-bold mt-1">{statistics.total_orders}</h3>
-                <p className="text-sm mt-2">
-                  <span className="text-yellow-600">{statistics.pending_orders} Awaiting</span>
-                  <span className="text-gray-400 mx-2">•</span>
-                  <span className="text-green-600">{statistics.delivered_orders} Delivered</span>
-                </p>
+          {/* Quotes Received Tile */}
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex justify-between items-start text-slate-400">
+                <span className="text-[11px] font-mono uppercase tracking-wider font-semibold text-slate-500">
+                  Manufacturer Bids
+                </span>
+                <div className="p-2 rounded-lg bg-emerald-50 text-emerald-600">
+                  <FiPackage className="text-base" />
+                </div>
               </div>
-              <div className="p-3 bg-purple-50 rounded-lg">
-                <FiShoppingCart className="text-purple-600 text-xl" />
+              <div className="text-2xl font-bold font-mono text-slate-950 mt-2">
+                {statistics.total_quotes || 0}
               </div>
-            </div>
-            <div className="mt-4 flex items-center text-sm">
-              <FiTrendingUp className={`mr-1 ${statistics.order_change >= 0 ? 'text-green-500' : 'text-red-500'}`} />
-              <span className={statistics.order_change >= 0 ? 'text-green-600' : 'text-red-600'}>
-                {statistics.order_change}%
-              </span>
-              <span className="text-gray-500 ml-1"></span>
+              <div className="flex items-center gap-2 text-xs mt-2 text-slate-500">
+                <span className="font-semibold text-amber-600">{statistics.pending_quotes || 0} Under Evaluation</span>
+                <span>•</span>
+                <span>{statistics.quotes_this_month || 0} New</span>
+              </div>
             </div>
           </div>
 
-          {/* Spending Card */}
-          <div className="bg-white rounded-xl p-6 border hover:shadow-lg transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-gray-500 text-sm">total cost</p>
-                <h3 className="text-2xl font-bold mt-1">{formatCurrency(statistics.total_spent)}</h3>
-                <p className="text-sm mt-2">
-                  <span className="text-indigo-600">{formatCurrency(statistics.monthly_spent)} This Month</span>
-                </p>
+          {/* Orders Tile */}
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex justify-between items-start text-slate-400">
+                <span className="text-[11px] font-mono uppercase tracking-wider font-semibold text-slate-500">
+                  Wholesale Orders
+                </span>
+                <div className="p-2 rounded-lg bg-indigo-50 text-indigo-600">
+                  <FiShoppingCart className="text-base" />
+                </div>
               </div>
-              <div className="p-3 bg-blue-50 rounded-lg">
-                <FiDollarSign className="text-blue-600 text-xl" />
+              <div className="text-2xl font-bold font-mono text-slate-950 mt-2">
+                {statistics.total_orders || 0}
+              </div>
+              <div className="flex items-center gap-2 text-xs mt-2 text-slate-500">
+                <span className="font-semibold text-cyan-600">{statistics.pending_orders || 0} In Transit</span>
+                <span>•</span>
+                <span className="text-emerald-600">{statistics.delivered_orders || 0} Completed</span>
               </div>
             </div>
-            <div className="mt-4 flex items-center text-sm">
-              <FiUsers className="mr-1 text-gray-500" />
-              <span className="text-gray-600">{savedSuppliersCount} saved suppliers</span>
+          </div>
+
+          {/* Outlay Tile (INR) */}
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <div className="flex justify-between items-start text-slate-400">
+                <span className="text-[11px] font-mono uppercase tracking-wider font-semibold text-slate-500">
+                  Total Sourcing Outlay
+                </span>
+                <div className="p-2 rounded-lg bg-purple-50 text-purple-600 font-mono font-bold text-sm">
+                  ₹
+                </div>
+              </div>
+              <div className="text-2xl font-bold font-mono text-slate-950 mt-2 truncate">
+                {formatCurrency(statistics.total_spent)}
+              </div>
+              <div className="flex items-center gap-2 text-xs mt-2 text-slate-500">
+                <span>Monthly: <strong className="text-slate-800 font-mono">{formatCurrency(statistics.monthly_spent)}</strong></span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Charts Section - Activity Overview */}
+        {/* ------------------------------------------------------------- */}
+        {/* ACTIVITY OVERVIEW CHART SECTION                               */}
+        {/* ------------------------------------------------------------- */}
         {chartData && (
-          <div className="bg-white rounded-xl p-6 border">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-lg flex items-center">
-                <BsGraphUp className="mr-2" /> Summary of Activity (Last 6 Months)
-              </h3>
-              <div className="flex items-center space-x-4 text-xs text-gray-600">
-                <div className="flex items-center"><span className="w-2.5 h-2.5 bg-indigo-500 rounded mr-2"></span> RFQ</div>
-                <div className="flex items-center"><span className="w-2.5 h-2.5 bg-green-500 rounded mr-2"></span> Order</div>
-                <div className="flex items-center"><span className="w-2.5 h-2.5 bg-purple-500 rounded mr-2"></span> Quote</div>
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-6 shadow-card">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                <div>
+                  <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                    <BsGraphUp className="text-brand-600" /> Sourcing Activity Trend (Last 6 Months)
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Monthly distribution of RFQ publishing volume vs. quote bids and fulfilled purchase orders.
+                  </p>
+                </div>
+                <div className="flex items-center gap-4 text-xs font-mono font-semibold">
+                  <div className="flex items-center gap-1.5 text-slate-600">
+                    <span className="w-2.5 h-2.5 bg-indigo-600 rounded"></span> RFQs
+                  </div>
+                  <div className="flex items-center gap-1.5 text-slate-600">
+                    <span className="w-2.5 h-2.5 bg-emerald-500 rounded"></span> Orders
+                  </div>
+                  <div className="flex items-center gap-1.5 text-slate-600">
+                    <span className="w-2.5 h-2.5 bg-purple-500 rounded"></span> Quotes
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="h-64">
-              <div className="h-48 border border-gray-100 rounded-lg bg-gradient-to-b from-gray-50 to-white px-3 py-4">
+
+              {/* Responsive Bar Graphic */}
+              <div className="h-48 border border-slate-100 rounded-xl bg-slate-50/50 p-4">
                 <div className="grid grid-cols-6 gap-3 h-full items-end">
                   {chartData.labels.map((label, index) => {
                     const rfqMax = Math.max(...chartData.rfqs, 1);
@@ -232,276 +271,345 @@ export default function BuyerDashboard() {
                     const rfqHeight = Math.round((chartData.rfqs[index] / rfqMax) * 100);
                     const orderHeight = Math.round((chartData.orders[index] / orderMax) * 100);
                     const quoteHeight = Math.round((chartData.quotes[index] / quoteMax) * 100);
+
                     return (
-                      <div key={label} className="flex flex-col items-center h-full">
-                        <div className="flex items-end space-x-1 h-full w-full">
+                      <div key={label} className="flex flex-col items-center h-full justify-end">
+                        <div className="flex items-end gap-1 w-full justify-center h-32">
                           <div
-                            className="w-full bg-indigo-500/80 rounded-t"
-                            style={{ height: `${rfqHeight}%` }}
-                            title={`RFQ: ${chartData.rfqs[index]}`}
-                          ></div>
+                            className="w-2 sm:w-3 bg-indigo-600 rounded-t transition-all duration-300"
+                            style={{ height: `${Math.max(rfqHeight, 6)}%` }}
+                            title={`RFQs: ${chartData.rfqs[index]}`}
+                          />
                           <div
-                            className="w-full bg-green-500/80 rounded-t"
-                            style={{ height: `${orderHeight}%` }}
-                            title={`Order: ${chartData.orders[index]}`}
-                          ></div>
+                            className="w-2 sm:w-3 bg-emerald-500 rounded-t transition-all duration-300"
+                            style={{ height: `${Math.max(orderHeight, 6)}%` }}
+                            title={`Orders: ${chartData.orders[index]}`}
+                          />
                           <div
-                            className="w-full bg-purple-500/80 rounded-t"
-                            style={{ height: `${quoteHeight}%` }}
-                            title={`Quote: ${chartData.quotes[index]}`}
-                          ></div>
+                            className="w-2 sm:w-3 bg-purple-500 rounded-t transition-all duration-300"
+                            style={{ height: `${Math.max(quoteHeight, 6)}%` }}
+                            title={`Quotes: ${chartData.quotes[index]}`}
+                          />
                         </div>
-                        <span className="text-xs mt-2 text-gray-600">{label}</span>
+                        <span className="text-[10px] font-mono text-slate-500 mt-2 font-medium">
+                          {label}
+                        </span>
                       </div>
                     );
                   })}
                 </div>
               </div>
-              <p className="text-xs text-gray-500 mt-3">
-                Bars are independently scaled for readability.
-              </p>
             </div>
           </div>
         )}
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Recent RFQs and Quotes */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Recent RFQs */}
-            <div className="bg-white rounded-xl p-6 border">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-lg flex items-center">
-                  <FiFileText className="mr-2" /> Recent RFQ
-                </h3>
-                <Link href={route('buyer.rfqs.index')} className="text-sm text-indigo-600 hover:text-indigo-800">
-                  View All →
-                </Link>
-              </div>
-              <div className="space-y-3">
-                {recentRfqs?.length > 0 ? recentRfqs.map((rfq) => (
-                  <div key={rfq.id} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <div className="flex items-center">
-                          <h4 className="font-medium">{rfq.title}</h4>
-                          <span className={`ml-3 px-2 py-1 text-xs rounded-full ${getStatusColor(rfq.status)}`}>
-                            {rfq.status === 'open' ? 'open' :
-                              rfq.status === 'closed' ? 'off' :
-                                rfq.status === 'cancelled' ? 'cancel' : rfq.status}
-                          </span>
-                        </div>
-                        <p className="text-sm text-gray-600 mt-1">RFQ #{rfq.rfq_number}</p>
-                        <div className="flex items-center text-sm text-gray-500 mt-2">
-                          <FiPackage className="mr-1" /> Amount: {rfq.quantity} Unit
-                          <span className="mx-2">•</span>
-                          <FiClock className="mr-1" /> Required date: {new Date(rfq.required_by_date).toLocaleDateString('en-US')}
-                        </div>
-                        {rfq.quotes_count > 0 && (
-                          <p className="text-sm text-indigo-600 mt-2 font-medium">
-                            {rfq.quotes_count} quotes received
-                          </p>
-                        )}
-                      </div>
-                      <Link
-                        href={route('buyer.rfqs.show', rfq.id)}
-                        className="text-indigo-600 hover:text-indigo-800 text-sm"
-                      >
-                        for suppliers See details →
-                      </Link>
-                    </div>
+        {/* ------------------------------------------------------------- */}
+        {/* TWO-COLUMN OPERATIONAL WORKBENCH                             */}
+        {/* ------------------------------------------------------------- */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Column: Recent RFQs & Quotes (8 cols) */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* Recent RFQs Table Card */}
+            <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+              <div className="bg-white rounded-xl p-5 shadow-card">
+                <div className="flex justify-between items-center mb-4">
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                      <FiFileText className="text-brand-600" /> Active Sourcing Requests (RFQs)
+                    </h3>
+                    <p className="text-xs text-slate-500">Live technical inquiries open for manufacturer bidding</p>
                   </div>
-                )) : (
-                  <p className="text-gray-500 text-center py-4">No RFQ</p>
-                )}
+                  <Link
+                    href={route('buyer.rfqs.index')}
+                    className="text-xs font-semibold text-brand-600 hover:text-brand-800 transition-colors inline-flex items-center gap-1"
+                  >
+                    <span>View All RFQs</span>
+                    <FiChevronRight />
+                  </Link>
+                </div>
+
+                <div className="space-y-2.5">
+                  {recentRfqs && recentRfqs.length > 0 ? (
+                    recentRfqs.map((rfq) => {
+                      const badge = getStatusBadge(rfq.status);
+                      return (
+                        <div
+                          key={rfq.id}
+                          className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/60 hover:bg-white hover:border-slate-300 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                        >
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-bold text-xs text-slate-900 truncate">
+                                {rfq.title}
+                              </h4>
+                              <span className={`px-2 py-0.5 text-[10px] font-mono font-semibold rounded-full border ${badge.cls}`}>
+                                {badge.label}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-3 text-xs text-slate-500 mt-1 font-mono">
+                              <span>RFQ #{rfq.rfq_number}</span>
+                              <span>•</span>
+                              <span>Target: {rfq.quantity} {rfq.unit || 'units'}</span>
+                              <span>•</span>
+                              <span>Required: {formatIndianDate(rfq.required_by_date)}</span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-3 justify-end shrink-0">
+                            {rfq.quotes_count > 0 && (
+                              <span className="text-xs font-mono font-semibold text-brand-600 bg-brand-50 px-2 py-0.5 rounded border border-brand-200">
+                                {rfq.quotes_count} Bids In
+                              </span>
+                            )}
+                            <Link
+                              href={route('buyer.rfqs.show', rfq.id)}
+                              className="text-xs font-semibold text-slate-700 hover:text-slate-950 bg-white border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-slate-50 transition-colors"
+                            >
+                              Manage RFQ &rarr;
+                            </Link>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center py-8 text-xs text-slate-400">
+                      No active RFQs currently published.
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Recent Quotes */}
-            <div className="bg-white rounded-xl p-6 border">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-lg flex items-center">
-                  <FiPackage className="mr-2" /> Recent Quotes
-                </h3>
-                <Link href={route('buyer.quotes.index')} className="text-sm text-indigo-600 hover:text-indigo-800">
-                  View All →
-                </Link>
-              </div>
-              <div className="space-y-3">
-                {recentQuotes?.length > 0 ? recentQuotes.map((quote) => (
-                  <div key={quote.id} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <div className="flex items-center">
-                          <h4 className="font-medium">Quote from {quote.supplier?.name}</h4>
-                          <span className={`ml-3 px-2 py-1 text-xs rounded-full ${getStatusColor(quote.status)}`}>
-                            {quote.status === 'pending' ? 'Awaiting' :
-                              quote.status === 'accepted' ? 'accepted' :
-                                quote.status === 'rejected' ? 'Rejected' : quote.status}
-                          </span>
-                        </div>
-                        <p className="text-sm text-gray-600 mt-1">{quote.rfq?.title} -for</p>
-                        <p className="text-sm text-gray-600 mt-1">Quote #: {quote.quote_number}</p>
-                        <div className="flex items-center text-sm mt-2">
-                          <FiDollarSign className="text-gray-500 mr-1" />
-                          <span className="font-medium">{formatCurrency(quote.total_amount)}</span>
-                          <span className="mx-2 text-gray-300">|</span>
-                          <FiClock className="text-gray-500 mr-1" />
-                          <span className="text-gray-600">Expires: {new Date(quote.valid_until).toLocaleDateString('en-US')}</span>
-                        </div>
-                      </div>
-                      <Link
-                        href={route('buyer.quotes.show', quote.id)}
-                        className="text-indigo-600 hover:text-indigo-800 text-sm"
-                      >
-                        Review →
-                      </Link>
-                    </div>
+            {/* Recent Quotes Table Card */}
+            <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+              <div className="bg-white rounded-xl p-5 shadow-card">
+                <div className="flex justify-between items-center mb-4">
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                      <FiPackage className="text-emerald-600" /> Incoming Factory Quotations
+                    </h3>
+                    <p className="text-xs text-slate-500">Direct wholesale bids received from verified suppliers</p>
                   </div>
-                )) : (
-                  <p className="text-gray-500 text-center py-4">No quotes found yet</p>
-                )}
+                  <Link
+                    href={route('buyer.quotes.index')}
+                    className="text-xs font-semibold text-brand-600 hover:text-brand-800 transition-colors inline-flex items-center gap-1"
+                  >
+                    <span>View All Quotes</span>
+                    <FiChevronRight />
+                  </Link>
+                </div>
+
+                <div className="space-y-2.5">
+                  {recentQuotes && recentQuotes.length > 0 ? (
+                    recentQuotes.map((quote) => {
+                      const badge = getStatusBadge(quote.status);
+                      return (
+                        <div
+                          key={quote.id}
+                          className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/60 hover:bg-white hover:border-slate-300 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                        >
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-bold text-xs text-slate-900 truncate">
+                                {quote.supplier?.name || 'Verified Supplier'}
+                              </h4>
+                              <span className={`px-2 py-0.5 text-[10px] font-mono font-semibold rounded-full border ${badge.cls}`}>
+                                {badge.label}
+                              </span>
+                            </div>
+                            <div className="text-xs text-slate-600 mt-0.5 truncate">
+                              Target: {quote.rfq?.title || 'Wholesale Requirement'}
+                            </div>
+                            <div className="flex items-center gap-3 text-xs text-slate-500 mt-1 font-mono">
+                              <span className="font-bold text-slate-900">{formatCurrency(quote.total_amount)}</span>
+                              <span>•</span>
+                              <span>Quote #{quote.quote_number}</span>
+                              <span>•</span>
+                              <span>Valid: {formatIndianDate(quote.valid_until)}</span>
+                            </div>
+                          </div>
+
+                          <Link
+                            href={route('buyer.quotes.show', quote.id)}
+                            className="text-xs font-semibold text-white bg-slate-950 hover:bg-slate-800 px-3.5 py-1.5 rounded-lg transition-colors shrink-0 text-center"
+                          >
+                            Review & Accept Bid &rarr;
+                          </Link>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center py-8 text-xs text-slate-400">
+                      No quotation bids received yet.
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column - Recent Orders, Messages and Suppliers */}
-          <div className="space-y-6">
-            {/* Recent Orders */}
-            <div className="bg-white rounded-xl p-6 border">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-lg flex items-center">
-                  <FiShoppingCart className="mr-2" /> Recent Orders
-                </h3>
-                <Link href={route('buyer.orders.index')} className="text-sm text-indigo-600 hover:text-indigo-800">
-                  View All →
-                </Link>
-              </div>
-              <div className="space-y-3">
-                {recentOrders?.length > 0 ? recentOrders.map((order) => (
-                  <div key={order.id} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="font-medium">Order #{order.order_number}</p>
-                        <p className="text-sm text-gray-600">Supplier: {order.supplier?.name}</p>
-                        <p className="text-sm text-gray-600 mt-1">total: {formatCurrency(order.total_amount)}</p>
-                      </div>
-                      <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(order.order_status)}`}>
-                        {order.order_status === 'pending_confirmation' ? 'Awaiting' :
-                          order.order_status === 'confirmed' ? 'sure' :
-                            order.order_status === 'processing' ? 'In process' :
-                              order.order_status === 'shipped' ? 'Sent' :
-                                order.order_status === 'delivered' ? 'Delivered' :
-                                  order.order_status === 'cancelled' ? 'cancel' : order.order_status.replace('_', ' ')}
-                      </span>
-                    </div>
-                    <Link
-                      href={route('buyer.orders.show', order.id)}
-                      className="mt-2 inline-block text-sm text-indigo-600 hover:text-indigo-800"
-                    >
-                      Track Order →
-                    </Link>
-                  </div>
-                )) : (
-                  <p className="text-gray-500 text-center py-4">No order</p>
-                )}
-              </div>
-            </div>
+          {/* Right Column: Escrow Orders, Messages & Vendor Network (4 cols) */}
+          <div className="lg:col-span-4 space-y-6">
+            {/* Purchase Orders in Escrow */}
+            <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+              <div className="bg-white rounded-xl p-5 shadow-card">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                    <FiShoppingCart className="text-indigo-600" /> Orders in Escrow
+                  </h3>
+                  <Link href={route('buyer.orders.index')} className="text-xs font-semibold text-brand-600 hover:text-brand-800">
+                    All &rarr;
+                  </Link>
+                </div>
 
-            {/* Recent Messages */}
-            <div className="bg-white rounded-xl p-6 border">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-lg flex items-center">
-                  <FiMessageCircle className="mr-2" /> Recent messages
-                </h3>
-                <Link href={route('buyer.messages.index')} className="text-sm text-indigo-600 hover:text-indigo-800">
-                  View All →
-                </Link>
-              </div>
-              <div className="space-y-3">
-                {recentMessages?.length > 0 ? recentMessages.map((message) => {
-                  const isFromMe = message.sender_id === usePage().props.auth.user.id;
-                  return (
-                    <div key={message.id} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                      <div className="flex items-start">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <p className="font-medium text-sm truncate">
-                              {isFromMe ? 'You are' : message.sender?.name}
-                            </p>
-                            {!message.is_read && !isFromMe && (
-                              <span className="ml-2 w-2 h-2 bg-blue-600 rounded-full"></span>
-                            )}
+                <div className="space-y-2.5">
+                  {recentOrders && recentOrders.length > 0 ? (
+                    recentOrders.map((order) => {
+                      const badge = getStatusBadge(order.order_status);
+                      return (
+                        <div key={order.id} className="p-3 rounded-xl bg-slate-50 border border-slate-200/60">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <div className="font-mono font-bold text-xs text-slate-900">
+                                #{order.order_number}
+                              </div>
+                              <div className="text-xs text-slate-500 mt-0.5 truncate">
+                                {order.supplier?.name}
+                              </div>
+                              <div className="font-mono font-bold text-slate-900 text-xs mt-1">
+                                {formatCurrency(order.total_amount)}
+                              </div>
+                            </div>
+                            <span className={`px-2 py-0.5 text-[9px] font-mono font-semibold rounded border ${badge.cls}`}>
+                              {badge.label}
+                            </span>
                           </div>
-                          <p className="text-sm text-gray-600 truncate mt-1">{message.message}</p>
-                          <p className="text-xs text-gray-400 mt-1">
-                            {new Date(message.created_at).toLocaleDateString('en-US')}
-                          </p>
+
+                          <div className="mt-2 pt-2 border-t border-slate-200/60 flex justify-between items-center text-xs">
+                            <span className="text-slate-400 text-[11px] font-mono">
+                              {formatIndianDate(order.created_at)}
+                            </span>
+                            <Link
+                              href={route('buyer.orders.show', order.id)}
+                              className="text-brand-600 hover:text-brand-800 font-semibold"
+                            >
+                              Track & Escrow &rarr;
+                            </Link>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  );
-                }) : (
-                  <p className="text-gray-500 text-center py-4">No message</p>
-                )}
+                      );
+                    })
+                  ) : (
+                    <p className="text-center py-6 text-xs text-slate-400">No active purchase orders.</p>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Saved Suppliers */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6">
-              <h3 className="font-semibold text-lg mb-4 flex items-center">
-                <FiUsers className="mr-2" /> Supplier ({savedSuppliersCount})
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">You have connected with {savedSuppliersCount} suppliers</p>
-              <Link
-                href={route('buyer.suppliers.index')}
-                className="inline-block w-full text-center px-4 py-2 bg-white text-indigo-600 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Browse all suppliers
-              </Link>
+            {/* Direct Supplier Communications */}
+            <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+              <div className="bg-white rounded-xl p-5 shadow-card">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                    <FiMessageCircle className="text-purple-600" /> Supplier Messages
+                  </h3>
+                  <Link href={route('buyer.messages.index')} className="text-xs font-semibold text-brand-600 hover:text-brand-800">
+                    Inbox &rarr;
+                  </Link>
+                </div>
+
+                <div className="space-y-2">
+                  {recentMessages && recentMessages.length > 0 ? (
+                    recentMessages.map((msg) => {
+                      const isMe = msg.sender_id === usePage().props.auth?.user?.id;
+                      return (
+                        <div key={msg.id} className="p-2.5 rounded-lg bg-slate-50 border border-slate-100 text-xs">
+                          <div className="flex justify-between font-medium text-slate-800 text-[11px]">
+                            <span>{isMe ? 'You' : msg.sender?.name}</span>
+                            <span className="text-slate-400 font-mono text-[10px]">{formatIndianDate(msg.created_at)}</span>
+                          </div>
+                          <p className="text-slate-600 mt-1 line-clamp-1">{msg.message}</p>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p className="text-center py-4 text-xs text-slate-400">No recent messages.</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Verified Manufacturer Directory CTA */}
+            <div className="p-1 rounded-2xl bg-slate-900 text-white shadow-card">
+              <div className="p-5 rounded-xl bg-slate-950 border border-slate-800">
+                <div className="flex items-center gap-2 mb-2">
+                  <BsBuildingCheck className="text-brand-400 text-base" />
+                  <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-brand-300">
+                    Vetted Manufacturer Network
+                  </span>
+                </div>
+                <h4 className="font-bold text-sm text-white">
+                  Connected Suppliers ({savedSuppliersCount || 0})
+                </h4>
+                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Explore verified manufacturers across Tirupur, Chakan, Peenya, Manesar, and Dahej industrial zones.
+                </p>
+                <Link
+                  href={route('buyer.suppliers.index')}
+                  className="mt-4 block w-full text-center bg-brand-600 hover:bg-brand-700 text-white py-2 rounded-lg text-xs font-semibold shadow-sm transition-colors"
+                >
+                  Explore All Factory Hubs &rarr;
+                </Link>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Recent Activity Feed */}
-        {recentActivity?.length > 0 && (
-          <div className="bg-white rounded-xl p-6 border">
-            <h3 className="font-semibold text-lg mb-4 flex items-center">
-              <FiClock className="mr-2" /> recent activity
-            </h3>
-            <div className="space-y-3">
-              {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-start py-2 border-b last:border-0">
-                  <div className={`p-2 rounded-full mr-3 ${activity.type === 'rfq' ? 'bg-indigo-100' :
-                    activity.type === 'order' ? 'bg-green-100' : 'bg-purple-100'
-                    }`}>
-                    {activity.type === 'rfq' && <FiFileText className={activity.type === 'rfq' ? 'text-indigo-600' : ''} />}
-                    {activity.type === 'order' && <FiShoppingCart className="text-green-600" />}
-                    {activity.type === 'quote' && <FiPackage className="text-purple-600" />}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex justify-between">
-                      <p className="text-sm font-medium">{activity.title}</p>
-                      <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(activity.status)}`}>
-                        {activity.status === 'open' ? 'open' :
-                          activity.status === 'pending' ? 'Awaiting' :
-                            activity.status === 'accepted' ? 'accepted' :
-                              activity.status === 'delivered' ? 'Delivered' :
-                                activity.status === 'cancelled' ? 'cancel' : activity.status}
-                      </span>
+        {/* ------------------------------------------------------------- */}
+        {/* INSTITUTIONAL AUDIT TRAIL / ACTIVITY FEED                     */}
+        {/* ------------------------------------------------------------- */}
+        {recentActivity && recentActivity.length > 0 && (
+          <div className="p-1 rounded-2xl bg-slate-100/70 border border-slate-200/80">
+            <div className="bg-white rounded-xl p-5 shadow-card">
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2 mb-4">
+                <FiClock className="text-slate-500" /> Sourcing Audit Trail & Compliance Log
+              </h3>
+              <div className="divide-y divide-slate-100">
+                {recentActivity.map((activity, index) => {
+                  const badge = getStatusBadge(activity.status);
+                  return (
+                    <div key={index} className="py-2.5 flex items-center justify-between text-xs gap-4">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 shrink-0">
+                          {activity.type === 'rfq' && <FiFileText />}
+                          {activity.type === 'order' && <FiShoppingCart />}
+                          {activity.type === 'quote' && <FiPackage />}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-medium text-slate-900 truncate">{activity.title}</p>
+                          <p className="text-[11px] font-mono text-slate-400">{formatIndianDate(activity.time)}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 shrink-0">
+                        {activity.amount && (
+                          <span className="font-mono font-bold text-slate-900">
+                            {formatCurrency(activity.amount)}
+                          </span>
+                        )}
+                        <span className={`px-2 py-0.5 text-[9px] font-mono font-semibold rounded border ${badge.cls}`}>
+                          {badge.label}
+                        </span>
+                        {activity.url && (
+                          <Link href={activity.url} className="text-brand-600 hover:text-brand-800 font-semibold">
+                            View &rarr;
+                          </Link>
+                        )}
+                      </div>
                     </div>
-                    {activity.amount && (
-                      <p className="text-sm text-gray-600 mt-1">{formatCurrency(activity.amount)}</p>
-                    )}
-                    <p className="text-xs text-gray-400 mt-1">
-                      {new Date(activity.time).toLocaleDateString('en-US')} {new Date(activity.time).toLocaleTimeString('en-US')}
-                    </p>
-                  </div>
-                  <Link href={activity.url} className="text-indigo-600 hover:text-indigo-800 text-sm ml-2">
-                    See
-                  </Link>
-                </div>
-              ))}
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}
