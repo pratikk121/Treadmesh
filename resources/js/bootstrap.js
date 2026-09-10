@@ -26,25 +26,29 @@ import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 window.Pusher = Pusher;
 
-// Initialize Echo with Pusher configuration
-window.Echo = new Echo({
-    // Use Pusher as the broadcasting driver
-    broadcaster: "pusher",
+// Initialize Echo with Pusher configuration only if key is configured
+if (import.meta.env.VITE_PUSHER_APP_KEY) {
+    window.Echo = new Echo({
+        // Use Pusher as the broadcasting driver
+        broadcaster: "pusher",
 
-    // Application credentials from environment variables
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? "mt1",
+        // Application credentials from environment variables
+        key: import.meta.env.VITE_PUSHER_APP_KEY,
+        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? "mt1",
 
-    // WebSocket connection configuration
-    wsHost: import.meta.env.VITE_PUSHER_HOST
-        ? import.meta.env.VITE_PUSHER_HOST
-        : `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
-    wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
-    wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
+        // WebSocket connection configuration
+        wsHost: import.meta.env.VITE_PUSHER_HOST
+            ? import.meta.env.VITE_PUSHER_HOST
+            : `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER || "mt1"}.pusher.com`,
+        wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
+        wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
 
-    // Use TLS/SSL if scheme is https
-    forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? "https") === "https",
+        // Use TLS/SSL if scheme is https
+        forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? "https") === "https",
 
-    // Enable both ws and wss transports
-    enabledTransports: ["ws", "wss"],
-});
+        // Enable both ws and wss transports
+        enabledTransports: ["ws", "wss"],
+    });
+} else {
+    window.Echo = null;
+}

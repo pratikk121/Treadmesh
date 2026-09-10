@@ -23,7 +23,8 @@ php artisan view:clear || true
 
 # Run database migrations and seeders automatically
 echo "==> Running database migrations and seeders..."
-php artisan migrate --force --seed || echo "Database already initialized."
+php artisan migrate --force || echo "Migrations completed or already up to date."
+php artisan db:seed --force || echo "Database already seeded."
 
 # Re-enforce www-data ownership after migrations
 chown -R www-data:www-data /var/www/html/database /var/www/html/storage /var/www/html/bootstrap/cache
