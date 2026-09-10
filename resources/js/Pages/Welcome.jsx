@@ -30,7 +30,6 @@ import {
     FiActivity,
     FiExternalLink,
     FiRefreshCw,
-    FiDollarSign,
     FiLock,
     FiFileText
 } from 'react-icons/fi';
@@ -40,6 +39,7 @@ import {
     BsBuildingCheck,
     BsArrowRight
 } from 'react-icons/bs';
+import { formatCurrency, formatIndianDate } from '@/Utils/formatters';
 
 const NoImg = "/noImg.jpg";
 
@@ -73,10 +73,12 @@ export default function Welcome({
     // Contact form feedback state
     const [contactSubmitted, setContactSubmitted] = useState(false);
     const [contactForm, setContactForm] = useState({
-        firstName: '',
-        lastName: '',
+        fullName: '',
+        companyName: '',
         email: '',
-        subject: '',
+        phone: '',
+        gstin: '',
+        categoryTarget: '',
         message: ''
     });
 
@@ -92,16 +94,6 @@ export default function Welcome({
         if (sortBy !== 'created_at') count++;
         return count;
     }, [searchTerm, selectedCategory, selectedSupplier, minPrice, maxPrice, verifiedOnly, sortBy]);
-
-    // Format currency in USD with clean tabular glyphs
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        }).format(amount || 0);
-    };
 
     // Apply filters to product listing
     const applyFilters = (customCategory = null) => {
@@ -155,19 +147,27 @@ export default function Welcome({
     const handleContactSubmit = (e) => {
         e.preventDefault();
         setContactSubmitted(true);
-        setContactForm({ firstName: '', lastName: '', email: '', subject: '', message: '' });
+        setContactForm({
+            fullName: '',
+            companyName: '',
+            email: '',
+            phone: '',
+            gstin: '',
+            categoryTarget: '',
+            message: ''
+        });
         setTimeout(() => setContactSubmitted(false), 6000);
     };
 
     return (
         <div className="min-h-screen bg-[#FAFAFC] text-slate-900 selection:bg-brand-500 selection:text-white font-sans antialiased">
-            <Head title="Treadmesh — Enterprise B2B Wholesale Marketplace & Procurement Protocol" />
+            <Head title="Treadmesh India — B2B Wholesale Marketplace & MSME Procurement Protocol" />
 
             {/* ------------------------------------------------------------- */}
             {/* FLOATING GLASS ISLAND NAVIGATION BAR                          */}
             {/* ------------------------------------------------------------- */}
             <header className="fixed top-4 inset-x-0 z-50 px-4 sm:px-6 pointer-events-none">
-                <nav className="max-w-6xl mx-auto pointer-events-auto bg-white/80 backdrop-blur-xl border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-full px-4 sm:px-6 py-2.5 transition-all duration-300">
+                <nav className="max-w-6xl mx-auto pointer-events-auto bg-white/85 backdrop-blur-xl border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-full px-4 sm:px-6 py-2.5 transition-all duration-300">
                     <div className="flex items-center justify-between">
                         {/* Brand Monogram & Name */}
                         <Link href="/" className="flex items-center gap-3 group">
@@ -179,9 +179,12 @@ export default function Welcome({
                             <div className="flex flex-col">
                                 <div className="text-lg font-bold tracking-tight text-slate-950 flex items-center">
                                     Tread<span className="text-brand-600">mesh</span>
+                                    <span className="ml-1.5 px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-900 border border-amber-200">
+                                        INDIA
+                                    </span>
                                 </div>
-                                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold -mt-1 hidden sm:block">
-                                    Enterprise B2B
+                                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold -mt-0.5 hidden sm:block">
+                                    B2B Wholesale & MSME Protocol
                                 </span>
                             </div>
                         </Link>
@@ -192,13 +195,13 @@ export default function Welcome({
                                 href="#products"
                                 className="px-3 py-1.5 rounded-full hover:text-slate-950 hover:bg-slate-100/70 transition-colors"
                             >
-                                Products
+                                Catalog
                             </a>
                             <a
                                 href="#categories"
                                 className="px-3 py-1.5 rounded-full hover:text-slate-950 hover:bg-slate-100/70 transition-colors"
                             >
-                                Categories
+                                Manufacturing Hubs
                             </a>
                             <a
                                 href="#capabilities"
@@ -216,13 +219,13 @@ export default function Welcome({
                                 href="#about"
                                 className="px-3 py-1.5 rounded-full hover:text-slate-950 hover:bg-slate-100/70 transition-colors"
                             >
-                                Enterprise Trust
+                                GST & Escrow Trust
                             </a>
                             <a
                                 href="#contact"
                                 className="px-3 py-1.5 rounded-full hover:text-slate-950 hover:bg-slate-100/70 transition-colors"
                             >
-                                Contact
+                                Trade Desk
                             </a>
                         </div>
 
@@ -257,7 +260,7 @@ export default function Welcome({
                                             href={route('register')}
                                             className="group inline-flex items-center gap-2 bg-slate-950 hover:bg-slate-800 text-white pl-4 pr-2.5 py-1.5 rounded-full text-xs sm:text-sm font-semibold shadow-sm transition-all duration-200"
                                         >
-                                            <span>Get Started</span>
+                                            <span>Join Network</span>
                                             <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-brand-500 group-hover:translate-x-0.5 transition-all duration-200">
                                                 <FiArrowRight className="text-xs text-white" />
                                             </span>
@@ -286,42 +289,42 @@ export default function Welcome({
                                 onClick={() => setMobileMenuOpen(false)}
                                 className="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg"
                             >
-                                Products
+                                Commercial Catalog
                             </a>
                             <a
                                 href="#categories"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg"
                             >
-                                Categories
+                                Manufacturing Hubs & Sectors
                             </a>
                             <a
                                 href="#capabilities"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg"
                             >
-                                Enterprise Capabilities
+                                Sourcing Capabilities
                             </a>
                             <a
                                 href="#how-it-works"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg"
                             >
-                                How It Works
+                                Procurement Flow
                             </a>
                             <a
                                 href="#about"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg"
                             >
-                                About & Trust
+                                GST, MSME & Escrow Trust
                             </a>
                             <a
                                 href="#contact"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className="px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg"
                             >
-                                Contact Specialists
+                                India Trade Desk
                             </a>
                         </div>
                     )}
@@ -329,47 +332,46 @@ export default function Welcome({
             </header>
 
             {/* ------------------------------------------------------------- */}
-            {/* HERO SECTION: SOURCING TERMINAL & AMBIENT GLOW                */}
+            {/* HERO SECTION: SOURCING TERMINAL & PAN-INDIA INDUSTRIAL GLOW    */}
             {/* ------------------------------------------------------------- */}
             <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-slate-50 via-white to-[#FAFAFC]">
-                {/* Radial ambient illumination nodes */}
-                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[360px] bg-gradient-to-tr from-brand-500/10 via-indigo-400/5 to-purple-400/0 blur-3xl pointer-events-none rounded-full" />
+                {/* Ambient illumination nodes */}
+                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[380px] bg-gradient-to-tr from-brand-500/10 via-indigo-400/5 to-amber-500/5 blur-3xl pointer-events-none rounded-full" />
                 <div className="absolute -top-10 -right-10 w-96 h-96 bg-brand-400/5 blur-3xl pointer-events-none rounded-full" />
 
                 {/* Subtle technical background grid */}
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
                 <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
-                    {/* Enterprise Trust Indicator Pill */}
+                    {/* India Trust Indicator Pill */}
                     <div className="flex justify-center mb-6">
                         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] text-xs font-semibold text-slate-800">
                             <span className="flex h-2 w-2 relative">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-600"></span>
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
                             </span>
-                            <span className="font-mono text-brand-700 tracking-tight font-bold">RFQ ENGINE v2.4</span>
+                            <span className="font-mono text-brand-700 tracking-tight font-bold">MAKE IN INDIA • GSTIN READY</span>
                             <span className="text-slate-300">•</span>
-                            <span className="text-slate-600 font-normal">Multi-Supplier Direct Wholesale Sourcing</span>
+                            <span className="text-slate-600 font-normal">Pan-India Wholesale Sourcing & Escrow</span>
                         </div>
                     </div>
 
                     {/* Editorial Headline */}
                     <div className="text-center max-w-4xl mx-auto">
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-950 leading-[1.12]">
-                            Direct Wholesale Sourcing for{' '}
+                            Direct Factory Procurement for{' '}
                             <span className="bg-gradient-to-r from-brand-600 via-indigo-600 to-indigo-800 bg-clip-text text-transparent">
-                                High-Velocity
-                            </span>{' '}
-                            Enterprises
+                                Indian Enterprises
+                            </span>
                         </h1>
                         <p className="mt-6 text-base sm:text-lg lg:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                            Discover verified commercial suppliers, compare transparent volume-tiered bids,
-                            and execute high-volume procurement contracts with escrow trade assurance.
+                            Connect directly with GST-verified manufacturers across major industrial corridors.
+                            Publish RFQs, secure wholesale volume discounts, and settle orders with 100% escrow protection.
                         </p>
                     </div>
 
                     {/* --------------------------------------------------------- */}
-                    {/* OMNIBAR SEARCH & FILTER TERMINAL                          */}
+                    {/* OMNIBAR SOURCING TERMINAL                                 */}
                     {/* --------------------------------------------------------- */}
                     <div className="mt-10 max-w-3xl mx-auto">
                         {/* Outer Double-Bezel Container */}
@@ -386,7 +388,7 @@ export default function Welcome({
                                             onChange={(e) => setSelectedCategory(e.target.value)}
                                             className="w-full bg-transparent border-0 py-1.5 pl-0 pr-6 text-xs sm:text-sm font-semibold text-slate-800 focus:ring-0 focus:outline-none cursor-pointer truncate"
                                         >
-                                            <option value="">All Categories</option>
+                                            <option value="">All Sectors</option>
                                             {categories.map((cat) => (
                                                 <option key={cat.name} value={cat.name}>
                                                     {cat.name} ({cat.count})
@@ -403,7 +405,7 @@ export default function Welcome({
                                         type="text"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        placeholder="Search commercial SKUs, products, or suppliers..."
+                                        placeholder="Search products, HSN codes, materials, or verified manufacturers..."
                                         className="w-full bg-transparent border-0 py-2 px-0 text-sm placeholder:text-slate-400 text-slate-900 focus:ring-0 focus:outline-none"
                                     />
                                 </div>
@@ -433,7 +435,7 @@ export default function Welcome({
                                         type="submit"
                                         className="group inline-flex items-center justify-center gap-2 bg-slate-950 hover:bg-slate-800 text-white px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 shadow-sm"
                                     >
-                                        <span>Search</span>
+                                        <span>Find Suppliers</span>
                                         <FiArrowRight className="text-xs group-hover:translate-x-0.5 transition-transform" />
                                     </button>
                                 </div>
@@ -443,7 +445,7 @@ export default function Welcome({
                         {/* Top Category Chips for Fast Filtering */}
                         <div className="mt-3.5 flex items-center gap-2 overflow-x-auto pb-1 text-xs text-slate-500 no-scrollbar">
                             <span className="font-semibold text-slate-400 flex items-center gap-1 shrink-0 font-mono text-[11px] uppercase tracking-wider">
-                                <FiZap className="text-amber-500" /> Hot Sectors:
+                                <FiZap className="text-amber-500" /> Key Hubs:
                             </span>
                             <button
                                 type="button"
@@ -454,7 +456,7 @@ export default function Welcome({
                                         : 'bg-white border-slate-200/70 hover:border-slate-300 text-slate-600'
                                 }`}
                             >
-                                All Items
+                                All Sectors
                             </button>
                             {categories.slice(0, 6).map((cat) => (
                                 <button
@@ -479,22 +481,22 @@ export default function Welcome({
                     </div>
 
                     {/* --------------------------------------------------------- */}
-                    {/* LIVE PLATFORM METRICS BAR                                 */}
+                    {/* LIVE PAN-INDIA PROCUREMENT METRICS BAR                    */}
                     {/* --------------------------------------------------------- */}
                     <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                         <div className="p-1 rounded-xl bg-white border border-slate-200/70 shadow-subtle hover:border-slate-300 transition-colors">
                             <div className="p-4 rounded-lg bg-slate-50/50">
                                 <div className="flex items-center justify-between text-slate-400 mb-2">
                                     <span className="text-[11px] font-mono uppercase tracking-wider font-semibold text-slate-500">
-                                        Verified Suppliers
+                                        GSTIN Suppliers
                                     </span>
                                     <BsShieldCheck className="text-emerald-600 text-base" />
                                 </div>
-                                <div className="text-2xl sm:text-3xl font-bold font-mono text-slate-900 tracking-tight">
-                                    {(stats.suppliers || 0).toLocaleString()}
+                                <div className="text-2xl sm:text-3xl font-bold font-mono text-slate-950 tracking-tight">
+                                    {(stats.suppliers || 0).toLocaleString('en-IN')}
                                     <span className="text-brand-600 font-sans text-xl">+</span>
                                 </div>
-                                <p className="text-[11px] text-slate-500 mt-1">100% credential audited</p>
+                                <p className="text-[11px] text-slate-500 mt-1">100% GST & Udyam verified</p>
                             </div>
                         </div>
 
@@ -502,15 +504,15 @@ export default function Welcome({
                             <div className="p-4 rounded-lg bg-slate-50/50">
                                 <div className="flex items-center justify-between text-slate-400 mb-2">
                                     <span className="text-[11px] font-mono uppercase tracking-wider font-semibold text-slate-500">
-                                        Catalog Inventory
+                                        Active Commercial SKUs
                                     </span>
                                     <FiPackage className="text-brand-600 text-base" />
                                 </div>
-                                <div className="text-2xl sm:text-3xl font-bold font-mono text-slate-900 tracking-tight">
-                                    {(stats.products || 0).toLocaleString()}
+                                <div className="text-2xl sm:text-3xl font-bold font-mono text-slate-950 tracking-tight">
+                                    {(stats.products || 0).toLocaleString('en-IN')}
                                     <span className="text-brand-600 font-sans text-xl">+</span>
                                 </div>
-                                <p className="text-[11px] text-slate-500 mt-1">Ready for wholesale dispatch</p>
+                                <p className="text-[11px] text-slate-500 mt-1">Ready for freight dispatch</p>
                             </div>
                         </div>
 
@@ -522,11 +524,11 @@ export default function Welcome({
                                     </span>
                                     <FiCheckCircle className="text-indigo-600 text-base" />
                                 </div>
-                                <div className="text-2xl sm:text-3xl font-bold font-mono text-slate-900 tracking-tight">
-                                    {(stats.successfulDeals || 0).toLocaleString()}
+                                <div className="text-2xl sm:text-3xl font-bold font-mono text-slate-950 tracking-tight">
+                                    {(stats.successfulDeals || 0).toLocaleString('en-IN')}
                                     <span className="text-brand-600 font-sans text-xl">+</span>
                                 </div>
-                                <p className="text-[11px] text-slate-500 mt-1">Zero escrow dispute rate</p>
+                                <p className="text-[11px] text-slate-500 mt-1">Protected via Nodal Escrow</p>
                             </div>
                         </div>
 
@@ -538,11 +540,11 @@ export default function Welcome({
                                     </span>
                                     <FiUsers className="text-purple-600 text-base" />
                                 </div>
-                                <div className="text-2xl sm:text-3xl font-bold font-mono text-slate-900 tracking-tight">
-                                    {(stats.buyers || 0).toLocaleString()}
+                                <div className="text-2xl sm:text-3xl font-bold font-mono text-slate-950 tracking-tight">
+                                    {(stats.buyers || 0).toLocaleString('en-IN')}
                                     <span className="text-brand-600 font-sans text-xl">+</span>
                                 </div>
-                                <p className="text-[11px] text-slate-500 mt-1">Trading across 40+ regions</p>
+                                <p className="text-[11px] text-slate-500 mt-1">Across 28 states & UTs</p>
                             </div>
                         </div>
                     </div>
@@ -550,7 +552,7 @@ export default function Welcome({
             </section>
 
             {/* ------------------------------------------------------------- */}
-            {/* ADVANCED PROCUREMENT FILTER DRAWER                            */}
+            {/* ADVANCED PROCUREMENT FILTER DRAWER (INR CALIBRATED)          */}
             {/* ------------------------------------------------------------- */}
             {showFilters && (
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 mb-12 animate-in fade-in slide-in-from-top-2 duration-300">
@@ -580,14 +582,14 @@ export default function Welcome({
                                 {/* Category Dropdown */}
                                 <div>
                                     <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
-                                        Category
+                                        Manufacturing Sector
                                     </label>
                                     <select
                                         value={selectedCategory}
                                         onChange={(e) => setSelectedCategory(e.target.value)}
                                         className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                                     >
-                                        <option value="">All Categories</option>
+                                        <option value="">All Sectors</option>
                                         {categories.map((cat) => (
                                             <option key={cat.name} value={cat.name}>
                                                 {cat.name} ({cat.count})
@@ -599,46 +601,46 @@ export default function Welcome({
                                 {/* Supplier Dropdown */}
                                 <div>
                                     <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
-                                        Direct Supplier
+                                        Direct Manufacturer
                                     </label>
                                     <select
                                         value={selectedSupplier}
                                         onChange={(e) => setSelectedSupplier(e.target.value)}
                                         className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                                     >
-                                        <option value="">All Suppliers</option>
+                                        <option value="">All Manufacturers</option>
                                         {suppliers?.map((supplier) => (
                                             <option key={supplier.id} value={supplier.id}>
-                                                {supplier.name} {supplier.verified ? '✓ (Verified)' : ''}
+                                                {supplier.name} {supplier.verified ? '✓ (GSTIN Verified)' : ''}
                                             </option>
                                         ))}
                                     </select>
                                 </div>
 
-                                {/* Min Price */}
+                                {/* Min Price in INR */}
                                 <div>
                                     <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
-                                        Min Price ($)
+                                        Min Price (₹)
                                     </label>
                                     <input
                                         type="number"
                                         value={minPrice}
                                         onChange={(e) => setMinPrice(e.target.value)}
-                                        placeholder="0"
+                                        placeholder="₹0"
                                         className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                                     />
                                 </div>
 
-                                {/* Max Price */}
+                                {/* Max Price in INR */}
                                 <div>
                                     <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
-                                        Max Price ($)
+                                        Max Price (₹)
                                     </label>
                                     <input
                                         type="number"
                                         value={maxPrice}
                                         onChange={(e) => setMaxPrice(e.target.value)}
-                                        placeholder="No limit"
+                                        placeholder="No upper limit"
                                         className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                                     />
                                 </div>
@@ -653,9 +655,9 @@ export default function Welcome({
                                         onChange={(e) => setSortBy(e.target.value)}
                                         className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                                     >
-                                        <option value="created_at">Latest Added</option>
+                                        <option value="created_at">Latest Listings</option>
                                         <option value="name">Product Name</option>
-                                        <option value="base_price">Wholesale Price</option>
+                                        <option value="base_price">Wholesale Price (₹)</option>
                                         <option value="minimum_order_quantity">Minimum Order (MOQ)</option>
                                     </select>
                                 </div>
@@ -672,7 +674,7 @@ export default function Welcome({
                                     />
                                     <span className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                                         <BsShieldCheck className="text-emerald-600" />
-                                        Only show verified suppliers
+                                        Only show GSTIN & Udyam verified suppliers
                                     </span>
                                 </label>
 
@@ -728,14 +730,14 @@ export default function Welcome({
                             <div className="flex items-center gap-2 mb-2">
                                 <span className="w-2 h-2 rounded-full bg-brand-600"></span>
                                 <span className="text-xs font-mono uppercase tracking-wider font-bold text-brand-700">
-                                    Commercial Inventory
+                                    Direct Factory Catalog
                                 </span>
                             </div>
                             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-950 tracking-tight">
-                                Featured Wholesale Products
+                                Featured Commercial Inventory
                             </h2>
                             <p className="text-sm text-slate-500 mt-1 max-w-xl">
-                                Real-time pricing with minimum order quantities, factory certifications, and direct RFQ capability.
+                                Real-time wholesale pricing in INR (₹) with HSN codes, MOQ brackets, and Input Tax Credit (ITC) eligibility.
                             </p>
                         </div>
 
@@ -787,7 +789,7 @@ export default function Welcome({
                                                 {product.supplier?.verified ? (
                                                     <span className="bg-emerald-600/90 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
                                                         <BsShieldCheck className="text-xs" />
-                                                        <span>Verified</span>
+                                                        <span>GSTIN Verified</span>
                                                     </span>
                                                 ) : (
                                                     <span />
@@ -817,12 +819,12 @@ export default function Welcome({
                                                 {product.name}
                                             </h3>
 
-                                            {/* Price and MOQ Section */}
+                                            {/* Price in INR and MOQ Section */}
                                             <div className="mt-auto pt-4 border-t border-slate-100">
                                                 <div className="flex items-baseline justify-between gap-2 mb-3">
                                                     <div>
                                                         <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block -mb-0.5">
-                                                            Unit Price
+                                                            Wholesale Price
                                                         </span>
                                                         <span className="font-mono text-xl font-bold text-slate-950 tracking-tight">
                                                             {formatCurrency(product.price)}
@@ -901,19 +903,19 @@ export default function Welcome({
             </section>
 
             {/* ------------------------------------------------------------- */}
-            {/* CATEGORY EXPLORATION BENTO (#categories)                      */}
+            {/* CATEGORY & INDUSTRIAL CORRIDORS (#categories)                 */}
             {/* ------------------------------------------------------------- */}
             <section id="categories" className="py-16 md:py-24 bg-white border-t border-slate-200/60">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6">
                     <div className="text-center max-w-2xl mx-auto mb-12">
                         <span className="text-xs font-mono uppercase tracking-wider font-bold text-brand-700">
-                            Industrial Sectors
+                            Indian Industrial Clusters
                         </span>
                         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-950 tracking-tight mt-1">
-                            Browse Sourcing Categories
+                            Major Manufacturing Hubs
                         </h2>
                         <p className="text-sm text-slate-500 mt-2">
-                            Explore vetted commercial suppliers categorized by manufacturing sector and material specifications.
+                            Source directly from specialized production clusters across Chakan, Peenya, Manesar, Tirupur, Sri City, and Dahej.
                         </p>
                     </div>
 
@@ -956,24 +958,24 @@ export default function Welcome({
             </section>
 
             {/* ------------------------------------------------------------- */}
-            {/* ASYMMETRIC BENTO GRID: ENTERPRISE CAPABILITIES                */}
+            {/* ASYMMETRIC BENTO GRID: INDIAN ENTERPRISE CAPABILITIES         */}
             {/* ------------------------------------------------------------- */}
             <section id="capabilities" className="py-16 md:py-24 bg-[#FAFAFC] border-t border-slate-200/60">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6">
                     <div className="text-center max-w-2xl mx-auto mb-14">
                         <span className="text-xs font-mono uppercase tracking-wider font-bold text-brand-700">
-                            Protocol Architecture
+                            Enterprise Infrastructure
                         </span>
                         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-950 tracking-tight mt-1">
-                            Engineered for Wholesale Scale
+                            Built for India's Manufacturing Scale
                         </h2>
                         <p className="text-sm text-slate-500 mt-2">
-                            Traditional B2B procurement is plagued by fragmented emails, uncertain quality, and hidden margins. Treadmesh rebuilds the workflow from the ground up.
+                            End-to-end institutional procurement integrating GST e-invoicing, Input Tax Credit reconciliation, and RBI-governed escrow accounts.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        {/* Bento Card 1: Multi-Supplier RFQ Engine (2 cols) */}
+                        {/* Bento Card 1: Multi-Supplier RFQ Auction (2 cols) */}
                         <div className="md:col-span-2 p-1.5 rounded-2xl bg-white border border-slate-200/80 shadow-card flex flex-col justify-between overflow-hidden">
                             <div className="p-6">
                                 <div className="flex items-center gap-2 mb-3">
@@ -981,50 +983,50 @@ export default function Welcome({
                                         <FiZap />
                                     </span>
                                     <span className="text-xs font-mono font-semibold uppercase tracking-wider text-brand-700">
-                                        Smart RFQ Protocol
+                                        Pan-India RFQ Engine
                                     </span>
                                 </div>
                                 <h3 className="text-xl font-bold text-slate-950">
                                     Instant Competitive Multi-Bid Auction
                                 </h3>
                                 <p className="text-sm text-slate-600 mt-1.5 max-w-xl">
-                                    Submit your technical procurement requirements once. Verified suppliers submit transparent bids with volume pricing curves and delivery timelines within 48 hours.
+                                    Post technical part drawings or bill of materials once. Receive competitive, GST-compliant quotes from certified manufacturers across India within 48 hours.
                                 </p>
                             </div>
 
                             {/* Architectural UI Simulation */}
                             <div className="mx-6 mb-6 p-4 rounded-xl bg-slate-900 text-white font-mono text-xs shadow-inner">
                                 <div className="flex items-center justify-between pb-3 border-b border-slate-800 text-[11px] text-slate-400">
-                                    <span>RFQ-9824 // Precision Carbon Bearings (5,000 Units)</span>
+                                    <span>RFQ-8412 // CNC Precision Bushings (10,000 Units)</span>
                                     <span className="text-emerald-400 flex items-center gap-1">
                                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                                        3 ACTIVE BIDS
+                                        4 VERIFIED BIDS
                                     </span>
                                 </div>
                                 <div className="space-y-2 mt-3 text-xs">
                                     <div className="flex items-center justify-between p-2 rounded bg-slate-800/80 border border-slate-700/50">
                                         <div className="flex items-center gap-2">
                                             <BsShieldCheck className="text-emerald-400" />
-                                            <span>Apex Heavy Industries Ltd.</span>
+                                            <span>Rajkot Precision Engineering Pvt Ltd</span>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <span className="text-slate-400">MOQ 1,000</span>
-                                            <span className="text-emerald-400 font-bold">$18.50/unit</span>
+                                            <span className="text-slate-400">MOQ 2,000</span>
+                                            <span className="text-emerald-400 font-bold">₹42.50/unit</span>
                                             <span className="px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 text-[10px] border border-emerald-800">
-                                                Best Volume Tier
+                                                18% GST Incl.
                                             </span>
                                         </div>
                                     </div>
                                     <div className="flex items-center justify-between p-2 rounded bg-slate-800/40 border border-slate-800 text-slate-400">
                                         <div className="flex items-center gap-2">
                                             <BsShieldCheck className="text-emerald-400" />
-                                            <span>Vanguard Precision Parts</span>
+                                            <span>Hosur Auto-Components Ltd</span>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <span>MOQ 2,500</span>
-                                            <span className="text-slate-200 font-bold">$19.20/unit</span>
+                                            <span>MOQ 5,000</span>
+                                            <span className="text-slate-200 font-bold">₹44.00/unit</span>
                                             <span className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px]">
-                                                4 Day Dispatch
+                                                E-Way Bill Ready
                                             </span>
                                         </div>
                                     </div>
@@ -1032,7 +1034,7 @@ export default function Welcome({
                             </div>
                         </div>
 
-                        {/* Bento Card 2: Tiered Economics (1 col) */}
+                        {/* Bento Card 2: Tiered Wholesale Economics in INR (1 col) */}
                         <div className="p-1.5 rounded-2xl bg-white border border-slate-200/80 shadow-card flex flex-col justify-between">
                             <div className="p-6">
                                 <div className="flex items-center gap-2 mb-3">
@@ -1044,25 +1046,25 @@ export default function Welcome({
                                     </span>
                                 </div>
                                 <h3 className="text-xl font-bold text-slate-950">
-                                    Dynamic Volume Tiers
+                                    Transparent Volume Tiers
                                 </h3>
                                 <p className="text-sm text-slate-600 mt-1.5">
-                                    Real-time tier thresholds eliminate manual back-and-forth price negotiations.
+                                    Pre-configured bulk price brackets eliminate manual quotation delay.
                                 </p>
                             </div>
 
                             <div className="mx-6 mb-6 p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
                                 <div className="flex justify-between items-center text-xs font-mono py-1 border-b border-slate-200/60">
-                                    <span className="text-slate-600">Tier 1 (100 - 499 units)</span>
-                                    <span className="font-bold text-slate-900">$240.00</span>
+                                    <span className="text-slate-600">Tier 1 (500 - 999 units)</span>
+                                    <span className="font-bold text-slate-900">₹1,250.00</span>
                                 </div>
                                 <div className="flex justify-between items-center text-xs font-mono py-1 border-b border-slate-200/60">
-                                    <span className="text-slate-600">Tier 2 (500 - 999 units)</span>
-                                    <span className="font-bold text-brand-600">$215.00 (-10%)</span>
+                                    <span className="text-slate-600">Tier 2 (1,000 - 4,999 units)</span>
+                                    <span className="font-bold text-brand-600">₹1,080.00 (-13%)</span>
                                 </div>
                                 <div className="flex justify-between items-center text-xs font-mono py-1 bg-brand-50/80 px-2 rounded border border-brand-200/60">
-                                    <span className="text-brand-900 font-semibold">Tier 3 (1,000+ units)</span>
-                                    <span className="font-bold text-brand-700">$185.00 (-23%)</span>
+                                    <span className="text-brand-900 font-semibold">Tier 3 (5,000+ units)</span>
+                                    <span className="font-bold text-brand-700">₹920.00 (-26%)</span>
                                 </div>
                             </div>
                         </div>
@@ -1075,14 +1077,14 @@ export default function Welcome({
                                         <FiLock />
                                     </span>
                                     <span className="text-xs font-mono font-semibold uppercase tracking-wider text-purple-700">
-                                        Capital Safety
+                                        Payment Assurance
                                     </span>
                                 </div>
                                 <h3 className="text-xl font-bold text-slate-950">
-                                    Escrow & Milestone Settlement
+                                    RBI-Compliant Nodal Escrow
                                 </h3>
                                 <p className="text-sm text-slate-600 mt-1.5">
-                                    Funds remain protected in segregated escrow until goods are physically inspected and received to spec.
+                                    Payment is safeguarded in segregated bank escrow accounts until goods clear physical quality inspection at receiving warehouse.
                                 </p>
                             </div>
 
@@ -1091,8 +1093,8 @@ export default function Welcome({
                                     <BsShieldCheck className="text-xl" />
                                 </div>
                                 <div>
-                                    <div className="text-xs font-bold text-slate-900">100% Inspection Assurance</div>
-                                    <div className="text-[11px] text-slate-500">Dispute mediation guarantee under UCC standard</div>
+                                    <div className="text-xs font-bold text-slate-900">Input Tax Credit (ITC) Ready</div>
+                                    <div className="text-[11px] text-slate-500">Automated GSTR-2B reconciliation & e-Way bill sync</div>
                                 </div>
                             </div>
                         </div>
@@ -1105,29 +1107,29 @@ export default function Welcome({
                                         <BsBuildingCheck />
                                     </span>
                                     <span className="text-xs font-mono font-semibold uppercase tracking-wider text-emerald-700">
-                                        Risk Mitigation
+                                        Supplier Governance
                                     </span>
                                 </div>
                                 <h3 className="text-xl font-bold text-slate-950">
-                                    Vetted Factory Audits & Continuous KYC
+                                    Verified MSME & Factory Due Diligence
                                 </h3>
                                 <p className="text-sm text-slate-600 mt-1.5 max-w-xl">
-                                    Every supplier undergoes business entity verification, manufacturing capacity review, and on-time fulfillment tracking before being awarded the Verified Supplier badge.
+                                    Every manufacturer on Treadmesh undergoes rigorous physical facility audits, MCA/GST verification, and Udyam certification checks to ensure production capability and zero delivery default.
                                 </p>
                             </div>
 
                             <div className="mx-6 mb-6 grid grid-cols-3 gap-3">
                                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 text-center">
-                                    <div className="text-lg font-bold font-mono text-slate-900">99.4%</div>
-                                    <div className="text-[10px] text-slate-500 uppercase tracking-wider font-mono">On-Time SLA</div>
+                                    <div className="text-lg font-bold font-mono text-slate-900">99.2%</div>
+                                    <div className="text-[10px] text-slate-500 uppercase tracking-wider font-mono">Dispatch SLA</div>
                                 </div>
                                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 text-center">
-                                    <div className="text-lg font-bold font-mono text-slate-900">ISO 9001</div>
-                                    <div className="text-[10px] text-slate-500 uppercase tracking-wider font-mono">Quality Standard</div>
+                                    <div className="text-lg font-bold font-mono text-slate-900">GSTIN / HSN</div>
+                                    <div className="text-[10px] text-slate-500 uppercase tracking-wider font-mono">100% Tax Compliant</div>
                                 </div>
                                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/60 text-center">
-                                    <div className="text-lg font-bold font-mono text-slate-900">&lt; 0.1%</div>
-                                    <div className="text-[10px] text-slate-500 uppercase tracking-wider font-mono">Return Rate</div>
+                                    <div className="text-lg font-bold font-mono text-slate-900">ZED Gold</div>
+                                    <div className="text-[10px] text-slate-500 uppercase tracking-wider font-mono">Quality Audited</div>
                                 </div>
                             </div>
                         </div>
@@ -1142,13 +1144,13 @@ export default function Welcome({
                 <div className="max-w-6xl mx-auto px-4 sm:px-6">
                     <div className="text-center max-w-2xl mx-auto mb-16">
                         <span className="text-xs font-mono uppercase tracking-wider font-bold text-brand-700">
-                            Workflow Process
+                            Procurement Sequence
                         </span>
                         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-950 tracking-tight mt-1">
-                            How Treadmesh Operates
+                            How Enterprise Sourcing Works
                         </h2>
                         <p className="text-sm text-slate-500 mt-2">
-                            A streamlined 4-stage pipeline that takes your procurement order from initial requirement to verified delivery.
+                            A streamlined 4-stage protocol connecting purchasing managers directly with vetted manufacturing plants across India.
                         </p>
                     </div>
 
@@ -1156,27 +1158,27 @@ export default function Welcome({
                         {/* Step 1 */}
                         <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 relative flex flex-col">
                             <span className="font-mono text-3xl font-extrabold text-slate-300 mb-4">01</span>
-                            <h3 className="font-bold text-slate-900 text-base mb-2">Create Buyer Profile</h3>
+                            <h3 className="font-bold text-slate-900 text-base mb-2">KYC & GST Onboarding</h3>
                             <p className="text-xs text-slate-600 leading-relaxed">
-                                Complete rapid enterprise KYC to gain immediate access to wholesale pricing and custom quotes.
+                                Enter your company GSTIN to instantly verify corporate credentials and access direct wholesale pricing.
                             </p>
                         </div>
 
                         {/* Step 2 */}
                         <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 relative flex flex-col">
                             <span className="font-mono text-3xl font-extrabold text-brand-500/40 mb-4">02</span>
-                            <h3 className="font-bold text-slate-900 text-base mb-2">Submit RFQ Specs</h3>
+                            <h3 className="font-bold text-slate-900 text-base mb-2">Publish RFQ / PO</h3>
                             <p className="text-xs text-slate-600 leading-relaxed">
-                                Define part specifications, required volumes, delivery deadlines, and compliance certifications.
+                                Define required volumes, technical drawings, dispatch destinations, and targeted delivery timelines.
                             </p>
                         </div>
 
                         {/* Step 3 */}
                         <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 relative flex flex-col">
                             <span className="font-mono text-3xl font-extrabold text-indigo-500/40 mb-4">03</span>
-                            <h3 className="font-bold text-slate-900 text-base mb-2">Evaluate Quotes</h3>
+                            <h3 className="font-bold text-slate-900 text-base mb-2">Compare Factory Bids</h3>
                             <p className="text-xs text-slate-600 leading-relaxed">
-                                Review competitive bids side-by-side with transparent tiered pricing and direct supplier messaging.
+                                Review competitive tiered bids with transparent HSN-coded breakdowns and dispatch milestones.
                             </p>
                         </div>
 
@@ -1185,7 +1187,7 @@ export default function Welcome({
                             <span className="font-mono text-3xl font-extrabold text-emerald-500/40 mb-4">04</span>
                             <h3 className="font-bold text-slate-900 text-base mb-2">Escrow Settlement</h3>
                             <p className="text-xs text-slate-600 leading-relaxed">
-                                Lock funds securely into trade escrow. Payment is released only upon post-delivery inspection approval.
+                                Secure funds via corporate banking escrow. Payment is released upon warehouse inspection and delivery sign-off.
                             </p>
                         </div>
                     </div>
@@ -1193,7 +1195,7 @@ export default function Welcome({
             </section>
 
             {/* ------------------------------------------------------------- */}
-            {/* VERIFIED SUCCESS STORIES & RECENT DEALS                       */}
+            {/* VERIFIED SUCCESS STORIES & RECENT DEALS IN INR                */}
             {/* ------------------------------------------------------------- */}
             {successStories && successStories.length > 0 && (
                 <section className="py-16 md:py-24 bg-[#FAFAFC] border-t border-slate-200/60">
@@ -1203,10 +1205,10 @@ export default function Welcome({
                                 Trade Settlement Ledger
                             </span>
                             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-950 tracking-tight mt-1">
-                                Recent Executed Procurement Deals
+                                Recent Fulfilled Wholesale Contracts
                             </h2>
                             <p className="text-sm text-slate-500 mt-2">
-                                Real transactions completed through Treadmesh's verified supplier network and escrow pipeline.
+                                Executed transactions delivered through Treadmesh's verified Indian supplier network and escrow pipeline.
                             </p>
                         </div>
 
@@ -1219,7 +1221,7 @@ export default function Welcome({
                                     <div className="p-5">
                                         <div className="flex items-center justify-between text-xs text-slate-400 font-mono mb-3">
                                             <span className="text-slate-600 font-semibold">{story.order_number || `ORD-${story.id}`}</span>
-                                            <span>{story.date}</span>
+                                            <span>{formatIndianDate(story.date)}</span>
                                         </div>
 
                                         <h4 className="font-bold text-slate-900 text-sm mb-1 line-clamp-1">
@@ -1230,7 +1232,7 @@ export default function Welcome({
                                         </p>
 
                                         <div className="p-3 rounded-lg bg-slate-50 border border-slate-200/60 flex items-center justify-between">
-                                            <span className="text-xs font-medium text-slate-500">Total Settlement</span>
+                                            <span className="text-xs font-medium text-slate-500">Order Value</span>
                                             <span className="font-mono text-base font-bold text-slate-950">
                                                 {formatCurrency(story.amount)}
                                             </span>
@@ -1244,7 +1246,7 @@ export default function Welcome({
                                             ))}
                                         </div>
                                         <span className="font-mono text-[11px] font-semibold text-emerald-600 flex items-center gap-1">
-                                            <FiCheck className="text-xs" /> Verified Fulfilled
+                                            <FiCheck className="text-xs" /> E-Way Bill Fulfilled
                                         </span>
                                     </div>
                                 </div>
@@ -1255,33 +1257,33 @@ export default function Welcome({
             )}
 
             {/* ------------------------------------------------------------- */}
-            {/* ENTERPRISE TRUST & ABOUT PLATFORM (#about)                    */}
+            {/* ENTERPRISE TRUST & REGULATORY COMPLIANCE (#about)             */}
             {/* ------------------------------------------------------------- */}
             <section id="about" className="py-16 md:py-24 bg-white border-t border-slate-200/60">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         <div>
                             <span className="text-xs font-mono uppercase tracking-wider font-bold text-brand-700">
-                                Mission & Governance
+                                Indian Regulatory Governance
                             </span>
                             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-950 tracking-tight mt-1 mb-6 leading-tight">
-                                Re-Architecting Global Wholesale Sourcing for the Digital Age
+                                Empowering India's Industrial Supply Chain
                             </h2>
                             <p className="text-sm text-slate-600 leading-relaxed mb-4">
-                                Founded to remove friction from large-scale B2B trade, Treadmesh creates a verifiable, transparent layer between global manufacturing facilities and commercial enterprises.
+                                Treadmesh is engineered specifically to eliminate fragmented intermediary markups and supply uncertainty for Indian manufacturing enterprises, OEMs, and EPC contractors.
                             </p>
                             <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                                We combine rigorous supplier credentialing with programmatic RFQs and multi-tiered pricing, giving purchasing departments the same speed and certainty found in modern consumer digital commerce.
+                                We combine rigorous supplier credentialing with programmatic RFQs, automated GST e-invoicing, and escrow-backed milestone releases under the Indian Contract Act.
                             </p>
 
                             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
                                 <div>
-                                    <div className="text-xl font-bold font-mono text-slate-900">SOC 2 Type II</div>
-                                    <div className="text-xs text-slate-500">Enterprise data security audited</div>
+                                    <div className="text-xl font-bold font-mono text-slate-900">GSTIN / E-Invoice</div>
+                                    <div className="text-xs text-slate-500">GSTR-2B automated reconciliation</div>
                                 </div>
                                 <div>
-                                    <div className="text-xl font-bold font-mono text-slate-900">256-Bit SSL</div>
-                                    <div className="text-xs text-slate-500">Bank-grade transaction encryption</div>
+                                    <div className="text-xl font-bold font-mono text-slate-900">RBI Nodal Escrow</div>
+                                    <div className="text-xs text-slate-500">Regulated scheduled bank escrow rails</div>
                                 </div>
                             </div>
                         </div>
@@ -1293,39 +1295,39 @@ export default function Welcome({
                                     <div className="flex items-center gap-2">
                                         <div className="w-3 h-3 rounded-full bg-emerald-500" />
                                         <span className="text-xs font-mono font-semibold tracking-wider uppercase text-slate-300">
-                                            Enterprise Buyer Protections
+                                            Institutional Sourcing Protections
                                         </span>
                                     </div>
-                                    <span className="text-[10px] font-mono text-slate-500">STANDARD v4.1</span>
+                                    <span className="text-[10px] font-mono text-slate-500">PROTOCOL v3.2</span>
                                 </div>
 
                                 <div className="space-y-4 mt-5">
                                     <div className="flex items-start gap-3">
                                         <FiShield className="text-brand-400 shrink-0 mt-0.5" />
                                         <div>
-                                            <h4 className="text-xs font-bold text-white">Full Capital Escrow Release</h4>
-                                            <p className="text-[11px] text-slate-400 mt-0.5">Funds are only disbursed after signed Bill of Lading and quality acceptance test.</p>
+                                            <h4 className="text-xs font-bold text-white">Full Capital Escrow Protection</h4>
+                                            <p className="text-[11px] text-slate-400 mt-0.5">Funds disbursed strictly post physical material inspection and Lorry Receipt (LR) validation.</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-3">
                                         <FiCheckCircle className="text-emerald-400 shrink-0 mt-0.5" />
                                         <div>
                                             <h4 className="text-xs font-bold text-white">Factory Verified Credentials</h4>
-                                            <p className="text-[11px] text-slate-400 mt-0.5">Active business licenses, tax ID registrations, and facility certifications verified.</p>
+                                            <p className="text-[11px] text-slate-400 mt-0.5">Active GSTIN status, Udyam registration, and factory audit certificates verified by trade desk.</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-3">
                                         <FiClock className="text-indigo-400 shrink-0 mt-0.5" />
                                         <div>
-                                            <h4 className="text-xs font-bold text-white">24/7 Procurement Specialist Support</h4>
-                                            <p className="text-[11px] text-slate-400 mt-0.5">Dedicated human procurement account managers to assist with high-volume RFQs.</p>
+                                            <h4 className="text-xs font-bold text-white">Dedicated Trade Desk Support</h4>
+                                            <p className="text-[11px] text-slate-400 mt-0.5">Commercial specialists in Mumbai, Bengaluru & NCR assisting high-ticket procurement.</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-slate-400">
-                                    <span>Average Quote Delivery</span>
-                                    <span className="text-emerald-400 font-bold">&lt; 24 Hours</span>
+                                    <span>Average Quote Turnaround</span>
+                                    <span className="text-emerald-400 font-bold">&lt; 24 Hours IST</span>
                                 </div>
                             </div>
                         </div>
@@ -1334,7 +1336,7 @@ export default function Welcome({
             </section>
 
             {/* ------------------------------------------------------------- */}
-            {/* DIRECT SOURCING & SPECIALIST ADVISORY (#contact)              */}
+            {/* DIRECT SOURCING & INDIA TRADE DESK (#contact)                 */}
             {/* ------------------------------------------------------------- */}
             <section id="contact" className="py-16 md:py-24 bg-[#FAFAFC] border-t border-slate-200/60">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -1345,10 +1347,10 @@ export default function Welcome({
                                 Commercial Advisory
                             </span>
                             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight mt-1 mb-4">
-                                Connect With a Procurement Specialist
+                                Connect With India Trade Desk
                             </h2>
                             <p className="text-sm text-slate-600 leading-relaxed mb-8">
-                                Have high-volume custom manufacturing requirements or need help establishing supplier contracts? Our dedicated trade specialists are on call.
+                                Have customized bulk supply contracts, high-tonnage raw material requirements, or need vendor registration assistance? Our procurement specialists are on call.
                             </p>
 
                             <div className="space-y-4">
@@ -1357,8 +1359,8 @@ export default function Welcome({
                                         <FiMapPin />
                                     </div>
                                     <div>
-                                        <div className="text-xs font-mono uppercase tracking-wider font-semibold text-slate-400">Commercial HQ</div>
-                                        <div className="text-xs font-semibold text-slate-800">100 Commercial Plaza, Suite 400</div>
+                                        <div className="text-xs font-mono uppercase tracking-wider font-semibold text-slate-400">Corporate Headquarters</div>
+                                        <div className="text-xs font-semibold text-slate-800">One BKC, G-Block, Bandra Kurla Complex (BKC), Mumbai 400051</div>
                                     </div>
                                 </div>
 
@@ -1367,8 +1369,8 @@ export default function Welcome({
                                         <FiPhone />
                                     </div>
                                     <div>
-                                        <div className="text-xs font-mono uppercase tracking-wider font-semibold text-slate-400">Direct Hotline</div>
-                                        <div className="text-xs font-semibold text-slate-800 font-mono">+1 (555) 234-5678</div>
+                                        <div className="text-xs font-mono uppercase tracking-wider font-semibold text-slate-400">Trade Desk Hotline</div>
+                                        <div className="text-xs font-semibold text-slate-800 font-mono">+91 (022) 6982 4500 / +91 98200 45678</div>
                                     </div>
                                 </div>
 
@@ -1377,8 +1379,8 @@ export default function Welcome({
                                         <FiMail />
                                     </div>
                                     <div>
-                                        <div className="text-xs font-mono uppercase tracking-wider font-semibold text-slate-400">Procurement Desk</div>
-                                        <div className="text-xs font-semibold text-slate-800 font-mono">support@treadmesh.com</div>
+                                        <div className="text-xs font-mono uppercase tracking-wider font-semibold text-slate-400">Enterprise Procurement</div>
+                                        <div className="text-xs font-semibold text-slate-800 font-mono">procurement@treadmesh.in</div>
                                     </div>
                                 </div>
                             </div>
@@ -1388,18 +1390,18 @@ export default function Welcome({
                         <div className="lg:col-span-7 p-1.5 rounded-2xl bg-white border border-slate-200/80 shadow-card">
                             <div className="p-6 sm:p-8">
                                 <h3 className="text-lg font-bold text-slate-950 mb-1">
-                                    Submit Enterprise Sourcing Inquiry
+                                    Submit Institutional Sourcing Inquiry
                                 </h3>
                                 <p className="text-xs text-slate-500 mb-6">
-                                    Our trade desk responds with qualified supplier matches within 1 business day.
+                                    Our trade desk matches verified Indian manufacturers within 1 business day.
                                 </p>
 
                                 {contactSubmitted ? (
                                     <div className="p-6 rounded-xl bg-emerald-50 border border-emerald-200 text-center animate-in fade-in duration-300">
                                         <FiCheckCircle className="mx-auto text-3xl text-emerald-600 mb-2" />
-                                        <h4 className="font-bold text-emerald-900 text-sm">Inquiry Transmitted Successfully</h4>
+                                        <h4 className="font-bold text-emerald-900 text-sm">Sourcing Request Received</h4>
                                         <p className="text-xs text-emerald-700 mt-1 max-w-sm mx-auto">
-                                            A procurement advisor has been assigned to review your parameters. We will contact you at your work email shortly.
+                                            A dedicated procurement manager has been assigned. You will receive matching supplier quotes at your corporate email shortly.
                                         </p>
                                     </div>
                                 ) : (
@@ -1407,27 +1409,84 @@ export default function Welcome({
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             <div>
                                                 <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
-                                                    First Name *
+                                                    Full Name *
                                                 </label>
                                                 <input
                                                     type="text"
                                                     required
-                                                    value={contactForm.firstName}
-                                                    onChange={(e) => setContactForm({ ...contactForm, firstName: e.target.value })}
-                                                    placeholder="Jane"
+                                                    value={contactForm.fullName}
+                                                    onChange={(e) => setContactForm({ ...contactForm, fullName: e.target.value })}
+                                                    placeholder="Rajesh Sharma"
                                                     className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                                                 />
                                             </div>
                                             <div>
                                                 <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
-                                                    Last Name *
+                                                    Company / Enterprise Name *
                                                 </label>
                                                 <input
                                                     type="text"
                                                     required
-                                                    value={contactForm.lastName}
-                                                    onChange={(e) => setContactForm({ ...contactForm, lastName: e.target.value })}
-                                                    placeholder="Doe"
+                                                    value={contactForm.companyName}
+                                                    onChange={(e) => setContactForm({ ...contactForm, companyName: e.target.value })}
+                                                    placeholder="Apex Engineering Works Pvt Ltd"
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
+                                                    Official Corporate Email *
+                                                </label>
+                                                <input
+                                                    type="email"
+                                                    required
+                                                    value={contactForm.email}
+                                                    onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                                                    placeholder="rajesh@apexengg.in"
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
+                                                    Mobile / WhatsApp (India) *
+                                                </label>
+                                                <input
+                                                    type="tel"
+                                                    required
+                                                    value={contactForm.phone}
+                                                    onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
+                                                    placeholder="+91 98200 12345"
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
+                                                    GSTIN (Optional)
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={contactForm.gstin}
+                                                    onChange={(e) => setContactForm({ ...contactForm, gstin: e.target.value.toUpperCase() })}
+                                                    placeholder="27AAACA0000A1Z5"
+                                                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-mono font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 uppercase"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
+                                                    Procurement Category *
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={contactForm.categoryTarget}
+                                                    onChange={(e) => setContactForm({ ...contactForm, categoryTarget: e.target.value })}
+                                                    placeholder="e.g. Forged Steel Flanges, Industrial Fasteners"
                                                     className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                                                 />
                                             </div>
@@ -1435,42 +1494,14 @@ export default function Welcome({
 
                                         <div>
                                             <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
-                                                Corporate Email *
-                                            </label>
-                                            <input
-                                                type="email"
-                                                required
-                                                value={contactForm.email}
-                                                onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                                                placeholder="j.doe@enterprise.com"
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
-                                                Subject / Procurement Target *
-                                            </label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={contactForm.subject}
-                                                onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
-                                                placeholder="e.g., Request for Bulk Precision Electronic Components"
-                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-slate-600 mb-1.5">
-                                                Sourcing Specifications / Volumes *
+                                                Technical Specifications & Monthly Volume *
                                             </label>
                                             <textarea
                                                 rows="4"
                                                 required
                                                 value={contactForm.message}
                                                 onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                                                placeholder="Provide part numbers, estimated monthly volume, material specifications, or delivery timelines..."
+                                                placeholder="Specify part dimensions, material grades (e.g. SS304/MS), estimated monthly volumes, delivery location (pincode)..."
                                                 className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                                             ></textarea>
                                         </div>
@@ -1479,7 +1510,7 @@ export default function Welcome({
                                             type="submit"
                                             className="w-full group/btn inline-flex items-center justify-center gap-2 bg-slate-950 hover:bg-slate-800 text-white py-2.5 rounded-lg text-xs font-semibold shadow-sm transition-all duration-200"
                                         >
-                                            <span>Transmit Sourcing Request</span>
+                                            <span>Transmit Sourcing Request to Trade Desk</span>
                                             <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center group-hover/btn:translate-x-0.5 transition-transform duration-200">
                                                 <FiArrowRight className="text-xs" />
                                             </span>
@@ -1500,20 +1531,20 @@ export default function Welcome({
                 <div className="max-w-4xl mx-auto text-center px-4 relative z-10">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-brand-300 border border-white/10 text-xs font-mono mb-4">
                         <BsLightningChargeFill className="text-amber-400" />
-                        <span>ZERO COMMITMENT ONBOARDING</span>
+                        <span>ZERO ONBOARDING FEES FOR BUYERS</span>
                     </div>
                     <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
-                        Ready to Accelerate Your Enterprise Procurement?
+                        Modernize Your Indian Supply Chain Today
                     </h2>
                     <p className="text-sm sm:text-base text-slate-300 mb-8 max-w-xl mx-auto leading-relaxed">
-                        Join over 10,000 businesses sourcing high-grade inventory directly from vetted manufacturers with trade assurance.
+                        Join India's fastest growing institutional procurement network. Vetted manufacturers, direct factory pricing, and 100% escrow peace of mind.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                         <Link
                             href={route('register')}
                             className="group inline-flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-full text-xs sm:text-sm font-semibold shadow-lg shadow-brand-500/25 transition-all duration-200"
                         >
-                            <span>Create Free Enterprise Account</span>
+                            <span>Register as Buyer</span>
                             <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
                                 <FiArrowRight className="text-xs" />
                             </span>
@@ -1522,14 +1553,14 @@ export default function Welcome({
                             href="#contact"
                             className="inline-flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/15 text-white px-6 py-3 rounded-full text-xs sm:text-sm font-semibold border border-white/20 transition-all duration-200"
                         >
-                            <span>Speak to an Advisor</span>
+                            <span>Speak to Trade Desk</span>
                         </a>
                     </div>
                 </div>
             </section>
 
             {/* ------------------------------------------------------------- */}
-            {/* ENTERPRISE DARK SLATE FOOTER                                  */}
+            {/* ENTERPRISE DARK SLATE FOOTER (PAN-INDIA SOURCING)             */}
             {/* ------------------------------------------------------------- */}
             <footer className="bg-slate-950 text-slate-400 text-xs border-t border-slate-800">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
@@ -1541,15 +1572,15 @@ export default function Welcome({
                                     TM
                                 </div>
                                 <span className="text-base font-bold text-white tracking-tight">
-                                    Tread<span className="text-brand-500">mesh</span>
+                                    Tread<span className="text-brand-500">mesh</span> India
                                 </span>
                             </Link>
                             <p className="text-xs text-slate-400 leading-relaxed max-w-sm mb-4">
-                                Enterprise-grade wholesale procurement infrastructure connecting verified suppliers with high-volume commercial buyers under strict escrow governance.
+                                Institutional B2B wholesale marketplace connecting verified Indian manufacturing facilities with commercial enterprises under strict GST and RBI-compliant escrow governance.
                             </p>
                             <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-[11px] font-mono text-emerald-400">
                                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <span>Platform Operational • Escrow Active</span>
+                                <span>Pan-India Nodes Active • Nodal Escrow Operational</span>
                             </div>
                         </div>
 
@@ -1559,11 +1590,11 @@ export default function Welcome({
                                 Platform
                             </h4>
                             <ul className="space-y-2">
-                                <li><a href="#products" className="hover:text-white transition-colors">Products Catalog</a></li>
-                                <li><a href="#categories" className="hover:text-white transition-colors">Category Sectors</a></li>
-                                <li><a href="#capabilities" className="hover:text-white transition-colors">Capabilities</a></li>
+                                <li><a href="#products" className="hover:text-white transition-colors">Commercial Catalog</a></li>
+                                <li><a href="#categories" className="hover:text-white transition-colors">Industrial Clusters</a></li>
+                                <li><a href="#capabilities" className="hover:text-white transition-colors">Sourcing Infrastructure</a></li>
                                 <li><a href="#how-it-works" className="hover:text-white transition-colors">Procurement Pipeline</a></li>
-                                <li><a href="#about" className="hover:text-white transition-colors">Enterprise Trust</a></li>
+                                <li><a href="#about" className="hover:text-white transition-colors">GST & Regulatory Trust</a></li>
                             </ul>
                         </div>
 
@@ -1574,9 +1605,9 @@ export default function Welcome({
                             </h4>
                             <ul className="space-y-2">
                                 <li><Link href={route('buyer.products.index')} className="hover:text-white transition-colors">Browse Products</Link></li>
-                                <li><Link href={route('buyer.rfqs.create')} className="hover:text-white transition-colors">Submit RFQ</Link></li>
-                                <li><a href="#about" className="hover:text-white transition-colors">Escrow Guarantee</a></li>
-                                <li><a href="#contact" className="hover:text-white transition-colors">Volume Purchasing</a></li>
+                                <li><Link href={route('buyer.rfqs.create')} className="hover:text-white transition-colors">Post RFQ</Link></li>
+                                <li><a href="#about" className="hover:text-white transition-colors">Nodal Escrow Guarantee</a></li>
+                                <li><a href="#contact" className="hover:text-white transition-colors">Custom Bulk Supply</a></li>
                             </ul>
                         </div>
 
@@ -1586,10 +1617,10 @@ export default function Welcome({
                                 For Suppliers
                             </h4>
                             <ul className="space-y-2">
-                                <li><Link href={route('register')} className="hover:text-white transition-colors">Become a Supplier</Link></li>
-                                <li><a href="#about" className="hover:text-white transition-colors">Verification Audit</a></li>
-                                <li><a href="#capabilities" className="hover:text-white transition-colors">RFQ Bidding Engine</a></li>
-                                <li><a href="#contact" className="hover:text-white transition-colors">Supplier Support</a></li>
+                                <li><Link href={route('register')} className="hover:text-white transition-colors">Register as Manufacturer</Link></li>
+                                <li><a href="#about" className="hover:text-white transition-colors">GSTIN & Udyam Verification</a></li>
+                                <li><a href="#capabilities" className="hover:text-white transition-colors">RFQ Bidding Console</a></li>
+                                <li><a href="#contact" className="hover:text-white transition-colors">Supplier Support Desk</a></li>
                             </ul>
                         </div>
                     </div>
@@ -1597,13 +1628,13 @@ export default function Welcome({
                     {/* Bottom Legal & Copyright Bar */}
                     <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500">
                         <p className="font-mono text-[11px]">
-                            &copy; {new Date().getFullYear()} Treadmesh B2B Inc. All rights reserved.
+                            &copy; {new Date().getFullYear()} Treadmesh India B2B Technologies Pvt Ltd. All rights reserved.
                         </p>
                         <div className="flex items-center gap-6 text-[11px]">
                             <a href="#about" className="hover:text-slate-300 transition-colors">Privacy Policy</a>
-                            <a href="#about" className="hover:text-slate-300 transition-colors">Terms of Trade</a>
-                            <a href="#about" className="hover:text-slate-300 transition-colors">Escrow Disclosures</a>
-                            <a href="#contact" className="hover:text-slate-300 transition-colors">Security</a>
+                            <a href="#about" className="hover:text-slate-300 transition-colors">Terms of Trade (Indian Contract Act)</a>
+                            <a href="#about" className="hover:text-slate-300 transition-colors">Nodal Escrow Disclosures</a>
+                            <a href="#contact" className="hover:text-slate-300 transition-colors">Security & GST</a>
                         </div>
                     </div>
                 </div>
