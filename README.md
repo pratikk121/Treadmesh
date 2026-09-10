@@ -442,7 +442,7 @@ Once `php artisan migrate --seed` is executed, the following pre-configured acco
 
 ## 📄 License
 
-Proprietary software — Devlogic Systems HQ. All rights reserved.
+Proprietary software — Devlogic Systems. All rights reserved.
 
 ---
 
