@@ -66,15 +66,15 @@ export default function Products({ productData }) {
 
   return (
     <DashboardLayout>
-      <Head title="পণ্য রিপোর্ট" />
+      <Head title="Product report" />
 
       <div className="space-y-6">
         {/* Header - Page title and export button */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">পণ্য রিপোর্ট</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Product report</h1>
             <p className="text-sm text-gray-600 mt-1">
-              পণ্যের মজুত ও বিক্রয় কর্মক্ষমতা বিশ্লেষণ করুন
+              Analyze product inventory and sales performance
             </p>
           </div>
           <button
@@ -82,7 +82,7 @@ export default function Products({ productData }) {
             className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
           >
             <FiDownload className="w-4 h-4" />
-            <span>এক্সপোর্ট</span>
+            <span>Export</span>
           </button>
         </div>
 
@@ -91,7 +91,7 @@ export default function Products({ productData }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট পণ্য</p>
+                <p className="text-sm text-gray-500">Total Products</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">{formatNumber(inventory.total_products)}</p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-lg">
@@ -103,7 +103,7 @@ export default function Products({ productData }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট মজুত মূল্য</p>
+                <p className="text-sm text-gray-500">Total stock value is</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{formatCurrency(inventory.total_value)}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -115,7 +115,7 @@ export default function Products({ productData }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">স্টকে নেই</p>
+                <p className="text-sm text-gray-500">Out of stock</p>
                 <p className="text-2xl font-bold text-red-600 mt-1">{formatNumber(inventory.out_of_stock)}</p>
               </div>
               <div className="p-3 bg-red-100 rounded-lg">
@@ -127,7 +127,7 @@ export default function Products({ productData }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">স্টক কম</p>
+                <p className="text-sm text-gray-500">Stock low</p>
                 <p className="text-2xl font-bold text-yellow-600 mt-1">{formatNumber(inventory.low_stock)}</p>
               </div>
               <div className="p-3 bg-yellow-100 rounded-lg">
@@ -143,7 +143,7 @@ export default function Products({ productData }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MdOutlineCategory className="w-5 h-5 text-indigo-600" />
-              ক্যাটাগরি অনুযায়ী পণ্য
+              Product By Category
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -173,17 +173,17 @@ export default function Products({ productData }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MdOutlineAttachMoney className="w-5 h-5 text-indigo-600" />
-              মূল্য বণ্টন
+              Price distribution
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={[
-                    { range: '< ১ লক্ষ', count: price_distribution.under_100k },
-                    { range: '১-৫ লক্ষ', count: price_distribution['100k_500k'] },
-                    { range: '৫-১০ লক্ষ', count: price_distribution['500k_1m'] },
-                    { range: '১০-৫০ লক্ষ', count: price_distribution['1m_5m'] },
-                    { range: '> ৫০ লক্ষ', count: price_distribution.above_5m },
+                    { range: '< 1 lakh', count: price_distribution.under_100k },
+                    { range: '1-5 lakhs', count: price_distribution['100k_500k'] },
+                    { range: '5-10 lakhs', count: price_distribution['500k_1m'] },
+                    { range: '10-50 lakhs', count: price_distribution['1m_5m'] },
+                    { range: '> 50 lakhs', count: price_distribution.above_5m },
                   ]}
                   margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                 >
@@ -191,7 +191,7 @@ export default function Products({ productData }) {
                   <XAxis dataKey="range" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="count" fill="#4F46E5" name="পণ্য" />
+                  <Bar dataKey="count" fill="#4F46E5" name="Product" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -203,7 +203,7 @@ export default function Products({ productData }) {
             {/* Header */}
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiTrendingUp className="w-5 h-5 text-indigo-600" />
-              সর্বাধিক বিক্রিত পণ্য
+              Best selling products
             </h3>
 
             {/* Table */}
@@ -212,10 +212,10 @@ export default function Products({ productData }) {
                 {/* Table header */}
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ক্রম</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">পণ্য</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">বিক্রিত পরিমাণ</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">আয়</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">sequence</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Amount sold is</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Income</th>
                   </tr>
                 </thead>
 
@@ -252,7 +252,7 @@ export default function Products({ productData }) {
 
           {/* Table Header */}
           <div className="px-6 py-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900">ক্যাটাগরির বিবরণ</h3>
+            <h3 className="font-semibold text-gray-900">Category Description</h3>
           </div>
 
           {/* Table */}
@@ -262,9 +262,9 @@ export default function Products({ productData }) {
               {/* Table Header */}
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ক্যাটাগরি</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">পণ্যের সংখ্যা</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">মোটের শতাংশ</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Number of products</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Percentage of total</th>
                 </tr>
               </thead>
 

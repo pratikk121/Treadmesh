@@ -100,7 +100,7 @@ export default function SalesAnalytics({
   // Process category data for pie chart
   const categoryData = Array.isArray(salesByCategory)
     ? salesByCategory.map((item) => ({
-      name: item.category || item.name || 'অশ্রেণিকৃত',
+      name: item.category || item.name || 'Uncategorized',
       value: Number(item.revenue || item.value || 0)
     }))
     : Object.entries(salesByCategory || {}).map(([category, data]) => ({
@@ -149,15 +149,15 @@ export default function SalesAnalytics({
 
   return (
     <DashboardLayout>
-      <Head title="বিক্রয় বিশ্লেষণ" />
+      <Head title="Sales Analysis" />
 
       <div className="space-y-6">
         {/* Header - Page title and export button */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">বিক্রয় বিশ্লেষণ</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Sales Analysis</h1>
             <p className="text-sm text-gray-600 mt-1">
-              আপনার বিক্রয় কর্মক্ষমতা এবং আয়ের মেট্রিক্স ট্র্যাক করুন
+              Track your sales performance and revenue metrics
             </p>
           </div>
           <div className="flex gap-2">
@@ -166,7 +166,7 @@ export default function SalesAnalytics({
               className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
             >
               <FiDownload className="w-4 h-4" />
-              <span>রিপোর্ট এক্সপোর্ট</span>
+              <span>Report Export</span>
             </button>
           </div>
         </div>
@@ -176,7 +176,7 @@ export default function SalesAnalytics({
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2">
               <FiCalendar className="w-5 h-5 text-gray-400" />
-              <span className="text-sm font-medium text-gray-700">সময়কাল:</span>
+              <span className="text-sm font-medium text-gray-700">Duration:</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {['week', 'month', 'quarter', 'year', 'custom'].map((period) => (
@@ -188,10 +188,10 @@ export default function SalesAnalytics({
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                 >
-                  {period === 'week' ? 'সপ্তাহ' :
-                    period === 'month' ? 'মাস' :
-                      period === 'quarter' ? 'ত্রৈমাসিক' :
-                        period === 'year' ? 'বছর' : 'কাস্টম'}
+                  {period === 'week' ? 'week' :
+                    period === 'month' ? 'Month' :
+                      period === 'quarter' ? 'Quarterly' :
+                        period === 'year' ? 'Year' : 'Custom'}
                 </button>
               ))}
             </div>
@@ -206,7 +206,7 @@ export default function SalesAnalytics({
               <div className="flex flex-wrap items-end gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    থেকে তারিখ
+                    Date from
                   </label>
                   <input
                     type="date"
@@ -217,7 +217,7 @@ export default function SalesAnalytics({
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    পর্যন্ত তারিখ
+                    Date up to
                   </label>
                   <input
                     type="date"
@@ -231,13 +231,13 @@ export default function SalesAnalytics({
                   disabled={!customDateFrom || !customDateTo}
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
                 >
-                  প্রয়োগ
+                  application
                 </button>
                 <button
                   onClick={() => setShowDatePicker(false)}
                   className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
                 >
-                  বাতিল
+                  cancel
                 </button>
               </div>
             </div>
@@ -247,7 +247,7 @@ export default function SalesAnalytics({
         {/* Summary Cards - Key metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl p-6 text-white">
-            <p className="text-sm opacity-90">মোট আয়</p>
+            <p className="text-sm opacity-90">Total income is</p>
             <p className="text-2xl font-bold mt-1">{formatCurrency(summary.total_revenue)}</p>
             <div className="mt-2 flex items-center text-sm">
               {summary.revenue_growth >= 0 ? (
@@ -261,12 +261,12 @@ export default function SalesAnalytics({
                   <span>{formatPercentage(summary.revenue_growth)}</span>
                 </>
               )}
-              <span className="ml-2 opacity-75">গত সময়ের তুলনায়</span>
+              <span className="ml-2 opacity-75"></span>
             </div>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">মোট অর্ডার</p>
+            <p className="text-sm text-gray-500">Total order</p>
             <p className="text-2xl font-bold text-gray-900">{formatNumber(summary.total_orders)}</p>
             <div className="mt-2 flex items-center text-sm">
               {summary.orders_growth >= 0 ? (
@@ -274,12 +274,12 @@ export default function SalesAnalytics({
               ) : (
                 <span className="text-red-600">↓ {formatPercentage(summary.orders_growth)}</span>
               )}
-              <span className="ml-2 text-gray-400">গত সময়ের তুলনায়</span>
+              <span className="ml-2 text-gray-400"></span>
             </div>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">গড় অর্ডার মূল্য</p>
+            <p className="text-sm text-gray-500">Average order value</p>
             <p className="text-2xl font-bold text-gray-900">{formatCurrency(summary.average_order_value)}</p>
             <div className="mt-2 flex items-center text-sm">
               {summary.aov_growth >= 0 ? (
@@ -287,17 +287,17 @@ export default function SalesAnalytics({
               ) : (
                 <span className="text-red-600">↓ {formatPercentage(summary.aov_growth)}</span>
               )}
-              <span className="ml-2 text-gray-400">গত সময়ের তুলনায়</span>
+              <span className="ml-2 text-gray-400"></span>
             </div>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">বিক্রিত পণ্য</p>
+            <p className="text-sm text-gray-500">Product sold</p>
             <p className="text-2xl font-bold text-gray-900">{formatNumber(summary.total_items_sold)}</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">স্বতন্ত্র ক্রেতা</p>
+            <p className="text-sm text-gray-500">INDIVIDUAL BUYER</p>
             <p className="text-2xl font-bold text-gray-900">{formatNumber(summary.unique_customers)}</p>
           </div>
         </div>
@@ -306,7 +306,7 @@ export default function SalesAnalytics({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Revenue Trend - Area chart */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">আয়ের প্রবণতা</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Revenue Trends</h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={safeSalesByPeriod}>
@@ -326,7 +326,7 @@ export default function SalesAnalytics({
                   <YAxis
                     stroke="#6B7280"
                     fontSize={12}
-                    tickFormatter={(value) => `৳${value / 1000}K`}
+                    tickFormatter={(value) => `$${value / 1000}K`}
                   />
                   <Tooltip
                     formatter={(value) => formatCurrency(value)}
@@ -356,7 +356,7 @@ export default function SalesAnalytics({
 
           {/* Orders Trend - Bar chart */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">অর্ডারের প্রবণতা</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Order Trend</h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={safeSalesByPeriod}>
@@ -390,7 +390,7 @@ export default function SalesAnalytics({
 
           {/* Sales by Category - Pie chart */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">ক্যাটাগরি অনুযায়ী বিক্রয়</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Category wise sales</h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
@@ -424,7 +424,7 @@ export default function SalesAnalytics({
 
           {/* Top Products */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">শীর্ষ পণ্য</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Top Products</h2>
             <div className="space-y-4">
               {topProducts.map((product, index) => (
                 <div key={product.id} className="flex items-center justify-between">
@@ -435,7 +435,7 @@ export default function SalesAnalytics({
                     <div className="flex-1">
                       <p className="font-medium text-gray-900">{product.name}</p>
                       <p className="text-sm text-gray-500">
-                        {formatNumber(product.total_quantity_sold)} ইউনিট · {product.order_count} অর্ডার
+                        {formatNumber(product.total_quantity_sold)} Unit · {product.order_count} Order
                       </p>
                     </div>
                   </div>
@@ -452,14 +452,14 @@ export default function SalesAnalytics({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Top Buyers Table */}
           <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">শীর্ষ ক্রেতা</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">top buyer</h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ক্রেতা</th>
-                    <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">অর্ডার</th>
-                    <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">মোট ব্যয়</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Buyer</th>
+                    <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Order</th>
+                    <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">total cost</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -484,13 +484,13 @@ export default function SalesAnalytics({
 
           {/* Payment Methods */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">পেমেন্ট পদ্ধতি</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Method</h2>
             <div className="space-y-4">
               {paymentMethods.map((method, index) => (
                 <div key={method.payment_status}>
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-medium text-gray-700">
-                      {method.payment_status === 'paid' ? 'পরিশোধিত' : 'অপেক্ষমান'}
+                      {method.payment_status === 'paid' ? 'Paid' : 'Awaiting'}
                     </span>
                     <span className="text-sm font-medium text-gray-900">
                       {formatCurrency(method.total)}
@@ -502,7 +502,7 @@ export default function SalesAnalytics({
                       style={{ width: `${(method.total / paymentMethods.reduce((sum, m) => sum + m.total, 0)) * 100}%` }}
                     />
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">{method.count} টি লেনদেন</p>
+                  <p className="text-xs text-gray-500 mt-1">{method.count} t transaction</p>
                 </div>
               ))}
             </div>
@@ -512,13 +512,13 @@ export default function SalesAnalytics({
         {/* Geographical Distribution */}
         {geoDistribution.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">ভৌগোলিক বণ্টন</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Geographical distribution</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {geoDistribution.map((location) => (
                 <div key={location.city} className="bg-gray-50 rounded-lg p-4">
-                  <p className="font-medium text-gray-900">{location.city || 'অজানা'}</p>
+                  <p className="font-medium text-gray-900">{location.city || 'unknown'}</p>
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-sm text-gray-500">{location.order_count} অর্ডার</span>
+                    <span className="text-sm text-gray-500">{location.order_count} Order</span>
                     <span className="font-bold text-indigo-600">{formatCurrency(location.total_spent)}</span>
                   </div>
                 </div>

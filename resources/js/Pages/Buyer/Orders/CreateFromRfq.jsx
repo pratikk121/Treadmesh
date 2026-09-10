@@ -71,22 +71,22 @@ export default function CreateFromRfq({ rfq, quote }) {
   if (rfq.status !== 'open') {
     return (
       <DashboardLayout>
-        <Head title="RFQ বন্ধ - অর্ডার তৈরি" />
+        <Head title="RFQ Close - Order creation" />
 
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center max-w-md mx-auto p-8 bg-white rounded-xl shadow-lg">
             <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <FiAlertCircle className="w-10 h-10 text-yellow-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">RFQ বন্ধ রয়েছে</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">RFQ </h2>
             <p className="text-gray-600 mb-6">
-              এই RFQ অর্ডারের জন্য উন্মুক্ত নয়। এটি বন্ধ করা হয়েছে অথবা ইতিমধ্যে একটি অর্ডার তৈরি করা হয়েছে।
+              This RFQ is not open for orders. It has been closed or an order has already been created।
             </p>
             <Link
               href={route('buyer.rfqs.show', rfq.id)}
               className="inline-block px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
             >
-              RFQ-তে ফিরে যান
+              RFQ-Back to
             </Link>
           </div>
         </div>
@@ -98,22 +98,22 @@ export default function CreateFromRfq({ rfq, quote }) {
   if (rfq.order) {
     return (
       <DashboardLayout>
-        <Head title="অর্ডার বিদ্যমান" />
+        <Head title="Order exists" />
 
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center max-w-md mx-auto p-8 bg-white rounded-xl shadow-lg">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <FiCheckCircle className="w-10 h-10 text-green-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">অর্ডার ইতিমধ্যে রয়েছে</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">Order Already Placed</h2>
             <p className="text-gray-600 mb-6">
-              এই RFQ-র জন্য ইতিমধ্যে একটি অর্ডার তৈরি করা হয়েছে।
+              An Order Already Created for This RFQ।
             </p>
             <Link
               href={route('buyer.orders.show', rfq.order.id)}
               className="inline-block px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
             >
-              অর্ডার দেখুন
+              View order
             </Link>
           </div>
         </div>
@@ -125,20 +125,20 @@ export default function CreateFromRfq({ rfq, quote }) {
   if (orderPlaced) {
     return (
       <DashboardLayout>
-        <Head title="অর্ডার সফল হয়েছে" />
+        <Head title="Order was successful" />
 
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center max-w-md mx-auto p-8 bg-white rounded-xl shadow-lg">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <FiCheckCircle className="w-10 h-10 text-green-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">অর্ডার সফলভাবে তৈরি হয়েছে!</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">Order successfully created!</h2>
             <p className="text-gray-600 mb-4">
-              আপনার অর্ডার সফলভাবে তৈরি করা হয়েছে। সাপ্লায়ার ২৪-৪৮ ঘন্টার মধ্যে আপনার অর্ডার নিশ্চিত করবে।
+              Your order has been successfully created. Supplier will confirm your order within 24-48 hours।
             </p>
             {orderNumber && (
               <p className="text-sm bg-gray-50 p-3 rounded-lg mb-6">
-                অর্ডার নম্বর: <span className="font-bold text-indigo-600">{orderNumber}</span>
+                Order number: <span className="font-bold text-indigo-600">{orderNumber}</span>
               </p>
             )}
             <div className="space-y-3">
@@ -146,13 +146,13 @@ export default function CreateFromRfq({ rfq, quote }) {
                 href={route('buyer.orders.index')}
                 className="block w-full px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
               >
-                আমার অর্ডার দেখুন
+                View my order
               </Link>
               <Link
                 href={route('buyer.rfqs.show', rfq.id)}
                 className="block w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
               >
-                RFQ-তে ফিরে যান
+                RFQ-Back to
               </Link>
             </div>
           </div>
@@ -163,7 +163,7 @@ export default function CreateFromRfq({ rfq, quote }) {
 
   return (
     <DashboardLayout>
-      <Head title="অর্ডার নিশ্চিতকরণ" />
+      <Head title="Order confirmation" />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -175,8 +175,8 @@ export default function CreateFromRfq({ rfq, quote }) {
             <FiArrowLeft className="text-xl" />
           </Link>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">অর্ডার নিশ্চিত করুন</h2>
-            <p className="text-gray-600 mt-1">আপনার অর্ডারের বিবরণ পর্যালোচনা ও নিশ্চিত করুন</p>
+            <h2 className="text-2xl font-bold text-gray-800">Confirm order</h2>
+            <p className="text-gray-600 mt-1">Review and confirm your order details</p>
           </div>
         </div>
 
@@ -187,7 +187,7 @@ export default function CreateFromRfq({ rfq, quote }) {
             {/* Order Summary Section */}
             <div className="bg-white rounded-xl border p-6">
               <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiPackage className="mr-2" /> অর্ডারের সারসংক্ষেপ
+                <FiPackage className="mr-2" /> Order Summary
               </h3>
 
               <div className="space-y-4">
@@ -195,7 +195,7 @@ export default function CreateFromRfq({ rfq, quote }) {
                   <div className="flex justify-between items-start mb-2">
                     <p className="font-medium">RFQ: {rfq.rfq_number}</p>
                     <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
-                      গৃহীত কোটা
+                      Accepted Quota
                     </span>
                   </div>
                   <p className="text-sm text-gray-600 mb-3">{rfq.title}</p>
@@ -212,7 +212,7 @@ export default function CreateFromRfq({ rfq, quote }) {
 
                   {/* Total amount */}
                   <div className="mt-3 pt-3 border-t flex justify-between">
-                    <span className="font-medium">মোট পরিমাণ</span>
+                    <span className="font-medium">total amount</span>
                     <span className="font-bold text-indigo-600">{formatCurrency(quote.total_amount)}</span>
                   </div>
                 </div>
@@ -220,19 +220,19 @@ export default function CreateFromRfq({ rfq, quote }) {
                 {/* Supplier and quote details */}
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-gray-500">সাপ্লায়ার</p>
+                    <p className="text-gray-500">Supplier</p>
                     <p className="font-medium">{quote.supplier?.name}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">কোম্পানি</p>
+                    <p className="text-gray-500">Company</p>
                     <p className="font-medium">{quote.supplier?.supplier?.company_name}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">কোটা নম্বর</p>
+                    <p className="text-gray-500">Quota Number</p>
                     <p className="font-medium">{quote.quote_number}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">মেয়াদ শেষ</p>
+                    <p className="text-gray-500">Expires</p>
                     <p className="font-medium">{formatDate(quote.valid_until)}</p>
                   </div>
                 </div>
@@ -242,20 +242,20 @@ export default function CreateFromRfq({ rfq, quote }) {
             {/* Shipping Address Form */}
             <div className="bg-white rounded-xl border p-6">
               <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiMapPin className="mr-2" /> শিপিং ঠিকানা
+                <FiMapPin className="mr-2" /> Shipping address is
               </h3>
 
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    শিপিং ঠিকানা <span className="text-red-500">*</span>
+                    Shipping address is <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     value={data.shipping_address}
                     onChange={(e) => setData('shipping_address', e.target.value)}
                     rows="3"
                     className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="আপনার সম্পূর্ণ শিপিং ঠিকানা লিখুন"
+                    placeholder="Enter your complete shipping address"
                     required
                   />
                   {errors.shipping_address && (
@@ -265,14 +265,14 @@ export default function CreateFromRfq({ rfq, quote }) {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    অতিরিক্ত নোট (ঐচ্ছিক)
+                    Additional Notes (Optional)
                   </label>
                   <textarea
                     value={data.notes}
                     onChange={(e) => setData('notes', e.target.value)}
                     rows="2"
                     className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="সাপ্লায়ারের জন্য বিশেষ নির্দেশনা..."
+                    placeholder="SPECIAL INSTRUCTIONS FOR SUPPLIERS..."
                   />
                 </div>
               </div>
@@ -283,21 +283,21 @@ export default function CreateFromRfq({ rfq, quote }) {
           <div className="space-y-6">
             {/* Order Total Card */}
             <div className="bg-white rounded-xl border p-6">
-              <h3 className="font-medium text-gray-700 mb-4">অর্ডারের মোট পরিমাণ</h3>
+              <h3 className="font-medium text-gray-700 mb-4">Total order amount is</h3>
               <p className="text-3xl font-bold text-indigo-600">{formatCurrency(quote.total_amount)}</p>
 
               <div className="mt-4 space-y-2 text-sm text-gray-600">
                 <div className="flex justify-between">
-                  <span>সাবটোটাল</span>
+                  <span>Subtotal</span>
                   <span>{formatCurrency(quote.total_amount)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>শিপিং</span>
-                  <span>সাপ্লায়ার গণনা করবেন</span>
+                  <span>Shipping</span>
+                  <span>The supplier will calculate</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>ট্যাক্স</span>
-                  <span>অন্তর্ভুক্ত</span>
+                  <span>Tax</span>
+                  <span>Includes</span>
                 </div>
               </div>
             </div>
@@ -313,7 +313,7 @@ export default function CreateFromRfq({ rfq, quote }) {
                     className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                   />
                   <span className="ml-2 text-sm text-gray-600">
-                    আমি নিশ্চিত করছি যে অর্ডারের বিবরণ সঠিক এবং শর্তাবলী মেনে নিচ্ছি
+                    I confirm the order details are correct and accept the terms and conditions
                   </span>
                 </label>
                 {errors.terms_accepted && (
@@ -331,10 +331,10 @@ export default function CreateFromRfq({ rfq, quote }) {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      প্রক্রিয়াকরণ...
+                      processing...
                     </>
                   ) : (
-                    'অর্ডার নিশ্চিত করুন'
+                    'Confirm order'
                   )}
                 </button>
               </div>
@@ -345,12 +345,12 @@ export default function CreateFromRfq({ rfq, quote }) {
               <div className="flex items-start gap-3">
                 <FiCheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-blue-700 font-medium">পরবর্তী কী হবে?</p>
+                  <p className="text-sm text-blue-700 font-medium">What's Next?</p>
                   <ul className="mt-2 text-xs text-blue-600 list-disc list-inside space-y-1">
-                    <li>সাপ্লায়ার ২৪-৪৮ ঘন্টার মধ্যে অর্ডার নিশ্চিত করবে</li>
-                    <li>অর্ডার প্রক্রিয়াকরণের আপডেট পাবেন</li>
-                    <li>অর্ডার নিশ্চিত হওয়ার পর পেমেন্ট সম্পন্ন করতে পারবেন</li>
-                    <li>রিয়েল-টাইমে আপনার অর্ডারের স্ট্যাটাস ট্র্যাক করুন</li>
+                    <li>Supplier will confirm order within 24-48 hours</li>
+                    <li>Get order processing updates</li>
+                    <li>Payment can be completed after the order is confirmed</li>
+                    <li>Track your order status in real-time</li>
                   </ul>
                 </div>
               </div>

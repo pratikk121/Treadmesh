@@ -59,22 +59,22 @@ export default function Buyers({ buyerData, period, dateRange }) {
 
   // Period options for dropdown
   const periodOptions = [
-    { value: 'monthly', label: 'মাসিক' },
-    { value: 'quarterly', label: 'ত্রৈমাসিক' },
-    { value: 'yearly', label: 'বার্ষিক' },
+    { value: 'monthly', label: 'Monthly' },
+    { value: 'quarterly', label: 'Quarterly' },
+    { value: 'yearly', label: 'Annually' },
   ];
 
   return (
     <DashboardLayout>
-      <Head title="ক্রেতা রিপোর্ট" />
+      <Head title="Buyer reports" />
 
       <div className="space-y-6">
         {/* Header - Page title, period selector and export button */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">ক্রেতা রিপোর্ট</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Buyer reports</h1>
             <p className="text-sm text-gray-600 mt-1">
-              ক্রেতাদের কার্যকলাপ ও অংশগ্রহণ বিশ্লেষণ করুন
+              Analyze customer activity and engagement
             </p>
           </div>
           <div className="flex gap-2">
@@ -92,7 +92,7 @@ export default function Buyers({ buyerData, period, dateRange }) {
               className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
             >
               <FiDownload className="w-4 h-4" />
-              <span>এক্সপোর্ট</span>
+              <span>Export</span>
             </button>
           </div>
         </div>
@@ -101,7 +101,7 @@ export default function Buyers({ buyerData, period, dateRange }) {
         <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 flex items-center gap-2 text-indigo-700">
           <FiCalendar className="w-4 h-4" />
           <span className="text-sm font-medium">
-            রিপোর্ট সময়কাল: {new Date(dateRange.start).toLocaleDateString('bn-BD')} - {new Date(dateRange.end).toLocaleDateString('bn-BD')}
+            Report period: {new Date(dateRange.start).toLocaleDateString('bn-BD')} - {new Date(dateRange.end).toLocaleDateString('bn-BD')}
           </span>
         </div>
 
@@ -110,7 +110,7 @@ export default function Buyers({ buyerData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট ক্রেতা</p>
+                <p className="text-sm text-gray-500">Total buyers</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">{formatNumber(overview.total)}</p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-lg">
@@ -122,7 +122,7 @@ export default function Buyers({ buyerData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">সক্রিয় ক্রেতা</p>
+                <p className="text-sm text-gray-500">Active buyer</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{formatNumber(overview.active)}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -134,7 +134,7 @@ export default function Buyers({ buyerData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">অর্ডার সহ ক্রেতা</p>
+                <p className="text-sm text-gray-500">Buyer with order</p>
                 <p className="text-2xl font-bold text-blue-600 mt-1">{formatNumber(overview.with_orders)}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
@@ -146,7 +146,7 @@ export default function Buyers({ buyerData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">RFQ সহ ক্রেতা</p>
+                <p className="text-sm text-gray-500">RFQ Co-buyer</p>
                 <p className="text-2xl font-bold text-purple-600 mt-1">{formatNumber(overview.with_rfqs)}</p>
               </div>
               <div className="p-3 bg-purple-100 rounded-lg">
@@ -159,38 +159,38 @@ export default function Buyers({ buyerData, period, dateRange }) {
         {/* Activity Stats - Buyer engagement metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <p className="text-sm text-gray-500 mb-2">নতুন ক্রেতা</p>
+            <p className="text-sm text-gray-500 mb-2">New Buyer</p>
             <p className="text-3xl font-bold text-indigo-600">{formatNumber(activity_stats.new_buyers)}</p>
-            <p className="text-xs text-gray-500 mt-1">এই সময়কালে</p>
+            <p className="text-xs text-gray-500 mt-1">During this period</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <p className="text-sm text-gray-500 mb-2">সক্রিয় ক্রেতা</p>
+            <p className="text-sm text-gray-500 mb-2">Active buyer</p>
             <p className="text-3xl font-bold text-green-600">{formatNumber(activity_stats.active_buyers)}</p>
-            <p className="text-xs text-gray-500 mt-1">অর্ডার দিয়েছেন</p>
+            <p className="text-xs text-gray-500 mt-1">Ordered</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <p className="text-sm text-gray-500 mb-2">গড় অর্ডার/ক্রেতা</p>
+            <p className="text-sm text-gray-500 mb-2">Average order/buyer</p>
             <p className="text-3xl font-bold text-purple-600">{activity_stats.average_orders_per_buyer}</p>
-            <p className="text-xs text-gray-500 mt-1">এই সময়কালে</p>
+            <p className="text-xs text-gray-500 mt-1">During this period</p>
           </div>
         </div>
 
         {/* RFQ Stats - Quote request metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <p className="text-sm text-gray-500 mb-2">মোট RFQ</p>
+            <p className="text-sm text-gray-500 mb-2">total RFQ</p>
             <p className="text-3xl font-bold text-indigo-600">{formatNumber(rfq_stats.total_rfqs)}</p>
-            <p className="text-xs text-gray-500 mt-1">এই সময়কালে</p>
+            <p className="text-xs text-gray-500 mt-1">During this period</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <p className="text-sm text-gray-500 mb-2">RFQ সহ ক্রেতা</p>
+            <p className="text-sm text-gray-500 mb-2">RFQ Co-buyer</p>
             <p className="text-3xl font-bold text-green-600">{formatNumber(rfq_stats.buyers_with_rfqs)}</p>
-            <p className="text-xs text-gray-500 mt-1">সক্রিয় RFQ সৃষ্টিকারী</p>
+            <p className="text-xs text-gray-500 mt-1">Active RFQ generator</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <p className="text-sm text-gray-500 mb-2">গড় RFQ/ক্রেতা</p>
+            <p className="text-sm text-gray-500 mb-2">Average RFQ/Buyer</p>
             <p className="text-3xl font-bold text-purple-600">{rfq_stats.avg_rfqs_per_buyer}</p>
-            <p className="text-xs text-gray-500 mt-1">সক্রিয় ক্রেতাদের মধ্যে</p>
+            <p className="text-xs text-gray-500 mt-1">Among active buyers is</p>
           </div>
         </div>
 
@@ -201,7 +201,7 @@ export default function Buyers({ buyerData, period, dateRange }) {
           <div className="px-6 py-4 border-b border-gray-100">
             <h3 className="font-semibold text-gray-900 flex items-center gap-2">
               <BsGraphUp className="w-5 h-5 text-indigo-600" />
-              ব্যয় অনুযায়ী শীর্ষ ক্রেতা
+              Top buyer by spend
             </h3>
           </div>
 
@@ -212,11 +212,11 @@ export default function Buyers({ buyerData, period, dateRange }) {
               {/* Table header */}
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ক্রম</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ক্রেতা</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ইমেইল</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">অর্ডার</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">মোট ব্যয়</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">sequence</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Buyer</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Order</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">total cost</th>
                 </tr>
               </thead>
 

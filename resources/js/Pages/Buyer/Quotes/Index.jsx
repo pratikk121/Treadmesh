@@ -150,14 +150,14 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
 
   return (
     <DashboardLayout>
-      <Head title="প্রাপ্ত কোটা" />
+      <Head title="Received Quota" />
 
       <div className="space-y-6">
         {/* Header - Page title and compare button */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">প্রাপ্ত কোটা</h2>
-            <p className="text-gray-600 mt-1">সাপ্লায়ারদের কাছ থেকে প্রাপ্ত কোটা পর্যালোচনা ও তুলনা করুন</p>
+            <h2 className="text-2xl font-bold text-gray-800">Received Quota</h2>
+            <p className="text-gray-600 mt-1">Review and compare quotes from suppliers</p>
           </div>
 
           {/* Compare Button - Shows when quotes are selected */}
@@ -167,7 +167,7 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
               className="mt-3 md:mt-0 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center"
             >
               <FiBarChart2 className="mr-2" />
-              নির্বাচিত তুলনা ({selectedQuotes.length})
+              Selected comparison ({selectedQuotes.length})
             </button>
           )}
         </div>
@@ -175,23 +175,23 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
         {/* Stats Cards - Quote status counts */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">মোট কোটা</p>
+            <p className="text-sm text-gray-500">Total Quota</p>
             <p className="text-2xl font-bold">{quotes.total}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">অপেক্ষমান</p>
+            <p className="text-sm text-gray-500">Awaiting</p>
             <p className="text-2xl font-bold text-yellow-600">{counts.pending}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">গৃহীত</p>
+            <p className="text-sm text-gray-500">accepted</p>
             <p className="text-2xl font-bold text-green-600">{counts.accepted}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">প্রত্যাখ্যাত</p>
+            <p className="text-sm text-gray-500">Rejected</p>
             <p className="text-2xl font-bold text-red-600">{counts.rejected}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">মেয়াদোত্তীর্ণ</p>
+            <p className="text-sm text-gray-500">Expired</p>
             <p className="text-2xl font-bold text-gray-600">{counts.expired}</p>
           </div>
         </div>
@@ -202,14 +202,14 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Search Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">অনুসন্ধান</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">search</label>
                 <div className="relative">
                   <FiSearch className="absolute left-3 top-3 text-gray-400" />
                   <input
                     type="text"
                     value={filters.search}
                     onChange={(e) => handleFilterChange('search', e.target.value)}
-                    placeholder="কোটা #, RFQ #, শিরোনাম..."
+                    placeholder="Quota #, RFQ #, Title..."
                     className="w-full pl-10 border rounded-lg px-3 py-2 text-sm"
                   />
                 </div>
@@ -217,16 +217,16 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
 
               {/* Status Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">স্ট্যাটাস</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                 <select
                   value={filters.status}
                   onChange={(e) => handleFilterChange('status', e.target.value)}
                   className="w-full border rounded-lg px-3 py-2 text-sm"
                 >
-                  <option value="">সব স্ট্যাটাস</option>
-                  <option value="pending">অপেক্ষমান</option>
-                  <option value="accepted">গৃহীত</option>
-                  <option value="rejected">প্রত্যাখ্যাত</option>
+                  <option value="">All statuses are</option>
+                  <option value="pending">Awaiting</option>
+                  <option value="accepted">accepted</option>
+                  <option value="rejected">Rejected</option>
                 </select>
               </div>
 
@@ -238,7 +238,7 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                   onChange={(e) => handleFilterChange('rfq_id', e.target.value)}
                   className="w-full border rounded-lg px-3 py-2 text-sm"
                 >
-                  <option value="">সব RFQ</option>
+                  <option value="">All RFQ</option>
                   {rfqs.map((rfq) => (
                     <option key={rfq.id} value={rfq.id}>
                       {rfq.title} ({rfq.rfq_number})
@@ -249,15 +249,15 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
 
               {/* Validity Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">মেয়াদ</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Term</label>
                 <select
                   value={filters.validity}
                   onChange={(e) => handleFilterChange('validity', e.target.value)}
                   className="w-full border rounded-lg px-3 py-2 text-sm"
                 >
-                  <option value="">সব</option>
-                  <option value="valid">বৈধ</option>
-                  <option value="expired">মেয়াদোত্তীর্ণ</option>
+                  <option value="">All</option>
+                  <option value="valid">Valid</option>
+                  <option value="expired">Expired</option>
                 </select>
               </div>
             </div>
@@ -265,7 +265,7 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Date Range Filters */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">থেকে তারিখ</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date from</label>
                 <input
                   type="date"
                   value={filters.from_date}
@@ -274,7 +274,7 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">পর্যন্ত তারিখ</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date up to</label>
                 <input
                   type="date"
                   value={filters.to_date}
@@ -285,17 +285,17 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
 
               {/* Sort Options */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">সাজান</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Sort</label>
                 <select
                   value={filters.sort}
                   onChange={(e) => handleFilterChange('sort', e.target.value)}
                   className="w-full border rounded-lg px-3 py-2 text-sm"
                 >
-                  <option value="latest">সর্বশেষ প্রথম</option>
-                  <option value="oldest">পুরানো প্রথম</option>
-                  <option value="amount_high">পরিমাণ: বেশি থেকে কম</option>
-                  <option value="amount_low">পরিমাণ: কম থেকে বেশি</option>
-                  <option value="valid_until">মেয়াদ শেষ</option>
+                  <option value="latest">Last is first</option>
+                  <option value="oldest">Old first</option>
+                  <option value="amount_high">Amount: More to less</option>
+                  <option value="amount_low">Amount: Low to High</option>
+                  <option value="valid_until">Expires</option>
                 </select>
               </div>
 
@@ -305,14 +305,14 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                   type="submit"
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
                 >
-                  ফিল্টার প্রয়োগ
+                  Apply Filter
                 </button>
                 <button
                   type="button"
                   onClick={resetFilters}
                   className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 text-sm"
                 >
-                  রিসেট
+                  Reset
                 </button>
               </div>
             </div>
@@ -324,13 +324,13 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
           // Empty State - No quotes
           <div className="bg-white rounded-xl p-12 text-center border">
             <FiFileText className="mx-auto text-5xl text-gray-400 mb-4" />
-            <h3 className="text-xl font-medium text-gray-700 mb-2">কোনো কোটা নেই</h3>
-            <p className="text-gray-500 mb-6">যখন সাপ্লায়াররা আপনার RFQ-তে সাড়া দেবে, কোটা এখানে দেখাবে</p>
+            <h3 className="text-xl font-medium text-gray-700 mb-2">No Quota</h3>
+            <p className="text-gray-500 mb-6">When suppliers respond to your RFQ, the quota will show here</p>
             <Link
               href={route('buyer.rfqs.create')}
               className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 inline-flex items-center"
             >
-              নতুন RFQ তৈরি করুন
+              Create new RFQ
             </Link>
           </div>
         ) : (
@@ -357,17 +357,17 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                       <div className="ml-2 flex-1">
                         <div className="flex items-center flex-wrap gap-2">
                           <h3 className="font-semibold text-lg text-gray-800">
-                            কোটা #{quote.quote_number}
+                            Quote #{quote.quote_number}
                           </h3>
                           <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(quote.status)}`}>
-                            {quote.status === 'pending' ? 'অপেক্ষমান' :
-                              quote.status === 'accepted' ? 'গৃহীত' :
-                                quote.status === 'rejected' ? 'প্রত্যাখ্যাত' :
-                                  quote.status === 'expired' ? 'মেয়াদোত্তীর্ণ' : quote.status}
+                            {quote.status === 'pending' ? 'Awaiting' :
+                              quote.status === 'accepted' ? 'accepted' :
+                                quote.status === 'rejected' ? 'Rejected' :
+                                  quote.status === 'expired' ? 'Expired' : quote.status}
                           </span>
                           {!isQuoteValid(quote) && quote.status === 'pending' && (
                             <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">
-                              মেয়াদোত্তীর্ণ
+                              Expired
                             </span>
                           )}
                         </div>
@@ -387,10 +387,10 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                     {/* Supplier Info */}
                     <div className="flex items-center text-sm text-gray-600 mb-3">
                       <FiUser className="mr-1" />
-                      <span>সাপ্লায়ার: {quote.supplier?.name}</span>
+                      <span>Supplier: {quote.supplier?.name}</span>
                       {quote.supplier?.supplier?.verification_status === 'verified' && (
                         <span className="ml-2 px-2 py-0.5 bg-green-100 text-green-600 text-xs rounded">
-                          ভেরিফাইড
+                          Verified
                         </span>
                       )}
                     </div>
@@ -398,30 +398,30 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                     {/* Quote Details Grid */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
                       <div>
-                        <p className="text-xs text-gray-500">মোট পরিমাণ</p>
+                        <p className="text-xs text-gray-500">total amount</p>
                         <p className="font-bold text-indigo-600">{formatCurrency(quote.total_amount)}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">মেয়াদ শেষ</p>
+                        <p className="text-xs text-gray-500">Expires</p>
                         <p className="text-sm flex items-center">
                           <FiCalendar className="mr-1 text-gray-400" />
                           {formatDate(quote.valid_until)}
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">প্রাপ্তির তারিখ</p>
+                        <p className="text-xs text-gray-500">Date of receipt</p>
                         <p className="text-sm">{formatDate(quote.created_at)}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">আইটেম</p>
-                        <p className="text-sm">{quote.rfq?.products_requested?.length || 0} টি পণ্য</p>
+                        <p className="text-xs text-gray-500">Item</p>
+                        <p className="text-sm">{quote.rfq?.products_requested?.length || 0} t product</p>
                       </div>
                     </div>
 
                     {/* Product Breakdown Preview */}
                     {quote.product_breakdown && (
                       <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                        <p className="text-xs font-medium text-gray-700 mb-2">মূল্য বিশ্লেষণ:</p>
+                        <p className="text-xs font-medium text-gray-700 mb-2">Price analysis:</p>
                         <div className="space-y-1">
                           {quote.product_breakdown.slice(0, 2).map((item, index) => (
                             <div key={index} className="flex justify-between text-xs">
@@ -430,7 +430,7 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                             </div>
                           ))}
                           {quote.product_breakdown.length > 2 && (
-                            <p className="text-xs text-gray-500">+{quote.product_breakdown.length - 2} আরো আইটেম</p>
+                            <p className="text-xs text-gray-500">+{quote.product_breakdown.length - 2} more items</p>
                           )}
                         </div>
                       </div>
@@ -444,7 +444,7 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                       className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors inline-flex items-center justify-center"
                     >
                       <FiEye className="mr-2" />
-                      বিস্তারিত দেখুন
+                      for suppliers See details
                     </Link>
 
                     {quote.status === 'pending' && isQuoteValid(quote) && (
@@ -454,14 +454,14 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                           className="px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors inline-flex items-center justify-center"
                         >
                           <FiCheckCircle className="mr-2" />
-                          গ্রহণ
+                          accept
                         </Link>
                         <Link
                           href={route('buyer.quotes.reject-confirm', quote.id)}
                           className="px-4 py-2 bg-red-100 text-red-600 text-sm rounded-lg hover:bg-red-200 transition-colors inline-flex items-center justify-center"
                         >
                           <FiXCircle className="mr-2" />
-                          প্রত্যাখ্যান
+                          Rejection
                         </Link>
                       </>
                     )}
@@ -488,8 +488,8 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                       onClick={() => router.get(link.url)}
                       dangerouslySetInnerHTML={{
                         __html: link.label
-                          .replace('Previous', 'পূর্ববর্তী')
-                          .replace('Next', 'পরবর্তী')
+                          .replace('Previous', 'previous')
+                          .replace('Next', 'next')
                       }}
                       className={`px-4 py-2 rounded-lg ${link.active
                         ? 'bg-indigo-600 text-white'

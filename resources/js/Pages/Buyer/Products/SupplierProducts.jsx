@@ -22,17 +22,17 @@ export default function SupplierProducts({ products }) {
 
   return (
     <DashboardLayout>
-      <Head title="সাপ্লায়ারের পণ্য" />
+      <Head title="Supplier's product" />
 
       <div className="space-y-6">
         {/* Header - Page title and back link */}
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-800">সাপ্লায়ারের পণ্য</h2>
+          <h2 className="text-2xl font-bold text-gray-800">Supplier's product</h2>
           <Link
             href={route('buyer.products.index')}
             className="text-indigo-600 hover:text-indigo-800"
           >
-            ← সকল পণ্যে ফিরে যান
+            ← Back to All Products
           </Link>
         </div>
 
@@ -41,8 +41,8 @@ export default function SupplierProducts({ products }) {
           // Empty State - No products found
           <div className="bg-white rounded-xl p-12 text-center border">
             <FiPackage className="mx-auto text-5xl text-gray-400 mb-4" />
-            <h3 className="text-xl font-medium text-gray-700 mb-2">কোনো পণ্য পাওয়া যায়নি</h3>
-            <p className="text-gray-500">এই সাপ্লায়ার এখনো কোনো পণ্য তালিকাভুক্ত করেননি।</p>
+            <h3 className="text-xl font-medium text-gray-700 mb-2">No products found</h3>
+            <p className="text-gray-500">This supplier has not yet listed any products।</p>
           </div>
         ) : (
           // Product Grid
@@ -71,7 +71,7 @@ export default function SupplierProducts({ products }) {
                 <p className="text-sm text-gray-500 mb-2">{product.category}</p>
                 <p className="text-lg font-bold text-indigo-600 mb-2">{formatCurrency(product.base_price)}</p>
                 <p className="text-sm text-gray-500 mb-3">
-                  সর্বনিম্ন অর্ডার: {product.minimum_order_quantity} {product.unit}
+                  Minimum Order: {product.minimum_order_quantity} {product.unit}
                 </p>
 
                 {/* View Details Button */}
@@ -79,7 +79,7 @@ export default function SupplierProducts({ products }) {
                   href={route('buyer.products.show', product.slug)}
                   className="block text-center px-3 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700"
                 >
-                  বিস্তারিত দেখুন
+                  for suppliers See details
                 </Link>
               </div>
             ))}

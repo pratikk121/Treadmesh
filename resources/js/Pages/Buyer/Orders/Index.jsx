@@ -128,37 +128,37 @@ export default function OrdersIndex({ orders, counts }) {
 
   return (
     <DashboardLayout>
-      <Head title="আমার অর্ডার সমূহ" />
+      <Head title="My orders are" />
 
       <div className="space-y-6">
         {/* Header - Page title */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">আমার অর্ডার</h2>
-            <p className="text-gray-600 mt-1">আপনার অর্ডার ট্র্যাক এবং পরিচালনা করুন</p>
+            <h2 className="text-2xl font-bold text-gray-800">My order is</h2>
+            <p className="text-gray-600 mt-1">Track and Manage Your Order</p>
           </div>
         </div>
 
         {/* Stats Cards - Order status counts */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">অপেক্ষমান</p>
+            <p className="text-sm text-gray-500">Awaiting</p>
             <p className="text-2xl font-bold text-yellow-600">{counts.pending}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">প্রক্রিয়াধীন</p>
+            <p className="text-sm text-gray-500">In process</p>
             <p className="text-2xl font-bold text-purple-600">{counts.processing}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">পাঠানো হয়েছে</p>
+            <p className="text-sm text-gray-500">has been sent</p>
             <p className="text-2xl font-bold text-indigo-600">{counts.shipped}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">ডেলিভারি হয়েছে</p>
+            <p className="text-sm text-gray-500">Delivered</p>
             <p className="text-2xl font-bold text-green-600">{counts.delivered}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">মোট অর্ডার</p>
+            <p className="text-sm text-gray-500">Total order</p>
             <p className="text-2xl font-bold text-gray-800">{orders.total}</p>
           </div>
         </div>
@@ -169,14 +169,14 @@ export default function OrdersIndex({ orders, counts }) {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Search Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">অনুসন্ধান</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">search</label>
                 <div className="relative">
                   <FiSearch className="absolute left-3 top-3 text-gray-400" />
                   <input
                     type="text"
                     value={filters.search}
                     onChange={(e) => handleFilterChange('search', e.target.value)}
-                    placeholder="অর্ডার নম্বর..."
+                    placeholder="Order number..."
                     className="w-full pl-10 border rounded-lg px-3 py-2 text-sm"
                   />
                 </div>
@@ -184,48 +184,48 @@ export default function OrdersIndex({ orders, counts }) {
 
               {/* Order Status Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">অর্ডার স্ট্যাটাস</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Order Status</label>
                 <select
                   value={filters.status}
                   onChange={(e) => handleFilterChange('status', e.target.value)}
                   className="w-full border rounded-lg px-3 py-2 text-sm"
                 >
-                  <option value="">সব স্ট্যাটাস</option>
-                  <option value="pending_confirmation">অপেক্ষমান</option>
-                  <option value="confirmed">নিশ্চিত</option>
-                  <option value="processing">প্রক্রিয়াধীন</option>
-                  <option value="shipped">পাঠানো হয়েছে</option>
-                  <option value="delivered">ডেলিভারি হয়েছে</option>
-                  <option value="cancelled">বাতিল</option>
+                  <option value="">All statuses are</option>
+                  <option value="pending_confirmation">Awaiting</option>
+                  <option value="confirmed">sure</option>
+                  <option value="processing">In process</option>
+                  <option value="shipped">has been sent</option>
+                  <option value="delivered">Delivered</option>
+                  <option value="cancelled">cancel</option>
                 </select>
               </div>
 
               {/* Payment Status Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">পেমেন্ট স্ট্যাটাস</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
                 <select
                   value={filters.payment_status}
                   onChange={(e) => handleFilterChange('payment_status', e.target.value)}
                   className="w-full border rounded-lg px-3 py-2 text-sm"
                 >
-                  <option value="">সব</option>
-                  <option value="pending">অপেক্ষমান</option>
-                  <option value="paid">পরিশোধিত</option>
+                  <option value="">All</option>
+                  <option value="pending">Awaiting</option>
+                  <option value="paid">Paid</option>
                 </select>
               </div>
 
               {/* Sort Options */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">সাজান</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Sort</label>
                 <select
                   value={filters.sort}
                   onChange={(e) => handleFilterChange('sort', e.target.value)}
                   className="w-full border rounded-lg px-3 py-2 text-sm"
                 >
-                  <option value="latest">সর্বশেষ প্রথম</option>
-                  <option value="oldest">পুরানো প্রথম</option>
-                  <option value="amount_high">পরিমাণ: বেশি থেকে কম</option>
-                  <option value="amount_low">পরিমাণ: কম থেকে বেশি</option>
+                  <option value="latest">Last is first</option>
+                  <option value="oldest">Old first</option>
+                  <option value="amount_high">Amount: More to less</option>
+                  <option value="amount_low">Amount: Low to High</option>
                 </select>
               </div>
             </div>
@@ -233,7 +233,7 @@ export default function OrdersIndex({ orders, counts }) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Date Range Filters */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">থেকে তারিখ</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date from</label>
                 <input
                   type="date"
                   value={filters.from_date}
@@ -242,7 +242,7 @@ export default function OrdersIndex({ orders, counts }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">পর্যন্ত তারিখ</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date up to</label>
                 <input
                   type="date"
                   value={filters.to_date}
@@ -255,14 +255,14 @@ export default function OrdersIndex({ orders, counts }) {
                   type="submit"
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
                 >
-                  ফিল্টার প্রয়োগ
+                  Apply Filter
                 </button>
                 <button
                   type="button"
                   onClick={resetFilters}
                   className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 text-sm"
                 >
-                  রিসেট
+                  Reset
                 </button>
               </div>
             </div>
@@ -274,13 +274,13 @@ export default function OrdersIndex({ orders, counts }) {
           // Empty State - No orders
           <div className="bg-white rounded-xl p-12 text-center border">
             <FiShoppingBag className="mx-auto text-5xl text-gray-400 mb-4" />
-            <h3 className="text-xl font-medium text-gray-700 mb-2">কোনো অর্ডার নেই</h3>
-            <p className="text-gray-500 mb-6">যখন আপনি অর্ডার দেবেন, সেগুলি এখানে দেখাবে</p>
+            <h3 className="text-xl font-medium text-gray-700 mb-2">No order</h3>
+            <p className="text-gray-500 mb-6">When you place orders, they will show up here</p>
             <Link
               href={route('buyer.products.index')}
               className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 inline-flex items-center"
             >
-              পণ্য ব্রাউজ করুন
+              Browse Products
             </Link>
           </div>
         ) : (
@@ -296,18 +296,18 @@ export default function OrdersIndex({ orders, counts }) {
                       <div className="ml-2 flex-1">
                         <div className="flex items-center flex-wrap gap-2">
                           <h3 className="font-semibold text-lg text-gray-800">
-                            অর্ডার #{order.order_number}
+                            Order #{order.order_number}
                           </h3>
                           <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(order.order_status)}`}>
-                            {order.order_status === 'pending_confirmation' ? 'অপেক্ষমান' :
-                              order.order_status === 'confirmed' ? 'নিশ্চিত' :
-                                order.order_status === 'processing' ? 'প্রক্রিয়াধীন' :
-                                  order.order_status === 'shipped' ? 'পাঠানো হয়েছে' :
-                                    order.order_status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                                      order.order_status === 'cancelled' ? 'বাতিল' : order.order_status.replace('_', ' ')}
+                            {order.order_status === 'pending_confirmation' ? 'Awaiting' :
+                              order.order_status === 'confirmed' ? 'sure' :
+                                order.order_status === 'processing' ? 'In process' :
+                                  order.order_status === 'shipped' ? 'has been sent' :
+                                    order.order_status === 'delivered' ? 'Delivered' :
+                                      order.order_status === 'cancelled' ? 'cancel' : order.order_status.replace('_', ' ')}
                           </span>
                           <span className={`px-2 py-1 text-xs rounded-full ${getPaymentStatusColor(order.payment_status)}`}>
-                            পেমেন্ট: {order.payment_status === 'paid' ? 'পরিশোধিত' : 'অপেক্ষমান'}
+                            Payment: {order.payment_status === 'paid' ? 'Paid' : 'Awaiting'}
                           </span>
                         </div>
                       </div>
@@ -316,13 +316,13 @@ export default function OrdersIndex({ orders, counts }) {
                     {/* Supplier Information */}
                     <div className="flex items-center text-sm text-gray-600 mb-3">
                       <FiTruck className="mr-1" />
-                      <span>সাপ্লায়ার: {order.supplier?.name || 'N/A'}</span>
+                      <span>Supplier: {order.supplier?.name || 'N/A'}</span>
                     </div>
 
                     {/* Order Items Preview */}
                     {order.items && order.items.length > 0 && (
                       <div className="mt-3">
-                        <p className="text-sm font-medium text-gray-700 mb-2">আইটেম:</p>
+                        <p className="text-sm font-medium text-gray-700 mb-2">Item:</p>
                         <div className="space-y-2">
                           {order.items.slice(0, 2).map((item, index) => (
                             <div key={index} className="flex items-center text-sm bg-gray-50 p-2 rounded">
@@ -332,7 +332,7 @@ export default function OrdersIndex({ orders, counts }) {
                             </div>
                           ))}
                           {order.items.length > 2 && (
-                            <p className="text-xs text-gray-500">+{order.items.length - 2} আরো আইটেম</p>
+                            <p className="text-xs text-gray-500">+{order.items.length - 2} more items</p>
                           )}
                         </div>
                       </div>
@@ -342,16 +342,16 @@ export default function OrdersIndex({ orders, counts }) {
                     <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-gray-500">
                       <div className="flex items-center">
                         <FiCalendar className="mr-1" />
-                        অর্ডার: {formatDate(order.created_at)}
+                        Order: {formatDate(order.created_at)}
                       </div>
                       <div className="flex items-center">
                         <FiDollarSign className="mr-1" />
-                        মোট: <span className="font-medium ml-1">{formatCurrency(order.total_amount)}</span>
+                        total: <span className="font-medium ml-1">{formatCurrency(order.total_amount)}</span>
                       </div>
                       {order.confirmed_at && (
                         <div className="flex items-center">
                           <FiCheckCircle className="mr-1 text-green-500" />
-                          নিশ্চিত: {formatDate(order.confirmed_at)}
+                          sure: {formatDate(order.confirmed_at)}
                         </div>
                       )}
                     </div>
@@ -360,7 +360,7 @@ export default function OrdersIndex({ orders, counts }) {
                     {order.rfq && (
                       <div className="mt-3 p-2 bg-indigo-50 rounded-lg inline-block">
                         <p className="text-xs text-indigo-600">
-                          RFQ থেকে: {order.rfq.title} (#{order.rfq.rfq_number})
+                          RFQ from: {order.rfq.title} (#{order.rfq.rfq_number})
                         </p>
                       </div>
                     )}
@@ -373,7 +373,7 @@ export default function OrdersIndex({ orders, counts }) {
                       className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors inline-flex items-center justify-center"
                     >
                       <FiEye className="mr-2" />
-                      বিস্তারিত দেখুন
+                      for suppliers See details
                     </Link>
 
                     {order.order_status === 'delivered' && (
@@ -382,21 +382,21 @@ export default function OrdersIndex({ orders, counts }) {
                         className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200 transition-colors inline-flex items-center justify-center"
                       >
                         <FiDownload className="mr-2" />
-                        চালান
+                        Run
                       </button>
                     )}
 
                     {order.order_status === 'shipped' && (
                       <button
                         onClick={() => {
-                          if (confirm('আপনি কি এই অর্ডার পেয়েছেন?')) {
+                          if (confirm('Did You Receive This Order?')) {
                             router.post(route('buyer.orders.mark-received', order.id));
                           }
                         }}
                         className="px-4 py-2 bg-green-100 text-green-700 text-sm rounded-lg hover:bg-green-200 transition-colors inline-flex items-center justify-center"
                       >
                         <FiCheckCircle className="mr-2" />
-                        প্রাপ্ত হিসেবে চিহ্নিত
+                        Marked as Received
                       </button>
                     )}
                   </div>
@@ -414,8 +414,8 @@ export default function OrdersIndex({ orders, counts }) {
                       onClick={() => router.get(link.url)}
                       dangerouslySetInnerHTML={{
                         __html: link.label
-                          .replace('Previous', 'পূর্ববর্তী')
-                          .replace('Next', 'পরবর্তী')
+                          .replace('Previous', 'previous')
+                          .replace('Next', 'next')
                       }}
                       className={`px-4 py-2 rounded-lg ${link.active
                         ? 'bg-indigo-600 text-white'

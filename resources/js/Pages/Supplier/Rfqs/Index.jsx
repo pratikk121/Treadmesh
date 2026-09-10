@@ -47,18 +47,18 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
     const diffTime = deadlineDate - now;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays < 0) return 'মেয়াদোত্তীর্ণ';
-    if (diffDays === 0) return 'আজ';
-    if (diffDays === 1) return 'আগামীকাল';
-    return `${diffDays} দিন বাকি`;
+    if (diffDays < 0) return 'Expired';
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'tomorrow';
+    return `${diffDays} Days Remaining`;
   };
 
   // Get urgency color based on days remaining
   const getUrgencyColor = (deadline) => {
     const days = getDaysRemaining(deadline);
-    if (days === 'মেয়াদোত্তীর্ণ') return 'text-red-600';
-    if (days === 'আজ') return 'text-orange-600';
-    if (days === 'আগামীকাল') return 'text-yellow-600';
+    if (days === 'Expired') return 'text-red-600';
+    if (days === 'Today') return 'text-orange-600';
+    if (days === 'tomorrow') return 'text-yellow-600';
     return 'text-green-600';
   };
 
@@ -124,15 +124,15 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
 
   return (
     <DashboardLayout>
-      <Head title="RFQ সমূহ" />
+      <Head title="RFQ " />
 
       <div className="space-y-6">
         {/* Header - Page title */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">কোটা অনুরোধ (RFQ)</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Quota request (RFQ)</h1>
             <p className="text-sm text-gray-600 mt-1">
-              আপনার পণ্যের সাথে মিলে এমন খোলা RFQ ব্রাউজ করুন এবং কোটা দিন
+              Browse open RFQs that match your product and quote
             </p>
           </div>
         </div>
@@ -140,23 +140,23 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
         {/* Stats Cards - Key metrics */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <p className="text-sm text-gray-500">মোট উপলব্ধ</p>
+            <p className="text-sm text-gray-500">Total available</p>
             <p className="text-2xl font-bold text-gray-900">{stats.total_available}</p>
           </div>
           <div className="bg-indigo-50 rounded-xl shadow-sm border border-indigo-100 p-4">
-            <p className="text-sm text-indigo-600">মিলে যাওয়া ক্যাটাগরি</p>
+            <p className="text-sm text-indigo-600">Matching Categories</p>
             <p className="text-2xl font-bold text-indigo-700">{stats.matching_categories}</p>
           </div>
           <div className="bg-blue-50 rounded-xl shadow-sm border border-blue-100 p-4">
-            <p className="text-sm text-blue-600">আমার কোটা</p>
+            <p className="text-sm text-blue-600">My quota is</p>
             <p className="text-2xl font-bold text-blue-700">{stats.my_quotes}</p>
           </div>
           <div className="bg-yellow-50 rounded-xl shadow-sm border border-yellow-100 p-4">
-            <p className="text-sm text-yellow-600">অপেক্ষমান</p>
+            <p className="text-sm text-yellow-600">Awaiting</p>
             <p className="text-2xl font-bold text-yellow-700">{stats.pending_quotes}</p>
           </div>
           <div className="bg-green-50 rounded-xl shadow-sm border border-green-100 p-4">
-            <p className="text-sm text-green-600">গৃহীত</p>
+            <p className="text-sm text-green-600">accepted</p>
             <p className="text-2xl font-bold text-green-700">{stats.accepted_quotes}</p>
           </div>
         </div>
@@ -168,12 +168,12 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
               <FiAlertCircle className="w-5 h-5 text-yellow-400 mr-3 mt-0.5" />
               <div>
                 <p className="text-sm text-yellow-700 font-medium">
-                  কোনো পণ্য ক্যাটাগরি পাওয়া যায়নি
+                  No product categories found
                 </p>
                 <p className="text-sm text-yellow-600 mt-1">
-                  মিলে যাওয়া RFQ দেখতে ক্যাটাগরি সহ পণ্য যোগ করুন।
+                  Add Products with Categories to View Matching RFQs।
                   <Link href={route('supplier.products.create')} className="ml-1 font-medium underline">
-                    আপনার প্রথম পণ্য যোগ করুন →
+                    .Add your first product →
                   </Link>
                 </p>
               </div>
@@ -189,7 +189,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
               className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
             >
               <FiFilter className="w-4 h-4" />
-              <span className="font-medium">ফিল্টার</span>
+              <span className="font-medium">Filter</span>
               {showFilters ? <FiChevronUp className="w-4 h-4" /> : <FiChevronDown className="w-4 h-4" />}
             </button>
           </div>
@@ -202,7 +202,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                   <form onSubmit={handleSearch} className="flex">
                     <input
                       type="text"
-                      placeholder="শিরোনাম, বিবরণ বা RFQ নম্বর দ্বারা অনুসন্ধান..."
+                      placeholder="Search by Title, Description or RFQ Number..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
@@ -223,7 +223,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                     value={dateFrom}
                     onChange={(e) => setDateFrom(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                    placeholder="থেকে তারিখ"
+                    placeholder="Date from"
                   />
                 </div>
                 <div>
@@ -232,7 +232,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                     value={dateTo}
                     onChange={(e) => setDateTo(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                    placeholder="পর্যন্ত তারিখ"
+                    placeholder="Date up to"
                   />
                 </div>
 
@@ -246,7 +246,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                       className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                     />
                     <span className="text-sm text-gray-700">
-                      শুধুমাত্র আমার পণ্য ক্যাটাগরির সাথে মিলে যাওয়া RFQ দেখান
+                      Only show RFQs matching my product category
                     </span>
                   </label>
                 </div>
@@ -258,13 +258,13 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                   onClick={resetFilters}
                   className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
                 >
-                  রিসেট
+                  Reset
                 </button>
                 <button
                   onClick={applyFilters}
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
-                  ফিল্টার প্রয়োগ
+                  Apply Filter
                 </button>
               </div>
             </div>
@@ -291,19 +291,19 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                       onClick={() => handleSort('title')}
                       className="flex items-center gap-1 hover:text-gray-700"
                     >
-                      শিরোনাম
+                      Title
                       <SortIcon field="title" />
                     </button>
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ক্রেতা
+                    Buyer
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     <button
                       onClick={() => handleSort('quantity')}
                       className="flex items-center gap-1 hover:text-gray-700"
                     >
-                      পরিমাণ
+                      Amount
                       <SortIcon field="quantity" />
                     </button>
                   </th>
@@ -312,15 +312,15 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                       onClick={() => handleSort('required_by_date')}
                       className="flex items-center gap-1 hover:text-gray-700"
                     >
-                      শেষ তারিখ
+                      Last date
                       <SortIcon field="required_by_date" />
                     </button>
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    স্ট্যাটাস
+                    Status
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    কার্যক্রম
+                    Activities
                   </th>
                 </tr>
               </thead>
@@ -362,12 +362,12 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                       {hasQuoted(rfq) ? (
                         <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
                           <FiCheckCircle className="w-3 h-3" />
-                          কোটা দেওয়া হয়েছে
+                          Quota is given
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
                           <FiClock className="w-3 h-3" />
-                          খোলা
+                          open
                         </span>
                       )}
                     </td>
@@ -376,7 +376,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                         <Link
                           href={route('supplier.rfqs.show', rfq.id)}
                           className="p-2 text-gray-400 hover:text-indigo-600"
-                          title="বিস্তারিত দেখুন"
+                          title="for suppliers See details"
                         >
                           <FiEye className="w-5 h-5" />
                         </Link>
@@ -385,7 +385,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                             href={route('supplier.rfqs.create-quote', rfq.id)}
                             className="px-3 py-1 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700"
                           >
-                            কোটা দিন
+                            Give Quota
                           </Link>
                         )}
                       </div>
@@ -398,11 +398,11 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                   <tr>
                     <td colSpan="7" className="px-6 py-12 text-center">
                       <FiFileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                      <p className="text-gray-500 text-lg mb-2">কোনো RFQ পাওয়া যায়নি</p>
+                      <p className="text-gray-500 text-lg mb-2">No RFQ found</p>
                       <p className="text-gray-400">
                         {supplierCategories.length === 0
-                          ? 'মিলে যাওয়া RFQ দেখতে ক্যাটাগরি সহ পণ্য যোগ করুন'
-                          : 'আপনার ফিল্টার সামঞ্জস্য করুন'}
+                          ? 'Add Products with Categories to View Matching RFQs'
+                          : 'Adjust your filter'}
                       </p>
                     </td>
                   </tr>
@@ -416,7 +416,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
             <div className="px-6 py-4 border-t border-gray-100">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-500">
-                  মোট {rfqs.total} টির মধ্যে {rfqs.from} থেকে {rfqs.to} দেখানো হচ্ছে
+                  total {rfqs.total} of the {rfqs.from} from {rfqs.to} Showing
                 </p>
                 <div className="flex gap-2">
                   {rfqs.links.map((link, index) => (
@@ -432,8 +432,8 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                         }`}
                       dangerouslySetInnerHTML={{
                         __html: link.label
-                          .replace('Previous', 'পূর্ববর্তী')
-                          .replace('Next', 'পরবর্তী')
+                          .replace('Previous', 'previous')
+                          .replace('Next', 'next')
                       }}
                     />
                   ))}

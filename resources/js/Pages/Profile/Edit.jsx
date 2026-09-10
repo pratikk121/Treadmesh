@@ -61,8 +61,8 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
         router.patch(route('profile.update'), profileData, {
             onSuccess: () => {
                 Swal.fire({
-                    title: 'সফল!',
-                    text: 'প্রোফাইল সফলভাবে আপডেট হয়েছে।',
+                    title: 'successful!',
+                    text: 'Profile updated successfully।',
                     icon: 'success',
                     timer: 2000,
                     showConfirmButton: false
@@ -71,8 +71,8 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
             onError: (errors) => {
                 setErrors(errors);
                 Swal.fire({
-                    title: 'ত্রুটি!',
-                    text: 'ফর্মে ত্রুটি আছে। অনুগ্রহ করে পরীক্ষা করুন।',
+                    title: 'Error!',
+                    text: 'There is an error in the form. Please check।',
                     icon: 'error',
                     confirmButtonColor: '#4F46E5'
                 });
@@ -95,8 +95,8 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                     password_confirmation: '',
                 });
                 Swal.fire({
-                    title: 'সফল!',
-                    text: 'পাসওয়ার্ড সফলভাবে আপডেট হয়েছে।',
+                    title: 'successful!',
+                    text: 'Password successfully updated।',
                     icon: 'success',
                     timer: 2000,
                     showConfirmButton: false
@@ -105,8 +105,8 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
             onError: (errors) => {
                 setErrors(errors);
                 Swal.fire({
-                    title: 'ত্রুটি!',
-                    text: 'ফর্মে ত্রুটি আছে। অনুগ্রহ করে পরীক্ষা করুন।',
+                    title: 'Error!',
+                    text: 'There is an error in the form. Please check।',
                     icon: 'error',
                     confirmButtonColor: '#4F46E5'
                 });
@@ -118,17 +118,17 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
     // Handle account deletion with SweetAlert confirmation
     const handleDeleteAccount = () => {
         Swal.fire({
-            title: 'অ্যাকাউন্ট মুছুন',
-            text: 'আপনি কি আপনার অ্যাকাউন্ট মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।',
+            title: 'Delete Account',
+            text: 'Do you want to delete your account? This action cannot be undone।',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#EF4444',
             cancelButtonColor: '#6B7280',
-            confirmButtonText: 'হ্যাঁ, আমার অ্যাকাউন্ট মুছুন',
-            cancelButtonText: 'বাতিল',
+            confirmButtonText: 'Yes, delete my account',
+            cancelButtonText: 'cancel',
             input: 'password',
-            inputLabel: 'পাসওয়ার্ড',
-            inputPlaceholder: 'আপনার পাসওয়ার্ড দিন',
+            inputLabel: 'The password is',
+            inputPlaceholder: 'is in stock Enter your password',
             inputAttributes: {
                 autocapitalize: 'off',
                 type: 'password'
@@ -138,15 +138,15 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                     data: { password },
                     onSuccess: () => {
                         Swal.fire({
-                            title: 'মুছে ফেলা হয়েছে!',
-                            text: 'আপনার অ্যাকাউন্ট মুছে ফেলা হয়েছে।',
+                            title: 'Deleted!',
+                            text: 'Your account has been deleted।',
                             icon: 'success',
                             timer: 2000,
                             showConfirmButton: false
                         });
                     },
                     onError: () => {
-                        Swal.showValidationMessage('ভুল পাসওয়ার্ড');
+                        Swal.showValidationMessage('Wrong Password');
                     }
                 });
             }
@@ -155,14 +155,14 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
 
     return (
         <DashboardLayout>
-            <Head title="প্রোফাইল" />
+            <Head title="profile" />
 
             <div className="max-w-3xl mx-auto space-y-6">
                 {/* Header - Page title and description */}
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">প্রোফাইল সেটিংস</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">Profile Settings</h1>
                     <p className="text-sm text-gray-600 mt-1">
-                        আপনার অ্যাকাউন্ট সেটিংস এবং পছন্দগুলি পরিচালনা করুন
+                        Manage your account settings and preferences
                     </p>
                 </div>
 
@@ -176,17 +176,17 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                     <div>
                         <p className="font-medium text-gray-900">{user.name}</p>
                         <p className="text-sm text-gray-500 capitalize flex items-center gap-2">
-                            <span>{user.role === 'admin' ? 'অ্যাডমিন' :
-                                user.role === 'supplier' ? 'সাপ্লায়ার' : 'ক্রেতা'}</span>
+                            <span>{user.role === 'admin' ? 'Admin' :
+                                user.role === 'supplier' ? 'Supplier' : 'Buyer'}</span>
                             {user.is_active ? (
                                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                     <FiCheckCircle className="w-3 h-3 mr-1" />
-                                    সক্রিয়
+                                    Active
                                 </span>
                             ) : (
                                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                     <FiAlertCircle className="w-3 h-3 mr-1" />
-                                    নিষ্ক্রিয়
+                                    Inactive
                                 </span>
                             )}
                         </p>
@@ -198,14 +198,14 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                     <div className="px-6 py-4 border-b border-gray-100">
                         <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                             <FiUser className="w-5 h-5 text-indigo-600" />
-                            প্রোফাইল তথ্য
+                            Profile Information
                         </h3>
                     </div>
                     <form onSubmit={handleProfileUpdate} className="p-6 space-y-4">
                         {/* Name Field */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                সম্পূর্ণ নাম
+                                Full name
                             </label>
                             <input
                                 type="text"
@@ -222,7 +222,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                         {/* Email Field */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                ইমেইল ঠিকানা
+                                Email address
                             </label>
                             <input
                                 type="email"
@@ -240,12 +240,12 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                         {mustVerifyEmail && user.email_verified_at === null && (
                             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                                 <p className="text-sm text-yellow-700">
-                                    আপনার ইমেইল ঠিকানা ভেরিফাই করা হয়নি।
+                                    Your email address has not been verified।
                                     <button
                                         onClick={() => router.post(route('verification.send'))}
                                         className="ml-2 text-yellow-600 underline hover:text-yellow-500"
                                     >
-                                        ভেরিফিকেশন ইমেইল পুনরায় পাঠাতে এখানে ক্লিক করুন।
+                                        Click here to resend verification email।
                                     </button>
                                 </p>
                             </div>
@@ -266,7 +266,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                                 className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
                             >
                                 <FiSave className="w-4 h-4" />
-                                {processing ? 'সংরক্ষণ হচ্ছে...' : 'পরিবর্তন সংরক্ষণ করুন'}
+                                {processing ? 'Saving...' : 'Save changes'}
                             </button>
                         </div>
                     </form>
@@ -278,13 +278,13 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                         <div className="px-6 py-4 border-b border-gray-100">
                             <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                                 <FaBuilding className="w-5 h-5 text-indigo-600" />
-                                সাপ্লায়ার প্রোফাইল
+                                Supplier Profile
                             </h3>
                         </div>
                         <div className="p-6 space-y-4">
                             {/* Verification Status Badge */}
                             <div className="bg-gray-50 p-4 rounded-lg flex items-center justify-between">
-                                <span className="text-sm font-medium text-gray-700">ভেরিফিকেশন স্ট্যাটাস</span>
+                                <span className="text-sm font-medium text-gray-700">Verification Status</span>
                                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${supplier.verification_status === 'verified'
                                     ? 'bg-green-100 text-green-800'
                                     : supplier.verification_status === 'pending'
@@ -292,11 +292,11 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                                         : 'bg-red-100 text-red-800'
                                     }`}>
                                     {supplier.verification_status === 'verified' ? (
-                                        <><MdVerified className="w-4 h-4 mr-1" /> ভেরিফাইড</>
+                                        <><MdVerified className="w-4 h-4 mr-1" /> Verified</>
                                     ) : supplier.verification_status === 'pending' ? (
-                                        <><MdPending className="w-4 h-4 mr-1" /> বিচারাধীন</>
+                                        <><MdPending className="w-4 h-4 mr-1" /> Pending</>
                                     ) : (
-                                        <><FiAlertCircle className="w-4 h-4 mr-1" /> বাতিল</>
+                                        <><FiAlertCircle className="w-4 h-4 mr-1" /> cancel</>
                                     )}
                                 </span>
                             </div>
@@ -306,7 +306,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                                 {/* Company Name */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        কোম্পানির নাম
+                                        Company Name
                                     </label>
                                     <input
                                         type="text"
@@ -319,7 +319,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                                 {/* Trade License */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        ট্রেড লাইসেন্স নম্বর
+                                        Trade License No.
                                     </label>
                                     <input
                                         type="text"
@@ -332,7 +332,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                                 {/* Company Phone */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        কোম্পানির ফোন
+                                        Company Phone
                                     </label>
                                     <input
                                         type="text"
@@ -345,7 +345,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                                 {/* Company Email */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        কোম্পানির ইমেইল
+                                        Company Email
                                     </label>
                                     <input
                                         type="email"
@@ -358,7 +358,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                                 {/* City */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        শহর
+                                        City
                                     </label>
                                     <input
                                         type="text"
@@ -372,7 +372,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                             {/* Company Address */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    কোম্পানির ঠিকানা
+                                    Company Address
                                 </label>
                                 <textarea
                                     value={supplierData.company_address}
@@ -386,7 +386,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
                                 <p className="text-sm text-blue-700 flex items-center gap-2">
                                     <FiAlertCircle className="w-4 h-4" />
-                                    সাপ্লায়ার প্রোফাইল তথ্য শুধুমাত্র সাপোর্টের সাথে যোগাযোগ করে আপডেট করা যেতে পারে।
+                                    Supplier profile information can only be updated by contacting Support।
                                 </p>
                             </div>
                         </div>
@@ -398,14 +398,14 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                     <div className="px-6 py-4 border-b border-gray-100">
                         <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                             <FiLock className="w-5 h-5 text-indigo-600" />
-                            পাসওয়ার্ড আপডেট করুন
+                            Update password
                         </h3>
                     </div>
                     <form onSubmit={handlePasswordUpdate} className="p-6 space-y-4">
                         {/* Current Password */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                বর্তমান পাসওয়ার্ড
+                                Current password is
                             </label>
                             <input
                                 type="password"
@@ -422,7 +422,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                         {/* New Password */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                নতুন পাসওয়ার্ড
+                                New Password
                             </label>
                             <input
                                 type="password"
@@ -439,7 +439,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                         {/* Confirm Password */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                নতুন পাসওয়ার্ড নিশ্চিত করুন
+                                Confirm new password
                             </label>
                             <input
                                 type="password"
@@ -457,7 +457,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                                 className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
                             >
                                 <FiSave className="w-4 h-4" />
-                                {processing ? 'আপডেট হচ্ছে...' : 'পাসওয়ার্ড আপডেট করুন'}
+                                {processing ? 'Updating...' : 'Update password'}
                             </button>
                         </div>
                     </form>
@@ -468,19 +468,19 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                     <div className="px-6 py-4 border-b border-red-100 bg-red-50">
                         <h3 className="font-semibold text-red-600 flex items-center gap-2">
                             <FiAlertCircle className="w-5 h-5" />
-                            অ্যাকাউন্ট মুছুন
+                            Delete Account
                         </h3>
                     </div>
                     <div className="p-6">
                         <p className="text-sm text-gray-600 mb-4">
-                            আপনার অ্যাকাউন্ট মুছে ফেলা হলে, এর সমস্ত রিসোর্স এবং ডেটা স্থায়ীভাবে মুছে যাবে।
-                            আপনার অ্যাকাউন্ট স্থায়ীভাবে মুছে ফেলার জন্য আপনার পাসওয়ার্ড দিন।
+                            If your account is deleted, all its resources and data will be permanently deleted।
+                            Enter your password।
                         </p>
                         <button
                             onClick={handleDeleteAccount}
                             className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
                         >
-                            অ্যাকাউন্ট মুছুন
+                            Delete Account
                         </button>
                     </div>
                 </div>

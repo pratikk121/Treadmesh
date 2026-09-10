@@ -45,10 +45,10 @@ export default function Index({ rfqs, stats, buyers, filters }) {
 
   // Status options for dropdown
   const statusOptions = [
-    { value: '', label: 'সব স্ট্যাটাস' },
-    { value: 'open', label: 'খোলা', color: 'green' },
-    { value: 'quoted', label: 'কোটা প্রাপ্ত', color: 'blue' },
-    { value: 'closed', label: 'বন্ধ', color: 'red' },
+    { value: '', label: 'All statuses are' },
+    { value: 'open', label: 'open', color: 'green' },
+    { value: 'quoted', label: 'Quota received', color: 'blue' },
+    { value: 'closed', label: 'off', color: 'red' },
   ];
 
   // Handle search form submission
@@ -119,21 +119,21 @@ export default function Index({ rfqs, stats, buyers, filters }) {
   // Handle delete single RFQ
   const handleDelete = (rfq) => {
     Swal.fire({
-      title: 'RFQ মুছুন',
-      text: `আপনি কি RFQ ${rfq.rfq_number} মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।`,
+      title: 'RFQ delete',
+      text: `Are you RFQ ${rfq.rfq_number} Want to delete? This action cannot be undone।`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'হ্যাঁ, মুছুন',
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: 'Yes, delete',
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.rfqs.destroy', rfq.id), {
           onSuccess: () => {
             Swal.fire({
-              title: 'মুছে ফেলা হয়েছে!',
-              text: 'RFQ মুছে ফেলা হয়েছে।',
+              title: 'Deleted!',
+              text: 'RFQ Deleted।',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -156,9 +156,9 @@ export default function Index({ rfqs, stats, buyers, filters }) {
   // Get status badge with appropriate styling
   const getStatusBadge = (status) => {
     const badges = {
-      open: { color: 'bg-green-100 text-green-800', icon: MdPending, label: 'খোলা' },
-      quoted: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'কোটা প্রাপ্ত' },
-      closed: { color: 'bg-red-100 text-red-800', icon: MdWarning, label: 'বন্ধ' },
+      open: { color: 'bg-green-100 text-green-800', icon: MdPending, label: 'open' },
+      quoted: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'Quota received' },
+      closed: { color: 'bg-red-100 text-red-800', icon: MdWarning, label: 'off' },
     };
     const badge = badges[status] || badges.open;
     const Icon = badge.icon;
@@ -182,15 +182,15 @@ export default function Index({ rfqs, stats, buyers, filters }) {
 
   return (
     <DashboardLayout>
-      <Head title="RFQ ব্যবস্থাপনা" />
+      <Head title="RFQ Management" />
 
       <div className="space-y-6">
         {/* Header - Page title and action buttons */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">RFQ ব্যবস্থাপনা</h1>
+            <h1 className="text-2xl font-bold text-gray-900">RFQ Management</h1>
             <p className="text-sm text-gray-600 mt-1">
-              সকল কোটা অনুরোধ পরিচালনা ও পর্যবেক্ষণ করুন
+              for this RFQ Manage and monitor all quota requests
             </p>
           </div>
           <div className="flex gap-2">
@@ -199,14 +199,14 @@ export default function Index({ rfqs, stats, buyers, filters }) {
               className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
             >
               <FiDownload className="w-4 h-4" />
-              <span>এক্সপোর্ট</span>
+              <span>Export</span>
             </button>
             <Link
               href={route('admin.rfqs.statistics')}
               className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
             >
               <BsGraphUp className="w-4 h-4" />
-              <span>পরিসংখ্যান</span>
+              <span>Statistics</span>
             </Link>
           </div>
         </div>
@@ -216,7 +216,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট RFQ</p>
+                <p className="text-sm text-gray-500">total RFQ</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">{stats.total}</p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-lg">
@@ -228,7 +228,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">খোলা RFQ</p>
+                <p className="text-sm text-gray-500">open RFQ</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{stats.open}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -240,7 +240,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">কোটা প্রাপ্ত</p>
+                <p className="text-sm text-gray-500">Quota received</p>
                 <p className="text-2xl font-bold text-blue-600 mt-1">{stats.quoted}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
@@ -252,7 +252,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">অর্ডারে রূপান্তরিত</p>
+                <p className="text-sm text-gray-500">Converted to order</p>
                 <p className="text-2xl font-bold text-purple-600 mt-1">{stats.converted_to_order}</p>
               </div>
               <div className="p-3 bg-purple-100 rounded-lg">
@@ -270,7 +270,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="RFQ নম্বর, শিরোনাম বা ক্রেতার নাম দ্বারা অনুসন্ধান..."
+                  placeholder="RFQ Search by number, title or buyer name..."
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -292,7 +292,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                 className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
               >
                 <FiFilter className="w-4 h-4" />
-                <span>ফিল্টার</span>
+                <span>Filter</span>
                 {activeFilterCount > 0 && (
                   <span className="ml-1 px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-xs">
                     {activeFilterCount}
@@ -304,7 +304,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                   onClick={handleReset}
                   className="px-4 py-2 text-gray-600 hover:text-gray-900"
                 >
-                  মুছুন
+                  delete
                 </button>
               )}
             </div>
@@ -314,7 +314,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
           {selectedRfqs.length > 0 && (
             <div className="mt-4 flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
               <span className="text-sm font-medium text-indigo-700">
-                {selectedRfqs.length} টি RFQ নির্বাচিত
+                {selectedRfqs.length} T RFQ selected
               </span>
               <div className="relative">
                 <button
@@ -322,7 +322,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
                   <FiMoreVertical className="w-4 h-4" />
-                  একাধিক কার্যক্রম
+                  Multiple activities
                 </button>
                 {bulkActionMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border z-10">
@@ -333,7 +333,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                       }}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      নির্বাচিত এক্সপোর্ট
+                      Selected export
                     </button>
                   </div>
                 )}
@@ -360,28 +360,28 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                     RFQ #
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    শিরোনাম
+                    Title
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ক্রেতা
+                    Buyer
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    পরিমাণ
+                    Amount
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    প্রয়োজনীয় তারিখ
+                    Required date
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    স্ট্যাটাস
+                    Status
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    কোটা
+                    Quote
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    তৈরির তারিখ
+                    Creation Date
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    কার্যক্রম
+                    Activities
                   </th>
                 </tr>
               </thead>
@@ -431,7 +431,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                     </td>
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                        {rfq.quotes_count || 0} টি কোটা
+                        {rfq.quotes_count || 0} t quota
                       </span>
                     </td>
                     <td className="px-6 py-4">
@@ -442,7 +442,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                         <Link
                           href={route('admin.rfqs.show', rfq.id)}
                           className="p-1 text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
-                          title="দেখুন"
+                          title="See"
                         >
                           <FiEye className="w-4 h-4" />
                         </Link>
@@ -452,7 +452,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                               // Handle close RFQ
                             }}
                             className="p-1 text-yellow-600 hover:bg-yellow-50 rounded-lg transition"
-                            title="RFQ বন্ধ করুন"
+                            title="RFQ Close"
                           >
                             <FiXCircle className="w-4 h-4" />
                           </button>
@@ -460,7 +460,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                         <button
                           onClick={() => handleDelete(rfq)}
                           className="p-1 text-red-600 hover:bg-red-50 rounded-lg transition"
-                          title="মুছুন"
+                          title="delete"
                         >
                           <FiAlertCircle className="w-4 h-4" />
                         </button>
@@ -477,7 +477,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
             <div className="px-6 py-4 border-t border-gray-100">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-500">
-                  মোট {rfqs.total} টির মধ্যে {rfqs.from} থেকে {rfqs.to} দেখানো হচ্ছে
+                  total {rfqs.total} of the {rfqs.from} from {rfqs.to} Showing
                 </p>
                 <div className="flex gap-2">
                   {rfqs.links.map((link, index) => (
@@ -493,8 +493,8 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                         }`}
                       dangerouslySetInnerHTML={{
                         __html: link.label
-                          .replace('Previous', 'পূর্ববর্তী')
-                          .replace('Next', 'পরবর্তী')
+                          .replace('Previous', 'previous')
+                          .replace('Next', 'next')
                       }}
                     />
                   ))}
@@ -509,19 +509,19 @@ export default function Index({ rfqs, stats, buyers, filters }) {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-900">উন্নত ফিল্টার</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Advanced filter</h3>
               </div>
               <div className="p-6 space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    ক্রেতা
+                    Buyer
                   </label>
                   <select
                     value={selectedBuyer}
                     onChange={(e) => setSelectedBuyer(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   >
-                    <option value="">সব ক্রেতা</option>
+                    <option value="">All Buyers</option>
                     {buyers.map((buyer) => (
                       <option key={buyer.id} value={buyer.id}>{buyer.name}</option>
                     ))}
@@ -530,7 +530,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    তৈরির তারিখ সীমা
+                    Creation date range
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -538,21 +538,21 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                       value={dateFrom}
                       onChange={(e) => setDateFrom(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="থেকে"
+                      placeholder="from"
                     />
                     <input
                       type="date"
                       value={dateTo}
                       onChange={(e) => setDateTo(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="পর্যন্ত"
+                      placeholder="up to"
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    প্রয়োজনীয় তারিখ সীমা
+                    The required date range is
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -560,14 +560,14 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                       value={requiredFrom}
                       onChange={(e) => setRequiredFrom(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="থেকে"
+                      placeholder="from"
                     />
                     <input
                       type="date"
                       value={requiredTo}
                       onChange={(e) => setRequiredTo(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="পর্যন্ত"
+                      placeholder="up to"
                     />
                   </div>
                 </div>
@@ -577,19 +577,19 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                   onClick={() => setShowFilterModal(false)}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900"
                 >
-                  বাতিল
+                  cancel
                 </button>
                 <button
                   onClick={handleReset}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg"
                 >
-                  রিসেট
+                  Reset
                 </button>
                 <button
                   onClick={handleFilter}
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
-                  ফিল্টার প্রয়োগ
+                  Apply Filter
                 </button>
               </div>
             </div>

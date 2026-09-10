@@ -74,7 +74,7 @@ export default function MessagesIndex({ conversationList, rfqs }) {
     if (diffDays === 0) {
       return messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     } else if (diffDays === 1) {
-      return 'গতকাল';
+      return 'yesterday';
     } else if (diffDays < 7) {
       return messageDate.toLocaleDateString([], { weekday: 'short' });
     } else {
@@ -98,7 +98,7 @@ export default function MessagesIndex({ conversationList, rfqs }) {
 
   return (
     <DashboardLayout>
-      <Head title="বার্তা - ক্রেতা" />
+      <Head title="Message - Buyer" />
 
       <div className="h-[calc(100vh-8rem)] flex">
         {/* Left Panel - Conversation List */}
@@ -106,11 +106,11 @@ export default function MessagesIndex({ conversationList, rfqs }) {
           {/* Header with search and new message button */}
           <div className="p-4 border-b">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-800">বার্তা</h2>
+              <h2 className="text-xl font-bold text-gray-800">Message</h2>
               <button
                 onClick={() => setShowNewMessageModal(true)}
                 className="p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-                title="নতুন বার্তা"
+                title="New message"
               >
                 <FiPlus />
               </button>
@@ -123,7 +123,7 @@ export default function MessagesIndex({ conversationList, rfqs }) {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="কথোপকথন অনুসন্ধান..."
+                placeholder="Conversation search..."
                 className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
@@ -135,12 +135,12 @@ export default function MessagesIndex({ conversationList, rfqs }) {
               // Empty state - No conversations
               <div className="p-8 text-center">
                 <FiMessageCircle className="mx-auto text-4xl text-gray-400 mb-3" />
-                <p className="text-gray-500">কোনো কথোপকথন নেই</p>
+                <p className="text-gray-500">No conversation</p>
                 <button
                   onClick={() => setShowNewMessageModal(true)}
                   className="mt-4 text-indigo-600 hover:text-indigo-800"
                 >
-                  নতুন কথোপকথন শুরু করুন
+                  Start a new conversation
                 </button>
               </div>
             ) : (
@@ -203,7 +203,7 @@ export default function MessagesIndex({ conversationList, rfqs }) {
                       {conversation.last_message_sender === 'You' && (
                         <div className="flex items-center mt-1">
                           <BsCheck2All className="text-blue-500 text-xs" />
-                          <span className="text-xs text-gray-400 ml-1">পাঠানো হয়েছে</span>
+                          <span className="text-xs text-gray-400 ml-1">has been sent</span>
                         </div>
                       )}
                     </div>
@@ -220,16 +220,16 @@ export default function MessagesIndex({ conversationList, rfqs }) {
             <div className="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <FiMessageCircle className="text-4xl text-indigo-600" />
             </div>
-            <h3 className="text-xl font-medium text-gray-800 mb-2">আপনার বার্তা</h3>
+            <h3 className="text-xl font-medium text-gray-800 mb-2">Your message is</h3>
             <p className="text-gray-600 mb-6">
-              RFQ এবং অর্ডার সম্পর্কে সাপ্লায়ারদের সাথে চ্যাট করতে তালিকা থেকে একটি কথোপকথন নির্বাচন করুন।
+              RFQ And select a conversation from the list to chat with the suppliers about the order।
             </p>
             <button
               onClick={() => setShowNewMessageModal(true)}
               className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors inline-flex items-center"
             >
               <FiSend className="mr-2" />
-              নতুন বার্তা
+              New message
             </button>
           </div>
         </div>
@@ -244,20 +244,20 @@ export default function MessagesIndex({ conversationList, rfqs }) {
 
             {/* Modal Content */}
             <div className="relative bg-white rounded-lg max-w-lg w-full p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">নতুন বার্তা</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">New message</h3>
 
               <form onSubmit={handleSendNewMessage}>
                 {/* RFQ Selection (Optional) */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    সম্পর্কিত RFQ (ঐচ্ছিক)
+                    Related RFQ (Optional)
                   </label>
                   <select
                     value={newMessage.rfq_id}
                     onChange={(e) => setNewMessage({ ...newMessage, rfq_id: e.target.value })}
                     className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                   >
-                    <option value="">সাধারণ বার্তা</option>
+                    <option value="">General messages</option>
                     {rfqs.map((rfq) => (
                       <option key={rfq.id} value={rfq.id}>
                         {rfq.title} ({rfq.rfq_number})
@@ -269,31 +269,31 @@ export default function MessagesIndex({ conversationList, rfqs }) {
                 {/* Receiver Selection */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    প্রাপক <span className="text-red-500">*</span>
+                    Recipient <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="সাপ্লায়ারের নাম বা আইডি লিখুন"
+                    placeholder="Enter Supplier Name or ID"
                     className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                     value={newMessage.receiver_id}
                     onChange={(e) => setNewMessage({ ...newMessage, receiver_id: e.target.value })}
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    আপনি শুধুমাত্র সেই সাপ্লায়ারদের সাথে বার্তা পাঠাতে পারেন যাদের সাথে আপনার ব্যবসায়িক সম্পর্ক রয়েছে।
+                    You may only send messages to suppliers with whom you have a business relationship।
                   </p>
                 </div>
 
                 {/* Message Content */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    বার্তা <span className="text-red-500">*</span>
+                    Message <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     value={newMessage.message}
                     onChange={(e) => setNewMessage({ ...newMessage, message: e.target.value })}
                     rows="4"
                     className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="আপনার বার্তা এখানে লিখুন..."
+                    placeholder="Enter your message here..."
                   />
                 </div>
 
@@ -304,7 +304,7 @@ export default function MessagesIndex({ conversationList, rfqs }) {
                     onClick={() => setShowNewMessageModal(false)}
                     className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-50"
                   >
-                    বাতিল
+                    cancel
                   </button>
                   <button
                     type="submit"
@@ -312,7 +312,7 @@ export default function MessagesIndex({ conversationList, rfqs }) {
                     className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center"
                   >
                     <FiSend className="mr-2" />
-                    বার্তা পাঠান
+                    send message
                   </button>
                 </div>
               </form>

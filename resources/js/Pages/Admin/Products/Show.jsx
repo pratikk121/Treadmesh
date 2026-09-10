@@ -48,14 +48,14 @@ export default function Show({ product, salesData, recentOrders }) {
   // Handle product deletion
   const handleDelete = () => {
     Swal.fire({
-      title: 'পণ্য মুছুন',
-      text: `আপনি কি ${product.name} মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।`,
+      title: 'Delete product',
+      text: `Are you ${product.name} Want to delete? This action cannot be undone।`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'হ্যাঁ, মুছুন',
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: 'Yes, delete',
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.products.destroy', product.id), {
@@ -72,8 +72,8 @@ export default function Show({ product, salesData, recentOrders }) {
     router.patch(route('admin.products.toggle-featured', product.id), {}, {
       onSuccess: () => {
         Swal.fire({
-          title: 'সফল!',
-          text: `পণ্যটি ${product.is_featured ? 'অপ্রচারিত' : 'প্রচারিত'} হিসেবে চিহ্নিত হয়েছে।`,
+          title: 'successful!',
+          text: `The product is ${product.is_featured ? 'Unpublished' : 'Promoted'} marked as।`,
           icon: 'success',
           timer: 1500,
           showConfirmButton: false
@@ -88,8 +88,8 @@ export default function Show({ product, salesData, recentOrders }) {
       onSuccess: () => {
         setShowStockForm(false);
         Swal.fire({
-          title: 'সফল!',
-          text: 'স্টক সফলভাবে আপডেট হয়েছে।',
+          title: 'successful!',
+          text: 'Stock updated successfully।',
           icon: 'success',
           timer: 1500,
           showConfirmButton: false
@@ -121,9 +121,9 @@ export default function Show({ product, salesData, recentOrders }) {
   // Get status badge with appropriate styling
   const getStatusBadge = (status) => {
     const badges = {
-      approved: { color: 'bg-green-100 text-green-800', icon: MdVerified, label: 'অনুমোদিত' },
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'বিচারাধীন' },
-      rejected: { color: 'bg-red-100 text-red-800', icon: MdWarning, label: 'প্রত্যাখ্যাত' },
+      approved: { color: 'bg-green-100 text-green-800', icon: MdVerified, label: 'Approved' },
+      pending: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'Pending' },
+      rejected: { color: 'bg-red-100 text-red-800', icon: MdWarning, label: 'Rejected' },
     };
     const badge = badges[status] || badges.pending;
     const Icon = badge.icon;
@@ -137,7 +137,7 @@ export default function Show({ product, salesData, recentOrders }) {
 
   return (
     <DashboardLayout>
-      <Head title={`${product.name} - বিস্তারিত`} />
+      <Head title={`${product.name} - Details`} />
 
       <div className="space-y-6">
         {/* Header - Back button, title and action buttons */}
@@ -152,7 +152,7 @@ export default function Show({ product, salesData, recentOrders }) {
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
               <p className="text-sm text-gray-600 mt-1">
-                পণ্যের বিবরণ ও ব্যবস্থাপনা
+                Product description and management
               </p>
             </div>
           </div>
@@ -165,21 +165,21 @@ export default function Show({ product, salesData, recentOrders }) {
                 }`}
             >
               {product.is_featured ? <FiStarFilled className="w-4 h-4" /> : <FiStar className="w-4 h-4" />}
-              <span>{product.is_featured ? 'প্রচারিত' : 'প্রচারিত হিসেবে চিহ্নিত'}</span>
+              <span>{product.is_featured ? 'Promoted' : 'Marked as promoted'}</span>
             </button>
             <Link
               href={route('admin.products.edit', product.id)}
               className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
             >
               <FiEdit2 className="w-4 h-4" />
-              <span>সম্পাদনা</span>
+              <span>editing</span>
             </Link>
             <button
               onClick={handleDelete}
               className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
             >
               <FiTrash2 className="w-4 h-4" />
-              <span>মুছুন</span>
+              <span>delete</span>
             </button>
           </div>
         </div>
@@ -198,16 +198,16 @@ export default function Show({ product, salesData, recentOrders }) {
                 <MdOutlineInventory className="w-4 h-4 mr-1" />
                 {product.stock_quantity > 0
                   ? product.stock_quantity < 10
-                    ? `স্টক কম (${product.stock_quantity})`
-                    : `স্টকে আছে (${product.stock_quantity})`
-                  : 'স্টক নেই'}
+                    ? `Stock low (${product.stock_quantity})`
+                    : ` (${product.stock_quantity})`
+                  : 'Out of Stock'}
               </span>
             </div>
             <button
               onClick={() => setShowStockForm(true)}
               className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
             >
-              স্টক আপডেট
+              Stock update
             </button>
           </div>
         </div>
@@ -215,11 +215,11 @@ export default function Show({ product, salesData, recentOrders }) {
         {/* Stock Update Form */}
         {showStockForm && (
           <div className="bg-white rounded-xl shadow-sm border border-indigo-200 p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">স্টক পরিমাণ আপডেট</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">Stock quantity update</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  নতুন স্টক পরিমাণ
+                  New stock quantity
                 </label>
                 <input
                   type="number"
@@ -234,7 +234,7 @@ export default function Show({ product, salesData, recentOrders }) {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  সমন্বয়ের কারণ (ঐচ্ছিক)
+                  Reason for adjustment (optional)
                 </label>
                 <input
                   type="text"
@@ -244,7 +244,7 @@ export default function Show({ product, salesData, recentOrders }) {
                     adjustment_reason: e.target.value
                   })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  placeholder="যেমন: পুনরায় মজুত, ক্ষতিগ্রস্ত পণ্য, ইত্যাদি"
+                  placeholder="eg: restocking, damaged goods, etc."
                 />
               </div>
             </div>
@@ -253,13 +253,13 @@ export default function Show({ product, salesData, recentOrders }) {
                 onClick={() => setShowStockForm(false)}
                 className="px-4 py-2 text-gray-700 hover:text-gray-900"
               >
-                বাতিল
+                cancel
               </button>
               <button
                 onClick={handleStockUpdate}
                 className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
               >
-                স্টক আপডেট
+                Stock update
               </button>
             </div>
           </div>
@@ -280,7 +280,7 @@ export default function Show({ product, salesData, recentOrders }) {
                       : 'text-gray-500 hover:text-gray-700'
                       }`}
                   >
-                    পণ্যের বিবরণ
+                    Product details
                   </button>
                   <button
                     onClick={() => setActiveTab('pricing')}
@@ -289,7 +289,7 @@ export default function Show({ product, salesData, recentOrders }) {
                       : 'text-gray-500 hover:text-gray-700'
                       }`}
                   >
-                    মূল্য ও মজুত
+                    Price and stock
                   </button>
                   <button
                     onClick={() => setActiveTab('supplier')}
@@ -298,7 +298,7 @@ export default function Show({ product, salesData, recentOrders }) {
                       : 'text-gray-500 hover:text-gray-700'
                       }`}
                   >
-                    সাপ্লায়ার তথ্য
+                    Supplier Information
                   </button>
                 </div>
               </div>
@@ -309,7 +309,7 @@ export default function Show({ product, salesData, recentOrders }) {
                   <div className="space-y-6">
                     {/* Product Images */}
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-3">পণ্যের ছবি</h4>
+                      <h4 className="font-medium text-gray-900 mb-3">Product image</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {product.main_image ? (
                           <div className="col-span-2">
@@ -333,29 +333,29 @@ export default function Show({ product, salesData, recentOrders }) {
 
                     {/* Description */}
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-2">বিবরণ</h4>
+                      <h4 className="font-medium text-gray-900 mb-2">Description</h4>
                       <p className="text-gray-600 whitespace-pre-line">{product.description}</p>
                     </div>
 
                     {/* Basic Info */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm text-gray-500">ক্যাটাগরি</p>
+                        <p className="text-sm text-gray-500">Category</p>
                         <p className="font-medium text-gray-900 flex items-center gap-1">
                           <MdOutlineCategory className="w-4 h-4 text-indigo-600" />
                           {product.category}
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">ইউনিট</p>
+                        <p className="text-sm text-gray-500">Unit</p>
                         <p className="font-medium text-gray-900">{product.unit}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">স্লাগ</p>
+                        <p className="text-sm text-gray-500">Slug</p>
                         <p className="font-medium text-gray-900">{product.slug}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">তৈরির তারিখ</p>
+                        <p className="text-sm text-gray-500">Creation Date</p>
                         <p className="font-medium text-gray-900">{formatDate(product.created_at)}</p>
                       </div>
                     </div>
@@ -367,15 +367,15 @@ export default function Show({ product, salesData, recentOrders }) {
                   <div className="space-y-6">
                     {/* Base Price */}
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-500">মূল মূল্য</p>
+                      <p className="text-sm text-gray-500">Original price</p>
                       <p className="text-2xl font-bold text-gray-900">{formatCurrency(product.base_price)}</p>
-                      <p className="text-sm text-gray-500 mt-1">সর্বনিম্ন অর্ডার: {product.minimum_order_quantity} {product.unit}</p>
+                      <p className="text-sm text-gray-500 mt-1">Minimum Order: {product.minimum_order_quantity} {product.unit}</p>
                     </div>
 
                     {/* Bulk Pricing */}
                     {product.bulk_prices && product.bulk_prices.length > 0 && (
                       <div>
-                        <h4 className="font-medium text-gray-900 mb-3">বাল্ক মূল্য স্তর</h4>
+                        <h4 className="font-medium text-gray-900 mb-3">Bulk price level</h4>
                         <div className="space-y-2">
                           {product.bulk_prices.map((tier, index) => (
                             <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
@@ -395,14 +395,14 @@ export default function Show({ product, salesData, recentOrders }) {
 
                     {/* Stock Info */}
                     <div className="border-t pt-4">
-                      <h4 className="font-medium text-gray-900 mb-3">স্টক তথ্য</h4>
+                      <h4 className="font-medium text-gray-900 mb-3">Stock information</h4>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <p className="text-sm text-gray-500">বর্তমান স্টক</p>
+                          <p className="text-sm text-gray-500">Current stock is</p>
                           <p className="text-xl font-bold text-gray-900">{product.stock_quantity} {product.unit}</p>
                         </div>
                         <div>
-                          <p className="text-sm text-gray-500">সর্বশেষ আপডেট</p>
+                          <p className="text-sm text-gray-500">Latest update</p>
                           <p className="text-sm text-gray-900">{product.updated_at ? formatDate(product.updated_at) : 'N/A'}</p>
                         </div>
                       </div>
@@ -419,7 +419,7 @@ export default function Show({ product, salesData, recentOrders }) {
                       </div>
                       <div>
                         <h4 className="text-lg font-semibold text-gray-900">{product.supplier?.company_name}</h4>
-                        <p className="text-sm text-gray-500">{new Date(product.supplier?.created_at).getFullYear()} থেকে সাপ্লায়ার</p>
+                        <p className="text-sm text-gray-500">{new Date(product.supplier?.created_at).getFullYear()} Supplier from</p>
                       </div>
                     </div>
 
@@ -445,7 +445,7 @@ export default function Show({ product, salesData, recentOrders }) {
                     </div>
 
                     <div className="border-t pt-4">
-                      <p className="text-sm text-gray-500">যোগাযোগের ব্যক্তি</p>
+                      <p className="text-sm text-gray-500">Contact Person</p>
                       <p className="font-medium text-gray-900">{product.supplier?.user?.name}</p>
                       <p className="text-sm text-gray-500">{product.supplier?.user?.email}</p>
                     </div>
@@ -459,17 +459,17 @@ export default function Show({ product, salesData, recentOrders }) {
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                   <FiShoppingCart className="w-5 h-5 text-indigo-600" />
-                  সাম্প্রতিক অর্ডার
+                  Recent Orders
                 </h3>
                 <div className="space-y-3">
                   {recentOrders.map((order, index) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
                         <p className="font-medium text-gray-900">{order.order_number}</p>
-                        <p className="text-sm text-gray-500">ক্রেতা: {order.buyer_name}</p>
+                        <p className="text-sm text-gray-500">Buyer: {order.buyer_name}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-medium text-indigo-600">{order.quantity} ইউনিট</p>
+                        <p className="font-medium text-indigo-600">{order.quantity} Unit</p>
                         <p className="text-xs text-gray-500">{formatDate(order.date)}</p>
                       </div>
                     </div>
@@ -485,24 +485,24 @@ export default function Show({ product, salesData, recentOrders }) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <FiTrendingUp className="w-5 h-5 text-indigo-600" />
-                বিক্রয় কর্মক্ষমতা
+                Sales performance
               </h3>
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-500">মোট বিক্রিত ইউনিট</p>
+                  <p className="text-sm text-gray-500">Total units sold are</p>
                   <p className="text-2xl font-bold text-gray-900">{salesData.total_ordered}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">মোট আয়</p>
+                  <p className="text-sm text-gray-500">Total income is</p>
                   <p className="text-2xl font-bold text-green-600">{formatCurrency(salesData.total_revenue)}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4 pt-2 border-t">
                   <div>
-                    <p className="text-xs text-gray-500">ক্রয়ের সংখ্যা</p>
+                    <p className="text-xs text-gray-500">The number of purchases is</p>
                     <p className="text-lg font-semibold text-gray-900">{salesData.times_purchased}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">গড় রেটিং</p>
+                    <p className="text-xs text-gray-500">Average rating is</p>
                     <p className="text-lg font-semibold text-yellow-600">{salesData.average_rating} ★</p>
                   </div>
                 </div>
@@ -511,21 +511,21 @@ export default function Show({ product, salesData, recentOrders }) {
 
             {/* Quick Actions */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">দ্রুত কার্যক্রম</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Quick operation</h3>
               <div className="space-y-2">
                 <Link
                   href={route('admin.products.edit', product.id)}
                   className="flex items-center gap-2 p-3 text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
                 >
                   <FiEdit2 className="w-5 h-5" />
-                  <span>পণ্য সম্পাদনা</span>
+                  <span>Product editing</span>
                 </Link>
                 <button
                   onClick={() => setShowStockForm(true)}
                   className="flex items-center gap-2 p-3 text-green-600 hover:bg-green-50 rounded-lg transition w-full text-left"
                 >
                   <MdOutlineInventory className="w-5 h-5" />
-                  <span>স্টক আপডেট</span>
+                  <span>Stock update</span>
                 </button>
                 <button
                   onClick={handleToggleFeatured}
@@ -535,7 +535,7 @@ export default function Show({ product, salesData, recentOrders }) {
                     }`}
                 >
                   {product.is_featured ? <FiStarFilled className="w-5 h-5" /> : <FiStar className="w-5 h-5" />}
-                  <span>{product.is_featured ? 'প্রচারিত চিহ্ন সরান' : 'প্রচারিত হিসেবে চিহ্নিত'}</span>
+                  <span>{product.is_featured ? 'Remove the promoted symbol' : 'Marked as promoted'}</span>
                 </button>
               </div>
             </div>

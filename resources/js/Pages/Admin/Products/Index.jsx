@@ -54,18 +54,18 @@ export default function Index({ products, stats, categories, suppliers, filters 
 
   // Status options for dropdown
   const statusOptions = [
-    { value: '', label: 'সব স্ট্যাটাস' },
-    { value: 'approved', label: 'অনুমোদিত', color: 'green' },
-    { value: 'pending', label: 'বিচারাধীন', color: 'yellow' },
-    { value: 'rejected', label: 'প্রত্যাখ্যাত', color: 'red' },
+    { value: '', label: 'All statuses are' },
+    { value: 'approved', label: 'Approved', color: 'green' },
+    { value: 'pending', label: 'Pending', color: 'yellow' },
+    { value: 'rejected', label: 'Rejected', color: 'red' },
   ];
 
   // Stock status options for dropdown
   const stockStatusOptions = [
-    { value: '', label: 'সব স্টক' },
-    { value: 'in_stock', label: 'স্টকে আছে' },
-    { value: 'low_stock', label: 'স্টক কম (<১০)' },
-    { value: 'out_of_stock', label: 'স্টক নেই' },
+    { value: '', label: 'All stock' },
+    { value: 'in_stock', label: '' },
+    { value: 'low_stock', label: 'Stock low (<10)' },
+    { value: 'out_of_stock', label: 'Out of Stock' },
   ];
 
   // Handle search form submission
@@ -145,36 +145,36 @@ export default function Index({ products, stats, categories, suppliers, filters 
 
     const actionConfig = {
       approve: {
-        title: 'একাধিক পণ্য অনুমোদন',
-        text: `আপনি কি ${selectedProducts.length} টি পণ্য অনুমোদন করতে চান?`,
+        title: 'Multiple product approval',
+        text: `Are you ${selectedProducts.length} t want to approve the product?`,
         icon: 'question',
         confirmColor: '#10B981',
         action: 'approve'
       },
       reject: {
-        title: 'একাধিক পণ্য প্রত্যাখ্যান',
-        text: `আপনি কি ${selectedProducts.length} টি পণ্য প্রত্যাখ্যান করতে চান?`,
+        title: 'Rejection of multiple products',
+        text: `Are you ${selectedProducts.length} t want to reject the product?`,
         icon: 'warning',
         confirmColor: '#EF4444',
         action: 'reject'
       },
       feature: {
-        title: 'একাধিক পণ্য প্রমোশন',
-        text: `আপনি কি ${selectedProducts.length} টি পণ্য প্রচারিত হিসেবে চিহ্নিত করতে চান?`,
+        title: 'Multiple product promotions',
+        text: `Are you ${selectedProducts.length} T want to mark the product as promoted?`,
         icon: 'question',
         confirmColor: '#8B5CF6',
         action: 'feature'
       },
       unfeature: {
-        title: 'একাধিক পণ্য প্রমোশন বাতিল',
-        text: `আপনি কি ${selectedProducts.length} টি পণ্য থেকে প্রচারিত চিহ্ন সরাতে চান?`,
+        title: 'Cancel multiple product promotions',
+        text: `Are you ${selectedProducts.length} T want to remove the promoted mark from the product?`,
         icon: 'question',
         confirmColor: '#6B7280',
         action: 'unfeature'
       },
       delete: {
-        title: 'একাধিক পণ্য মুছুন',
-        text: `আপনি কি ${selectedProducts.length} টি পণ্য মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।`,
+        title: 'Delete multiple products',
+        text: `Are you ${selectedProducts.length} Want to remove t products? This action cannot be undone।`,
         icon: 'warning',
         confirmColor: '#EF4444',
         action: 'delete'
@@ -190,8 +190,8 @@ export default function Index({ products, stats, categories, suppliers, filters 
       showCancelButton: true,
       confirmButtonColor: config.confirmColor,
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'হ্যাঁ, চালিয়ে যান',
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: 'Yes, continue',
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.products.bulk-update'), {
@@ -202,8 +202,8 @@ export default function Index({ products, stats, categories, suppliers, filters 
             setSelectedProducts([]);
             setBulkActionMenu(false);
             Swal.fire({
-              title: 'সফল!',
-              text: `একাধিক কার্যক্রম সফলভাবে সম্পন্ন হয়েছে।`,
+              title: 'successful!',
+              text: `to start sending messages Multiple operations completed successfully।`,
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -217,21 +217,21 @@ export default function Index({ products, stats, categories, suppliers, filters 
   // Handle delete single product
   const handleDelete = (product) => {
     Swal.fire({
-      title: 'পণ্য মুছুন',
-      text: `আপনি কি ${product.name} মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।`,
+      title: 'Delete product',
+      text: `Are you ${product.name} Want to delete? This action cannot be undone।`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'হ্যাঁ, মুছুন',
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: 'Yes, delete',
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.products.destroy', product.id), {
           onSuccess: () => {
             Swal.fire({
-              title: 'মুছে ফেলা হয়েছে!',
-              text: 'পণ্যটি মুছে ফেলা হয়েছে।',
+              title: 'Deleted!',
+              text: 'The product has been deleted।',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -247,8 +247,8 @@ export default function Index({ products, stats, categories, suppliers, filters 
     router.patch(route('admin.products.toggle-featured', product.id), {}, {
       onSuccess: () => {
         Swal.fire({
-          title: 'সফল!',
-          text: `পণ্যটি ${product.is_featured ? 'অপ্রচারিত' : 'প্রচারিত'} হিসেবে চিহ্নিত হয়েছে।`,
+          title: 'successful!',
+          text: `The product is ${product.is_featured ? 'Unpublished' : 'Promoted'} marked as।`,
           icon: 'success',
           timer: 1500,
           showConfirmButton: false
@@ -293,9 +293,9 @@ export default function Index({ products, stats, categories, suppliers, filters 
   // Get status badge with appropriate styling
   const getStatusBadge = (status) => {
     const badges = {
-      approved: { color: 'bg-green-100 text-green-800', icon: MdVerified, label: 'অনুমোদিত' },
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'বিচারাধীন' },
-      rejected: { color: 'bg-red-100 text-red-800', icon: MdWarning, label: 'প্রত্যাখ্যাত' },
+      approved: { color: 'bg-green-100 text-green-800', icon: MdVerified, label: 'Approved' },
+      pending: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'Pending' },
+      rejected: { color: 'bg-red-100 text-red-800', icon: MdWarning, label: 'Rejected' },
     };
     const badge = badges[status] || badges.pending;
     const Icon = badge.icon;
@@ -321,15 +321,15 @@ export default function Index({ products, stats, categories, suppliers, filters 
 
   return (
     <DashboardLayout>
-      <Head title="পণ্য ব্যবস্থাপনা" />
+      <Head title="Product Management" />
 
       <div className="space-y-6">
         {/* Header - Page title and action buttons */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">পণ্য ব্যবস্থাপনা</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Product Management</h1>
             <p className="text-sm text-gray-600 mt-1">
-              মার্কেটপ্লেসের সকল পণ্য পরিচালনা ও পর্যবেক্ষণ করুন
+              Manage and monitor all products in the marketplace
             </p>
           </div>
           <div className="flex gap-2">
@@ -338,14 +338,14 @@ export default function Index({ products, stats, categories, suppliers, filters 
               className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
             >
               <FiDownload className="w-4 h-4" />
-              <span>এক্সপোর্ট</span>
+              <span>Export</span>
             </button>
             <Link
               href={route('admin.products.statistics')}
               className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
             >
               <BsGraphUp className="w-4 h-4" />
-              <span>পরিসংখ্যান</span>
+              <span>Statistics</span>
             </Link>
           </div>
         </div>
@@ -355,7 +355,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট পণ্য</p>
+                <p className="text-sm text-gray-500">Total Products</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">{stats.total}</p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-lg">
@@ -367,7 +367,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট মজুত মূল্য</p>
+                <p className="text-sm text-gray-500">Total stock value is</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{formatCurrency(stats.total_value)}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -379,7 +379,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">অনুমোদিত</p>
+                <p className="text-sm text-gray-500">Approved</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{stats.approved}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -391,7 +391,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">স্টক নেই</p>
+                <p className="text-sm text-gray-500">Out of Stock</p>
                 <p className="text-2xl font-bold text-red-600 mt-1">{stats.out_of_stock}</p>
               </div>
               <div className="p-3 bg-red-100 rounded-lg">
@@ -409,7 +409,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="পণ্যের নাম, বিবরণ বা সাপ্লায়ার দ্বারা অনুসন্ধান..."
+                  placeholder="Search by product name, description or supplier..."
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -431,7 +431,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
                 className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
               >
                 <FiFilter className="w-4 h-4" />
-                <span>ফিল্টার</span>
+                <span>Filter</span>
                 {activeFilterCount > 0 && (
                   <span className="ml-1 px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-xs">
                     {activeFilterCount}
@@ -443,7 +443,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
                   onClick={handleReset}
                   className="px-4 py-2 text-gray-600 hover:text-gray-900"
                 >
-                  মুছুন
+                  delete
                 </button>
               )}
             </div>
@@ -453,7 +453,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
           {selectedProducts.length > 0 && (
             <div className="mt-4 flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
               <span className="text-sm font-medium text-indigo-700">
-                {selectedProducts.length} টি পণ্য নির্বাচিত
+                {selectedProducts.length} products selected
               </span>
               <div className="relative">
                 <button
@@ -461,7 +461,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
                   <FiMoreVertical className="w-4 h-4" />
-                  একাধিক কার্যক্রম
+                  Multiple activities
                 </button>
                 {bulkActionMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border z-10">
@@ -469,33 +469,33 @@ export default function Index({ products, stats, categories, suppliers, filters 
                       onClick={() => handleBulkAction('approve')}
                       className="block w-full text-left px-4 py-2 text-sm text-green-600 hover:bg-gray-100"
                     >
-                      নির্বাচিত অনুমোদন
+                      Selected authorization
                     </button>
                     <button
                       onClick={() => handleBulkAction('reject')}
                       className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                     >
-                      নির্বাচিত প্রত্যাখ্যান
+                      Selected Reject
                     </button>
                     <div className="border-t my-1"></div>
                     <button
                       onClick={() => handleBulkAction('feature')}
                       className="block w-full text-left px-4 py-2 text-sm text-purple-600 hover:bg-gray-100"
                     >
-                      প্রচারিত হিসেবে চিহ্নিত
+                      Marked as promoted
                     </button>
                     <button
                       onClick={() => handleBulkAction('unfeature')}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-100"
                     >
-                      প্রচারিত চিহ্ন সরান
+                      Remove the promoted symbol
                     </button>
                     <div className="border-t my-1"></div>
                     <button
                       onClick={() => handleBulkAction('delete')}
                       className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                     >
-                      নির্বাচিত মুছুন
+                      Delete selected
                     </button>
                   </div>
                 )}
@@ -522,43 +522,43 @@ export default function Index({ products, stats, categories, suppliers, filters 
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('name')}
                   >
-                    পণ্য <SortIndicator field="name" />
+                    Product <SortIndicator field="name" />
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    সাপ্লায়ার
+                    Supplier
                   </th>
                   <th
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('category')}
                   >
-                    ক্যাটাগরি <SortIndicator field="category" />
+                    Category <SortIndicator field="category" />
                   </th>
                   <th
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('base_price')}
                   >
-                    মূল্য <SortIndicator field="base_price" />
+                    Price <SortIndicator field="base_price" />
                   </th>
                   <th
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('stock_quantity')}
                   >
-                    মজুত <SortIndicator field="stock_quantity" />
+                    Stock <SortIndicator field="stock_quantity" />
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    স্ট্যাটাস
+                    Status
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    প্রচারিত
+                    Promoted
                   </th>
                   <th
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('created_at')}
                   >
-                    তৈরির তারিখ <SortIndicator field="created_at" />
+                    Creation Date <SortIndicator field="created_at" />
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    কার্যক্রম
+                    Activities
                   </th>
                 </tr>
               </thead>
@@ -593,7 +593,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
                           )}
                           <div>
                             <div className="font-medium text-gray-900">{product.name}</div>
-                            <div className="text-xs text-gray-500">সর্বনিম্ন অর্ডার: {product.minimum_order_quantity} {product.unit}</div>
+                            <div className="text-xs text-gray-500">Minimum Order: {product.minimum_order_quantity} {product.unit}</div>
                           </div>
                         </div>
                       </Link>
@@ -646,21 +646,21 @@ export default function Index({ products, stats, categories, suppliers, filters 
                         <Link
                           href={route('admin.products.edit', product.id)}
                           className="p-1 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                          title="সম্পাদনা"
+                          title="editing"
                         >
                           <FiEdit2 className="w-4 h-4" />
                         </Link>
                         <Link
                           href={route('admin.products.show', product.id)}
                           className="p-1 text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
-                          title="দেখুন"
+                          title="See"
                         >
                           <FiEye className="w-4 h-4" />
                         </Link>
                         <button
                           onClick={() => handleDelete(product)}
                           className="p-1 text-red-600 hover:bg-red-50 rounded-lg transition"
-                          title="মুছুন"
+                          title="delete"
                         >
                           <FiTrash2 className="w-4 h-4" />
                         </button>
@@ -677,7 +677,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
             <div className="px-6 py-4 border-t border-gray-100">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-500">
-                  মোট {products.total} টির মধ্যে {products.from} থেকে {products.to} দেখানো হচ্ছে
+                  total {products.total} of the {products.from} from {products.to} Showing
                 </p>
                 <div className="flex gap-2">
                   {products.links.map((link, index) => (
@@ -693,8 +693,8 @@ export default function Index({ products, stats, categories, suppliers, filters 
                         }`}
                       dangerouslySetInnerHTML={{
                         __html: link.label
-                          .replace('Previous', 'পূর্ববর্তী')
-                          .replace('Next', 'পরবর্তী')
+                          .replace('Previous', 'previous')
+                          .replace('Next', 'next')
                       }}
                     />
                   ))}
@@ -709,20 +709,20 @@ export default function Index({ products, stats, categories, suppliers, filters 
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-900">উন্নত ফিল্টার</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Advanced filter</h3>
               </div>
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      ক্যাটাগরি
+                      Category
                     </label>
                     <select
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
-                      <option value="">সব ক্যাটাগরি</option>
+                      <option value="">All Categories</option>
                       {categories.map((category) => (
                         <option key={category} value={category}>{category}</option>
                       ))}
@@ -730,14 +730,14 @@ export default function Index({ products, stats, categories, suppliers, filters 
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      সাপ্লায়ার
+                      Supplier
                     </label>
                     <select
                       value={selectedSupplier}
                       onChange={(e) => setSelectedSupplier(e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
-                      <option value="">সব সাপ্লায়ার</option>
+                      <option value="">All suppliers</option>
                       {suppliers.map((supplier) => (
                         <option key={supplier.id} value={supplier.id}>{supplier.company_name}</option>
                       ))}
@@ -747,7 +747,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    স্টক স্ট্যাটাস
+                    Stock status
                   </label>
                   <select
                     value={selectedStockStatus}
@@ -762,7 +762,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    তারিখ সীমা
+                    Date range
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -770,21 +770,21 @@ export default function Index({ products, stats, categories, suppliers, filters 
                       value={dateFrom}
                       onChange={(e) => setDateFrom(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="থেকে"
+                      placeholder="from"
                     />
                     <input
                       type="date"
                       value={dateTo}
                       onChange={(e) => setDateTo(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="পর্যন্ত"
+                      placeholder="up to"
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    মূল্য সীমা (টাকা)
+                    Price range (Rs)
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -792,7 +792,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
                       value={minPrice}
                       onChange={(e) => setMinPrice(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="সর্বনিম্ন মূল্য"
+                      placeholder="Lowest Price"
                       min="0"
                     />
                     <input
@@ -800,7 +800,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
                       value={maxPrice}
                       onChange={(e) => setMaxPrice(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="সর্বোচ্চ মূল্য"
+                      placeholder="Maximum price"
                       min="0"
                     />
                   </div>
@@ -811,19 +811,19 @@ export default function Index({ products, stats, categories, suppliers, filters 
                   onClick={() => setShowFilterModal(false)}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900"
                 >
-                  বাতিল
+                  cancel
                 </button>
                 <button
                   onClick={handleReset}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg"
                 >
-                  রিসেট
+                  Reset
                 </button>
                 <button
                   onClick={handleFilter}
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
-                  ফিল্টার প্রয়োগ
+                  Apply Filter
                 </button>
               </div>
             </div>

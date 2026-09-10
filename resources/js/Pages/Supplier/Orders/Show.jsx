@@ -77,12 +77,12 @@ export default function OrderShow({
   // Get status badge with appropriate styling
   const getStatusBadge = (status) => {
     const badges = {
-      pending_confirmation: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: MdPending, label: 'অপেক্ষমান' },
-      confirmed: { bg: 'bg-blue-100', text: 'text-blue-800', icon: MdVerified, label: 'নিশ্চিত' },
-      processing: { bg: 'bg-indigo-100', text: 'text-indigo-800', icon: FiPackage, label: 'প্রক্রিয়াধীন' },
-      shipped: { bg: 'bg-purple-100', text: 'text-purple-800', icon: FiTruck, label: 'পাঠানো হয়েছে' },
-      delivered: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'ডেলিভারি হয়েছে' },
-      cancelled: { bg: 'bg-red-100', text: 'text-red-800', icon: FiXCircle, label: 'বাতিল' }
+      pending_confirmation: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: MdPending, label: 'Awaiting' },
+      confirmed: { bg: 'bg-blue-100', text: 'text-blue-800', icon: MdVerified, label: 'sure' },
+      processing: { bg: 'bg-indigo-100', text: 'text-indigo-800', icon: FiPackage, label: 'In process' },
+      shipped: { bg: 'bg-purple-100', text: 'text-purple-800', icon: FiTruck, label: 'has been sent' },
+      delivered: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'Delivered' },
+      cancelled: { bg: 'bg-red-100', text: 'text-red-800', icon: FiXCircle, label: 'cancel' }
     };
     const badge = badges[status] || badges.pending_confirmation;
     const Icon = badge.icon;
@@ -97,7 +97,7 @@ export default function OrderShow({
 
   // Handle order confirmation
   const handleConfirmOrder = () => {
-    if (confirm('আপনি কি এই অর্ডার নিশ্চিত করতে চান?')) {
+    if (confirm('Do you want to confirm this order?')) {
       router.post(route('supplier.orders.confirm', order.id));
     }
   };
@@ -129,20 +129,20 @@ export default function OrderShow({
     if (!cancellationReason.trim()) {
       Swal.fire({
         icon: 'warning',
-        title: 'কারণ প্রয়োজন',
-        text: 'অনুগ্রহ করে বাতিলের কারণ উল্লেখ করুন',
-        confirmButtonText: 'ঠিক আছে'
+        title: 'Reason is necessary',
+        text: 'Please specify the reason for cancellation',
+        confirmButtonText: 'OK'
       });
       return;
     }
 
     Swal.fire({
-      title: 'আপনি কি নিশ্চিত?',
-      text: 'এই অর্ডারটি বাতিল করা হবে!',
+      title: 'Are you sure?',
+      text: 'This order will be canceled!',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'হ্যাঁ, বাতিল করুন',
-      cancelButtonText: 'না',
+      confirmButtonText: 'Yes, cancel',
+      cancelButtonText: 'No',
       confirmButtonColor: '#dc2626'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -155,15 +155,15 @@ export default function OrderShow({
 
             Swal.fire({
               icon: 'success',
-              title: 'বাতিল হয়েছে',
-              text: 'অর্ডার সফলভাবে বাতিল করা হয়েছে'
+              title: 'Canceled',
+              text: 'Order successfully canceled'
             });
           },
           onError: () => {
             Swal.fire({
               icon: 'error',
-              title: 'ত্রুটি',
-              text: 'অর্ডার বাতিল করা যায়নি'
+              title: 'Error',
+              text: 'Order could not be canceled'
             });
           }
         });
@@ -192,7 +192,7 @@ export default function OrderShow({
 
   return (
     <DashboardLayout>
-      <Head title={`অর্ডার #${order.order_number}`} />
+      <Head title={`Order #${order.order_number}`} />
 
       <div className="space-y-6">
         {/* Header - Back button, title and print button */}
@@ -205,9 +205,9 @@ export default function OrderShow({
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">অর্ডার #{order.order_number}</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Order #{order.order_number}</h1>
               <p className="text-sm text-gray-600 mt-1">
-                {formatDate(order.created_at)} তারিখে অর্ডার করা হয়েছে
+                {formatDate(order.created_at)} Ordered on
               </p>
             </div>
           </div>
@@ -217,7 +217,7 @@ export default function OrderShow({
               className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
             >
               <FiPrinter className="w-4 h-4" />
-              <span>প্রিন্ট</span>
+              <span>Print</span>
             </button>
           </div>
         </div>
@@ -230,10 +230,10 @@ export default function OrderShow({
                 <FiClock className="w-5 h-5 text-yellow-400 mr-3 mt-0.5" />
                 <div>
                   <p className="text-sm text-yellow-700 font-medium">
-                    এই অর্ডারটি আপনার নিশ্চিতকরণের অপেক্ষায় রয়েছে
+                    This order is awaiting your confirmation
                   </p>
                   <p className="text-sm text-yellow-600 mt-1">
-                    অনুগ্রহ করে অর্ডারের বিবরণ পর্যালোচনা করুন এবং ২৪ ঘন্টার মধ্যে নিশ্চিত করুন।
+                    Please review the order details and confirm within 24 hours।
                   </p>
                 </div>
               </div>
@@ -241,7 +241,7 @@ export default function OrderShow({
                 onClick={handleConfirmOrder}
                 className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
               >
-                অর্ডার নিশ্চিত করুন
+                Confirm order
               </button>
             </div>
           </div>
@@ -254,7 +254,7 @@ export default function OrderShow({
             {/* Order Items */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6 border-b border-gray-100">
-                <h2 className="text-lg font-semibold text-gray-900">অর্ডার আইটেম</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Order Item</h2>
               </div>
               <div className="divide-y divide-gray-100">
                 {order.items.map((item) => (
@@ -275,15 +275,15 @@ export default function OrderShow({
                         <h3 className="font-medium text-gray-900">{item.product_name}</h3>
                         <div className="grid grid-cols-2 gap-4 mt-2">
                           <div>
-                            <p className="text-xs text-gray-500">পরিমাণ</p>
+                            <p className="text-xs text-gray-500">Amount</p>
                             <p className="font-medium">{item.quantity}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500">একক মূল্য</p>
+                            <p className="text-xs text-gray-500">Unit price is</p>
                             <p className="font-medium">{formatCurrency(item.unit_price)}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500">মোট</p>
+                            <p className="text-xs text-gray-500">total</p>
                             <p className="font-bold text-indigo-600">{formatCurrency(item.total_price)}</p>
                           </div>
                         </div>
@@ -294,7 +294,7 @@ export default function OrderShow({
               </div>
               <div className="p-4 bg-gray-50 border-t border-gray-100">
                 <div className="flex justify-between items-center">
-                  <span className="font-semibold text-gray-900">সাবটোটাল</span>
+                  <span className="font-semibold text-gray-900">Subtotal</span>
                   <span className="font-bold text-gray-900">{formatCurrency(order.total_amount)}</span>
                 </div>
               </div>
@@ -302,7 +302,7 @@ export default function OrderShow({
 
             {/* Order Timeline */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">অর্ডার টাইমলাইন</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Order timeline</h2>
               <div className="space-y-4">
                 {timeline.map((event, index) => (
                   <div key={index} className="flex items-start gap-3">
@@ -324,12 +324,12 @@ export default function OrderShow({
                       <div className="flex justify-between items-start">
                         <div>
                           <p className="font-medium text-gray-900">
-                            {event.status === 'pending_confirmation' ? 'অপেক্ষমান' :
-                              event.status === 'confirmed' ? 'নিশ্চিত' :
-                                event.status === 'processing' ? 'প্রক্রিয়াধীন' :
-                                  event.status === 'shipped' ? 'পাঠানো হয়েছে' :
-                                    event.status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                                      event.status === 'cancelled' ? 'বাতিল' : event.status}
+                            {event.status === 'pending_confirmation' ? 'Awaiting' :
+                              event.status === 'confirmed' ? 'sure' :
+                                event.status === 'processing' ? 'In process' :
+                                  event.status === 'shipped' ? 'has been sent' :
+                                    event.status === 'delivered' ? 'Delivered' :
+                                      event.status === 'cancelled' ? 'cancel' : event.status}
                           </p>
                           <p className="text-sm text-gray-500 mt-1">{event.description}</p>
                         </div>
@@ -346,12 +346,12 @@ export default function OrderShow({
             {/* Shipping Form - When marking as shipped */}
             {showShippingForm && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">শিপিং তথ্য</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Shipping information</h2>
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        ট্র্যাকিং নম্বর <span className="text-red-500">*</span>
+                        Tracking number <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -363,7 +363,7 @@ export default function OrderShow({
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        শিপিং ক্যারিয়ার <span className="text-red-500">*</span>
+                        Shipping carrier <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -376,7 +376,7 @@ export default function OrderShow({
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      আনুমানিক ডেলিভারি তারিখ
+                      Estimated delivery date
                     </label>
                     <input
                       type="date"
@@ -388,14 +388,14 @@ export default function OrderShow({
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      অতিরিক্ত নোট
+                      Additional Notes
                     </label>
                     <textarea
                       value={shippingInfo.notes}
                       onChange={(e) => setShippingInfo({ ...shippingInfo, notes: e.target.value })}
                       rows="3"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                      placeholder="ক্রেতার জন্য কোনো অতিরিক্ত তথ্য..."
+                      placeholder="Any additional information for the buyer..."
                     />
                   </div>
                   <div className="flex gap-2">
@@ -403,13 +403,13 @@ export default function OrderShow({
                       onClick={() => handleUpdateStatus('shipped')}
                       className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                     >
-                      পাঠানো হিসেবে চিহ্নিত
+                      Marked as sent
                     </button>
                     <button
                       onClick={() => setShowShippingForm(false)}
                       className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
                     >
-                      বাতিল
+                      cancel
                     </button>
                   </div>
                 </div>
@@ -419,18 +419,18 @@ export default function OrderShow({
             {/* Cancel Form */}
             {showCancelForm && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">অর্ডার বাতিল</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Cancel Order</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      বাতিলের কারণ <span className="text-red-500">*</span>
+                      Reason for cancellation <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       value={cancellationReason}
                       onChange={(e) => setCancellationReason(e.target.value)}
                       rows="3"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                      placeholder="অনুগ্রহ করে বাতিলের কারণ উল্লেখ করুন..."
+                      placeholder="Please specify the reason for cancellation..."
                       required
                     />
                   </div>
@@ -439,13 +439,13 @@ export default function OrderShow({
                       onClick={handleCancelOrder}
                       className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                     >
-                      বাতিল নিশ্চিত করুন
+                      Confirm Cancel
                     </button>
                     <button
                       onClick={() => setShowCancelForm(false)}
                       className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
                     >
-                      ফিরে যান
+                      Go back to
                     </button>
                   </div>
                 </div>
@@ -457,26 +457,26 @@ export default function OrderShow({
           <div className="space-y-6">
             {/* Order Status Card */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">অর্ডার স্ট্যাটাস</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Order Status</h2>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">বর্তমান স্ট্যাটাস</span>
+                  <span className="text-gray-600">Current status is</span>
                   {getStatusBadge(order.order_status)}
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">পেমেন্ট স্ট্যাটাস</span>
+                  <span className="text-gray-600">Payment Status</span>
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${order.payment_status === 'paid'
                     ? 'bg-green-100 text-green-800'
                     : 'bg-yellow-100 text-yellow-800'
                     }`}>
-                    {order.payment_status === 'paid' ? 'পরিশোধিত' : 'অপেক্ষমান'}
+                    {order.payment_status === 'paid' ? 'Paid' : 'Awaiting'}
                   </span>
                 </div>
 
                 {/* Status Update Actions */}
                 {Object.keys(availableStatuses).length > 0 && (
                   <div className="pt-4 border-t border-gray-100">
-                    <p className="text-sm font-medium text-gray-700 mb-2">স্ট্যাটাস আপডেট</p>
+                    <p className="text-sm font-medium text-gray-700 mb-2">Status Update</p>
                     <div className="space-y-2">
                       {Object.entries(availableStatuses).map(([status, label]) => (
                         <button
@@ -484,9 +484,9 @@ export default function OrderShow({
                           onClick={() => handleUpdateStatus(status)}
                           className="w-full px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
                         >
-                          {status === 'processing' ? 'প্রক্রিয়াধীন' :
-                            status === 'shipped' ? 'পাঠানো হয়েছে' :
-                              status === 'delivered' ? 'ডেলিভারি হয়েছে' : label}
+                          {status === 'processing' ? 'In process' :
+                            status === 'shipped' ? 'has been sent' :
+                              status === 'delivered' ? 'Delivered' : label}
                         </button>
                       ))}
                     </div>
@@ -500,7 +500,7 @@ export default function OrderShow({
                       onClick={() => setShowCancelForm(true)}
                       className="w-full px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
                     >
-                      অর্ডার বাতিল
+                      Cancel Order
                     </button>
                   </div>
                 )}
@@ -509,19 +509,19 @@ export default function OrderShow({
 
             {/* Buyer Information */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">ক্রেতার তথ্য</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Buyer information</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <FiUser className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">নাম</p>
+                    <p className="text-sm text-gray-500">name</p>
                     <p className="font-medium text-gray-900">{order.buyer?.name}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <FiMail className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">ইমেইল</p>
+                    <p className="text-sm text-gray-500">Email</p>
                     <a href={`mailto:${order.buyer?.email}`} className="font-medium text-indigo-600 hover:text-indigo-700">
                       {order.buyer?.email}
                     </a>
@@ -531,7 +531,7 @@ export default function OrderShow({
                   <div className="flex items-start gap-3">
                     <FiPhone className="w-5 h-5 text-gray-400 mt-0.5" />
                     <div>
-                      <p className="text-sm text-gray-500">ফোন</p>
+                      <p className="text-sm text-gray-500">Phone</p>
                       <p className="font-medium text-gray-900">{order.buyer.phone}</p>
                     </div>
                   </div>
@@ -539,8 +539,8 @@ export default function OrderShow({
                 <div className="flex items-start gap-3">
                   <FiMapPin className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">শিপিং ঠিকানা</p>
-                    <p className="font-medium text-gray-900">{order.shipping_address || 'দেওয়া হয়নি'}</p>
+                    <p className="text-sm text-gray-500">Shipping address is</p>
+                    <p className="font-medium text-gray-900">{order.shipping_address || 'Not given'}</p>
                   </div>
                 </div>
               </div>
@@ -549,16 +549,16 @@ export default function OrderShow({
             {/* RFQ Information */}
             {order.rfq && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">RFQ বিবরণ</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">RFQ Description</h2>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-500">RFQ নম্বর</p>
+                    <p className="text-sm text-gray-500">RFQ Number</p>
                     <Link href={route('supplier.rfqs.show', order.rfq.id)} className="font-medium text-indigo-600 hover:text-indigo-700">
                       {order.rfq.rfq_number}
                     </Link>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">শিরোনাম</p>
+                    <p className="text-sm text-gray-500">Title</p>
                     <p className="font-medium text-gray-900">{order.rfq.title}</p>
                   </div>
                 </div>
@@ -568,24 +568,24 @@ export default function OrderShow({
             {/* Shipping Info (if shipped) */}
             {order.order_status === 'shipped' && order.tracking_number && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">শিপিং তথ্য</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Shipping information</h2>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-500">ট্র্যাকিং নম্বর</p>
+                    <p className="text-sm text-gray-500">Tracking number</p>
                     <p className="font-medium text-gray-900">{order.tracking_number}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">ক্যারিয়ার</p>
+                    <p className="text-sm text-gray-500">career</p>
                     <p className="font-medium text-gray-900">{order.shipping_carrier}</p>
                   </div>
                   {order.estimated_delivery && (
                     <div>
-                      <p className="text-sm text-gray-500">আনুমানিক ডেলিভারি</p>
+                      <p className="text-sm text-gray-500">Estimated Delivery</p>
                       <p className="font-medium text-gray-900">{formatDate(order.estimated_delivery)}</p>
                     </div>
                   )}
                   <div>
-                    <p className="text-sm text-gray-500">পাঠানোর তারিখ</p>
+                    <p className="text-sm text-gray-500">Ship Date</p>
                     <p className="font-medium text-gray-900">{formatDate(order.shipped_at)}</p>
                   </div>
                 </div>
@@ -602,8 +602,8 @@ export default function OrderShow({
                 <FiMessageSquare className="w-5 h-5 text-indigo-600" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">বার্তা</h2>
-                <p className="text-sm text-gray-500">ক্রেতার সাথে যোগাযোগ করুন</p>
+                <h2 className="text-lg font-semibold text-gray-900">Message</h2>
+                <p className="text-sm text-gray-500">Contact Buyer</p>
               </div>
             </div>
           </div>
@@ -635,7 +635,7 @@ export default function OrderShow({
 
               {messages.length === 0 && (
                 <div className="text-center py-8 text-gray-500">
-                  এখনও কোনো বার্তা নেই। ক্রেতার সাথে কথোপকথন শুরু করুন।
+                  No messages yet. Start a conversation with the buyer।
                 </div>
               )}
             </div>
@@ -646,7 +646,7 @@ export default function OrderShow({
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="আপনার বার্তা লিখুন..."
+                placeholder="Enter your message..."
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
               />
               <button
@@ -655,7 +655,7 @@ export default function OrderShow({
                 className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2"
               >
                 <FiSend className="w-4 h-4" />
-                <span>পাঠান</span>
+                <span>Send</span>
               </button>
             </form>
           </div>

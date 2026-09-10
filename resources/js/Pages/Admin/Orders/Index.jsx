@@ -161,12 +161,12 @@ export default function Index({
   // Get status badge - Returns appropriate badge for order status
   const getOrderStatusBadge = (status) => {
     const badges = {
-      pending_confirmation: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'অপেক্ষমান' },
-      confirmed: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'নিশ্চিত' },
-      processing: { color: 'bg-indigo-100 text-indigo-800', icon: FiClock, label: 'প্রক্রিয়াধীন' },
-      shipped: { color: 'bg-purple-100 text-purple-800', icon: MdOutlineLocalShipping, label: 'পাঠানো হয়েছে' },
-      delivered: { color: 'bg-green-100 text-green-800', icon: FiCheckCircle, label: 'ডেলিভারি হয়েছে' },
-      cancelled: { color: 'bg-red-100 text-red-800', icon: FiXCircle, label: 'বাতিল' },
+      pending_confirmation: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'Awaiting' },
+      confirmed: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'sure' },
+      processing: { color: 'bg-indigo-100 text-indigo-800', icon: FiClock, label: 'In process' },
+      shipped: { color: 'bg-purple-100 text-purple-800', icon: MdOutlineLocalShipping, label: 'has been sent' },
+      delivered: { color: 'bg-green-100 text-green-800', icon: FiCheckCircle, label: 'Delivered' },
+      cancelled: { color: 'bg-red-100 text-red-800', icon: FiXCircle, label: 'cancel' },
     };
     const badge = badges[status] || badges.pending_confirmation;
     const Icon = badge.icon;
@@ -181,8 +181,8 @@ export default function Index({
   // Get payment status badge
   const getPaymentStatusBadge = (status) => {
     const badges = {
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: FiClock, label: 'অপেক্ষমান' },
-      paid: { color: 'bg-green-100 text-green-800', icon: FiCheckCircle, label: 'পরিশোধিত' },
+      pending: { color: 'bg-yellow-100 text-yellow-800', icon: FiClock, label: 'Awaiting' },
+      paid: { color: 'bg-green-100 text-green-800', icon: FiCheckCircle, label: 'Paid' },
     };
     const badge = badges[status] || badges.pending;
     const Icon = badge.icon;
@@ -208,15 +208,15 @@ export default function Index({
 
   return (
     <DashboardLayout>
-      <Head title="অর্ডার ব্যবস্থাপনা" />
+      <Head title="Order Management" />
 
       <div className="space-y-6">
         {/* Header - Page title and action buttons */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">অর্ডার ব্যবস্থাপনা</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Order Management</h1>
             <p className="text-sm text-gray-600 mt-1">
-              মার্কেটপ্লেসের সকল অর্ডার পরিচালনা ও পর্যবেক্ষণ করুন
+              Manage and monitor all orders in the marketplace
             </p>
           </div>
           <div className="flex gap-2">
@@ -225,14 +225,14 @@ export default function Index({
               className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
             >
               <FiDownload className="w-4 h-4" />
-              <span>এক্সপোর্ট</span>
+              <span>Export</span>
             </button>
             <Link
               href={route('admin.orders.statistics')}
               className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
             >
               <BsGraphUp className="w-4 h-4" />
-              <span>পরিসংখ্যান</span>
+              <span>Statistics</span>
             </Link>
           </div>
         </div>
@@ -242,7 +242,7 @@ export default function Index({
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট অর্ডার</p>
+                <p className="text-sm text-gray-500">Total order</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">{stats.total_orders}</p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-lg">
@@ -254,7 +254,7 @@ export default function Index({
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট আয়</p>
+                <p className="text-sm text-gray-500">Total income is</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{formatCurrency(stats.total_revenue)}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -266,7 +266,7 @@ export default function Index({
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">অপেক্ষমান অর্ডার</p>
+                <p className="text-sm text-gray-500">Pending order</p>
                 <p className="text-2xl font-bold text-yellow-600 mt-1">{stats.pending_orders}</p>
               </div>
               <div className="p-3 bg-yellow-100 rounded-lg">
@@ -278,7 +278,7 @@ export default function Index({
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">প্রক্রিয়াধীন</p>
+                <p className="text-sm text-gray-500">In process</p>
                 <p className="text-2xl font-bold text-blue-600 mt-1">{stats.processing_orders}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
@@ -296,7 +296,7 @@ export default function Index({
                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="অর্ডার নম্বর, ক্রেতার নাম বা ঠিকানা দ্বারা অনুসন্ধান করুন..."
+                  placeholder="Search by order number, buyer name or address..."
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -309,7 +309,7 @@ export default function Index({
                 onChange={(e) => setSelectedOrderStatus(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               >
-                <option value="">সব স্ট্যাটাস</option>
+                <option value="">All statuses are</option>
                 {Object.entries(orderStatuses).map(([value, label]) => (
                   <option key={value} value={value}>{label}</option>
                 ))}
@@ -319,7 +319,7 @@ export default function Index({
                 className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
               >
                 <FiFilter className="w-4 h-4" />
-                <span>ফিল্টার</span>
+                <span>Filter</span>
                 {activeFilterCount > 0 && (
                   <span className="ml-1 px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-xs">
                     {activeFilterCount}
@@ -331,7 +331,7 @@ export default function Index({
                   onClick={handleReset}
                   className="px-4 py-2 text-gray-600 hover:text-gray-900"
                 >
-                  মুছুন
+                  delete
                 </button>
               )}
             </div>
@@ -341,7 +341,7 @@ export default function Index({
           {selectedOrders.length > 0 && (
             <div className="mt-4 flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
               <span className="text-sm font-medium text-indigo-700">
-                {selectedOrders.length} টি অর্ডার নির্বাচিত
+                {selectedOrders.length} orders selected
               </span>
               <div className="relative">
                 <button
@@ -349,7 +349,7 @@ export default function Index({
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
                   <FiMoreVertical className="w-4 h-4" />
-                  একাধিক কার্যক্রম
+                  Multiple activities
                 </button>
                 {bulkActionMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border z-10">
@@ -360,7 +360,7 @@ export default function Index({
                       }}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      স্ট্যাটাস আপডেট
+                      Status Update
                     </button>
                     <button
                       onClick={() => {
@@ -369,7 +369,7 @@ export default function Index({
                       }}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      নির্বাচিত এক্সপোর্ট
+                      Selected export
                     </button>
                   </div>
                 )}
@@ -396,34 +396,34 @@ export default function Index({
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('order_number')}
                   >
-                    অর্ডার # <SortIndicator field="order_number" />
+                    Order # <SortIndicator field="order_number" />
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ক্রেতা
+                    Buyer
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    সাপ্লায়ার
+                    Supplier
                   </th>
                   <th
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('total_amount')}
                   >
-                    পরিমাণ <SortIndicator field="total_amount" />
+                    Amount <SortIndicator field="total_amount" />
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    অর্ডার স্ট্যাটাস
+                    Order Status
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    পেমেন্ট
+                    Payment
                   </th>
                   <th
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('created_at')}
                   >
-                    তারিখ <SortIndicator field="created_at" />
+                    the date <SortIndicator field="created_at" />
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    কার্যক্রম
+                    Activities
                   </th>
                 </tr>
               </thead>
@@ -441,7 +441,7 @@ export default function Index({
                     <td className="px-6 py-4">
                       <Link href={route('admin.orders.show', order.id)} className="hover:text-indigo-600">
                         <div className="font-mono text-sm font-medium text-gray-900">{order.order_number}</div>
-                        <div className="text-xs text-gray-500">{order.items?.length || 0} টি আইটেম</div>
+                        <div className="text-xs text-gray-500">{order.items?.length || 0} t item</div>
                       </Link>
                     </td>
                     <td className="px-6 py-4">
@@ -481,7 +481,7 @@ export default function Index({
                         className="inline-flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-600 text-sm rounded-lg hover:bg-indigo-100 transition"
                       >
                         <FiEye className="w-4 h-4" />
-                        দেখুন
+                        See
                       </Link>
                     </td>
                   </tr>
@@ -495,7 +495,7 @@ export default function Index({
             <div className="px-6 py-4 border-t border-gray-100">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-500">
-                  মোট {orders.total} টির মধ্যে {orders.from} থেকে {orders.to} দেখানো হচ্ছে
+                  total {orders.total} of the {orders.from} from {orders.to} Showing
                 </p>
                 <div className="flex gap-2">
                   {orders.links.map((link, index) => (
@@ -511,8 +511,8 @@ export default function Index({
                         }`}
                       dangerouslySetInnerHTML={{
                         __html: link.label
-                          .replace('Previous', 'পূর্ববর্তী')
-                          .replace('Next', 'পরবর্তী')
+                          .replace('Previous', 'previous')
+                          .replace('Next', 'next')
                       }}
                     />
                   ))}
@@ -527,20 +527,20 @@ export default function Index({
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-900">উন্নত ফিল্টার</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Advanced filter</h3>
               </div>
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      পেমেন্ট স্ট্যাটাস
+                      Payment Status
                     </label>
                     <select
                       value={selectedPaymentStatus}
                       onChange={(e) => setSelectedPaymentStatus(e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
-                      <option value="">সব পেমেন্ট স্ট্যাটাস</option>
+                      <option value="">All payment status is</option>
                       {Object.entries(paymentStatuses).map(([value, label]) => (
                         <option key={value} value={value}>{label}</option>
                       ))}
@@ -548,14 +548,14 @@ export default function Index({
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      সাপ্লায়ার
+                      Supplier
                     </label>
                     <select
                       value={selectedSupplier}
                       onChange={(e) => setSelectedSupplier(e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
-                      <option value="">সব সাপ্লায়ার</option>
+                      <option value="">All suppliers</option>
                       {suppliers.map((supplier) => (
                         <option key={supplier.id} value={supplier.id}>{supplier.name}</option>
                       ))}
@@ -565,14 +565,14 @@ export default function Index({
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    ক্রেতা
+                    Buyer
                   </label>
                   <select
                     value={selectedBuyer}
                     onChange={(e) => setSelectedBuyer(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   >
-                    <option value="">সব ক্রেতা</option>
+                    <option value="">All Buyers</option>
                     {buyers.map((buyer) => (
                       <option key={buyer.id} value={buyer.id}>{buyer.name}</option>
                     ))}
@@ -581,7 +581,7 @@ export default function Index({
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    তারিখ সীমা
+                    Date range
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -589,21 +589,21 @@ export default function Index({
                       value={dateFrom}
                       onChange={(e) => setDateFrom(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="থেকে"
+                      placeholder="from"
                     />
                     <input
                       type="date"
                       value={dateTo}
                       onChange={(e) => setDateTo(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="পর্যন্ত"
+                      placeholder="up to"
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    পরিমাণ সীমা (টাকা)
+                    Amount limit (Rs)
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -611,7 +611,7 @@ export default function Index({
                       value={minAmount}
                       onChange={(e) => setMinAmount(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="সর্বনিম্ন পরিমাণ"
+                      placeholder="The minimum amount is"
                       min="0"
                     />
                     <input
@@ -619,7 +619,7 @@ export default function Index({
                       value={maxAmount}
                       onChange={(e) => setMaxAmount(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="সর্বোচ্চ পরিমাণ"
+                      placeholder="Maximum amount"
                       min="0"
                     />
                   </div>
@@ -630,19 +630,19 @@ export default function Index({
                   onClick={() => setShowFilterModal(false)}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900"
                 >
-                  বাতিল
+                  cancel
                 </button>
                 <button
                   onClick={handleReset}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg"
                 >
-                  রিসেট
+                  Reset
                 </button>
                 <button
                   onClick={handleFilter}
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
-                  ফিল্টার প্রয়োগ
+                  Apply Filter
                 </button>
               </div>
             </div>

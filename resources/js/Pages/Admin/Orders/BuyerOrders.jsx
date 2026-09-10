@@ -38,12 +38,12 @@ export default function BuyerOrders({ buyer, orders }) {
   // Get status badge - Returns appropriate badge based on order status
   const getOrderStatusBadge = (status) => {
     const badges = {
-      pending_confirmation: { color: 'bg-yellow-100 text-yellow-800', label: 'অপেক্ষমান' },
-      confirmed: { color: 'bg-blue-100 text-blue-800', label: 'নিশ্চিত' },
-      processing: { color: 'bg-indigo-100 text-indigo-800', label: 'প্রক্রিয়াধীন' },
-      shipped: { color: 'bg-purple-100 text-purple-800', label: 'পাঠানো হয়েছে' },
-      delivered: { color: 'bg-green-100 text-green-800', label: 'ডেলিভারি হয়েছে' },
-      cancelled: { color: 'bg-red-100 text-red-800', label: 'বাতিল' },
+      pending_confirmation: { color: 'bg-yellow-100 text-yellow-800', label: 'Awaiting' },
+      confirmed: { color: 'bg-blue-100 text-blue-800', label: 'sure' },
+      processing: { color: 'bg-indigo-100 text-indigo-800', label: 'In process' },
+      shipped: { color: 'bg-purple-100 text-purple-800', label: 'has been sent' },
+      delivered: { color: 'bg-green-100 text-green-800', label: 'Delivered' },
+      cancelled: { color: 'bg-red-100 text-red-800', label: 'cancel' },
     };
     const badge = badges[status] || badges.pending_confirmation;
     return (
@@ -55,7 +55,7 @@ export default function BuyerOrders({ buyer, orders }) {
 
   return (
     <DashboardLayout>
-      <Head title={`${buyer.name} - অর্ডার সমূহ`} />
+      <Head title={`${buyer.name} - Orders`} />
       
       <div className="space-y-6">
         {/* Header - Back button and buyer information */}
@@ -73,7 +73,7 @@ export default function BuyerOrders({ buyer, orders }) {
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{buyer.name}</h1>
               <p className="text-sm text-gray-600 mt-1">
-                এই ক্রেতার দ্বারা করা সমস্ত অর্ডার দেখুন
+                View All Orders Placed by This Buyer
               </p>
             </div>
           </div>
@@ -82,14 +82,14 @@ export default function BuyerOrders({ buyer, orders }) {
         {/* Orders List - Table displaying buyer's orders */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900">ক্রেতার অর্ডার সমূহ</h3>
+            <h3 className="font-semibold text-gray-900">Customer Orders</h3>
           </div>
 
           {orders.data.length === 0 ? (
             // Empty state - No orders found
             <div className="p-12 text-center">
               <FiPackage className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">এই ক্রেতার জন্য কোনো অর্ডার পাওয়া যায়নি।</p>
+              <p className="text-gray-500">No orders found for this customer।</p>
             </div>
           ) : (
             // Orders table
@@ -98,25 +98,25 @@ export default function BuyerOrders({ buyer, orders }) {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      অর্ডার #
+                      Order #
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      সাপ্লায়ার
+                      Supplier
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      পরিমাণ
+                      Amount
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      স্ট্যাটাস
+                      Status
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      আইটেম
+                      Item
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      তারিখ
+                      the date
                     </th>
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      কার্যক্রম
+                      Activities
                     </th>
                   </tr>
                 </thead>
@@ -143,7 +143,7 @@ export default function BuyerOrders({ buyer, orders }) {
                         {getOrderStatusBadge(order.order_status)}
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-sm text-gray-600">{order.items?.length || 0} টি আইটেম</span>
+                        <span className="text-sm text-gray-600">{order.items?.length || 0} t item</span>
                       </td>
                       <td className="px-6 py-4">
                         <span className="text-sm text-gray-500">{formatDate(order.created_at)}</span>
@@ -154,7 +154,7 @@ export default function BuyerOrders({ buyer, orders }) {
                           className="inline-flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-600 text-sm rounded-lg hover:bg-indigo-100"
                         >
                           <FiEye className="w-4 h-4" />
-                          দেখুন
+                          See
                         </Link>
                       </td>
                     </tr>
@@ -169,7 +169,7 @@ export default function BuyerOrders({ buyer, orders }) {
             <div className="px-6 py-4 border-t border-gray-100">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-500">
-                  মোট {orders.total} টির মধ্যে {orders.from} থেকে {orders.to} দেখানো হচ্ছে
+                  total {orders.total} of the {orders.from} from {orders.to} Showing
                 </p>
                 <div className="flex gap-2">
                   {orders.links.map((link, index) => (
@@ -185,8 +185,8 @@ export default function BuyerOrders({ buyer, orders }) {
                         }`}
                       dangerouslySetInnerHTML={{ 
                         __html: link.label
-                          .replace('Previous', 'পূর্ববর্তী')
-                          .replace('Next', 'পরবর্তী') 
+                          .replace('Previous', 'previous')
+                          .replace('Next', 'next') 
                       }}
                     />
                   ))}

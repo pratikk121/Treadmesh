@@ -67,7 +67,7 @@ export default function QuoteAccept({ quote }) {
 
     // Validate confirmation checkbox
     if (!formData.confirmation) {
-      setErrors({ confirmation: 'এই কোটা গ্রহণের জন্য আপনাকে নিশ্চিত করতে হবে' });
+      setErrors({ confirmation: 'You must confirm to accept this Quota' });
       return;
     }
 
@@ -85,7 +85,7 @@ export default function QuoteAccept({ quote }) {
 
   return (
     <DashboardLayout>
-      <Head title="কোটা গ্রহণ" />
+      <Head title="Taking Quota" />
 
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Header - Back button and page title */}
@@ -97,36 +97,36 @@ export default function QuoteAccept({ quote }) {
             <FiArrowLeft className="text-xl" />
           </Link>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">কোটা গ্রহণ</h2>
-            <p className="text-gray-600 mt-1">এই কোটা গ্রহণের বিষয়টি নিশ্চিত করুন</p>
+            <h2 className="text-2xl font-bold text-gray-800">Taking Quota</h2>
+            <p className="text-gray-600 mt-1">Confirm acceptance of this quota</p>
           </div>
         </div>
 
         {/* Quote Summary Section */}
         <div className="bg-white rounded-xl border p-6">
           <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-            <FiCheckCircle className="mr-2 text-green-600" /> কোটা সারসংক্ষেপ
+            <FiCheckCircle className="mr-2 text-green-600" /> Quota summary
           </h3>
 
           {/* Quote Details Grid */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <p className="text-sm text-gray-500">কোটা নম্বর</p>
+              <p className="text-sm text-gray-500">Quota Number</p>
               <p className="font-medium">{quote.quote_number}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">RFQ নম্বর</p>
+              <p className="text-sm text-gray-500">RFQ Number</p>
               <p className="font-medium">{quote.rfq?.rfq_number}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">সাপ্লায়ার</p>
+              <p className="text-sm text-gray-500">Supplier</p>
               <p className="font-medium flex items-center">
                 <FiUser className="mr-2 text-gray-400" />
                 {quote.supplier?.name}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">মেয়াদ শেষ</p>
+              <p className="text-sm text-gray-500">Expires</p>
               <p className="font-medium flex items-center">
                 <FiCalendar className="mr-2 text-gray-400" />
                 {formatDate(quote.valid_until)}
@@ -136,13 +136,13 @@ export default function QuoteAccept({ quote }) {
 
           {/* RFQ Title */}
           <div className="p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-500">RFQ শিরোনাম</p>
+            <p className="text-sm text-gray-500">RFQ Title</p>
             <p className="font-medium">{quote.rfq?.title}</p>
           </div>
 
           {/* Products List */}
           <div className="mt-4">
-            <p className="text-sm font-medium text-gray-700 mb-2">পণ্য তালিকা:</p>
+            <p className="text-sm font-medium text-gray-700 mb-2">Product list:</p>
             <div className="space-y-2">
               {quote.rfq?.products_requested?.map((product, index) => (
                 <div key={index} className="flex items-center text-sm bg-gray-50 p-2 rounded">
@@ -156,7 +156,7 @@ export default function QuoteAccept({ quote }) {
 
           {/* Total Amount */}
           <div className="mt-6 pt-4 border-t flex justify-between items-center">
-            <span className="font-medium text-gray-700">মোট পরিমাণ</span>
+            <span className="font-medium text-gray-700">total amount</span>
             <span className="text-2xl font-bold text-indigo-600">
               {formatCurrency(quote.total_amount)}
             </span>
@@ -165,12 +165,12 @@ export default function QuoteAccept({ quote }) {
 
         {/* Accept Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-xl border p-6">
-          <h3 className="font-medium text-gray-700 mb-4">গ্রহণ নিশ্চিতকরণ</h3>
+          <h3 className="font-medium text-gray-700 mb-4">Acceptance Confirmation</h3>
 
           {/* Additional Notes */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              অতিরিক্ত নোট (ঐচ্ছিক)
+              Additional Notes (Optional)
             </label>
             <textarea
               name="notes"
@@ -178,7 +178,7 @@ export default function QuoteAccept({ quote }) {
               onChange={handleChange}
               rows="3"
               className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="এই কোটা গ্রহণ সম্পর্কে কোনো নোট..."
+              placeholder="Any note about taking this quota..."
             />
           </div>
 
@@ -193,8 +193,8 @@ export default function QuoteAccept({ quote }) {
                 className="mt-1 mr-3"
               />
               <span className="text-sm text-gray-600">
-                আমি নিশ্চিত করছি যে আমি এই কোটা গ্রহণ করতে চাই। গ্রহণ করার মাধ্যমে, এই কোটা গৃহীত হিসেবে চিহ্নিত হবে,
-                এই RFQ-র জন্য অন্যান্য সকল কোটা প্রত্যাখ্যান করা হবে, এবং RFQ বন্ধ করা হবে।
+                I confirm that I want to accept this quota. By accepting, this quota will be marked as accepted,
+                All other quotas for this RFQ will be rejected, and the RFQ will be closed Will be।
               </span>
             </label>
             {errors.confirmation && (
@@ -210,7 +210,7 @@ export default function QuoteAccept({ quote }) {
               href={route('buyer.quotes.show', quote.id)}
               className="px-6 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              বাতিল
+              cancel
             </Link>
             <button
               type="submit"
@@ -223,12 +223,12 @@ export default function QuoteAccept({ quote }) {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  প্রক্রিয়াকরণ...
+                  processing...
                 </>
               ) : (
                 <>
                   <FiCheck className="mr-2" />
-                  গ্রহণ নিশ্চিত করুন
+                  Confirm acceptance
                 </>
               )}
             </button>

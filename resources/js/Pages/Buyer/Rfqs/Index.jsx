@@ -77,39 +77,39 @@ export default function RfqIndex({ rfqs, counts }) {
 
   return (
     <DashboardLayout>
-      <Head title="আমার RFQ সমূহ" />
+      <Head title="My RFQs are" />
 
       <div className="space-y-6">
         {/* Header - Page title and create button */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">আমার RFQ</h2>
-            <p className="text-gray-600 mt-1">আপনার কোটা অনুরোধগুলি পরিচালনা করুন</p>
+            <h2 className="text-2xl font-bold text-gray-800">My RFQ</h2>
+            <p className="text-gray-600 mt-1">Manage Your Quota Requests</p>
           </div>
           <Link
             href={route('buyer.rfqs.create')}
             className="mt-3 md:mt-0 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all flex items-center"
           >
-            <FiPlus className="mr-2" /> নতুন RFQ তৈরি
+            <FiPlus className="mr-2" /> Create new RFQ
           </Link>
         </div>
 
         {/* Stats Cards - Key metrics overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">মোট RFQ</p>
+            <p className="text-sm text-gray-500">total RFQ</p>
             <p className="text-2xl font-bold">{rfqs.total}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">খোলা RFQ</p>
+            <p className="text-sm text-gray-500">open RFQ</p>
             <p className="text-2xl font-bold text-green-600">{counts.open}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">কোটা প্রাপ্ত</p>
+            <p className="text-sm text-gray-500">Quota received</p>
             <p className="text-2xl font-bold text-blue-600">{counts.quoted}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">বন্ধ RFQ</p>
+            <p className="text-sm text-gray-500">off RFQ</p>
             <p className="text-2xl font-bold text-gray-600">{counts.closed}</p>
           </div>
         </div>
@@ -119,7 +119,7 @@ export default function RfqIndex({ rfqs, counts }) {
           <div className="flex flex-col md:flex-row md:items-center space-y-3 md:space-y-0 md:space-x-4">
             <div className="flex items-center">
               <FiFilter className="text-gray-400 mr-2" />
-              <span className="text-sm font-medium text-gray-700">ফিল্টার:</span>
+              <span className="text-sm font-medium text-gray-700">Filter:</span>
             </div>
 
             {/* Status Filter */}
@@ -128,10 +128,10 @@ export default function RfqIndex({ rfqs, counts }) {
               onChange={(e) => handleFilterChange('status', e.target.value)}
               className="border rounded-lg px-3 py-2 text-sm"
             >
-              <option value="">সব স্ট্যাটাস</option>
-              <option value="open">খোলা</option>
-              <option value="closed">বন্ধ</option>
-              <option value="cancelled">বাতিল</option>
+              <option value="">All statuses are</option>
+              <option value="open">open</option>
+              <option value="closed">off</option>
+              <option value="cancelled">cancel</option>
             </select>
 
             {/* Sort Filter */}
@@ -140,9 +140,9 @@ export default function RfqIndex({ rfqs, counts }) {
               onChange={(e) => handleFilterChange('sort', e.target.value)}
               className="border rounded-lg px-3 py-2 text-sm"
             >
-              <option value="latest">সর্বশেষ প্রথম</option>
-              <option value="oldest">পুরানো প্রথম</option>
-              <option value="required_date">প্রয়োজনীয় তারিখ</option>
+              <option value="latest">Last is first</option>
+              <option value="oldest">Old first</option>
+              <option value="required_date">Required date</option>
             </select>
           </div>
         </div>
@@ -152,13 +152,13 @@ export default function RfqIndex({ rfqs, counts }) {
           // Empty State - No RFQs found
           <div className="bg-white rounded-xl p-12 text-center border">
             <FiFileText className="mx-auto text-5xl text-gray-400 mb-4" />
-            <h3 className="text-xl font-medium text-gray-700 mb-2">কোনো RFQ নেই</h3>
-            <p className="text-gray-500 mb-6">সাপ্লায়ারদের কাছ থেকে কোটা পেতে আপনার প্রথম RFQ তৈরি করুন</p>
+            <h3 className="text-xl font-medium text-gray-700 mb-2">No RFQ</h3>
+            <p className="text-gray-500 mb-6">Create your first RFQ to get quotes from suppliers</p>
             <Link
               href={route('buyer.rfqs.create')}
               className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 inline-flex items-center"
             >
-              <FiPlus className="mr-2" /> আপনার প্রথম RFQ তৈরি করুন
+              <FiPlus className="mr-2" /> Create your first RFQ
             </Link>
           </div>
         ) : (
@@ -175,10 +175,10 @@ export default function RfqIndex({ rfqs, counts }) {
                         <div className="flex items-center flex-wrap gap-2">
                           <h3 className="font-semibold text-lg text-gray-800">{rfq.title}</h3>
                           <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(rfq.status)}`}>
-                            {rfq.status === 'open' ? 'খোলা' :
-                              rfq.status === 'closed' ? 'বন্ধ' :
-                                rfq.status === 'cancelled' ? 'বাতিল' :
-                                  rfq.status === 'pending' ? 'অপেক্ষমান' : rfq.status}
+                            {rfq.status === 'open' ? 'open' :
+                              rfq.status === 'closed' ? 'off' :
+                                rfq.status === 'cancelled' ? 'cancel' :
+                                  rfq.status === 'pending' ? 'Awaiting' : rfq.status}
                           </span>
                         </div>
                         <p className="text-sm text-gray-500 mt-1">RFQ #{rfq.rfq_number}</p>
@@ -187,7 +187,7 @@ export default function RfqIndex({ rfqs, counts }) {
 
                     {/* Products Requested List */}
                     <div className="mt-3">
-                      <p className="text-sm font-medium text-gray-700 mb-2">পণ্যের তালিকা:</p>
+                      <p className="text-sm font-medium text-gray-700 mb-2">compared to last month Product List:</p>
                       <div className="space-y-2">
                         {rfq.products_requested?.map((product, index) => (
                           <div key={index} className="flex items-center text-sm bg-gray-50 p-2 rounded">
@@ -208,14 +208,14 @@ export default function RfqIndex({ rfqs, counts }) {
                     <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-gray-500">
                       <div className="flex items-center">
                         <FiClock className="mr-1" />
-                        প্রয়োজনীয় তারিখ: {formatDate(rfq.required_by_date)}
+                        Required date: {formatDate(rfq.required_by_date)}
                       </div>
                       <div className="flex items-center">
                         <FiFileText className="mr-1" />
-                        {rfq.quotes?.length || 0} টি কোটা প্রাপ্ত
+                        {rfq.quotes?.length || 0} Received t quota
                       </div>
                       <div className="flex items-center">
-                        তৈরির তারিখ: {formatDate(rfq.created_at)}
+                        Creation Date: {formatDate(rfq.created_at)}
                       </div>
                     </div>
 
@@ -223,12 +223,12 @@ export default function RfqIndex({ rfqs, counts }) {
                     {rfq.quotes?.length > 0 && (
                       <div className="mt-4 p-3 bg-green-50 rounded-lg">
                         <p className="text-sm font-medium text-green-800 mb-2 flex items-center">
-                          <FiDollarSign className="mr-1" /> সর্বশেষ কোটা:
+                          <FiDollarSign className="mr-1" /> Latest Quota:
                         </p>
                         {rfq.quotes.slice(0, 1).map((quote) => (
                           <div key={quote.id} className="flex items-center justify-between text-sm">
-                            <span>সাপ্লায়ার: {quote.supplier?.name}</span>
-                            <span className="font-medium">৳ {quote.total_amount?.toLocaleString()}</span>
+                            <span>Supplier: {quote.supplier?.name}</span>
+                            <span className="font-medium">$ {quote.total_amount?.toLocaleString()}</span>
                           </div>
                         ))}
                       </div>
@@ -242,7 +242,7 @@ export default function RfqIndex({ rfqs, counts }) {
                       className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors inline-flex items-center justify-center"
                     >
                       <FiEye className="md:mr-2" />
-                      <span className="hidden md:inline">বিস্তারিত দেখুন</span>
+                      <span className="hidden md:inline">for suppliers See details</span>
                     </Link>
 
                     {rfq.status === 'open' && (
@@ -252,18 +252,18 @@ export default function RfqIndex({ rfqs, counts }) {
                           className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200 transition-colors inline-flex items-center justify-center"
                         >
                           <FiEdit2 className="md:mr-2" />
-                          <span className="hidden md:inline">সম্পাদনা</span>
+                          <span className="hidden md:inline">editing</span>
                         </Link>
                         <button
                           onClick={() => {
-                            if (confirm('আপনি কি এই RFQ বাতিল করতে চান?')) {
+                            if (confirm('Do you want to cancel this RFQ?')) {
                               router.delete(route('buyer.rfqs.cancel', rfq.id));
                             }
                           }}
                           className="px-4 py-2 bg-red-100 text-red-600 text-sm rounded-lg hover:bg-red-200 transition-colors inline-flex items-center justify-center"
                         >
                           <FiTrash2 className="md:mr-2" />
-                          <span className="hidden md:inline">বাতিল</span>
+                          <span className="hidden md:inline">cancel</span>
                         </button>
                       </>
                     )}
@@ -282,8 +282,8 @@ export default function RfqIndex({ rfqs, counts }) {
                       onClick={() => router.get(link.url)}
                       dangerouslySetInnerHTML={{
                         __html: link.label
-                          .replace('Previous', 'পূর্ববর্তী')
-                          .replace('Next', 'পরবর্তী')
+                          .replace('Previous', 'previous')
+                          .replace('Next', 'next')
                       }}
                       className={`px-4 py-2 rounded-lg ${link.active
                         ? 'bg-indigo-600 text-white'

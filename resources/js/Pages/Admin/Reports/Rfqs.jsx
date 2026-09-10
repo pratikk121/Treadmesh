@@ -69,22 +69,22 @@ export default function Rfqs({ rfqData, period, dateRange }) {
 
   // Period options for dropdown
   const periodOptions = [
-    { value: 'monthly', label: 'মাসিক' },
-    { value: 'quarterly', label: 'ত্রৈমাসিক' },
-    { value: 'yearly', label: 'বার্ষিক' },
+    { value: 'monthly', label: 'Monthly' },
+    { value: 'quarterly', label: 'Quarterly' },
+    { value: 'yearly', label: 'Annually' },
   ];
 
   return (
     <DashboardLayout>
-      <Head title="RFQ রিপোর্ট" />
+      <Head title="RFQ Report" />
 
       <div className="space-y-6">
         {/* Header - Page title, period selector and export button */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">RFQ রিপোর্ট</h1>
+            <h1 className="text-2xl font-bold text-gray-900">RFQ Report</h1>
             <p className="text-sm text-gray-600 mt-1">
-              কোটা অনুরোধের কার্যকলাপ বিশ্লেষণ করুন
+              Analyze quota request activity
             </p>
           </div>
           <div className="flex gap-2">
@@ -102,7 +102,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
               className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
             >
               <FiDownload className="w-4 h-4" />
-              <span>এক্সপোর্ট</span>
+              <span>Export</span>
             </button>
           </div>
         </div>
@@ -111,7 +111,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
         <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 flex items-center gap-2 text-indigo-700">
           <FiCalendar className="w-4 h-4" />
           <span className="text-sm font-medium">
-            রিপোর্ট সময়কাল: {new Date(dateRange.start).toLocaleDateString('bn-BD')} - {new Date(dateRange.end).toLocaleDateString('bn-BD')}
+            Report period: {new Date(dateRange.start).toLocaleDateString('bn-BD')} - {new Date(dateRange.end).toLocaleDateString('bn-BD')}
           </span>
         </div>
 
@@ -120,7 +120,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট RFQ</p>
+                <p className="text-sm text-gray-500">total RFQ</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">{formatNumber(overview.total)}</p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-lg">
@@ -132,7 +132,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">খোলা RFQ</p>
+                <p className="text-sm text-gray-500">open RFQ</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{formatNumber(overview.open)}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -144,7 +144,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">কোটা প্রাপ্ত</p>
+                <p className="text-sm text-gray-500">Quota received</p>
                 <p className="text-2xl font-bold text-blue-600 mt-1">{formatNumber(overview.quoted)}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
@@ -156,7 +156,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">বন্ধ</p>
+                <p className="text-sm text-gray-500">off</p>
                 <p className="text-2xl font-bold text-red-600 mt-1">{formatNumber(overview.closed)}</p>
               </div>
               <div className="p-3 bg-red-100 rounded-lg">
@@ -172,7 +172,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiBarChart2 className="w-5 h-5 text-indigo-600" />
-              স্ট্যাটাস অনুযায়ী RFQ
+              According to the status RFQ
             </h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -183,9 +183,9 @@ export default function Rfqs({ rfqData, period, dateRange }) {
                     cy="50%"
                     labelLine={true}
                     label={({ status, percent }) =>
-                      `${status === 'open' ? 'খোলা' :
-                        status === 'quoted' ? 'কোটা প্রাপ্ত' :
-                          status === 'closed' ? 'বন্ধ' : status}: ${(percent * 100).toFixed(1)}%`
+                      `${status === 'open' ? 'open' :
+                        status === 'quoted' ? 'Quota received' :
+                          status === 'closed' ? 'off' : status}: ${(percent * 100).toFixed(1)}%`
                     }
                     outerRadius={80}
                     fill="#8884d8"
@@ -209,7 +209,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiTrendingUp className="w-5 h-5 text-indigo-600" />
-              রূপান্তর হার
+              The conversion rate is
             </h3>
             <div className="text-center">
               <div className="relative inline-flex">
@@ -242,11 +242,11 @@ export default function Rfqs({ rfqData, period, dateRange }) {
               </div>
               <div className="mt-4 grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-500">মোট RFQ</p>
+                  <p className="text-sm text-gray-500">total RFQ</p>
                   <p className="text-xl font-bold text-gray-900">{formatNumber(conversion_rate.total)}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">রূপান্তরিত</p>
+                  <p className="text-sm text-gray-500">converted to</p>
                   <p className="text-xl font-bold text-green-600">{formatNumber(conversion_rate.converted)}</p>
                 </div>
               </div>
@@ -257,15 +257,15 @@ export default function Rfqs({ rfqData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 lg:col-span-2">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiClock className="w-5 h-5 text-indigo-600" />
-              গড় প্রতিক্রিয়া সময়
+              Average response time is
             </h3>
             <div className="flex items-center justify-center">
               <div className="text-center">
                 <div className="text-5xl font-bold text-indigo-600">
                   {response_time ? Math.round(response_time) : 0}
                 </div>
-                <p className="text-lg text-gray-500 mt-2">ঘন্টা</p>
-                <p className="text-sm text-gray-400 mt-1">RFQ তৈরি থেকে প্রথম কোটা পর্যন্ত গড় সময়</p>
+                <p className="text-lg text-gray-500 mt-2">hours</p>
+                <p className="text-sm text-gray-400 mt-1">RFQ Average time from creation to first quota is</p>
               </div>
             </div>
           </div>
@@ -274,15 +274,15 @@ export default function Rfqs({ rfqData, period, dateRange }) {
         {/* Status Breakdown Table - Detailed analysis */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900">স্ট্যাটাস বিশ্লেষণ</h3>
+            <h3 className="font-semibold text-gray-900">Status analysis</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">সংখ্যা</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">শতাংশ</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Number</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Percentage</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -292,9 +292,9 @@ export default function Rfqs({ rfqData, period, dateRange }) {
                     <tr key={item.status} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
                         <span className="capitalize font-medium text-gray-900">
-                          {item.status === 'open' ? 'খোলা' :
-                            item.status === 'quoted' ? 'কোটা প্রাপ্ত' :
-                              item.status === 'closed' ? 'বন্ধ' : item.status}
+                          {item.status === 'open' ? 'open' :
+                            item.status === 'quoted' ? 'Quota received' :
+                              item.status === 'closed' ? 'off' : item.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right text-gray-900">{formatNumber(item.total)}</td>

@@ -76,7 +76,7 @@ export default function Statistics({ stats }) {
 
   return (
     <DashboardLayout>
-      <Head title="অর্ডার পরিসংখ্যান" />
+      <Head title="Order statistics" />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -88,9 +88,9 @@ export default function Statistics({ stats }) {
             <FiArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">অর্ডার পরিসংখ্যান</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Order statistics</h1>
             <p className="text-sm text-gray-600 mt-1">
-              মার্কেটপ্লেসের সকল অর্ডারের বিস্তারিত পরিসংখ্যান
+              Detailed statistics of all orders in the marketplace
             </p>
           </div>
         </div>
@@ -100,7 +100,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-indigo-100 text-sm">মোট অর্ডার</p>
+                <p className="text-indigo-100 text-sm">Total order</p>
                 <p className="text-3xl font-bold mt-1">{totalOrders}</p>
               </div>
               <FiShoppingCart className="w-8 h-8 text-indigo-200" />
@@ -110,7 +110,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm">মোট আয়</p>
+                <p className="text-green-100 text-sm">Total income is</p>
                 <p className="text-2xl font-bold mt-1">{formatCurrency(totalRevenue)}</p>
               </div>
               <FiDollarSign className="w-8 h-8 text-green-200" />
@@ -120,7 +120,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm">গড় অর্ডার মূল্য</p>
+                <p className="text-purple-100 text-sm">Average order value</p>
                 <p className="text-2xl font-bold mt-1">
                   {formatCurrency(totalOrders ? totalRevenue / totalOrders : 0)}
                 </p>
@@ -132,7 +132,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-yellow-100 text-sm">বিক্রিত পণ্য</p>
+                <p className="text-yellow-100 text-sm">Product sold</p>
                 <p className="text-3xl font-bold mt-1">
                   {top_products.reduce((acc, curr) => acc + curr.total_quantity, 0)}
                 </p>
@@ -148,7 +148,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 lg:col-span-2">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiCalendar className="w-5 h-5 text-indigo-600" />
-              দৈনিক অর্ডার ও আয় (গত ৩০ দিন)
+              Daily Orders & Revenue (Last 30 Days)
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -165,8 +165,8 @@ export default function Statistics({ stats }) {
                     labelFormatter={(label) => new Date(label).toLocaleDateString('bn-BD')}
                   />
                   <Legend />
-                  <Bar yAxisId="left" dataKey="total_orders" fill="#4F46E5" name="অর্ডার" />
-                  <Bar yAxisId="right" dataKey="revenue" fill="#10B981" name="আয়" />
+                  <Bar yAxisId="left" dataKey="total_orders" fill="#4F46E5" name="Order" />
+                  <Bar yAxisId="right" dataKey="revenue" fill="#10B981" name="Income" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -176,7 +176,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiPieChart className="w-5 h-5 text-indigo-600" />
-              স্ট্যাটাস অনুযায়ী অর্ডার
+              Order by status
             </h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -204,12 +204,12 @@ export default function Statistics({ stats }) {
               {by_status.map((item) => (
                 <div key={item.order_status} className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">
-                    {item.order_status === 'pending_confirmation' ? 'অপেক্ষমান' :
-                      item.order_status === 'confirmed' ? 'নিশ্চিত' :
-                        item.order_status === 'processing' ? 'প্রক্রিয়াধীন' :
-                          item.order_status === 'shipped' ? 'পাঠানো হয়েছে' :
-                            item.order_status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                              item.order_status === 'cancelled' ? 'বাতিল' : item.order_status.replace('_', ' ')}
+                    {item.order_status === 'pending_confirmation' ? 'Awaiting' :
+                      item.order_status === 'confirmed' ? 'sure' :
+                        item.order_status === 'processing' ? 'In process' :
+                          item.order_status === 'shipped' ? 'has been sent' :
+                            item.order_status === 'delivered' ? 'Delivered' :
+                              item.order_status === 'cancelled' ? 'cancel' : item.order_status.replace('_', ' ')}
                   </span>
                   <span className="text-sm font-medium text-gray-900">{item.total}</span>
                 </div>
@@ -221,7 +221,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MdOutlinePayment className="w-5 h-5 text-indigo-600" />
-              পেমেন্ট স্ট্যাটাস অনুযায়ী অর্ডার
+              Orders by Payment Status
             </h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -231,7 +231,7 @@ export default function Statistics({ stats }) {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) => `${name === 'pending' ? 'অপেক্ষমান' : 'পরিশোধিত'}: ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }) => `${name === 'pending' ? 'Awaiting' : 'Paid'}: ${(percent * 100).toFixed(0)}%`}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="total"
@@ -249,7 +249,7 @@ export default function Statistics({ stats }) {
               {by_payment.map((item) => (
                 <div key={item.payment_status} className="flex justify-between items-center">
                   <span className="text-sm text-gray-600 capitalize">
-                    {item.payment_status === 'pending' ? 'অপেক্ষমান' : 'পরিশোধিত'}
+                    {item.payment_status === 'pending' ? 'Awaiting' : 'Paid'}
                   </span>
                   <span className="text-sm font-medium text-gray-900">{item.total}</span>
                 </div>
@@ -261,7 +261,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <BsBoxSeam className="w-5 h-5 text-indigo-600" />
-              শীর্ষ ১০ পণ্য
+              Top 10 Products
             </h3>
             <div className="space-y-3">
               {top_products.map((product, index) => (
@@ -275,7 +275,7 @@ export default function Statistics({ stats }) {
                     </span>
                   </div>
                   <div className="text-right">
-                    <span className="text-sm text-gray-600">{product.total_quantity} বিক্রিত</span>
+                    <span className="text-sm text-gray-600">{product.total_quantity} Sold</span>
                     <span className="text-xs text-gray-400 block">{formatCurrency(product.total_revenue)}</span>
                   </div>
                 </div>
@@ -287,7 +287,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiUsers className="w-5 h-5 text-indigo-600" />
-              শীর্ষ ১০ ক্রেতা
+              Top 10 buyers
             </h3>
             <div className="space-y-3">
               {top_buyers.map((buyer, index) => (
@@ -300,7 +300,7 @@ export default function Statistics({ stats }) {
                       <span className="text-sm font-medium text-gray-900 block">
                         {buyer.buyer?.name}
                       </span>
-                      <span className="text-xs text-gray-500">{buyer.order_count} টি অর্ডার</span>
+                      <span className="text-xs text-gray-500">{buyer.order_count} t order</span>
                     </div>
                   </div>
                   <span className="text-sm font-medium text-indigo-600">
@@ -315,23 +315,23 @@ export default function Statistics({ stats }) {
         {/* Status Breakdown Table - Detailed status analysis */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900">অর্ডার স্ট্যাটাস বিশ্লেষণ</h3>
+            <h3 className="font-semibold text-gray-900">Order Status Analysis</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    স্ট্যাটাস
+                    Status
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    সংখ্যা
+                    Number
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    শতাংশ
+                    Percentage
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ভিজুয়াল
+                    Visual
                   </th>
                 </tr>
               </thead>
@@ -342,12 +342,12 @@ export default function Statistics({ stats }) {
                     <tr key={item.order_status} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
                         <span className="capitalize text-gray-900">
-                          {item.order_status === 'pending_confirmation' ? 'অপেক্ষমান' :
-                            item.order_status === 'confirmed' ? 'নিশ্চিত' :
-                              item.order_status === 'processing' ? 'প্রক্রিয়াধীন' :
-                                item.order_status === 'shipped' ? 'পাঠানো হয়েছে' :
-                                  item.order_status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                                    item.order_status === 'cancelled' ? 'বাতিল' : item.order_status.replace('_', ' ')}
+                          {item.order_status === 'pending_confirmation' ? 'Awaiting' :
+                            item.order_status === 'confirmed' ? 'sure' :
+                              item.order_status === 'processing' ? 'In process' :
+                                item.order_status === 'shipped' ? 'has been sent' :
+                                  item.order_status === 'delivered' ? 'Delivered' :
+                                    item.order_status === 'cancelled' ? 'cancel' : item.order_status.replace('_', ' ')}
                         </span>
                       </td>
                       <td className="px-6 py-4">

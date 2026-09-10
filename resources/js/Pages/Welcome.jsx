@@ -115,11 +115,11 @@ export default function Welcome({
                             </Link>
 
                             <div className="hidden md:flex space-x-6">
-                                <Link href="#products" className="text-gray-700 hover:text-indigo-600">পণ্যসমূহ</Link>
-                                <Link href="#categories" className="text-gray-700 hover:text-indigo-600">ক্যাটাগরি</Link>
-                                <Link href="#how-it-works" className="text-gray-700 hover:text-indigo-600">কিভাবে কাজ করে</Link>
-                                <Link href="#about" className="text-gray-700 hover:text-indigo-600">আমাদের সম্পর্কে</Link>
-                                <Link href="#contact" className="text-gray-700 hover:text-indigo-600">যোগাযোগ</Link>
+                                <Link href="#products" className="text-gray-700 hover:text-indigo-600">Products</Link>
+                                <Link href="#categories" className="text-gray-700 hover:text-indigo-600">Category</Link>
+                                <Link href="#how-it-works" className="text-gray-700 hover:text-indigo-600">How it works</Link>
+                                <Link href="#about" className="text-gray-700 hover:text-indigo-600">about us</Link>
+                                <Link href="#contact" className="text-gray-700 hover:text-indigo-600">Contact</Link>
                             </div>
                         </div>
 
@@ -130,7 +130,7 @@ export default function Welcome({
                                     href={route('dashboard')}
                                     className="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                                 >
-                                    ড্যাশবোর্ড
+                                    Dashboard
                                 </Link>
                             ) : (
                                 <>
@@ -139,7 +139,7 @@ export default function Welcome({
                                             href={route('login')}
                                             className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium"
                                         >
-                                            লগ ইন
+                                            Log In
                                         </Link>
                                     )}
                                     {canRegister && (
@@ -147,7 +147,7 @@ export default function Welcome({
                                             href={route('register')}
                                             className="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                                         >
-                                            নিবন্ধন
+                                            Register
                                         </Link>
                                     )}
                                 </>
@@ -171,17 +171,17 @@ export default function Welcome({
                         <div className="text-center lg:text-left">
                             <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
                                 <BsLightning className="mr-2" />
-                                <span className="text-sm font-medium">১০,০০০+ ব্যবসায়ীর আস্থা</span>
+                                <span className="text-sm font-medium">Trusted by 10,000+ merchants</span>
                             </div>
 
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                                সরাসরি{' '}
-                                <span className="text-yellow-300">ভেরিফাইড সাপ্লায়ার</span> থেকে পণ্য সংগ্রহ করুন
+                                Source Wholesale Products Directly From{' '}
+                                <span className="text-yellow-300">Verified Suppliers</span>
                             </h1>
 
                             <p className="text-xl text-indigo-100 mb-8 max-w-2xl mx-auto lg:mx-0">
-                                বাংলাদেশের শীর্ষস্থানীয় B2B মার্কেটপ্লেস যা ক্রেতা এবং মানসম্পন্ন সরবরাহকারীদের সংযুক্ত করে।
-                                প্রতিযোগিতামূলক মূল্য, পাইকারি দর এবং নিরাপদ লেনদেন পান।
+                                Treadmesh is the premier enterprise B2B marketplace connecting buyers with quality suppliers.
+                                Get competitive quotes, wholesale volume discounts, and secure transactions.
                             </p>
 
                             {/* Call to action buttons */}
@@ -190,14 +190,14 @@ export default function Welcome({
                                     href={route('register')}
                                     className="bg-white text-indigo-600 px-8 py-4 rounded-lg font-semibold hover:bg-indigo-50 transition-colors inline-flex items-center justify-center group"
                                 >
-                                    শুরু করুন
+                                    Start
                                     <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                                 <Link
                                     href="#how-it-works"
                                     className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-indigo-600 transition-colors inline-flex items-center justify-center"
                                 >
-                                    ডেমো দেখুন
+                                    Check out the demo
                                 </Link>
                             </div>
 
@@ -205,15 +205,15 @@ export default function Welcome({
                             <div className="mt-8 flex flex-wrap items-center gap-6 justify-center lg:justify-start">
                                 <div className="flex items-center">
                                     <FiShield className="mr-2" />
-                                    <span className="text-sm">ভেরিফাইড সাপ্লায়ার</span>
+                                    <span className="text-sm">Verified Supplier</span>
                                 </div>
                                 <div className="flex items-center">
                                     <FiCheckCircle className="mr-2" />
-                                    <span className="text-sm">নিরাপদ পেমেন্ট</span>
+                                    <span className="text-sm">Secure payment</span>
                                 </div>
                                 <div className="flex items-center">
                                     <FiClock className="mr-2" />
-                                    <span className="text-sm">২৪/৭ সাপোর্ট</span>
+                                    <span className="text-sm">24/7 Support</span>
                                 </div>
                             </div>
                         </div>
@@ -225,22 +225,22 @@ export default function Welcome({
                                     <div className="bg-white/20 rounded-xl p-4">
                                         <FiPackage className="text-3xl mb-2" />
                                         <div className="text-2xl font-bold">{stats.products}+</div>
-                                        <div className="text-sm opacity-80">পণ্য</div>
+                                        <div className="text-sm opacity-80">Product</div>
                                     </div>
                                     <div className="bg-white/20 rounded-xl p-4">
                                         <FiUsers className="text-3xl mb-2" />
                                         <div className="text-2xl font-bold">{stats.suppliers}+</div>
-                                        <div className="text-sm opacity-80">সাপ্লায়ার</div>
+                                        <div className="text-sm opacity-80">Supplier</div>
                                     </div>
                                     <div className="bg-white/20 rounded-xl p-4">
                                         <FiShoppingBag className="text-3xl mb-2" />
                                         <div className="text-2xl font-bold">{stats.successfulDeals}+</div>
-                                        <div className="text-sm opacity-80">সফল চুক্তি</div>
+                                        <div className="text-sm opacity-80">Successful deal</div>
                                     </div>
                                     <div className="bg-white/20 rounded-xl p-4">
                                         <FiTrendingUp className="text-3xl mb-2" />
-                                        <div className="text-2xl font-bold">৫০০M+ টাকা</div>
-                                        <div className="text-sm opacity-80">লেনদেন</div>
+                                        <div className="text-2xl font-bold">500M+ Rs</div>
+                                        <div className="text-sm opacity-80">Transaction</div>
                                     </div>
                                 </div>
                             </div>
@@ -255,19 +255,19 @@ export default function Welcome({
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                         <div className="text-center">
                             <div className="text-4xl font-bold text-indigo-600 mb-2">{stats.suppliers}+</div>
-                            <div className="text-gray-600">ভেরিফাইড সাপ্লায়ার</div>
+                            <div className="text-gray-600">Verified Supplier</div>
                         </div>
                         <div className="text-center">
                             <div className="text-4xl font-bold text-indigo-600 mb-2">{stats.products}+</div>
-                            <div className="text-gray-600">সক্রিয় পণ্য</div>
+                            <div className="text-gray-600">Active product</div>
                         </div>
                         <div className="text-center">
                             <div className="text-4xl font-bold text-indigo-600 mb-2">{stats.successfulDeals}+</div>
-                            <div className="text-gray-600">সফল চুক্তি</div>
+                            <div className="text-gray-600">Successful deal</div>
                         </div>
                         <div className="text-center">
                             <div className="text-4xl font-bold text-indigo-600 mb-2">{stats.buyers}+</div>
-                            <div className="text-gray-600">সন্তুষ্ট ক্রেতা</div>
+                            <div className="text-gray-600">Satisfied buyer</div>
                         </div>
                     </div>
                 </div>
@@ -277,43 +277,43 @@ export default function Welcome({
             <section id="how-it-works" className="py-20 bg-gray-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">কিভাবে কাজ করে</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">How it works</h2>
                         <p className="text-gray-600 max-w-2xl mx-auto">
-                            ভেরিফাইড সাপ্লায়ার থেকে পণ্য সংগ্রহ শুরু করার সহজ ধাপ
+                            Easy steps to start procuring products from verified suppliers
                         </p>
                     </div>
 
                     <div className="grid md:grid-cols-4 gap-8">
                         <div className="text-center">
                             <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span className="text-2xl font-bold text-indigo-600">১</span>
+                                <span className="text-2xl font-bold text-indigo-600">1</span>
                             </div>
-                            <h3 className="font-semibold text-lg mb-2">একাউন্ট খুলুন</h3>
-                            <p className="text-gray-600">ক্রেতা হিসেবে নিবন্ধন করুন এবং প্রোফাইল সম্পূর্ণ করুন</p>
+                            <h3 className="font-semibold text-lg mb-2">Open account</h3>
+                            <p className="text-gray-600">Register as a buyer and complete the profile</p>
                         </div>
 
                         <div className="text-center">
                             <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span className="text-2xl font-bold text-indigo-600">২</span>
+                                <span className="text-2xl font-bold text-indigo-600">2</span>
                             </div>
-                            <h3 className="font-semibold text-lg mb-2">RFQ পোস্ট করুন</h3>
-                            <p className="text-gray-600">আপনার প্রয়োজনীয়তা বর্ণনা করুন এবং প্রয়োজনীয়তা পোস্ট করুন</p>
+                            <h3 className="font-semibold text-lg mb-2">RFQ Post</h3>
+                            <p className="text-gray-600">Describe your requirements and post requirements</p>
                         </div>
 
                         <div className="text-center">
                             <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span className="text-2xl font-bold text-indigo-600">৩</span>
+                                <span className="text-2xl font-bold text-indigo-600">3</span>
                             </div>
-                            <h3 className="font-semibold text-lg mb-2">কোটা পান</h3>
-                            <p className="text-gray-600">সাপ্লায়ারদের কাছ থেকে প্রতিযোগিতামূলক কোটা গ্রহণ করুন</p>
+                            <h3 className="font-semibold text-lg mb-2">Get Quota</h3>
+                            <p className="text-gray-600">Receive competitive quotes from suppliers</p>
                         </div>
 
                         <div className="text-center">
                             <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span className="text-2xl font-bold text-indigo-600">৪</span>
+                                <span className="text-2xl font-bold text-indigo-600">4</span>
                             </div>
-                            <h3 className="font-semibold text-lg mb-2">অর্ডার করুন</h3>
-                            <p className="text-gray-600">সেরা কোটা নির্বাচন করুন এবং ক্রয় সম্পন্ন করুন</p>
+                            <h3 className="font-semibold text-lg mb-2">Order</h3>
+                            <p className="text-gray-600">Select the best quota and complete the purchase</p>
                         </div>
                     </div>
                 </div>
@@ -324,9 +324,9 @@ export default function Welcome({
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Section Header */}
                     <div className="text-center mb-8">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">প্রচারিত পণ্য</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">Promoted products</h2>
                         <p className="text-gray-600 max-w-2xl mx-auto">
-                            আমাদের ভেরিফাইড সাপ্লায়ারদের শীর্ষ পণ্য আবিষ্কার করুন
+                            Discover Top Products of Our Verified Suppliers
                         </p>
                     </div>
 
@@ -337,7 +337,7 @@ export default function Welcome({
                                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                                 <input
                                     type="text"
-                                    placeholder="পণ্য খুঁজুন..."
+                                    placeholder="Find products..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -347,7 +347,7 @@ export default function Welcome({
                                 type="submit"
                                 className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors"
                             >
-                                অনুসন্ধান
+                                search
                             </button>
                             <button
                                 type="button"
@@ -363,12 +363,12 @@ export default function Welcome({
                     {showFilters && (
                         <div className="bg-white p-6 rounded-lg border mb-8">
                             <div className="flex justify-between items-center mb-4">
-                                <h3 className="font-semibold text-lg">পণ্য ফিল্টার করুন</h3>
+                                <h3 className="font-semibold text-lg">Filter products</h3>
                                 <button
                                     onClick={resetFilters}
                                     className="text-sm text-indigo-600 hover:text-indigo-800"
                                 >
-                                    সকল ফিল্টার রিসেট
+                                    Reset all filters
                                 </button>
                             </div>
 
@@ -376,14 +376,14 @@ export default function Welcome({
                                 {/* Category Filter */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        ক্যাটাগরি
+                                        Category
                                     </label>
                                     <select
                                         value={selectedCategory}
                                         onChange={(e) => setSelectedCategory(e.target.value)}
                                         className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                     >
-                                        <option value="">সকল ক্যাটাগরি</option>
+                                        <option value="">All Categories</option>
                                         {categories.map((cat) => (
                                             <option key={cat.name} value={cat.name}>
                                                 {cat.name} ({cat.count})
@@ -395,14 +395,14 @@ export default function Welcome({
                                 {/* Supplier Filter */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        সাপ্লায়ার
+                                        Supplier
                                     </label>
                                     <select
                                         value={selectedSupplier}
                                         onChange={(e) => setSelectedSupplier(e.target.value)}
                                         className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                     >
-                                        <option value="">সকল সাপ্লায়ার</option>
+                                        <option value="">All suppliers</option>
                                         {suppliers?.map((supplier) => (
                                             <option key={supplier.id} value={supplier.id}>
                                                 {supplier.name} {supplier.verified ? '✓' : ''}
@@ -414,13 +414,13 @@ export default function Welcome({
                                 {/* Min Price */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        ন্যূনতম মূল্য (টাকা)
+                                        Minimum Price (Amount))
                                     </label>
                                     <input
                                         type="number"
                                         value={minPrice}
                                         onChange={(e) => setMinPrice(e.target.value)}
-                                        placeholder="০"
+                                        placeholder="0"
                                         className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                     />
                                 </div>
@@ -428,13 +428,13 @@ export default function Welcome({
                                 {/* Max Price */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        সর্বোচ্চ মূল্য (টাকা)
+                                        Maximum Price (Rs.)
                                     </label>
                                     <input
                                         type="number"
                                         value={maxPrice}
                                         onChange={(e) => setMaxPrice(e.target.value)}
-                                        placeholder="যেকোনো"
+                                        placeholder="Any"
                                         className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                     />
                                 </div>
@@ -442,17 +442,17 @@ export default function Welcome({
                                 {/* Sort By */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        সাজানোর ধরণ
+                                        Sort Type
                                     </label>
                                     <select
                                         value={sortBy}
                                         onChange={(e) => setSortBy(e.target.value)}
                                         className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                     >
-                                        <option value="created_at">সর্বনতুন</option>
-                                        <option value="name">নাম</option>
-                                        <option value="base_price">মূল্য</option>
-                                        <option value="minimum_order_quantity">সর্বনিম্ন অর্ডার</option>
+                                        <option value="created_at">Latest</option>
+                                        <option value="name">name</option>
+                                        <option value="base_price">Price</option>
+                                        <option value="minimum_order_quantity">Minimum Order</option>
                                     </select>
                                 </div>
                             </div>
@@ -467,13 +467,13 @@ export default function Welcome({
                                         className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                     />
                                     <span className="ml-2 text-sm text-gray-600">
-                                        শুধুমাত্র ভেরিফাইড সাপ্লায়ার
+                                        Verified suppliers only
                                     </span>
                                 </label>
 
                                 {/* Sort Order Toggle */}
                                 <div className="flex items-center space-x-2">
-                                    <span className="text-sm text-gray-600">ক্রম:</span>
+                                    <span className="text-sm text-gray-600">sequence:</span>
                                     <button
                                         onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                                         className={`px-3 py-1 rounded text-sm ${sortOrder === 'asc'
@@ -481,7 +481,7 @@ export default function Welcome({
                                             : 'bg-gray-100 text-gray-700'
                                             }`}
                                     >
-                                        ক্রমবর্ধমান
+                                        Increasing
                                     </button>
                                     <button
                                         onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
@@ -490,7 +490,7 @@ export default function Welcome({
                                             : 'bg-gray-100 text-gray-700'
                                             }`}
                                     >
-                                        ক্রমহ্রাসমান
+                                        decreasing
                                     </button>
                                 </div>
                             </div>
@@ -501,7 +501,7 @@ export default function Welcome({
                                     onClick={applyFilters}
                                     className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors"
                                 >
-                                    ফিল্টার প্রয়োগ করুন
+                                    Apply filter
                                 </button>
                             </div>
                         </div>
@@ -528,7 +528,7 @@ export default function Welcome({
                                     )}
                                     {product.supplier?.verified && (
                                         <span className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-                                            ভেরিফাইড
+                                            Verified
                                         </span>
                                     )}
                                 </div>
@@ -542,7 +542,7 @@ export default function Welcome({
                                             {formatCurrency(product.price)}
                                         </span>
                                         <span className="text-sm text-gray-500">
-                                            সর্বনিম্ন অর্ডার: {product.moq} {product.unit}
+                                            Minimum Order: {product.moq} {product.unit}
                                         </span>
                                     </div>
 
@@ -557,7 +557,7 @@ export default function Welcome({
                                         href={route('buyer.products.show', product.slug)}
                                         className="block text-center bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors"
                                     >
-                                        বিস্তারিত দেখুন
+                                        for suppliers See details
                                     </Link>
                                 </div>
                             </div>
@@ -596,7 +596,7 @@ export default function Welcome({
                             href={route('buyer.products.index')}
                             className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium group"
                         >
-                            সকল পণ্য দেখুন
+                            See all products
                             <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                         </Link>
                     </div>
@@ -609,15 +609,15 @@ export default function Welcome({
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         <div>
-                            <span className="text-indigo-600 font-semibold mb-2 block">আমাদের সম্পর্কে</span>
+                            <span className="text-indigo-600 font-semibold mb-2 block">About Us</span>
                             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                                বাংলাদেশের শীর্ষস্থানীয় B2B মার্কেটপ্লেস
+                                Next-Generation B2B Procurement & Supplier Network
                             </h2>
                             <p className="text-gray-600 mb-6">
-                                ২০২০ সালে প্রতিষ্ঠিত, B2Bমার্কেট বাংলাদেশে ব্যবসায়ীদের পণ্য সংগ্রহ এবং সাপ্লায়ারের সাথে সংযোগ স্থাপনের পদ্ধতি পরিবর্তন করেছে। আমরা একটি বিশ্বস্ত প্ল্যাটফর্ম প্রদান করি যেখানে ক্রেতারা মানসম্পন্ন পণ্য খুঁজে পেতে, কোটা তুলনা করতে এবং নিরাপদে লেনদেন সম্পন্ন করতে পারেন।
+                                Treadmesh transforms wholesale procurement by connecting commercial buyers directly with verified enterprise suppliers. Our platform delivers a unified ecosystem where buyers discover premium inventory, compare multi-supplier bids, and execute transactions securely.
                             </p>
                             <p className="text-gray-600 mb-8">
-                                আমাদের লক্ষ্য হল সব আকারের ব্যবসাকে ভেরিফাইড সাপ্লায়ার, প্রতিযোগিতামূলক মূল্য এবং নির্বিঘ্ন ট্রেডিং অভিজ্ঞতা প্রদানের মাধ্যমে ক্ষমতায়ন করা। হাজার হাজার সফল চুক্তি এবং ক্রমবর্ধমান সম্প্রদায়ের সাথে, আমরা বাংলাদেশে B2B বাণিজ্যের ভবিষ্যত গড়ে তুলছি।
+                                Our mission is to empower growing enterprises with volume-based tiered pricing, verified supplier credentials, and transparent negotiation workflows.
                             </p>
 
                             <div className="flex items-center space-x-4">
@@ -632,7 +632,7 @@ export default function Welcome({
                                             <FiStar key={i} className="text-yellow-400 fill-current" />
                                         ))}
                                     </div>
-                                    <p className="text-sm text-gray-600">১০,০০০+ ব্যবসায়ীর আস্থা</p>
+                                    <p className="text-sm text-gray-600">Trusted by 10,000+ merchants</p>
                                 </div>
                             </div>
                         </div>
@@ -641,23 +641,23 @@ export default function Welcome({
                         <div className="grid grid-cols-2 gap-4">
                             <div className="bg-indigo-600 text-white p-6 rounded-xl">
                                 <FiAward className="text-3xl mb-3" />
-                                <div className="text-2xl font-bold mb-1">৫+ বছর</div>
-                                <div className="text-indigo-200">উত্তম সেবা</div>
+                                <div className="text-2xl font-bold mb-1">5+ years</div>
+                                <div className="text-indigo-200">good service</div>
                             </div>
                             <div className="bg-purple-600 text-white p-6 rounded-xl">
                                 <BsPeople className="text-3xl mb-3" />
-                                <div className="text-2xl font-bold mb-1">৫০ হাজার+</div>
-                                <div className="text-purple-200">নিবন্ধিত ব্যবহারকারী</div>
+                                <div className="text-2xl font-bold mb-1">50 thousand+</div>
+                                <div className="text-purple-200">Registered user</div>
                             </div>
                             <div className="bg-pink-600 text-white p-6 rounded-xl">
                                 <FiGlobe className="text-3xl mb-3" />
-                                <div className="text-2xl font-bold mb-1">৬৪ জেলা</div>
-                                <div className="text-pink-200">সারাদেশে সেবা</div>
+                                <div className="text-2xl font-bold mb-1">64 districts</div>
+                                <div className="text-pink-200">Nationwide service</div>
                             </div>
                             <div className="bg-green-600 text-white p-6 rounded-xl">
                                 <FiHeadphones className="text-3xl mb-3" />
-                                <div className="text-2xl font-bold mb-1">২৪/৭</div>
-                                <div className="text-green-200">সাপোর্ট উপলব্ধ</div>
+                                <div className="text-2xl font-bold mb-1">24/7</div>
+                                <div className="text-green-200">Support available</div>
                             </div>
                         </div>
                     </div>
@@ -669,9 +669,9 @@ export default function Welcome({
                 <section className="py-20 bg-gray-50">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-12">
-                            <h2 className="text-3xl md:text-4xl font-bold mb-4">সাফল্যের গল্প</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold mb-4">Success story</h2>
                             <p className="text-gray-600 max-w-2xl mx-auto">
-                                বাস্তব ব্যবসা, বাস্তব ফলাফল - দেখুন কিভাবে আমরা অন্যদের সাহায্য করেছি
+                                Real Business, Real Results - See How We've Helped Others
                             </p>
                         </div>
 
@@ -689,11 +689,11 @@ export default function Welcome({
                                     </div>
 
                                     <p className="text-gray-600 mb-3">
-                                        {story.supplier} থেকে সফলভাবে পণ্য সংগ্রহ করেছেন
+                                        {story.supplier} Successfully collected product from
                                     </p>
 
                                     <div className="flex justify-between items-center text-sm">
-                                        <span className="text-gray-500">পণ্য: {story.product}</span>
+                                        <span className="text-gray-500">Product: {story.product}</span>
                                         <span className="font-semibold text-indigo-600">
                                             {formatCurrency(story.amount)}
                                         </span>
@@ -705,7 +705,7 @@ export default function Welcome({
                                                 <FiStar key={i} className="fill-current" />
                                             ))}
                                         </div>
-                                        <span className="text-sm text-gray-500 ml-2">৫.০</span>
+                                        <span className="text-sm text-gray-500 ml-2">5.0</span>
                                     </div>
                                 </div>
                             ))}
@@ -718,23 +718,23 @@ export default function Welcome({
             <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
                 <div className="max-w-4xl mx-auto text-center px-4">
                     <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                        পণ্য সংগ্রহ শুরু করতে প্রস্তুত?
+                        Ready to start product collection?
                     </h2>
                     <p className="text-xl text-indigo-100 mb-8">
-                        হাজার হাজার ব্যবসায়ীর সাথে যোগ দিন যারা ইতিমধ্যে আমাদের প্ল্যাটফর্ম ব্যবহার করছেন
+                        Join thousands of traders who are already using our platform
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link
                             href={route('register')}
                             className="bg-white text-indigo-600 px-8 py-4 rounded-lg font-semibold hover:bg-indigo-50 transition-colors inline-flex items-center justify-center"
                         >
-                            বিনামূল্যে একাউন্ট খুলুন
+                            Open a free account
                         </Link>
                         <Link
                             href="#contact"
                             className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-indigo-600 transition-colors"
                         >
-                            সেলস টিমের সাথে কথা বলুন
+                            Talk to the sales team
                         </Link>
                     </div>
                 </div>
@@ -745,9 +745,9 @@ export default function Welcome({
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-12">
                         <div>
-                            <h2 className="text-3xl font-bold mb-4">যোগাযোগ করুন</h2>
+                            <h2 className="text-3xl font-bold mb-4">Contact</h2>
                             <p className="text-gray-600 mb-8">
-                                প্রশ্ন আছে? আমরা সাহায্য করতে প্রস্তুত। যেকোনো জিজ্ঞাসার জন্য আমাদের সাথে যোগাযোগ করুন।
+                                Have questions? We are ready to help. Contact us for any query।
                             </p>
 
                             <div className="space-y-4">
@@ -756,8 +756,8 @@ export default function Welcome({
                                         <FiMapPin className="text-xl text-indigo-600" />
                                     </div>
                                     <div className="ml-4">
-                                        <h4 className="font-semibold">ঠিকানা</h4>
-                                        <p className="text-gray-600">১২৩ গুলশান এভিনিউ, ঢাকা ১২১২, বাংলাদেশ</p>
+                                        <h4 className="font-semibold">Address</h4>
+                                        <p className="text-gray-600">100 Commercial Plaza, Suite 400</p>
                                     </div>
                                 </div>
 
@@ -766,8 +766,8 @@ export default function Welcome({
                                         <FiPhone className="text-xl text-indigo-600" />
                                     </div>
                                     <div className="ml-4">
-                                        <h4 className="font-semibold">ফোন</h4>
-                                        <p className="text-gray-600">+৮৮০ ১২৩৪-৫৬৭৮৯০</p>
+                                        <h4 className="font-semibold">Phone</h4>
+                                        <p className="text-gray-600">+1 (555) 234-5678</p>
                                     </div>
                                 </div>
 
@@ -776,8 +776,8 @@ export default function Welcome({
                                         <FiMail className="text-xl text-indigo-600" />
                                     </div>
                                     <div className="ml-4">
-                                        <h4 className="font-semibold">ইমেইল</h4>
-                                        <p className="text-gray-600">support@b2bmarketplace.com</p>
+                                        <h4 className="font-semibold">Email</h4>
+                                        <p className="text-gray-600">support@treadmesh.com</p>
                                     </div>
                                 </div>
                             </div>
@@ -801,40 +801,40 @@ export default function Welcome({
 
                         {/* Contact form */}
                         <div className="bg-white p-8 rounded-xl border">
-                            <h3 className="text-xl font-bold mb-6">আমাদেরকে বার্তা পাঠান</h3>
+                            <h3 className="text-xl font-bold mb-6">Send us a message at</h3>
                             <form className="space-y-4">
                                 <div className="grid grid-cols-2 gap-4">
                                     <input
                                         type="text"
-                                        placeholder="নামের প্রথম অংশ"
+                                        placeholder="The first part of the name"
                                         className="border rounded-lg px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500"
                                     />
                                     <input
                                         type="text"
-                                        placeholder="নামের শেষ অংশ"
+                                        placeholder="The last part of the name is"
                                         className="border rounded-lg px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500"
                                     />
                                 </div>
                                 <input
                                     type="email"
-                                    placeholder="ইমেইল ঠিকানা"
+                                    placeholder="Email address"
                                     className="w-full border rounded-lg px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500"
                                 />
                                 <input
                                     type="text"
-                                    placeholder="বিষয়"
+                                    placeholder="subject"
                                     className="w-full border rounded-lg px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500"
                                 />
                                 <textarea
                                     rows="4"
-                                    placeholder="আপনার বার্তা"
+                                    placeholder="Your message is"
                                     className="w-full border rounded-lg px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500"
                                 ></textarea>
                                 <button
                                     type="submit"
                                     className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors"
                                 >
-                                    বার্তা পাঠান
+                                    send message
                                 </button>
                             </form>
                         </div>
@@ -854,32 +854,32 @@ export default function Welcome({
                         </div>
 
                         <div>
-                            <h4 className="font-semibold mb-4">দ্রুত লিংক</h4>
+                            <h4 className="font-semibold mb-4">Quick Links</h4>
                             <ul className="space-y-2 text-sm text-gray-400">
-                                <li><Link href="#products" className="hover:text-white">পণ্যসমূহ</Link></li>
-                                <li><Link href="#categories" className="hover:text-white">ক্যাটাগরি</Link></li>
-                                <li><Link href="#how-it-works" className="hover:text-white">কিভাবে কাজ করে</Link></li>
-                                <li><Link href="#about" className="hover:text-white">আমাদের সম্পর্কে</Link></li>
+                                <li><Link href="#products" className="hover:text-white">Products</Link></li>
+                                <li><Link href="#categories" className="hover:text-white">Category</Link></li>
+                                <li><Link href="#how-it-works" className="hover:text-white">How it works</Link></li>
+                                <li><Link href="#about" className="hover:text-white">about us</Link></li>
                             </ul>
                         </div>
 
                         <div>
-                            <h4 className="font-semibold mb-4">ক্রেতাদের জন্য</h4>
+                            <h4 className="font-semibold mb-4">For buyers</h4>
                             <ul className="space-y-2 text-sm text-gray-400">
-                                <li><Link href={route('buyer.products.index')}>পণ্য ব্রাউজ করুন</Link></li>
-                                <li><Link href={route('buyer.rfqs.create')}>RFQ তৈরি করুন</Link></li>
-                                <li><Link href="#">সাপ্লায়ার ডিরেক্টরি</Link></li>
-                                <li><Link href="#">ক্রেতা গাইড</Link></li>
+                                <li><Link href={route('buyer.products.index')}>Browse Products</Link></li>
+                                <li><Link href={route('buyer.rfqs.create')}>RFQ Create</Link></li>
+                                <li><Link href="#">Supplier Directory</Link></li>
+                                <li><Link href="#">Buyer's Guide</Link></li>
                             </ul>
                         </div>
 
                         <div>
-                            <h4 className="font-semibold mb-4">সাপ্লায়ারদের জন্য</h4>
+                            <h4 className="font-semibold mb-4"></h4>
                             <ul className="space-y-2 text-sm text-gray-400">
-                                <li><Link href={route('register')}>সাপ্লায়ার হোন</Link></li>
-                                <li><Link href="#">সাপ্লায়ার সুবিধা</Link></li>
-                                <li><Link href="#">বিক্রেতা গাইড</Link></li>
-                                <li><Link href="#">মূল্য তালিকা</Link></li>
+                                <li><Link href={route('register')}>Be a supplier</Link></li>
+                                <li><Link href="#">Supplier benefits</Link></li>
+                                <li><Link href="#">Vendor Guide</Link></li>
+                                <li><Link href="#">Price list</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -890,9 +890,9 @@ export default function Welcome({
                                 &copy; {new Date().getFullYear()} Treadmesh. All rights reserved.
                             </p>
                             <div className="flex space-x-6 mt-4 md:mt-0">
-                                <Link href="#" className="text-gray-400 hover:text-white text-sm">গোপনীয়তা নীতি</Link>
-                                <Link href="#" className="text-gray-400 hover:text-white text-sm">সেবার শর্তাবলী</Link>
-                                <Link href="#" className="text-gray-400 hover:text-white text-sm">কুকি নীতি</Link>
+                                <Link href="#" className="text-gray-400 hover:text-white text-sm">Privacy Policy</Link>
+                                <Link href="#" className="text-gray-400 hover:text-white text-sm">Terms of Service</Link>
+                                <Link href="#" className="text-gray-400 hover:text-white text-sm">Cookie Policy</Link>
                             </div>
                         </div>
                     </div>

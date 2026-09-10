@@ -66,21 +66,21 @@ export default function BuyerDashboard() {
 
   return (
     <DashboardLayout>
-      <Head title="ক্রেতা ড্যাশবোর্ড" />
+      <Head title="Buyer Dashboard" />
 
       <div className="space-y-6">
         {/* Header with Welcome Message and Action Buttons */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">ক্রেতা ড্যাশবোর্ড</h2>
-            <p className="text-gray-600 mt-1">স্বাগতম! আপনার মার্কেটপ্লেস কার্যকলাপের সারসংক্ষেপ এখানে দেওয়া হল।</p>
+            <h2 className="text-2xl font-bold text-gray-800">Buyer Dashboard</h2>
+            <p className="text-gray-600 mt-1">Welcome! Here is a summary of your Marketplace activity।</p>
           </div>
           <div className="flex space-x-3 mt-3 md:mt-0">
             <Link
               href={route('buyer.rfqs.create')}
               className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all flex items-center"
             >
-              <FiFileText className="mr-2" /> + নতুন RFQ
+              <FiFileText className="mr-2" /> + New RFQ
             </Link>
             <Link
               href={route('buyer.messages.index')}
@@ -102,13 +102,13 @@ export default function BuyerDashboard() {
             <div className="flex items-start">
               <FiAlertCircle className="text-yellow-600 text-xl mr-3 mt-0.5" />
               <div className="flex-1">
-                <h4 className="text-yellow-800 font-medium">অপেক্ষমান কাজ ({pendingActions.length})</h4>
+                <h4 className="text-yellow-800 font-medium">pending work ({pendingActions.length})</h4>
                 <div className="mt-2 space-y-2">
                   {pendingActions.map((action, index) => (
                     <div key={index} className="flex items-center justify-between">
                       <p className="text-yellow-700 text-sm">{action.message}</p>
                       <Link href={action.url} className="text-sm text-yellow-800 hover:text-yellow-900 font-medium">
-                        দেখুন →
+                        See →
                       </Link>
                     </div>
                   ))}
@@ -124,12 +124,12 @@ export default function BuyerDashboard() {
           <div className="bg-white rounded-xl p-6 border hover:shadow-lg transition-shadow">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-gray-500 text-sm">মোট RFQ</p>
+                <p className="text-gray-500 text-sm">total RFQ</p>
                 <h3 className="text-2xl font-bold mt-1">{statistics.total_rfqs}</h3>
                 <p className="text-sm mt-2">
-                  <span className="text-green-600">{statistics.active_rfqs} সক্রিয়</span>
+                  <span className="text-green-600">{statistics.active_rfqs} Active</span>
                   <span className="text-gray-400 mx-2">•</span>
-                  <span className="text-indigo-600">{statistics.rfqs_this_month} এই মাসে</span>
+                  <span className="text-indigo-600">{statistics.rfqs_this_month} This Month</span>
                 </p>
               </div>
               <div className="p-3 bg-indigo-50 rounded-lg">
@@ -141,7 +141,7 @@ export default function BuyerDashboard() {
               <span className={statistics.rfq_change >= 0 ? 'text-green-600' : 'text-red-600'}>
                 {statistics.rfq_change}%
               </span>
-              <span className="text-gray-500 ml-1">গত মাসের তুলনায়</span>
+              <span className="text-gray-500 ml-1"></span>
             </div>
           </div>
 
@@ -149,12 +149,12 @@ export default function BuyerDashboard() {
           <div className="bg-white rounded-xl p-6 border hover:shadow-lg transition-shadow">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-gray-500 text-sm">প্রাপ্ত কোটা</p>
+                <p className="text-gray-500 text-sm">Received Quota</p>
                 <h3 className="text-2xl font-bold mt-1">{statistics.total_quotes}</h3>
                 <p className="text-sm mt-2">
-                  <span className="text-green-600">{statistics.pending_quotes} অপেক্ষমান</span>
+                  <span className="text-green-600">{statistics.pending_quotes} Awaiting</span>
                   <span className="text-gray-400 mx-2">•</span>
-                  <span className="text-indigo-600">{statistics.quotes_this_month} এই মাসে</span>
+                  <span className="text-indigo-600">{statistics.quotes_this_month} This Month</span>
                 </p>
               </div>
               <div className="p-3 bg-green-50 rounded-lg">
@@ -167,12 +167,12 @@ export default function BuyerDashboard() {
           <div className="bg-white rounded-xl p-6 border hover:shadow-lg transition-shadow">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-gray-500 text-sm">মোট অর্ডার</p>
+                <p className="text-gray-500 text-sm">Total order</p>
                 <h3 className="text-2xl font-bold mt-1">{statistics.total_orders}</h3>
                 <p className="text-sm mt-2">
-                  <span className="text-yellow-600">{statistics.pending_orders} অপেক্ষমান</span>
+                  <span className="text-yellow-600">{statistics.pending_orders} Awaiting</span>
                   <span className="text-gray-400 mx-2">•</span>
-                  <span className="text-green-600">{statistics.delivered_orders} ডেলিভারি হয়েছে</span>
+                  <span className="text-green-600">{statistics.delivered_orders} Delivered</span>
                 </p>
               </div>
               <div className="p-3 bg-purple-50 rounded-lg">
@@ -184,7 +184,7 @@ export default function BuyerDashboard() {
               <span className={statistics.order_change >= 0 ? 'text-green-600' : 'text-red-600'}>
                 {statistics.order_change}%
               </span>
-              <span className="text-gray-500 ml-1">গত মাসের তুলনায়</span>
+              <span className="text-gray-500 ml-1"></span>
             </div>
           </div>
 
@@ -192,10 +192,10 @@ export default function BuyerDashboard() {
           <div className="bg-white rounded-xl p-6 border hover:shadow-lg transition-shadow">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-gray-500 text-sm">মোট ব্যয়</p>
+                <p className="text-gray-500 text-sm">total cost</p>
                 <h3 className="text-2xl font-bold mt-1">{formatCurrency(statistics.total_spent)}</h3>
                 <p className="text-sm mt-2">
-                  <span className="text-indigo-600">{formatCurrency(statistics.monthly_spent)} এই মাসে</span>
+                  <span className="text-indigo-600">{formatCurrency(statistics.monthly_spent)} This Month</span>
                 </p>
               </div>
               <div className="p-3 bg-blue-50 rounded-lg">
@@ -204,7 +204,7 @@ export default function BuyerDashboard() {
             </div>
             <div className="mt-4 flex items-center text-sm">
               <FiUsers className="mr-1 text-gray-500" />
-              <span className="text-gray-600">{savedSuppliersCount} টি সাপ্লায়ার</span>
+              <span className="text-gray-600">{savedSuppliersCount} T Supplier</span>
             </div>
           </div>
         </div>
@@ -214,12 +214,12 @@ export default function BuyerDashboard() {
           <div className="bg-white rounded-xl p-6 border">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-lg flex items-center">
-                <BsGraphUp className="mr-2" /> কার্যকলাপের সারসংক্ষেপ (গত ৬ মাস)
+                <BsGraphUp className="mr-2" /> Summary of Activity (Last 6 Months)
               </h3>
               <div className="flex items-center space-x-4 text-xs text-gray-600">
                 <div className="flex items-center"><span className="w-2.5 h-2.5 bg-indigo-500 rounded mr-2"></span> RFQ</div>
-                <div className="flex items-center"><span className="w-2.5 h-2.5 bg-green-500 rounded mr-2"></span> অর্ডার</div>
-                <div className="flex items-center"><span className="w-2.5 h-2.5 bg-purple-500 rounded mr-2"></span> কোটা</div>
+                <div className="flex items-center"><span className="w-2.5 h-2.5 bg-green-500 rounded mr-2"></span> Order</div>
+                <div className="flex items-center"><span className="w-2.5 h-2.5 bg-purple-500 rounded mr-2"></span> Quote</div>
               </div>
             </div>
             <div className="h-64">
@@ -243,12 +243,12 @@ export default function BuyerDashboard() {
                           <div
                             className="w-full bg-green-500/80 rounded-t"
                             style={{ height: `${orderHeight}%` }}
-                            title={`অর্ডার: ${chartData.orders[index]}`}
+                            title={`Order: ${chartData.orders[index]}`}
                           ></div>
                           <div
                             className="w-full bg-purple-500/80 rounded-t"
                             style={{ height: `${quoteHeight}%` }}
-                            title={`কোটা: ${chartData.quotes[index]}`}
+                            title={`Quote: ${chartData.quotes[index]}`}
                           ></div>
                         </div>
                         <span className="text-xs mt-2 text-gray-600">{label}</span>
@@ -258,7 +258,7 @@ export default function BuyerDashboard() {
                 </div>
               </div>
               <p className="text-xs text-gray-500 mt-3">
-                বারগুলি পঠনযোগ্যতার জন্য স্বাধীনভাবে স্কেল করা হয়েছে।
+                Bars are independently scaled for readability।
               </p>
             </div>
           </div>
@@ -272,10 +272,10 @@ export default function BuyerDashboard() {
             <div className="bg-white rounded-xl p-6 border">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold text-lg flex items-center">
-                  <FiFileText className="mr-2" /> সাম্প্রতিক RFQ
+                  <FiFileText className="mr-2" /> Recent RFQ
                 </h3>
                 <Link href={route('buyer.rfqs.index')} className="text-sm text-indigo-600 hover:text-indigo-800">
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
               <div className="space-y-3">
@@ -286,20 +286,20 @@ export default function BuyerDashboard() {
                         <div className="flex items-center">
                           <h4 className="font-medium">{rfq.title}</h4>
                           <span className={`ml-3 px-2 py-1 text-xs rounded-full ${getStatusColor(rfq.status)}`}>
-                            {rfq.status === 'open' ? 'খোলা' :
-                              rfq.status === 'closed' ? 'বন্ধ' :
-                                rfq.status === 'cancelled' ? 'বাতিল' : rfq.status}
+                            {rfq.status === 'open' ? 'open' :
+                              rfq.status === 'closed' ? 'off' :
+                                rfq.status === 'cancelled' ? 'cancel' : rfq.status}
                           </span>
                         </div>
                         <p className="text-sm text-gray-600 mt-1">RFQ #{rfq.rfq_number}</p>
                         <div className="flex items-center text-sm text-gray-500 mt-2">
-                          <FiPackage className="mr-1" /> পরিমাণ: {rfq.quantity} ইউনিট
+                          <FiPackage className="mr-1" /> Amount: {rfq.quantity} Unit
                           <span className="mx-2">•</span>
-                          <FiClock className="mr-1" /> প্রয়োজনীয় তারিখ: {new Date(rfq.required_by_date).toLocaleDateString('bn-BD')}
+                          <FiClock className="mr-1" /> Required date: {new Date(rfq.required_by_date).toLocaleDateString('bn-BD')}
                         </div>
                         {rfq.quotes_count > 0 && (
                           <p className="text-sm text-indigo-600 mt-2 font-medium">
-                            {rfq.quotes_count} টি কোটা প্রাপ্ত
+                            {rfq.quotes_count} Received t quota
                           </p>
                         )}
                       </div>
@@ -307,12 +307,12 @@ export default function BuyerDashboard() {
                         href={route('buyer.rfqs.show', rfq.id)}
                         className="text-indigo-600 hover:text-indigo-800 text-sm"
                       >
-                        বিস্তারিত দেখুন →
+                        for suppliers See details →
                       </Link>
                     </div>
                   </div>
                 )) : (
-                  <p className="text-gray-500 text-center py-4">কোনো RFQ নেই</p>
+                  <p className="text-gray-500 text-center py-4">No RFQ</p>
                 )}
               </div>
             </div>
@@ -321,10 +321,10 @@ export default function BuyerDashboard() {
             <div className="bg-white rounded-xl p-6 border">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold text-lg flex items-center">
-                  <FiPackage className="mr-2" /> সাম্প্রতিক কোটা
+                  <FiPackage className="mr-2" /> Recent Quota
                 </h3>
                 <Link href={route('buyer.quotes.index')} className="text-sm text-indigo-600 hover:text-indigo-800">
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
               <div className="space-y-3">
@@ -333,33 +333,33 @@ export default function BuyerDashboard() {
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center">
-                          <h4 className="font-medium">{quote.supplier?.name} থেকে কোটা</h4>
+                          <h4 className="font-medium">{quote.supplier?.name} Quota from</h4>
                           <span className={`ml-3 px-2 py-1 text-xs rounded-full ${getStatusColor(quote.status)}`}>
-                            {quote.status === 'pending' ? 'অপেক্ষমান' :
-                              quote.status === 'accepted' ? 'গৃহীত' :
-                                quote.status === 'rejected' ? 'প্রত্যাখ্যাত' : quote.status}
+                            {quote.status === 'pending' ? 'Awaiting' :
+                              quote.status === 'accepted' ? 'accepted' :
+                                quote.status === 'rejected' ? 'Rejected' : quote.status}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 mt-1">{quote.rfq?.title} -এর জন্য</p>
-                        <p className="text-sm text-gray-600 mt-1">কোটা #: {quote.quote_number}</p>
+                        <p className="text-sm text-gray-600 mt-1">{quote.rfq?.title} -for</p>
+                        <p className="text-sm text-gray-600 mt-1">Quote #: {quote.quote_number}</p>
                         <div className="flex items-center text-sm mt-2">
                           <FiDollarSign className="text-gray-500 mr-1" />
                           <span className="font-medium">{formatCurrency(quote.total_amount)}</span>
                           <span className="mx-2 text-gray-300">|</span>
                           <FiClock className="text-gray-500 mr-1" />
-                          <span className="text-gray-600">মেয়াদ শেষ: {new Date(quote.valid_until).toLocaleDateString('bn-BD')}</span>
+                          <span className="text-gray-600">Expires: {new Date(quote.valid_until).toLocaleDateString('bn-BD')}</span>
                         </div>
                       </div>
                       <Link
                         href={route('buyer.quotes.show', quote.id)}
                         className="text-indigo-600 hover:text-indigo-800 text-sm"
                       >
-                        পর্যালোচনা →
+                        Review →
                       </Link>
                     </div>
                   </div>
                 )) : (
-                  <p className="text-gray-500 text-center py-4">এখনও কোনো কোটা পাওয়া যায়নি</p>
+                  <p className="text-gray-500 text-center py-4">No quota found yet</p>
                 )}
               </div>
             </div>
@@ -371,10 +371,10 @@ export default function BuyerDashboard() {
             <div className="bg-white rounded-xl p-6 border">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold text-lg flex items-center">
-                  <FiShoppingCart className="mr-2" /> সাম্প্রতিক অর্ডার
+                  <FiShoppingCart className="mr-2" /> Recent Orders
                 </h3>
                 <Link href={route('buyer.orders.index')} className="text-sm text-indigo-600 hover:text-indigo-800">
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
               <div className="space-y-3">
@@ -382,28 +382,28 @@ export default function BuyerDashboard() {
                   <div key={order.id} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                     <div className="flex justify-between items-start">
                       <div>
-                        <p className="font-medium">অর্ডার #{order.order_number}</p>
-                        <p className="text-sm text-gray-600">সাপ্লায়ার: {order.supplier?.name}</p>
-                        <p className="text-sm text-gray-600 mt-1">মোট: {formatCurrency(order.total_amount)}</p>
+                        <p className="font-medium">Order #{order.order_number}</p>
+                        <p className="text-sm text-gray-600">Supplier: {order.supplier?.name}</p>
+                        <p className="text-sm text-gray-600 mt-1">total: {formatCurrency(order.total_amount)}</p>
                       </div>
                       <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(order.order_status)}`}>
-                        {order.order_status === 'pending_confirmation' ? 'অপেক্ষমান' :
-                          order.order_status === 'confirmed' ? 'নিশ্চিত' :
-                            order.order_status === 'processing' ? 'প্রক্রিয়াধীন' :
-                              order.order_status === 'shipped' ? 'পাঠানো হয়েছে' :
-                                order.order_status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                                  order.order_status === 'cancelled' ? 'বাতিল' : order.order_status.replace('_', ' ')}
+                        {order.order_status === 'pending_confirmation' ? 'Awaiting' :
+                          order.order_status === 'confirmed' ? 'sure' :
+                            order.order_status === 'processing' ? 'In process' :
+                              order.order_status === 'shipped' ? 'has been sent' :
+                                order.order_status === 'delivered' ? 'Delivered' :
+                                  order.order_status === 'cancelled' ? 'cancel' : order.order_status.replace('_', ' ')}
                       </span>
                     </div>
                     <Link
                       href={route('buyer.orders.show', order.id)}
                       className="mt-2 inline-block text-sm text-indigo-600 hover:text-indigo-800"
                     >
-                      অর্ডার ট্র্যাক করুন →
+                      Track Order →
                     </Link>
                   </div>
                 )) : (
-                  <p className="text-gray-500 text-center py-4">কোনো অর্ডার নেই</p>
+                  <p className="text-gray-500 text-center py-4">No order</p>
                 )}
               </div>
             </div>
@@ -412,10 +412,10 @@ export default function BuyerDashboard() {
             <div className="bg-white rounded-xl p-6 border">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold text-lg flex items-center">
-                  <FiMessageCircle className="mr-2" /> সাম্প্রতিক বার্তা
+                  <FiMessageCircle className="mr-2" /> Recent messages
                 </h3>
                 <Link href={route('buyer.messages.index')} className="text-sm text-indigo-600 hover:text-indigo-800">
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
               <div className="space-y-3">
@@ -427,7 +427,7 @@ export default function BuyerDashboard() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
                             <p className="font-medium text-sm truncate">
-                              {isFromMe ? 'আপনি' : message.sender?.name}
+                              {isFromMe ? 'You are' : message.sender?.name}
                             </p>
                             {!message.is_read && !isFromMe && (
                               <span className="ml-2 w-2 h-2 bg-blue-600 rounded-full"></span>
@@ -442,7 +442,7 @@ export default function BuyerDashboard() {
                     </div>
                   );
                 }) : (
-                  <p className="text-gray-500 text-center py-4">কোনো বার্তা নেই</p>
+                  <p className="text-gray-500 text-center py-4">No message</p>
                 )}
               </div>
             </div>
@@ -450,14 +450,14 @@ export default function BuyerDashboard() {
             {/* Saved Suppliers */}
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6">
               <h3 className="font-semibold text-lg mb-4 flex items-center">
-                <FiUsers className="mr-2" /> সাপ্লায়ার ({savedSuppliersCount})
+                <FiUsers className="mr-2" /> Supplier ({savedSuppliersCount})
               </h3>
-              <p className="text-sm text-gray-600 mb-4">আপনি {savedSuppliersCount} টি সাপ্লায়ারের সাথে যোগাযোগ করেছেন</p>
+              <p className="text-sm text-gray-600 mb-4">You are {savedSuppliersCount} T contacted supplier</p>
               <Link
                 href={route('buyer.suppliers.index')}
                 className="inline-block w-full text-center px-4 py-2 bg-white text-indigo-600 rounded-lg hover:bg-gray-50 transition-colors"
               >
-                সকল সাপ্লায়ার ব্রাউজ করুন
+                Browse all suppliers
               </Link>
             </div>
           </div>
@@ -467,7 +467,7 @@ export default function BuyerDashboard() {
         {recentActivity?.length > 0 && (
           <div className="bg-white rounded-xl p-6 border">
             <h3 className="font-semibold text-lg mb-4 flex items-center">
-              <FiClock className="mr-2" /> সাম্প্রতিক কার্যকলাপ
+              <FiClock className="mr-2" /> recent activity
             </h3>
             <div className="space-y-3">
               {recentActivity.map((activity, index) => (
@@ -483,11 +483,11 @@ export default function BuyerDashboard() {
                     <div className="flex justify-between">
                       <p className="text-sm font-medium">{activity.title}</p>
                       <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(activity.status)}`}>
-                        {activity.status === 'open' ? 'খোলা' :
-                          activity.status === 'pending' ? 'অপেক্ষমান' :
-                            activity.status === 'accepted' ? 'গৃহীত' :
-                              activity.status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                                activity.status === 'cancelled' ? 'বাতিল' : activity.status}
+                        {activity.status === 'open' ? 'open' :
+                          activity.status === 'pending' ? 'Awaiting' :
+                            activity.status === 'accepted' ? 'accepted' :
+                              activity.status === 'delivered' ? 'Delivered' :
+                                activity.status === 'cancelled' ? 'cancel' : activity.status}
                       </span>
                     </div>
                     {activity.amount && (
@@ -498,7 +498,7 @@ export default function BuyerDashboard() {
                     </p>
                   </div>
                   <Link href={activity.url} className="text-indigo-600 hover:text-indigo-800 text-sm ml-2">
-                    দেখুন
+                    See
                   </Link>
                 </div>
               ))}

@@ -82,22 +82,22 @@ export default function Financial({ financialData, period, dateRange }) {
 
   // Period options for dropdown
   const periodOptions = [
-    { value: 'monthly', label: 'মাসিক' },
-    { value: 'quarterly', label: 'ত্রৈমাসিক' },
-    { value: 'yearly', label: 'বার্ষিক' },
+    { value: 'monthly', label: 'Monthly' },
+    { value: 'quarterly', label: 'Quarterly' },
+    { value: 'yearly', label: 'Annually' },
   ];
 
   return (
     <DashboardLayout>
-      <Head title="আর্থিক রিপোর্ট" />
+      <Head title="Financial reports" />
 
       <div className="space-y-6">
         {/* Header - Page title, period selector and export button */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">আর্থিক রিপোর্ট</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Financial reports</h1>
             <p className="text-sm text-gray-600 mt-1">
-              আয় ও পেমেন্ট কর্মক্ষমতা বিশ্লেষণ করুন
+              Analyze income and payment performance
             </p>
           </div>
           <div className="flex gap-2">
@@ -115,7 +115,7 @@ export default function Financial({ financialData, period, dateRange }) {
               className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
             >
               <FiDownload className="w-4 h-4" />
-              <span>এক্সপোর্ট</span>
+              <span>Export</span>
             </button>
           </div>
         </div>
@@ -124,7 +124,7 @@ export default function Financial({ financialData, period, dateRange }) {
         <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 flex items-center gap-2 text-indigo-700">
           <FiCalendar className="w-4 h-4" />
           <span className="text-sm font-medium">
-            রিপোর্ট সময়কাল: {new Date(dateRange.start).toLocaleDateString('bn-BD')} - {new Date(dateRange.end).toLocaleDateString('bn-BD')}
+            Report period: {new Date(dateRange.start).toLocaleDateString('bn-BD')} - {new Date(dateRange.end).toLocaleDateString('bn-BD')}
           </span>
         </div>
 
@@ -133,7 +133,7 @@ export default function Financial({ financialData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট আয়</p>
+                <p className="text-sm text-gray-500">Total income is</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{formatCurrency(revenue.total)}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -145,7 +145,7 @@ export default function Financial({ financialData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">পরিশোধিত অর্ডার</p>
+                <p className="text-sm text-gray-500">Paid order</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">{formatNumber(payment_stats.paid)}</p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-lg">
@@ -157,7 +157,7 @@ export default function Financial({ financialData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">অপরিশোধিত অর্ডার</p>
+                <p className="text-sm text-gray-500">Unprocessed order</p>
                 <p className="text-2xl font-bold text-yellow-600 mt-1">{formatNumber(payment_stats.pending)}</p>
               </div>
               <div className="p-3 bg-yellow-100 rounded-lg">
@@ -169,7 +169,7 @@ export default function Financial({ financialData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">পেমেন্ট পদ্ধতি</p>
+                <p className="text-sm text-gray-500">Payment Method</p>
                 <p className="text-2xl font-bold text-purple-600 mt-1">{revenue.by_payment_method?.length || 0}</p>
               </div>
               <div className="p-3 bg-purple-100 rounded-lg">
@@ -185,7 +185,7 @@ export default function Financial({ financialData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 lg:col-span-2">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiTrendingUp className="w-5 h-5 text-indigo-600" />
-              মাসিক আয়ের প্রবণতা
+              Monthly Earnings Trend
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -195,7 +195,7 @@ export default function Financial({ financialData, period, dateRange }) {
                   <YAxis tickFormatter={(value) => formatCurrency(value)} />
                   <Tooltip formatter={(value) => formatCurrency(value)} />
                   <Legend />
-                  <Line type="monotone" dataKey="revenue" stroke="#4F46E5" name="আয়" strokeWidth={2} />
+                  <Line type="monotone" dataKey="revenue" stroke="#4F46E5" name="Income" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -205,7 +205,7 @@ export default function Financial({ financialData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MdOutlinePayment className="w-5 h-5 text-indigo-600" />
-              পেমেন্ট পদ্ধতি
+              Payment Method
             </h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -216,7 +216,7 @@ export default function Financial({ financialData, period, dateRange }) {
                     cy="50%"
                     labelLine={true}
                     label={({ payment_method, percent }) =>
-                      `${payment_method || 'অন্যান্য'}: ${(percent * 100).toFixed(1)}%`
+                      `${payment_method || 'Other'}: ${(percent * 100).toFixed(1)}%`
                     }
                     outerRadius={80}
                     fill="#8884d8"
@@ -237,7 +237,7 @@ export default function Financial({ financialData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <BsBuilding className="w-5 h-5 text-indigo-600" />
-              শীর্ষ সাপ্লায়ার অনুযায়ী আয়
+              Earn according to top suppliers
             </h3>
             <div className="space-y-4">
               {revenue_by_supplier.map((supplier, index) => (
@@ -262,7 +262,7 @@ export default function Financial({ financialData, period, dateRange }) {
 
           {/* Table header */}
           <div className="px-6 py-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900">মাসিক আয়ের বিবরণ</h3>
+            <h3 className="font-semibold text-gray-900">Monthly income statement</h3>
           </div>
 
           {/* Table */}
@@ -272,9 +272,9 @@ export default function Financial({ financialData, period, dateRange }) {
               {/* Table header */}
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">মাস</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">আয়</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">মোটের শতাংশ</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Month</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Income</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Percentage of total</th>
                 </tr>
               </thead>
 

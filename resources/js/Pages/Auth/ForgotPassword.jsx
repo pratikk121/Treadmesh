@@ -24,7 +24,7 @@ export default function ForgotPassword({ status }) {
 
     return (
         <>
-            <Head title="পাসওয়ার্ড ভুলে গেছেন?" />
+            <Head title="Forgot password?" />
 
             <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
                 {/* Decorative elements - Background design */}
@@ -36,8 +36,8 @@ export default function ForgotPassword({ status }) {
                         <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mb-4 shadow-lg">
                             <FiMail className="w-10 h-10 text-white" />
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-800">পাসওয়ার্ড ভুলে গেছেন?</h2>
-                        <p className="text-gray-600 mt-2">কয়েক সেকেন্ডে আপনার পাসওয়ার্ড রিসেট করুন</p>
+                        <h2 className="text-3xl font-bold text-gray-800">Forgot password?</h2>
+                        <p className="text-gray-600 mt-2">Reset your password in seconds</p>
                     </div>
 
                     {/* Success Message */}
@@ -53,8 +53,8 @@ export default function ForgotPassword({ status }) {
                         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start space-x-3">
                             <FiSend className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                             <div className="text-sm text-green-700">
-                                <p className="font-medium mb-1">রিসেট লিঙ্ক পাঠানো হয়েছে!</p>
-                                <p>পাসওয়ার্ড রিসেট লিঙ্কের জন্য আপনার ইমেইল চেক করুন। আপনার স্প্যাম ফোল্ডারও চেক করতে ভুলবেন না।</p>
+                                <p className="font-medium mb-1">Reset link sent to!</p>
+                                <p>Check your email for the password reset link. Don't forget to check your spam folder as well।</p>
                             </div>
                         </div>
                     )}
@@ -64,7 +64,7 @@ export default function ForgotPassword({ status }) {
                         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-3">
                             <MdError className="w-5 h-5 text-red-600 flex-shrink-0" />
                             <span className="text-sm text-red-700">
-                                {errors.email || 'আপনার তথ্য যাচাই করুন'}
+                                {errors.email || 'Verify your information'}
                             </span>
                         </div>
                     )}
@@ -72,7 +72,7 @@ export default function ForgotPassword({ status }) {
                     {/* Info Message */}
                     <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
                         <p className="text-sm text-indigo-700">
-                            আপনার পাসওয়ার্ড ভুলে গেছেন? কোনো সমস্যা নেই। শুধু আপনার ইমেইল ঠিকানা দিন এবং আমরা আপনাকে একটি পাসওয়ার্ড রিসেট লিঙ্ক পাঠাব।
+                            Forgot your password? No problem. Just enter your email address and we'll send you a password reset link।
                         </p>
                     </div>
 
@@ -80,7 +80,7 @@ export default function ForgotPassword({ status }) {
                         {/* Email Field */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                                ইমেইল ঠিকানা <span className="text-red-500">*</span>
+                                Email address <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -118,28 +118,28 @@ export default function ForgotPassword({ status }) {
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    লিঙ্ক পাঠানো হচ্ছে...
+                                    Sending Link...
                                 </span>
                             ) : (
-                                'পাসওয়ার্ড রিসেট লিঙ্ক পাঠান'
+                                'Send password reset link'
                             )}
                         </button>
 
                         {/* Quick Tips */}
                         <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">দ্রুত টিপস</h4>
+                            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Quick Tips</h4>
                             <ul className="text-xs text-gray-600 space-y-1">
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
-                                    ইমেইল না পেলে আপনার স্প্যাম/জাঙ্ক ফোল্ডার চেক করুন
+                                    If you do not receive the email, check your spam/junk folder
                                 </li>
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
-                                    রিসেট লিঙ্ক ৬০ মিনিটের মধ্যে মেয়াদ শেষ হয়
+                                    Reset link expires in 60 minutes
                                 </li>
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
-                                    আপনার অ্যাকাউন্টের সাথে সংযুক্ত ইমেইল ব্যবহার করছেন কিনা নিশ্চিত করুন
+                                    Make sure you're using the email associated with your account
                                 </li>
                             </ul>
                         </div>
@@ -147,19 +147,19 @@ export default function ForgotPassword({ status }) {
                         {/* Back to Login Link */}
                         <div className="text-center mt-6 pt-4 border-t border-gray-200">
                             <p className="text-sm text-gray-600">
-                                আপনার পাসওয়ার্ড মনে আছে?{' '}
+                                Remember your password?{' '}
                                 <Link
                                     href={route('login')}
                                     className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
                                 >
-                                    লগইনে ফিরে যান
+                                    Back to login
                                 </Link>
                             </p>
                         </div>
 
                         {/* Help text */}
                         <div className="text-center text-xs text-gray-500">
-                            <p>সমস্যা হচ্ছে? সাহায্যের জন্য সাপোর্টে যোগাযোগ করুন</p>
+                            <p>Having problems? Contact support for assistance</p>
                         </div>
                     </form>
                 </div>

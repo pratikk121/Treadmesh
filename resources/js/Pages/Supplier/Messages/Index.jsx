@@ -75,7 +75,7 @@ export default function MessagesIndex({
     if (messageDate.toDateString() === today.toDateString()) {
       return messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     } else if (messageDate.toDateString() === yesterday.toDateString()) {
-      return 'গতকাল';
+      return 'yesterday';
     } else {
       return messageDate.toLocaleDateString('bn-BD', { month: 'short', day: 'numeric' });
     }
@@ -161,16 +161,16 @@ export default function MessagesIndex({
 
   return (
     <DashboardLayout>
-      <Head title="বার্তা" />
+      <Head title="Message" />
 
       <div className="h-[calc(100vh-8rem)] flex flex-col">
         {/* Header - Page title and actions */}
         <div className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">বার্তা</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Message</h1>
               <p className="text-sm text-gray-600 mt-1">
-                ক্রেতাদের সাথে যোগাযোগ করুন এবং কথোপকথন পরিচালনা করুন
+                Interact with buyers and manage conversations
               </p>
             </div>
             <button
@@ -178,7 +178,7 @@ export default function MessagesIndex({
               className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
             >
               <FiCheckCircle className="w-4 h-4" />
-              সব পড়া হিসেবে চিহ্নিত
+              Mark All as Read
             </button>
           </div>
         </div>
@@ -192,7 +192,7 @@ export default function MessagesIndex({
                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="কথোপকথন অনুসন্ধান..."
+                  placeholder="Conversation search..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
@@ -262,9 +262,9 @@ export default function MessagesIndex({
                 // Empty State - No conversations
                 <div className="p-8 text-center">
                   <FiMessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">কোনো কথোপকথন নেই</p>
+                  <p className="text-gray-500">No conversation</p>
                   <p className="text-sm text-gray-400 mt-1">
-                    আপনি যখন চ্যাট শুরু করবেন তখন বার্তা এখানে দেখা যাবে
+                    Messages will appear here when you start a chat
                   </p>
                 </div>
               )}
@@ -300,7 +300,7 @@ export default function MessagesIndex({
                         }}
                         className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent text-sm"
                       >
-                        <option value="">সাধারণ কথোপকথন</option>
+                        <option value="">General conversation</option>
                         {relatedRfqs.map((rfq) => (
                           <option key={rfq.id} value={rfq.id}>
                             {rfq.rfq_number} - {rfq.title}
@@ -360,9 +360,9 @@ export default function MessagesIndex({
                           </span>
                           {message.sender_id !== otherUser?.id && (
                             message.is_read ? (
-                              <FiCheckCircle className="w-3 h-3 text-indigo-200" title="পড়া হয়েছে" />
+                              <FiCheckCircle className="w-3 h-3 text-indigo-200" title="has been read" />
                             ) : (
-                              <FiCheck className="w-3 h-3 text-indigo-200" title="পাঠানো হয়েছে" />
+                              <FiCheck className="w-3 h-3 text-indigo-200" title="has been sent" />
                             )
                           )}
                         </div>
@@ -421,7 +421,7 @@ export default function MessagesIndex({
                     type="text"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="আপনার বার্তা লিখুন..."
+                    placeholder="Enter your message..."
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   />
 
@@ -432,7 +432,7 @@ export default function MessagesIndex({
                     className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2"
                   >
                     <FiSend className="w-4 h-4" />
-                    <span>পাঠান</span>
+                    <span>Send</span>
                   </button>
                 </form>
               </div>
@@ -444,9 +444,9 @@ export default function MessagesIndex({
                 <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <FiMessageSquare className="w-10 h-10 text-indigo-600" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">কোনো কথোপকথন নির্বাচিত হয়নি</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No conversations selected</h3>
                 <p className="text-gray-500">
-                  বার্তা পাঠানো শুরু করতে সাইডবার থেকে একটি কথোপকথন নির্বাচন করুন
+                  Select a conversation from the sidebar
                 </p>
               </div>
             </div>

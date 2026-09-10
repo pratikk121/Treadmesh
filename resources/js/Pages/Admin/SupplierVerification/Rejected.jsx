@@ -32,7 +32,7 @@ export default function Rejected({ rejectedSuppliers }) {
 
   return (
     <DashboardLayout>
-      <Head title="প্রত্যাখ্যাত সাপ্লায়ার" />
+      <Head title="Rejected supplier" />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -44,9 +44,9 @@ export default function Rejected({ rejectedSuppliers }) {
             <FiArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">প্রত্যাখ্যাত সাপ্লায়ার</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Rejected supplier</h1>
             <p className="text-sm text-gray-600 mt-1">
-              প্রত্যাখ্যাত সাপ্লায়ার আবেদনের তালিকা
+              to pay quota List of Rejected Supplier Applications
             </p>
           </div>
         </div>
@@ -58,7 +58,7 @@ export default function Rejected({ rejectedSuppliers }) {
               <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="কোম্পানির নাম, ইমেইল বা ফোন দ্বারা অনুসন্ধান..."
+                placeholder="Search by company name, email or phone..."
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -68,7 +68,7 @@ export default function Rejected({ rejectedSuppliers }) {
               type="submit"
               className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
             >
-              অনুসন্ধান
+              search
             </button>
           </form>
         </div>
@@ -85,11 +85,11 @@ export default function Rejected({ rejectedSuppliers }) {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">{supplier.company_name}</h3>
-                    <p className="text-sm text-gray-500">{supplier.city || 'শহর উল্লেখ নেই'}</p>
+                    <p className="text-sm text-gray-500">{supplier.city || 'City not mentioned'}</p>
                   </div>
                 </div>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                  প্রত্যাখ্যাত
+                  Rejected
                 </span>
               </div>
 
@@ -122,7 +122,7 @@ export default function Rejected({ rejectedSuppliers }) {
                 href={route('admin.supplier-verification.verify', supplier.id)}
                 className="block w-full text-center px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
               >
-                আবেদন পর্যালোচনা
+                Application review
               </Link>
             </div>
           ))}
@@ -144,8 +144,8 @@ export default function Rejected({ rejectedSuppliers }) {
                   }`}
                 dangerouslySetInnerHTML={{
                   __html: link.label
-                    .replace('Previous', 'পূর্ববর্তী')
-                    .replace('Next', 'পরবর্তী')
+                    .replace('Previous', 'previous')
+                    .replace('Next', 'next')
                 }}
               />
             ))}

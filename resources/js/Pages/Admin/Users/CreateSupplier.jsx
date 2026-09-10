@@ -55,8 +55,8 @@ export default function CreateSupplier({ user }) {
     router.post(route('admin.users.store-supplier', user.id), formData, {
       onSuccess: () => {
         Swal.fire({
-          title: 'সফল!',
-          text: 'সাপ্লায়ার প্রোফাইল সফলভাবে তৈরি করা হয়েছে।',
+          title: 'successful!',
+          text: 'Supplier profile created successfully।',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -65,8 +65,8 @@ export default function CreateSupplier({ user }) {
       onError: (errors) => {
         setErrors(errors);
         Swal.fire({
-          title: 'ত্রুটি!',
-          text: 'ফর্মে ত্রুটি আছে। অনুগ্রহ করে পরীক্ষা করুন।',
+          title: 'Error!',
+          text: 'There is an error in the form. Please check।',
           icon: 'error',
           confirmButtonColor: '#4F46E5'
         });
@@ -77,7 +77,7 @@ export default function CreateSupplier({ user }) {
 
   return (
     <DashboardLayout>
-      <Head title={`${user.name} - সাপ্লায়ার প্রোফাইল তৈরি`} />
+      <Head title={`${user.name} - Create supplier profile`} />
 
       <div className="max-w-2xl mx-auto">
         <div className="space-y-6">
@@ -90,9 +90,9 @@ export default function CreateSupplier({ user }) {
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">সাপ্লায়ার প্রোফাইল তৈরি</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Create supplier profile</h1>
               <p className="text-sm text-gray-600 mt-1">
-                {user.name} - এর জন্য সাপ্লায়ার তথ্য সম্পূর্ণ করুন
+                {user.name} - Complete Supplier Information for
               </p>
             </div>
           </div>
@@ -104,10 +104,10 @@ export default function CreateSupplier({ user }) {
             </div>
             <div>
               <p className="text-sm text-blue-700">
-                <span className="font-medium">ব্যবহারকারী:</span> {user.name} ({user.email})
+                <span className="font-medium">User:</span> {user.name} ({user.email})
               </p>
               <p className="text-xs text-blue-600 mt-1">
-                আপনি অ্যাডমিন হিসেবে তৈরি করায় এই প্রোফাইল স্বয়ংক্রিয়ভাবে ভেরিফাই করা হবে।
+                This profile will be automatically verified as you are created as an admin।
               </p>
             </div>
           </div>
@@ -119,13 +119,13 @@ export default function CreateSupplier({ user }) {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                   <MdOutlineStorefront className="w-5 h-5 text-indigo-600" />
-                  কোম্পানির তথ্য
+                  Company Information
                 </h3>
                 <div className="space-y-4">
                   {/* Company Name Field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      কোম্পানির নাম *
+                      Company Name *
                     </label>
                     <div className="relative">
                       <FaBuilding className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -136,7 +136,7 @@ export default function CreateSupplier({ user }) {
                         onChange={handleChange}
                         className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.company_name ? 'border-red-500' : 'border-gray-300'
                           }`}
-                        placeholder="কোম্পানির নাম লিখুন"
+                        placeholder="Enter the company name"
                       />
                     </div>
                     {errors.company_name && (
@@ -147,7 +147,7 @@ export default function CreateSupplier({ user }) {
                   {/* Trade License Number Field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      ট্রেড লাইসেন্স নম্বর *
+                      Trade License No. *
                     </label>
                     <div className="relative">
                       <FiFileText className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -158,7 +158,7 @@ export default function CreateSupplier({ user }) {
                         onChange={handleChange}
                         className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.trade_license_number ? 'border-red-500' : 'border-gray-300'
                           }`}
-                        placeholder="ট্রেড লাইসেন্স নম্বর লিখুন"
+                        placeholder="Enter trade license number"
                       />
                     </div>
                     {errors.trade_license_number && (
@@ -170,12 +170,12 @@ export default function CreateSupplier({ user }) {
 
               {/* Contact Information Section */}
               <div className="border-t pt-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">যোগাযোগের তথ্য</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
                 <div className="space-y-4">
                   {/* Company Phone Field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      কোম্পানির ফোন *
+                      Company Phone *
                     </label>
                     <div className="relative">
                       <FiPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -186,7 +186,7 @@ export default function CreateSupplier({ user }) {
                         onChange={handleChange}
                         className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.company_phone ? 'border-red-500' : 'border-gray-300'
                           }`}
-                        placeholder="কোম্পানির ফোন নম্বর লিখুন"
+                        placeholder="Enter Company Phone Number"
                       />
                     </div>
                     {errors.company_phone && (
@@ -197,7 +197,7 @@ export default function CreateSupplier({ user }) {
                   {/* Company Email Field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      কোম্পানির ইমেইল *
+                      Company Email *
                     </label>
                     <div className="relative">
                       <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -208,7 +208,7 @@ export default function CreateSupplier({ user }) {
                         onChange={handleChange}
                         className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.company_email ? 'border-red-500' : 'border-gray-300'
                           }`}
-                        placeholder="কোম্পানির ইমেইল লিখুন"
+                        placeholder="Enter Company Email"
                       />
                     </div>
                     {errors.company_email && (
@@ -220,12 +220,12 @@ export default function CreateSupplier({ user }) {
 
               {/* Address Information Section */}
               <div className="border-t pt-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">ঠিকানা তথ্য</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Address information</h3>
                 <div className="space-y-4">
                   {/* Company Address Field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      কোম্পানির ঠিকানা *
+                      Company Address *
                     </label>
                     <div className="relative">
                       <FiMapPin className="absolute left-3 top-3 text-gray-400" />
@@ -236,7 +236,7 @@ export default function CreateSupplier({ user }) {
                         rows="3"
                         className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.company_address ? 'border-red-500' : 'border-gray-300'
                           }`}
-                        placeholder="সম্পূর্ণ কোম্পানির ঠিকানা লিখুন"
+                        placeholder="Enter the full company address"
                       />
                     </div>
                     {errors.company_address && (
@@ -247,7 +247,7 @@ export default function CreateSupplier({ user }) {
                   {/* City Field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      শহর *
+                      City *
                     </label>
                     <input
                       type="text"
@@ -256,7 +256,7 @@ export default function CreateSupplier({ user }) {
                       onChange={handleChange}
                       className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.city ? 'border-red-500' : 'border-gray-300'
                         }`}
-                      placeholder="শহরের নাম লিখুন"
+                      placeholder="Enter the city name"
                     />
                     {errors.city && (
                       <p className="mt-1 text-sm text-red-600">{errors.city}</p>
@@ -272,14 +272,14 @@ export default function CreateSupplier({ user }) {
                 href={route('admin.users.show', user.id)}
                 className="px-4 py-2 text-gray-700 hover:text-gray-900"
               >
-                বাতিল
+                cancel
               </Link>
               <button
                 type="submit"
                 disabled={processing}
                 className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {processing ? 'তৈরি হচ্ছে...' : 'সাপ্লায়ার প্রোফাইল তৈরি'}
+                {processing ? 'Creating...' : 'Create supplier profile'}
               </button>
             </div>
           </form>
@@ -288,8 +288,8 @@ export default function CreateSupplier({ user }) {
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start gap-3">
             <FiCheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-green-700">
-              <p className="font-medium mb-1">স্বয়ংক্রিয়-ভেরিফিকেশন:</p>
-              <p>অ্যাডমিন দ্বারা তৈরি সাপ্লায়ার প্রোফাইল স্বয়ংক্রিয়ভাবে ভেরিফাই করা হয়। অতিরিক্ত অনুমোদনের প্রয়োজন নেই।</p>
+              <p className="font-medium mb-1">Auto-Verification:</p>
+              <p>Supplier profile created by admin is automatically verified. No additional authorization required।</p>
             </div>
           </div>
         </div>

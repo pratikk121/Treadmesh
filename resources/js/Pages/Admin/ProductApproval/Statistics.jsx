@@ -52,7 +52,7 @@ export default function Statistics({ stats }) {
 
   return (
     <DashboardLayout>
-      <Head title="পণ্য পরিসংখ্যান" />
+      <Head title="Product statistics" />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -64,9 +64,9 @@ export default function Statistics({ stats }) {
             <FiArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">পণ্য পরিসংখ্যান</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Product statistics</h1>
             <p className="text-sm text-gray-600 mt-1">
-              বিচারাধীন পণ্য অনুমোদনের সারসংক্ষেপ
+              Summary of pending product approvals
             </p>
           </div>
         </div>
@@ -76,7 +76,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">সর্বনিম্ন মূল্য</p>
+                <p className="text-sm text-gray-500">Lowest Price</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">
                   {formatCurrency(price_range.min || 0)}
                 </p>
@@ -90,7 +90,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">সর্বোচ্চ মূল্য</p>
+                <p className="text-sm text-gray-500">Maximum price</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">
                   {formatCurrency(price_range.max || 0)}
                 </p>
@@ -104,7 +104,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">গড় মূল্য</p>
+                <p className="text-sm text-gray-500">average price</p>
                 <p className="text-2xl font-bold text-purple-600 mt-1">
                   {formatCurrency(price_range.avg || 0)}
                 </p>
@@ -122,7 +122,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MdOutlineCategory className="w-5 h-5 text-indigo-600" />
-              ক্যাটাগরি অনুযায়ী পণ্য
+              Product By Category
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -165,7 +165,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <BsBuilding className="w-5 h-5 text-indigo-600" />
-              শীর্ষ সাপ্লায়ার
+              Top Suppliers
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -188,7 +188,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 lg:col-span-2">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiCalendar className="w-5 h-5 text-indigo-600" />
-              ৩০ দিনের জমা প্রবণতা
+              30-Day Deposit Trend
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -198,7 +198,7 @@ export default function Statistics({ stats }) {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="count" fill="#4F46E5" name="জমা দেওয়া পণ্য" />
+                  <Bar dataKey="count" fill="#4F46E5" name="Submitted products" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -210,7 +210,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-indigo-100 text-sm">মোট বিচারাধীন</p>
+                <p className="text-indigo-100 text-sm">Total pending</p>
                 <p className="text-3xl font-bold mt-1">{by_category.reduce((acc, curr) => acc + curr.total, 0)}</p>
               </div>
               <FiPackage className="w-8 h-8 text-indigo-200" />
@@ -220,7 +220,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm">ক্যাটাগরি</p>
+                <p className="text-green-100 text-sm">Category</p>
                 <p className="text-3xl font-bold mt-1">{by_category.length}</p>
               </div>
               <MdOutlineCategory className="w-8 h-8 text-green-200" />
@@ -230,7 +230,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm">সক্রিয় সাপ্লায়ার</p>
+                <p className="text-purple-100 text-sm">Active supplier</p>
                 <p className="text-3xl font-bold mt-1">{by_supplier.length}</p>
               </div>
               <BsBuilding className="w-8 h-8 text-purple-200" />
@@ -240,7 +240,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-yellow-100 text-sm">মূল্য সীমা</p>
+                <p className="text-yellow-100 text-sm">Price range</p>
                 <p className="text-xl font-bold mt-1">
                   {formatCurrency(price_range.min)} - {formatCurrency(price_range.max)}
                 </p>

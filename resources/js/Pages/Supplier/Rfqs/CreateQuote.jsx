@@ -94,20 +94,20 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
     if (selectedProducts.length === 0) {
       Swal.fire({
         icon: "warning",
-        title: "পণ্য যোগ করুন",
-        text: "অনুগ্রহ করে আপনার কোটায় অন্তত একটি পণ্য যোগ করুন",
-        confirmButtonText: "ঠিক আছে"
+        title: "Add product",
+        text: "Please add at least one product to your quota",
+        confirmButtonText: "OK"
       });
       return;
     }
 
     Swal.fire({
-      title: "আপনি কি নিশ্চিত?",
-      text: "আপনি কি এই কোটাটি সাবমিট করতে চান?",
+      title: "Are you sure?",
+      text: "Do You Want to Submit This Quota?",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "হ্যাঁ, সাবমিট করুন",
-      cancelButtonText: "না",
+      confirmButtonText: "Yes, submit",
+      cancelButtonText: "No",
       confirmButtonColor: "#16a34a"
     }).then((result) => {
       if (result.isConfirmed) {
@@ -115,15 +115,15 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
           onSuccess: () => {
             Swal.fire({
               icon: "success",
-              title: "সফল",
-              text: "কোটা সফলভাবে সাবমিট হয়েছে"
+              title: "successful",
+              text: "Quota successfully submitted"
             });
           },
           onError: () => {
             Swal.fire({
               icon: "error",
-              title: "ত্রুটি",
-              text: "কোটা সাবমিট করা যায়নি"
+              title: "Error",
+              text: "Quota could not be submitted"
             });
           }
         });
@@ -138,7 +138,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
 
   return (
     <DashboardLayout>
-      <Head title={`RFQ #${rfq.rfq_number} - কোটা তৈরি`} />
+      <Head title={`RFQ #${rfq.rfq_number} - Quota creation`} />
 
       <div className="space-y-6">
         {/* Header - Back button, title and action buttons */}
@@ -151,9 +151,9 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">কোটা তৈরি</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Quota creation</h1>
               <p className="text-sm text-gray-600 mt-1">
-                RFQ: {rfq.rfq_number} - {rfq.title} -এর জন্য
+                RFQ: {rfq.rfq_number} - {rfq.title} -for
               </p>
             </div>
           </div>
@@ -163,7 +163,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
               className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
             >
               <FiX className="w-4 h-4" />
-              <span>বাতিল</span>
+              <span>cancel</span>
             </Link>
             <button
               onClick={handleSubmit}
@@ -171,7 +171,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
               className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
             >
               <FiSave className="w-4 h-4" />
-              <span>{processing ? 'জমা দেওয়া হচ্ছে...' : 'কোটা জমা দিন'}</span>
+              <span>{processing ? 'Submitting...' : 'Submit Quota'}</span>
             </button>
           </div>
         </div>
@@ -182,14 +182,14 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
             <div className="lg:col-span-2 space-y-6">
               {/* RFQ Info Summary */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">RFQ সারসংক্ষেপ</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">RFQ Summary</h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-gray-500">মোট অনুরোধকৃত পরিমাণ</p>
+                    <p className="text-sm text-gray-500">without quota Total requested amount is</p>
                     <p className="font-bold text-gray-900">{rfq.quantity}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">প্রয়োজনীয় তারিখ</p>
+                    <p className="text-sm text-gray-500">Required date</p>
                     <p className="font-medium text-gray-900">
                       {new Date(rfq.required_by_date).toLocaleDateString('bn-BD')}
                     </p>
@@ -199,12 +199,12 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
 
               {/* Product Selection */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">পণ্য নির্বাচন</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Product Selection</h2>
 
                 {/* Requested Products Suggestions */}
                 {requestedProducts.length > 0 && (
                   <div className="mb-4">
-                    <p className="text-sm font-medium text-gray-700 mb-2">ক্রেতার অনুরোধ:</p>
+                    <p className="text-sm font-medium text-gray-700 mb-2">Buyer request:</p>
                     <div className="flex flex-wrap gap-2">
                       {requestedProducts.map((item, index) => (
                         <span key={index} className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm">
@@ -217,7 +217,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
 
                 {/* Available Products */}
                 <div className="space-y-3">
-                  <p className="text-sm font-medium text-gray-700">আপনার পণ্য:</p>
+                  <p className="text-sm font-medium text-gray-700">your product:</p>
                   {products.map((product) => (
                     <div
                       key={product.id}
@@ -230,7 +230,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                         <div>
                           <p className="font-medium text-gray-900">{product.name}</p>
                           <p className="text-sm text-gray-500">
-                            মূল মূল্য: {formatCurrency(product.base_price)} | সর্বনিম্ন অর্ডার: {product.minimum_order_quantity} {product.unit}
+                            Original price: {formatCurrency(product.base_price)} | Minimum Order: {product.minimum_order_quantity} {product.unit}
                           </p>
                         </div>
                       </div>
@@ -248,11 +248,11 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
 
               {/* Quote Items */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">কোটা আইটেম</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quota item</h2>
 
                 {selectedProducts.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
-                    আপনার কোটায় যোগ করতে উপরের পণ্য নির্বাচন করুন
+                    Select the product above to add to your quota
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -270,7 +270,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                         </div>
                         <div className="grid grid-cols-3 gap-3">
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">পরিমাণ</label>
+                            <label className="block text-xs text-gray-500 mb-1">Amount</label>
                             <input
                               type="number"
                               value={product.quantity}
@@ -280,7 +280,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">একক মূল্য (টাকা)</label>
+                            <label className="block text-xs text-gray-500 mb-1">Single price (Rs.)</label>
                             <input
                               type="number"
                               value={product.unit_price}
@@ -291,7 +291,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">মোট</label>
+                            <label className="block text-xs text-gray-500 mb-1">total</label>
                             <p className="font-medium text-indigo-600 pt-1">
                               {formatCurrency(product.total_price)}
                             </p>
@@ -303,7 +303,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                     {/* Quote Total */}
                     <div className="pt-4 border-t border-gray-200">
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold text-gray-900">মোট কোটা পরিমাণ</span>
+                        <span className="font-semibold text-gray-900">Total quota amount</span>
                         <span className="text-2xl font-bold text-indigo-600">
                           {formatCurrency(data.total_amount)}
                         </span>
@@ -318,13 +318,13 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
             <div className="space-y-6">
               {/* Quote Settings */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">কোটা বিবরণ</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quota details</h2>
 
                 <div className="space-y-4">
                   {/* Valid Until */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      মেয়াদ শেষ <span className="text-red-500">*</span>
+                      Expires <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="date"
@@ -342,13 +342,13 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                   {/* Delivery Estimate */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      ডেলিভারি সময়
+                      Delivery time
                     </label>
                     <input
                       type="text"
                       value={data.delivery_estimate}
                       onChange={(e) => setData('delivery_estimate', e.target.value)}
-                      placeholder="যেমন: ৫-৭ কার্যদিবস"
+                      placeholder="Eg: 5-7 working days"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                     />
                   </div>
@@ -356,34 +356,34 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                   {/* Payment Terms */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      পেমেন্ট শর্তাবলী
+                      Payment Terms
                     </label>
                     <select
                       value={data.payment_terms}
                       onChange={(e) => setData('payment_terms', e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                     >
-                      <option value="">পেমেন্ট শর্তাবলী নির্বাচন</option>
-                      <option value="advance">১০০% অগ্রিম</option>
-                      <option value="partial">৫০% অগ্রিম, ৫০% ডেলিভারিতে</option>
-                      <option value="delivery">ডেলিভারিতে পেমেন্ট</option>
-                      <option value="credit_7">৭ দিন ক্রেডিট</option>
-                      <option value="credit_15">১৫ দিন ক্রেডিট</option>
-                      <option value="credit_30">৩০ দিন ক্রেডিট</option>
+                      <option value="">Select payment terms</option>
+                      <option value="advance">100% advance</option>
+                      <option value="partial">50% in advance, 50% on delivery</option>
+                      <option value="delivery">Payment on delivery</option>
+                      <option value="credit_7">7 days credit</option>
+                      <option value="credit_15">15 days credit</option>
+                      <option value="credit_30">30 days credit</option>
                     </select>
                   </div>
 
                   {/* Additional Notes */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      অতিরিক্ত নোট
+                      Additional Notes
                     </label>
                     <textarea
                       value={data.notes}
                       onChange={(e) => setData('notes', e.target.value)}
                       rows="4"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                      placeholder="ক্রেতার জন্য যেকোনো অতিরিক্ত তথ্য..."
+                      placeholder="Any additional information for the buyer..."
                     />
                   </div>
                 </div>
@@ -394,12 +394,12 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                 <div className="flex items-start gap-3">
                   <FiAlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm text-blue-700 font-medium">কোটা টিপস</p>
+                    <p className="text-sm text-blue-700 font-medium">Quota Tips</p>
                     <ul className="mt-2 text-xs text-blue-600 list-disc list-inside space-y-1">
-                      <li>আপনার মূল্য প্রতিযোগিতামূলক রাখুন</li>
-                      <li>বাস্তবসম্মত ডেলিভারি সময় নির্ধারণ করুন</li>
-                      <li>স্পষ্ট পেমেন্ট শর্তাবলী আস্থা তৈরি করতে সাহায্য করে</li>
-                      <li>ক্রেতারা বিস্তারিত মূল্য বিশ্লেষণ সহ কোটা পছন্দ করেন</li>
+                      <li>Keep your prices competitive</li>
+                      <li>Set a realistic delivery time</li>
+                      <li>Clear payment terms help build trust</li>
+                      <li>Buyers prefer quotas with detailed price analysis</li>
                     </ul>
                   </div>
                 </div>

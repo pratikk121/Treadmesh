@@ -39,7 +39,7 @@ export default function ResetPassword({ token, email }) {
 
     return (
         <>
-            <Head title="পাসওয়ার্ড রিসেট" />
+            <Head title="Reset password" />
 
             <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
                 {/* Decorative elements - Background design */}
@@ -51,8 +51,8 @@ export default function ResetPassword({ token, email }) {
                         <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mb-4 shadow-lg">
                             <FiRefreshCw className="w-10 h-10 text-white" />
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-800">পাসওয়ার্ড রিসেট</h2>
-                        <p className="text-gray-600 mt-2">নিচে আপনার নতুন পাসওয়ার্ড দিন</p>
+                        <h2 className="text-3xl font-bold text-gray-800">Reset password</h2>
+                        <p className="text-gray-600 mt-2">Enter Your New Password Below</p>
                     </div>
 
                     {/* Error Message */}
@@ -60,7 +60,7 @@ export default function ResetPassword({ token, email }) {
                         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-3">
                             <MdError className="w-5 h-5 text-red-600 flex-shrink-0" />
                             <span className="text-sm text-red-700">
-                                {errors.email || errors.password || errors.password_confirmation || 'আপনার তথ্য যাচাই করুন'}
+                                {errors.email || errors.password || errors.password_confirmation || 'Verify your information'}
                             </span>
                         </div>
                     )}
@@ -69,12 +69,12 @@ export default function ResetPassword({ token, email }) {
                     <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-start space-x-3">
                         <BsKey className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                         <div className="text-sm text-blue-700">
-                            <p className="font-medium mb-1">পাসওয়ার্ড প্রয়োজনীয়তা:</p>
+                            <p className="font-medium mb-1">Password requirements:</p>
                             <ul className="list-disc list-inside text-xs space-y-1">
-                                <li>কমপক্ষে ৮ অক্ষর দীর্ঘ</li>
-                                <li>কমপক্ষে একটি বড় হাতের অক্ষর থাকতে হবে</li>
-                                <li>কমপক্ষে একটি সংখ্যা থাকতে হবে</li>
-                                <li>কমপক্ষে একটি বিশেষ অক্ষর থাকতে হবে</li>
+                                <li>At least 8 characters long</li>
+                                <li>Must contain at least one uppercase letter</li>
+                                <li>There must be at least one number</li>
+                                <li>Must contain at least one special character</li>
                             </ul>
                         </div>
                     </div>
@@ -83,7 +83,7 @@ export default function ResetPassword({ token, email }) {
                         {/* Email Field (read-only) */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                                ইমেইল ঠিকানা <span className="text-red-500">*</span>
+                                Email address <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -112,7 +112,7 @@ export default function ResetPassword({ token, email }) {
                         {/* New Password Field */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                                নতুন পাসওয়ার্ড <span className="text-red-500">*</span>
+                                New Password <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -152,7 +152,7 @@ export default function ResetPassword({ token, email }) {
                         {/* Confirm Password Field */}
                         <div>
                             <label htmlFor="password_confirmation" className="block text-sm font-medium text-gray-700 mb-1">
-                                নতুন পাসওয়ার্ড নিশ্চিত করুন <span className="text-red-500">*</span>
+                                Confirm new password <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -192,15 +192,15 @@ export default function ResetPassword({ token, email }) {
                         {data.password && (
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between text-xs">
-                                    <span className="text-gray-600">পাসওয়ার্ড শক্তি:</span>
+                                    <span className="text-gray-600">Password strength:</span>
                                     <span className={
                                         data.password.length < 8 ? 'text-red-600' :
                                             data.password.length < 12 ? 'text-yellow-600' :
                                                 'text-green-600'
                                     }>
-                                        {data.password.length < 8 ? 'দুর্বল' :
-                                            data.password.length < 12 ? 'মাঝারি' :
-                                                'শক্তিশালী'}
+                                        {data.password.length < 8 ? 'Weak' :
+                                            data.password.length < 12 ? 'Medium' :
+                                                'Strong'}
                                     </span>
                                 </div>
                                 <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -226,10 +226,10 @@ export default function ResetPassword({ token, email }) {
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    পাসওয়ার্ড রিসেট হচ্ছে...
+                                    Password resetting...
                                 </span>
                             ) : (
-                                'পাসওয়ার্ড রিসেট'
+                                'Reset password'
                             )}
                         </button>
 
@@ -237,26 +237,26 @@ export default function ResetPassword({ token, email }) {
                         <div className="bg-indigo-50 rounded-lg p-3 flex items-start space-x-3">
                             <BsShieldCheck className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                             <p className="text-xs text-indigo-700">
-                                আপনার নতুন পাসওয়ার্ড এনক্রিপ্ট করে নিরাপদে সংরক্ষণ করা হবে। একটি শক্তিশালী পাসওয়ার্ড নির্বাচন করুন যা আপনি অন্য কোথাও ব্যবহার করেননি।
+                                Your new password will be encrypted and stored securely. Choose a strong password that you haven't used elsewhere।
                             </p>
                         </div>
 
                         {/* Back to Login Link */}
                         <div className="text-center mt-6 pt-4 border-t border-gray-200">
                             <p className="text-sm text-gray-600">
-                                আপনার পাসওয়ার্ড মনে আছে?{' '}
+                                Remember your password?{' '}
                                 <Link
                                     href={route('login')}
                                     className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
                                 >
-                                    লগইনে ফিরে যান
+                                    Back to login
                                 </Link>
                             </p>
                         </div>
 
                         {/* Help text */}
                         <div className="text-center text-xs text-gray-500">
-                            <p>সমস্যা হচ্ছে? সাহায্যের জন্য সাপোর্টে যোগাযোগ করুন</p>
+                            <p>Having problems? Contact support for assistance</p>
                         </div>
                     </form>
                 </div>

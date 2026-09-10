@@ -54,10 +54,10 @@ export default function RfqShow({
     const diffTime = deadline - now;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays < 0) return { text: 'মেয়াদোত্তীর্ণ', color: 'text-red-600' };
-    if (diffDays === 0) return { text: 'আজ', color: 'text-orange-600' };
-    if (diffDays === 1) return { text: 'আগামীকাল', color: 'text-yellow-600' };
-    return { text: `${diffDays} দিন বাকি`, color: 'text-green-600' };
+    if (diffDays < 0) return { text: 'Expired', color: 'text-red-600' };
+    if (diffDays === 0) return { text: 'Today', color: 'text-orange-600' };
+    if (diffDays === 1) return { text: 'tomorrow', color: 'text-yellow-600' };
+    return { text: `${diffDays} Days Remaining`, color: 'text-green-600' };
   };
 
   // Calculate days remaining until deadline
@@ -66,9 +66,9 @@ export default function RfqShow({
   // Get quote status badge with appropriate styling
   const getQuoteStatusBadge = (status) => {
     const badges = {
-      pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: MdPending, label: 'অপেক্ষমান' },
-      accepted: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'গৃহীত' },
-      rejected: { bg: 'bg-red-100', text: 'text-red-800', icon: FiXCircle, label: 'প্রত্যাখ্যাত' }
+      pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: MdPending, label: 'Awaiting' },
+      accepted: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'accepted' },
+      rejected: { bg: 'bg-red-100', text: 'text-red-800', icon: FiXCircle, label: 'Rejected' }
     };
     const badge = badges[status] || badges.pending;
     const Icon = badge.icon;
@@ -97,7 +97,7 @@ export default function RfqShow({
           <div>
             <h1 className="text-2xl font-bold text-gray-900">RFQ #{rfq.rfq_number}</h1>
             <p className="text-sm text-gray-600 mt-1">
-              {formatDate(rfq.created_at)} তারিখে পোস্ট করা হয়েছে
+              {formatDate(rfq.created_at)} Posted on
             </p>
           </div>
         </div>
@@ -109,10 +109,10 @@ export default function RfqShow({
               <FiXCircle className="w-5 h-5 text-red-400 mr-3 mt-0.5" />
               <div>
                 <p className="text-sm text-red-700 font-medium">
-                  এই RFQ আর কোটা গ্রহণের জন্য উন্মুক্ত নেই
+                  This RFQ is no longer open for quota acceptance
                 </p>
                 <p className="text-sm text-red-600 mt-1">
-                  সময়সীমা শেষ হয়েছে বা RFQ বন্ধ করা হয়েছে।
+                  The deadline has expired or the RFQ has been closed।
                 </p>
               </div>
             </div>
@@ -126,11 +126,11 @@ export default function RfqShow({
               <FiCheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5" />
               <div>
                 <p className="text-sm text-green-700 font-medium">
-                  আপনি ইতিমধ্যে এই RFQ-র জন্য একটি কোটা জমা দিয়েছেন
+                  You have already submitted a quota for this RFQ
                 </p>
                 <p className="text-sm text-green-600 mt-1">
-                  কোটা নম্বর: {existingQuote.quote_number} | স্ট্যাটাস: {existingQuote.status === 'pending' ? 'অপেক্ষমান' :
-                    existingQuote.status === 'accepted' ? 'গৃহীত' : 'প্রত্যাখ্যাত'}
+                  Quota Number: {existingQuote.quote_number} | Status: {existingQuote.status === 'pending' ? 'Awaiting' :
+                    existingQuote.status === 'accepted' ? 'accepted' : 'Rejected'}
                 </p>
               </div>
             </div>
@@ -143,26 +143,26 @@ export default function RfqShow({
           <div className="lg:col-span-2 space-y-6">
             {/* RFQ Information */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">RFQ বিবরণ</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">RFQ Description</h2>
 
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-500">শিরোনাম</p>
+                  <p className="text-sm text-gray-500">Title</p>
                   <p className="font-medium text-gray-900">{rfq.title}</p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-gray-500">বিবরণ</p>
+                  <p className="text-sm text-gray-500">Description</p>
                   <p className="text-gray-700 whitespace-pre-line">{rfq.description}</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-gray-500">মোট পরিমাণ</p>
+                    <p className="text-sm text-gray-500">total amount</p>
                     <p className="font-bold text-gray-900">{rfq.quantity}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">প্রয়োজনীয় তারিখ</p>
+                    <p className="text-sm text-gray-500">Required date</p>
                     <div className="flex items-center gap-2">
                       <FiCalendar className="w-4 h-4 text-gray-400" />
                       <span className="font-medium text-gray-900">{formatDate(rfq.required_by_date)}</span>
@@ -175,7 +175,7 @@ export default function RfqShow({
 
             {/* Requested Products */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">ক্রেতার অনুরোধ</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Buyer request</h2>
 
               {rfq.products_requested && rfq.products_requested.length > 0 ? (
                 <div className="space-y-4">
@@ -198,12 +198,12 @@ export default function RfqShow({
                             )}
                             <div className="flex gap-4 mt-2">
                               <p className="text-sm">
-                                <span className="text-gray-500">পরিমাণ:</span>{' '}
+                                <span className="text-gray-500">Amount:</span>{' '}
                                 <span className="font-medium">{product.quantity || 'N/A'}</span>
                               </p>
                               {product.unit && (
                                 <p className="text-sm">
-                                  <span className="text-gray-500">ইউনিট:</span>{' '}
+                                  <span className="text-gray-500">Unit:</span>{' '}
                                   <span className="font-medium">{product.unit}</span>
                                 </p>
                               )}
@@ -213,7 +213,7 @@ export default function RfqShow({
                             {matchingProduct && (
                               <div className="mt-2 p-2 bg-green-50 rounded-lg">
                                 <p className="text-xs text-green-700">
-                                  ✓ আপনার মিলে যাওয়া পণ্য আছে: <span className="font-medium">{matchingProduct.name}</span>
+                                  ✓ You have matching products: <span className="font-medium">{matchingProduct.name}</span>
                                   ({formatCurrency(matchingProduct.base_price)}/{matchingProduct.unit})
                                 </p>
                               </div>
@@ -225,27 +225,27 @@ export default function RfqShow({
                   })}
                 </div>
               ) : (
-                <p className="text-gray-500">কোনো নির্দিষ্ট পণ্য অনুরোধ করা হয়নি</p>
+                <p className="text-gray-500">No specific product requested</p>
               )}
             </div>
 
             {/* Other Quotes (if any) */}
             {otherQuotes.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">অন্যান্য কোটা</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Other Quota</h2>
                 <p className="text-sm text-gray-500 mb-4">
-                  এই RFQ-র জন্য {otherQuotes.length} জন অন্যান্য সাপ্লায়ার কোটা দিয়েছেন
+                   {otherQuotes.length} John gave other supplier quota
                 </p>
                 <div className="space-y-3">
                   {otherQuotes.map((quote) => (
                     <div key={quote.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">{quote.supplier?.supplier?.company_name || 'সাপ্লায়ার'}</p>
-                        <p className="text-sm text-gray-500">কোটা #{quote.quote_number}</p>
+                        <p className="font-medium text-gray-900">{quote.supplier?.supplier?.company_name || 'Supplier'}</p>
+                        <p className="text-sm text-gray-500">Quote #{quote.quote_number}</p>
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-indigo-600">{formatCurrency(quote.total_amount)}</p>
-                        <p className="text-xs text-gray-400">{formatDate(quote.valid_until)} পর্যন্ত বৈধ</p>
+                        <p className="text-xs text-gray-400">{formatDate(quote.valid_until)} Valid up to</p>
                       </div>
                     </div>
                   ))}
@@ -258,19 +258,19 @@ export default function RfqShow({
           <div className="space-y-6">
             {/* Buyer Information */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">ক্রেতার তথ্য</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Buyer information</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <FiUser className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">নাম</p>
+                    <p className="text-sm text-gray-500">name</p>
                     <p className="font-medium text-gray-900">{rfq.buyer?.name}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <FiMessageSquare className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">সদস্য হন</p>
+                    <p className="text-sm text-gray-500">become a member</p>
                     <p className="font-medium text-gray-900">
                       {rfq.buyer?.created_at ? formatDate(rfq.buyer.created_at) : 'N/A'}
                     </p>
@@ -282,24 +282,24 @@ export default function RfqShow({
             {/* Your Quote (if exists) */}
             {existingQuote && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">আপনার কোটা</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Your quota is</h2>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-500">কোটা নম্বর</p>
+                    <p className="text-sm text-gray-500">Quota Number</p>
                     <p className="font-medium text-gray-900">{existingQuote.quote_number}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">মোট পরিমাণ</p>
+                    <p className="text-sm text-gray-500">total amount</p>
                     <p className="text-2xl font-bold text-indigo-600">
                       {formatCurrency(existingQuote.total_amount)}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">স্ট্যাটাস</p>
+                    <p className="text-sm text-gray-500">Status</p>
                     {getQuoteStatusBadge(existingQuote.status)}
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">মেয়াদ শেষ</p>
+                    <p className="text-sm text-gray-500">Expires</p>
                     <p className="font-medium text-gray-900">{formatDate(existingQuote.valid_until)}</p>
                   </div>
 
@@ -308,7 +308,7 @@ export default function RfqShow({
                       href={route('supplier.rfqs.edit-quote', existingQuote.id)}
                       className="block w-full text-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                     >
-                      কোটা সম্পাদনা
+                      Edit Quota
                     </Link>
                   )}
                 </div>
@@ -318,18 +318,18 @@ export default function RfqShow({
             {/* Action Buttons - Submit Quote */}
             {!existingQuote && isOpen && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">কোটা জমা দিন</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Submit Quota</h2>
 
                 {canQuote ? (
                   <>
                     <p className="text-sm text-gray-500 mb-4">
-                      আপনি আপনার পণ্যের ভিত্তিতে এই RFQ-র জন্য একটি কোটা জমা দিতে পারেন।
+                      You can submit a quota for this RFQ based on your product।
                     </p>
                     <Link
                       href={route('supplier.rfqs.create-quote', rfq.id)}
                       className="block w-full text-center px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
                     >
-                      কোটা তৈরি করুন
+                      Create Quota
                     </Link>
                   </>
                 ) : (
@@ -338,12 +338,12 @@ export default function RfqShow({
                       <FiAlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
                       <div>
                         <p className="text-sm text-yellow-700 font-medium">
-                          এই RFQ-র জন্য কোটা দিতে পারবেন না
+                          Cannot assign quota for this RFQ
                         </p>
                         <p className="text-xs text-yellow-600 mt-1">
-                          কোটা দেওয়ার জন্য আপনার সক্রিয় পণ্য প্রয়োজন।
+                          You need active product।
                           <Link href={route('supplier.products.create')} className="ml-1 underline">
-                            পণ্য যোগ করুন →
+                            Add product →
                           </Link>
                         </p>
                       </div>
@@ -356,7 +356,7 @@ export default function RfqShow({
             {/* Matching Products */}
             {supplierProducts && supplierProducts.length > 0 ? (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">আপনার পণ্য</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">your product</h2>
                 <div className="space-y-3">
                   {supplierProducts.map((product) => {
                     // Check if this product matches any requested product category
@@ -375,7 +375,7 @@ export default function RfqShow({
                             )}
                             {isMatching && (
                               <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
-                                অনুরোধের সাথে মেলে
+                                Match the request
                               </span>
                             )}
                           </div>
@@ -395,15 +395,15 @@ export default function RfqShow({
               </div>
             ) : (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">আপনার পণ্য</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">your product</h2>
                 <div className="text-center py-4">
                   <FiPackage className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-                  <p className="text-sm text-gray-500">কোনো পণ্য পাওয়া যায়নি</p>
+                  <p className="text-sm text-gray-500">No products found</p>
                   <Link
                     href={route('supplier.products.create')}
                     className="text-sm text-indigo-600 hover:text-indigo-700 mt-2 inline-block"
                   >
-                    আপনার প্রথম পণ্য যোগ করুন →
+                    .Add your first product →
                   </Link>
                 </div>
               </div>

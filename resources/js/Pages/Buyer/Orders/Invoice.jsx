@@ -43,7 +43,7 @@ export default function OrderInvoice({ order }) {
       printWindow.document.write(`
         <html>
           <head>
-            <title>চালান #${order.order_number}</title>
+            <title>Run #${order.order_number}</title>
             <style>
               body { font-family: Arial, sans-serif; padding: 40px; }
               .header { text-align: center; margin-bottom: 30px; }
@@ -69,7 +69,7 @@ export default function OrderInvoice({ order }) {
 
   return (
     <DashboardLayout>
-      <Head title={`চালান #${order.order_number}`} />
+      <Head title={`Run #${order.order_number}`} />
 
       <div className="space-y-6">
         {/* Header - Back button, title and action buttons */}
@@ -82,8 +82,8 @@ export default function OrderInvoice({ order }) {
               <FiArrowLeft className="text-xl" />
             </Link>
             <div>
-              <h2 className="text-2xl font-bold text-gray-800">চালান</h2>
-              <p className="text-gray-600 mt-1">অর্ডার #{order.order_number}</p>
+              <h2 className="text-2xl font-bold text-gray-800">Run</h2>
+              <p className="text-gray-600 mt-1">Order #{order.order_number}</p>
             </div>
           </div>
 
@@ -94,14 +94,14 @@ export default function OrderInvoice({ order }) {
               className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center"
             >
               <FiPrinter className="mr-2" />
-              প্রিন্ট
+              Print
             </button>
             <button
               onClick={() => router.get(route('buyer.orders.download-invoice', order.id))}
               className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center"
             >
               <FiDownload className="mr-2" />
-              ডাউনলোড PDF
+              Download PDF
             </button>
           </div>
         </div>
@@ -110,26 +110,26 @@ export default function OrderInvoice({ order }) {
         <div className="bg-white rounded-xl border p-8" ref={invoiceRef}>
           {/* Header - Company and invoice title */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-indigo-600">আপনার কোম্পানির নাম</h1>
-            <p className="text-gray-600 mt-2">চালান</p>
+            <h1 className="text-3xl font-bold text-indigo-600">Your company name is</h1>
+            <p className="text-gray-600 mt-2">Run</p>
           </div>
 
           {/* Invoice Information */}
           <div className="flex justify-between mb-8">
             <div>
-              <p className="text-sm text-gray-500">চালান নম্বর</p>
+              <p className="text-sm text-gray-500">Invoice No.</p>
               <p className="font-medium">INV-{order.order_number}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">অর্ডার নম্বর</p>
+              <p className="text-sm text-gray-500">Order number</p>
               <p className="font-medium">{order.order_number}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">তারিখ</p>
+              <p className="text-sm text-gray-500">the date</p>
               <p className="font-medium">{formatDate(order.created_at)}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">নির্ধারিত তারিখ</p>
+              <p className="text-sm text-gray-500">Due Date</p>
               <p className="font-medium">{formatDate(order.created_at)}</p>
             </div>
           </div>
@@ -137,13 +137,13 @@ export default function OrderInvoice({ order }) {
           {/* Buyer & Supplier Information */}
           <div className="grid grid-cols-2 gap-8 mb-8">
             <div>
-              <h3 className="font-medium text-gray-700 mb-2">প্রাপক:</h3>
+              <h3 className="font-medium text-gray-700 mb-2">Recipient:</h3>
               <p className="font-medium">{order.buyer?.name}</p>
               <p className="text-sm text-gray-600">{order.buyer?.email}</p>
               <p className="text-sm text-gray-600 mt-2 whitespace-pre-line">{order.shipping_address}</p>
             </div>
             <div>
-              <h3 className="font-medium text-gray-700 mb-2">প্রেরক:</h3>
+              <h3 className="font-medium text-gray-700 mb-2">Sender:</h3>
               <p className="font-medium">{order.supplier?.name}</p>
               {order.supplier?.supplier && (
                 <>
@@ -159,10 +159,10 @@ export default function OrderInvoice({ order }) {
           <table className="w-full mb-8">
             <thead>
               <tr>
-                <th className="text-left">আইটেম</th>
-                <th className="text-left">পরিমাণ</th>
-                <th className="text-left">একক মূল্য</th>
-                <th className="text-left">মোট</th>
+                <th className="text-left">Item</th>
+                <th className="text-left">Amount</th>
+                <th className="text-left">Unit price is</th>
+                <th className="text-left">total</th>
               </tr>
             </thead>
             <tbody>
@@ -181,15 +181,15 @@ export default function OrderInvoice({ order }) {
           <div className="flex justify-end">
             <div className="w-64">
               <div className="flex justify-between mb-2">
-                <span className="text-gray-600">সাবটোটাল:</span>
+                <span className="text-gray-600">Subtotal:</span>
                 <span className="font-medium">{formatCurrency(order.total_amount)}</span>
               </div>
               <div className="flex justify-between mb-2">
-                <span className="text-gray-600">শিপিং:</span>
-                <span className="font-medium">ফ্রি</span>
+                <span className="text-gray-600">Shipping:</span>
+                <span className="font-medium">Free</span>
               </div>
               <div className="flex justify-between pt-2 border-t font-bold">
-                <span>মোট:</span>
+                <span>total:</span>
                 <span className="text-indigo-600">{formatCurrency(order.total_amount)}</span>
               </div>
             </div>
@@ -198,17 +198,17 @@ export default function OrderInvoice({ order }) {
           {/* Payment Status */}
           <div className="mt-8 p-4 bg-gray-50 rounded-lg">
             <p className="text-sm">
-              <span className="font-medium">পেমেন্ট স্ট্যাটাস:</span>{' '}
+              <span className="font-medium">Payment Status:</span>{' '}
               <span className={order.payment_status === 'paid' ? 'text-green-600' : 'text-yellow-600'}>
-                {order.payment_status === 'paid' ? 'পরিশোধিত' : 'অপেক্ষমান'}
+                {order.payment_status === 'paid' ? 'Paid' : 'Awaiting'}
               </span>
             </p>
           </div>
 
           {/* Footer */}
           <div className="mt-8 text-center text-sm text-gray-500">
-            <p>আপনার ব্যবসার জন্য ধন্যবাদ!</p>
-            <p className="mt-1">এই চালান সম্পর্কে কোনো প্রশ্ন থাকলে আমাদের সাথে যোগাযোগ করুন।</p>
+            <p>Thank you for your business!</p>
+            <p className="mt-1">Contact us if you have any questions about this invoice।</p>
           </div>
         </div>
       </div>

@@ -39,14 +39,14 @@ export default function Show({ product, similarProducts, supplierProducts }) {
   // Handle product approval
   const handleApprove = () => {
     Swal.fire({
-      title: 'পণ্য অনুমোদন',
-      text: `আপনি কি ${product.name} অনুমোদন করতে চান?`,
+      title: 'Product approval',
+      text: `Are you ${product.name} Want to approve?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#10B981',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'হ্যাঁ, অনুমোদন করুন',
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: 'Yes, approve',
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.product-approval.approve', product.id), {
@@ -56,8 +56,8 @@ export default function Show({ product, similarProducts, supplierProducts }) {
         }, {
           onSuccess: () => {
             Swal.fire({
-              title: 'অনুমোদিত!',
-              text: 'পণ্যটি সফলভাবে অনুমোদন করা হয়েছে।',
+              title: 'Approved!',
+              text: 'The product has been successfully approved।',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -72,8 +72,8 @@ export default function Show({ product, similarProducts, supplierProducts }) {
   const handleReject = () => {
     if (!rejectionReason) {
       Swal.fire({
-        title: 'ত্রুটি!',
-        text: 'অনুগ্রহ করে প্রত্যাখ্যানের কারণ উল্লেখ করুন।',
+        title: 'Error!',
+        text: 'Please specify the reason for rejection।',
         icon: 'error',
         confirmButtonColor: '#4F46E5'
       });
@@ -81,14 +81,14 @@ export default function Show({ product, similarProducts, supplierProducts }) {
     }
 
     Swal.fire({
-      title: 'পণ্য প্রত্যাখ্যান',
-      text: `আপনি কি ${product.name} প্রত্যাখ্যান করতে চান?`,
+      title: 'Product rejection',
+      text: `Are you ${product.name} want to reject?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'হ্যাঁ, প্রত্যাখ্যান করুন',
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: 'Yes, reject',
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.product-approval.reject', product.id), {
@@ -98,8 +98,8 @@ export default function Show({ product, similarProducts, supplierProducts }) {
         }, {
           onSuccess: () => {
             Swal.fire({
-              title: 'প্রত্যাখ্যাত!',
-              text: 'পণ্যটি প্রত্যাখ্যান করা হয়েছে।',
+              title: 'Rejected!',
+              text: 'The product has been rejected।',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -132,7 +132,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
 
   return (
     <DashboardLayout>
-      <Head title={`${product.name} - পর্যালোচনা`} />
+      <Head title={`${product.name} - Review`} />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -144,9 +144,9 @@ export default function Show({ product, similarProducts, supplierProducts }) {
             <FiArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">পণ্য পর্যালোচনা</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Product Review</h1>
             <p className="text-sm text-gray-600 mt-1">
-              {product.name} পর্যালোচনা ও যাচাই করুন
+              {product.name} Review and Verify
             </p>
           </div>
         </div>
@@ -159,7 +159,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <FiPackage className="w-5 h-5 text-indigo-600" />
-                পণ্যের ছবি
+                Product image
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {product.main_image ? (
@@ -189,7 +189,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
                       : 'text-gray-500 hover:text-gray-700'
                       }`}
                   >
-                    পণ্যের বিবরণ
+                    Product details
                   </button>
                   <button
                     onClick={() => setActiveTab('pricing')}
@@ -198,7 +198,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
                       : 'text-gray-500 hover:text-gray-700'
                       }`}
                   >
-                    মূল্য ও মজুত
+                    Price and stock
                   </button>
                   <button
                     onClick={() => setActiveTab('supplier')}
@@ -207,7 +207,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
                       : 'text-gray-500 hover:text-gray-700'
                       }`}
                   >
-                    সাপ্লায়ার তথ্য
+                    Supplier Information
                   </button>
                 </div>
               </div>
@@ -222,27 +222,27 @@ export default function Show({ product, similarProducts, supplierProducts }) {
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm text-gray-500">ক্যাটাগরি</p>
+                        <p className="text-sm text-gray-500">Category</p>
                         <p className="font-medium text-gray-900 flex items-center gap-1">
                           <MdOutlineCategory className="w-4 h-4 text-indigo-600" />
                           {product.category}
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">ইউনিট</p>
+                        <p className="text-sm text-gray-500">Unit</p>
                         <p className="font-medium text-gray-900">{product.unit}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">সর্বনিম্ন অর্ডার পরিমাণ</p>
+                        <p className="text-sm text-gray-500">Minimum order quantity</p>
                         <p className="font-medium text-gray-900">{product.minimum_order_quantity} {product.unit}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500">স্টক পরিমাণ</p>
+                        <p className="text-sm text-gray-500">Stock amount is</p>
                         <p className="font-medium text-gray-900">{product.stock_quantity || 0} {product.unit}</p>
                       </div>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">স্লাগ</p>
+                      <p className="text-sm text-gray-500">Slug</p>
                       <p className="font-medium text-gray-900">{product.slug}</p>
                     </div>
                   </div>
@@ -252,13 +252,13 @@ export default function Show({ product, similarProducts, supplierProducts }) {
                 {activeTab === 'pricing' && (
                   <div className="space-y-6">
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-500">মূল মূল্য</p>
+                      <p className="text-sm text-gray-500">Original price</p>
                       <p className="text-2xl font-bold text-gray-900">{formatCurrency(product.base_price)}</p>
                     </div>
 
                     {product.bulkPrices && product.bulkPrices.length > 0 && (
                       <div>
-                        <h4 className="font-medium text-gray-900 mb-3">বাল্ক মূল্য স্তর</h4>
+                        <h4 className="font-medium text-gray-900 mb-3">Bulk price level</h4>
                         <div className="space-y-2">
                           {product.bulkPrices.map((tier, index) => (
                             <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
@@ -287,7 +287,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
                       </div>
                       <div>
                         <h4 className="text-lg font-semibold text-gray-900">{product.supplier?.company_name}</h4>
-                        <p className="text-sm text-gray-500">{new Date(product.supplier?.created_at).getFullYear()} থেকে সাপ্লায়ার</p>
+                        <p className="text-sm text-gray-500">{new Date(product.supplier?.created_at).getFullYear()} Supplier from</p>
                       </div>
                     </div>
 
@@ -313,7 +313,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
                     </div>
 
                     <div className="border-t pt-4">
-                      <p className="text-sm text-gray-500">যোগাযোগের ব্যক্তি</p>
+                      <p className="text-sm text-gray-500">Contact Person</p>
                       <p className="font-medium text-gray-900">{product.supplier?.user?.name}</p>
                       <p className="text-sm text-gray-500">{product.supplier?.user?.email}</p>
                     </div>
@@ -324,12 +324,12 @@ export default function Show({ product, similarProducts, supplierProducts }) {
 
             {/* Review Notes */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">পর্যালোচনা নোট</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Review notes</h3>
               <textarea
                 rows="4"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="এই পণ্য পর্যালোচনা সম্পর্কে নোট যোগ করুন..."
+                placeholder="Add notes about this product review..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               />
               <div className="mt-4 flex items-center gap-4">
@@ -340,7 +340,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
                     onChange={(e) => setFeatured(e.target.checked)}
                     className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                   />
-                  <span className="text-sm text-gray-700">প্রচারিত পণ্য হিসেবে চিহ্নিত করুন</span>
+                  <span className="text-sm text-gray-700">Mark as Promoted Product</span>
                 </label>
                 <label className="flex items-center gap-2">
                   <input
@@ -349,7 +349,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
                     onChange={(e) => setSendNotification(e.target.checked)}
                     className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                   />
-                  <span className="text-sm text-gray-700">সাপ্লায়ারকে ইমেইল নোটিফিকেশন পাঠান</span>
+                  <span className="text-sm text-gray-700">Send email notification to supplier</span>
                 </label>
               </div>
             </div>
@@ -359,18 +359,18 @@ export default function Show({ product, similarProducts, supplierProducts }) {
               <div className="bg-white rounded-xl shadow-sm border border-red-200 p-6">
                 <h3 className="font-semibold text-red-600 mb-4 flex items-center gap-2">
                   <MdWarning className="w-5 h-5" />
-                  প্রত্যাখ্যানের কারণ
+                  Reason for rejection
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      প্রত্যাখ্যানের কারণ *
+                      Reason for rejection *
                     </label>
                     <textarea
                       rows="3"
                       value={rejectionReason}
                       onChange={(e) => setRejectionReason(e.target.value)}
-                      placeholder="কেন এই পণ্যটি প্রত্যাখ্যান করা হচ্ছে তা ব্যাখ্যা করুন..."
+                      placeholder="Explain why this product is being rejected..."
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
                     />
                   </div>
@@ -379,13 +379,13 @@ export default function Show({ product, similarProducts, supplierProducts }) {
                       onClick={() => setShowRejectForm(false)}
                       className="px-4 py-2 text-gray-700 hover:text-gray-900"
                     >
-                      বাতিল
+                      cancel
                     </button>
                     <button
                       onClick={handleReject}
                       className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                     >
-                      প্রত্যাখ্যান নিশ্চিত করুন
+                      Confirm rejection
                     </button>
                   </div>
                 </div>
@@ -397,51 +397,51 @@ export default function Show({ product, similarProducts, supplierProducts }) {
           <div className="space-y-6">
             {/* Action Buttons */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">কার্যক্রম</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Activities</h3>
               <div className="space-y-3">
                 <button
                   onClick={handleApprove}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
                 >
                   <FiCheckCircle className="w-5 h-5" />
-                  পণ্য অনুমোদন
+                  Product approval
                 </button>
                 <button
                   onClick={() => setShowRejectForm(true)}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
                 >
                   <FiXCircle className="w-5 h-5" />
-                  পণ্য প্রত্যাখ্যান
+                  Product rejection
                 </button>
                 <button
                   onClick={() => router.get(route('admin.product-approval.index'))}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
                 >
                   <FiArrowLeft className="w-5 h-5" />
-                  তালিকায় ফিরে যান
+                  Back to List
                 </button>
               </div>
             </div>
 
             {/* Product Status */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">স্ট্যাটাস</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Status</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">বর্তমান স্ট্যাটাস</span>
+                  <span className="text-sm text-gray-500">Current status is</span>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                    পর্যালোচনাধীন
+                    Under review
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">জমা দেওয়ার তারিখ</span>
+                  <span className="text-sm text-gray-500">Date of submission</span>
                   <span className="text-sm font-medium text-gray-900">{formatDate(product.created_at)}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">সাপ্লায়ার স্ট্যাটাস</span>
+                  <span className="text-sm text-gray-500">Supplier Status</span>
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${product.supplier?.isVerified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                     }`}>
-                    {product.supplier?.isVerified ? 'ভেরিফাইড' : 'ভেরিফিকেশন বিচারাধীন'}
+                    {product.supplier?.isVerified ? 'Verified' : '.Pending'}
                   </span>
                 </div>
               </div>
@@ -450,7 +450,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
             {/* Similar Products */}
             {similarProducts.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">অনুরূপ পণ্য</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">Similar products</h3>
                 <div className="space-y-3">
                   {similarProducts.map((similar) => (
                     <div key={similar.id} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition cursor-pointer">
@@ -472,7 +472,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
             {/* Supplier's Other Products */}
             {supplierProducts.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">সাপ্লায়ারের অন্যান্য পণ্য</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">Other products of supplier</h3>
                 <div className="space-y-3">
                   {supplierProducts.map((product) => (
                     <div key={product.id} className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition">
@@ -484,7 +484,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
                         <p className="text-xs text-gray-500">{formatCurrency(product.base_price)}</p>
                       </div>
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        অনুমোদিত
+                        Approved
                       </span>
                     </div>
                   ))}

@@ -100,9 +100,9 @@ export default function EditQuote({ quote }) {
     if (selectedProducts.length === 0) {
       Swal.fire({
         icon: 'warning',
-        title: 'পণ্য যোগ করুন',
-        text: 'অনুগ্রহ করে আপনার কোটায় অন্তত একটি পণ্য যোগ করুন',
-        confirmButtonText: 'ঠিক আছে'
+        title: 'Add product',
+        text: 'Please add at least one product to your quota',
+        confirmButtonText: 'OK'
       });
       return;
     }
@@ -115,19 +115,19 @@ export default function EditQuote({ quote }) {
     if (invalidCustom) {
       Swal.fire({
         icon: 'warning',
-        title: 'তথ্য অসম্পূর্ণ',
-        text: 'অনুগ্রহ করে সকল কাস্টম পণ্যের নাম প্রদান করুন'
+        title: 'Data is incomplete',
+        text: 'Please provide all custom product names'
       });
       return;
     }
 
     Swal.fire({
-      title: 'আপনি কি নিশ্চিত?',
-      text: 'আপনি কি এই কোটা আপডেট করতে চান?',
+      title: 'Are you sure?',
+      text: 'Do you want to update this quota??',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'হ্যাঁ, আপডেট করুন',
-      cancelButtonText: 'না',
+      confirmButtonText: 'Yes, update',
+      cancelButtonText: 'No',
       confirmButtonColor: '#16a34a'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -135,15 +135,15 @@ export default function EditQuote({ quote }) {
           onSuccess: () => {
             Swal.fire({
               icon: 'success',
-              title: 'সফল',
-              text: 'কোটা সফলভাবে আপডেট হয়েছে'
+              title: 'successful',
+              text: 'Quota successfully updated'
             });
           },
           onError: () => {
             Swal.fire({
               icon: 'error',
-              title: 'ত্রুটি',
-              text: 'কোটা আপডেট করা যায়নি'
+              title: 'Error',
+              text: 'Quota could not be updated'
             });
           }
         });
@@ -158,7 +158,7 @@ export default function EditQuote({ quote }) {
 
   return (
     <DashboardLayout>
-      <Head title={`কোটা #${quote.quote_number} - সম্পাদনা`} />
+      <Head title={`Quote #${quote.quote_number} - editing`} />
 
       <div className="space-y-6">
         {/* Header - Back button, title and action buttons */}
@@ -171,9 +171,9 @@ export default function EditQuote({ quote }) {
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">কোটা সম্পাদনা</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Edit Quota</h1>
               <p className="text-sm text-gray-600 mt-1">
-                কোটা #{quote.quote_number} - RFQ: {quote.rfq?.rfq_number} {quote.rfq?.title && `- ${quote.rfq?.title}`}
+                Quote #{quote.quote_number} - RFQ: {quote.rfq?.rfq_number} {quote.rfq?.title && `- ${quote.rfq?.title}`}
               </p>
             </div>
           </div>
@@ -183,7 +183,7 @@ export default function EditQuote({ quote }) {
               className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
             >
               <FiX className="w-4 h-4" />
-              <span>বাতিল</span>
+              <span>cancel</span>
             </Link>
             <button
               onClick={handleSubmit}
@@ -191,7 +191,7 @@ export default function EditQuote({ quote }) {
               className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
             >
               <FiSave className="w-4 h-4" />
-              <span>{processing ? 'আপডেট হচ্ছে...' : 'কোটা আপডেট'}</span>
+              <span>{processing ? 'Updating...' : 'Quota Update'}</span>
             </button>
           </div>
         </div>
@@ -202,10 +202,10 @@ export default function EditQuote({ quote }) {
             <FiAlertCircle className="w-5 h-5 text-yellow-400 mr-3 mt-0.5" />
             <div>
               <p className="text-sm text-yellow-700 font-medium">
-                আপনি একটি অপেক্ষমান কোটা সম্পাদনা করছেন
+                You are editing a pending quota
               </p>
               <p className="text-sm text-yellow-600 mt-1">
-                পরিবর্তনগুলি অবিলম্বে ক্রেতার কাছে দৃশ্যমান হবে। নিশ্চিত করুন যে সমস্ত তথ্য সঠিক।
+                Changes will be immediately visible to the buyer. Make sure all information is correct।
               </p>
             </div>
           </div>
@@ -218,20 +218,20 @@ export default function EditQuote({ quote }) {
               {/* Current Quote Items */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900">কোটা আইটেম</h2>
+                  <h2 className="text-lg font-semibold text-gray-900">Quota item</h2>
                   <button
                     type="button"
                     onClick={addCustomProduct}
                     className="flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
                   >
                     <FiPlus className="w-4 h-4" />
-                    কাস্টম আইটেম যোগ করুন
+                    Add custom item
                   </button>
                 </div>
 
                 {selectedProducts.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
-                    আপনার কোটায় আইটেম যোগ করুন
+                    Add items to your quota
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -244,7 +244,7 @@ export default function EditQuote({ quote }) {
                                 type="text"
                                 value={product.name}
                                 onChange={(e) => updateProduct(index, 'name', e.target.value)}
-                                placeholder="পণ্যের নাম"
+                                placeholder=""
                                 className="font-medium text-gray-900 bg-transparent border-b border-gray-300 focus:border-indigo-600 focus:outline-none px-1 py-0.5 w-full"
                                 required
                               />
@@ -252,7 +252,7 @@ export default function EditQuote({ quote }) {
                               <h3 className="font-medium text-gray-900">{product.name}</h3>
                             )}
                             {product.product_id && (
-                              <p className="text-xs text-green-600 mt-1">আপনার ক্যাটালগ থেকে</p>
+                              <p className="text-xs text-green-600 mt-1">from your catalog</p>
                             )}
                           </div>
                           <button
@@ -265,7 +265,7 @@ export default function EditQuote({ quote }) {
                         </div>
                         <div className="grid grid-cols-3 gap-3">
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">পরিমাণ</label>
+                            <label className="block text-xs text-gray-500 mb-1">Amount</label>
                             <input
                               type="number"
                               value={product.quantity}
@@ -276,7 +276,7 @@ export default function EditQuote({ quote }) {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">একক মূল্য (টাকা)</label>
+                            <label className="block text-xs text-gray-500 mb-1">Single price (Rs.)</label>
                             <input
                               type="number"
                               value={product.unit_price}
@@ -288,7 +288,7 @@ export default function EditQuote({ quote }) {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">মোট</label>
+                            <label className="block text-xs text-gray-500 mb-1">total</label>
                             <p className="font-medium text-indigo-600 pt-1">
                               {formatCurrency(product.total_price)}
                             </p>
@@ -300,7 +300,7 @@ export default function EditQuote({ quote }) {
                     {/* Quote Total */}
                     <div className="pt-4 border-t border-gray-200">
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold text-gray-900">মোট কোটা পরিমাণ</span>
+                        <span className="font-semibold text-gray-900">Total quota amount</span>
                         <span className="text-2xl font-bold text-indigo-600">
                           {formatCurrency(data.total_amount)}
                         </span>
@@ -315,13 +315,13 @@ export default function EditQuote({ quote }) {
             <div className="space-y-6">
               {/* Quote Settings */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">কোটা বিবরণ</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quota details</h2>
 
                 <div className="space-y-4">
                   {/* Valid Until */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      মেয়াদ শেষ <span className="text-red-500">*</span>
+                      Expires <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="date"
@@ -339,13 +339,13 @@ export default function EditQuote({ quote }) {
                   {/* Delivery Estimate */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      ডেলিভারি সময়
+                      Delivery time
                     </label>
                     <input
                       type="text"
                       value={data.delivery_estimate}
                       onChange={(e) => setData('delivery_estimate', e.target.value)}
-                      placeholder="যেমন: ৫-৭ কার্যদিবস"
+                      placeholder="Eg: 5-7 working days"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                     />
                   </div>
@@ -353,34 +353,34 @@ export default function EditQuote({ quote }) {
                   {/* Payment Terms */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      পেমেন্ট শর্তাবলী
+                      Payment Terms
                     </label>
                     <select
                       value={data.payment_terms}
                       onChange={(e) => setData('payment_terms', e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                     >
-                      <option value="">পেমেন্ট শর্তাবলী নির্বাচন</option>
-                      <option value="advance">১০০% অগ্রিম</option>
-                      <option value="partial">৫০% অগ্রিম, ৫০% ডেলিভারিতে</option>
-                      <option value="delivery">ডেলিভারিতে পেমেন্ট</option>
-                      <option value="credit_7">৭ দিন ক্রেডিট</option>
-                      <option value="credit_15">১৫ দিন ক্রেডিট</option>
-                      <option value="credit_30">৩০ দিন ক্রেডিট</option>
+                      <option value="">Select payment terms</option>
+                      <option value="advance">100% advance</option>
+                      <option value="partial">50% in advance, 50% on delivery</option>
+                      <option value="delivery">Payment on delivery</option>
+                      <option value="credit_7">7 days credit</option>
+                      <option value="credit_15">15 days credit</option>
+                      <option value="credit_30">30 days credit</option>
                     </select>
                   </div>
 
                   {/* Additional Notes */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      অতিরিক্ত নোট
+                      Additional Notes
                     </label>
                     <textarea
                       value={data.notes}
                       onChange={(e) => setData('notes', e.target.value)}
                       rows="4"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                      placeholder="ক্রেতার জন্য যেকোনো অতিরিক্ত তথ্য..."
+                      placeholder="Any additional information for the buyer..."
                     />
                   </div>
                 </div>
@@ -388,26 +388,26 @@ export default function EditQuote({ quote }) {
 
               {/* Original Quote Info */}
               <div className="bg-gray-50 rounded-xl p-4">
-                <h3 className="text-sm font-medium text-gray-700 mb-3">মূল কোটা তথ্য</h3>
+                <h3 className="text-sm font-medium text-gray-700 mb-3">Basic Quota Information</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">কোটা নম্বর</span>
+                    <span className="text-gray-500">Quota Number</span>
                     <span className="font-medium text-gray-900">{quote.quote_number}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">জমার তারিখ</span>
+                    <span className="text-gray-500">Submission Date</span>
                     <span className="font-medium text-gray-900">
                       {new Date(quote.created_at).toLocaleDateString('bn-BD')}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">স্ট্যাটাস</span>
+                    <span className="text-gray-500">Status</span>
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full text-xs">
-                      অপেক্ষমান
+                      Awaiting
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">মূল মেয়াদ শেষ</span>
+                    <span className="text-gray-500">Original Expires</span>
                     <span className="font-medium text-gray-900">
                       {new Date(quote.valid_until).toLocaleDateString('bn-BD')}
                     </span>
@@ -420,12 +420,12 @@ export default function EditQuote({ quote }) {
                 <div className="flex items-start gap-3">
                   <FiAlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm text-blue-700 font-medium">সম্পাদনা টিপস</p>
+                    <p className="text-sm text-blue-700 font-medium">Editing tips</p>
                     <ul className="mt-2 text-xs text-blue-600 list-disc list-inside space-y-1">
-                      <li>আপনার ক্যাটালগে নেই এমন কাস্টম আইটেম যোগ করতে পারেন</li>
-                      <li>আপডেট করা কোটা ক্রেতার কাছে পুনরায় পাঠানো হবে</li>
-                      <li>মূল্য প্রতিযোগিতামূলক রাখুন</li>
-                      <li>মেয়াদ শেষের তারিখ ভবিষ্যতের হতে হবে</li>
+                      <li>You can add custom items not in your catalog</li>
+                      <li>The updated quota will be re-sent to the buyer</li>
+                      <li>Keep prices competitive</li>
+                      <li>The expiration date must be in the future</li>
                     </ul>
                   </div>
                 </div>

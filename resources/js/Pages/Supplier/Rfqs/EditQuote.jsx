@@ -121,8 +121,8 @@ export default function EditQuote({ quote, products }) {
     if (selectedProducts.length === 0) {
       Swal.fire({
         icon: "warning",
-        title: "পণ্য যোগ করুন",
-        text: "অনুগ্রহ করে আপনার কোটায় অন্তত একটি পণ্য যোগ করুন"
+        title: "Add product",
+        text: "Please add at least one product to your quota"
       });
       return;
     }
@@ -135,19 +135,19 @@ export default function EditQuote({ quote, products }) {
     if (invalidCustom) {
       Swal.fire({
         icon: "warning",
-        title: "অসম্পূর্ণ তথ্য",
-        text: "অনুগ্রহ করে সকল কাস্টম পণ্যের নাম প্রদান করুন"
+        title: "Incomplete information",
+        text: "Please provide all custom product names"
       });
       return;
     }
 
     Swal.fire({
-      title: "আপনি কি নিশ্চিত?",
-      text: "আপনি কি এই কোটা আপডেট করতে চান?",
+      title: "Are you sure?",
+      text: "Do you want to update this quota??",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "হ্যাঁ, আপডেট করুন",
-      cancelButtonText: "না",
+      confirmButtonText: "Yes, update",
+      cancelButtonText: "No",
       confirmButtonColor: "#16a34a"
     }).then((result) => {
       if (result.isConfirmed) {
@@ -155,15 +155,15 @@ export default function EditQuote({ quote, products }) {
           onSuccess: () => {
             Swal.fire({
               icon: "success",
-              title: "সফল",
-              text: "কোটা সফলভাবে আপডেট হয়েছে"
+              title: "successful",
+              text: "Quota successfully updated"
             });
           },
           onError: () => {
             Swal.fire({
               icon: "error",
-              title: "ত্রুটি",
-              text: "কোটা আপডেট করা যায়নি"
+              title: "Error",
+              text: "Quota could not be updated"
             });
           }
         });
@@ -183,7 +183,7 @@ export default function EditQuote({ quote, products }) {
 
   return (
     <DashboardLayout>
-      <Head title={`কোটা #${quote.quote_number} - সম্পাদনা`} />
+      <Head title={`Quote #${quote.quote_number} - editing`} />
 
       <div className="space-y-6">
         {/* Header - Back button, title and action buttons */}
@@ -196,9 +196,9 @@ export default function EditQuote({ quote, products }) {
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">কোটা সম্পাদনা</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Edit Quota</h1>
               <p className="text-sm text-gray-600 mt-1">
-                কোটা #{quote.quote_number} - RFQ: {quote.rfq?.rfq_number} - {quote.rfq?.title} -এর জন্য
+                Quote #{quote.quote_number} - RFQ: {quote.rfq?.rfq_number} - {quote.rfq?.title} -for
               </p>
             </div>
           </div>
@@ -208,7 +208,7 @@ export default function EditQuote({ quote, products }) {
               className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
             >
               <FiX className="w-4 h-4" />
-              <span>বাতিল</span>
+              <span>cancel</span>
             </Link>
             <button
               onClick={handleSubmit}
@@ -216,7 +216,7 @@ export default function EditQuote({ quote, products }) {
               className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
             >
               <FiSave className="w-4 h-4" />
-              <span>{processing ? 'আপডেট হচ্ছে...' : 'কোটা আপডেট'}</span>
+              <span>{processing ? 'Updating...' : 'Quota Update'}</span>
             </button>
           </div>
         </div>
@@ -227,10 +227,10 @@ export default function EditQuote({ quote, products }) {
             <FiAlertCircle className="w-5 h-5 text-yellow-400 mr-3 mt-0.5" />
             <div>
               <p className="text-sm text-yellow-700 font-medium">
-                আপনি একটি অপেক্ষমান কোটা সম্পাদনা করছেন
+                You are editing a pending quota
               </p>
               <p className="text-sm text-yellow-600 mt-1">
-                পরিবর্তনগুলি অবিলম্বে ক্রেতার কাছে দৃশ্যমান হবে। নিশ্চিত করুন যে সমস্ত তথ্য সঠিক।
+                Changes will be immediately visible to the buyer. Make sure all information is correct।
               </p>
             </div>
           </div>
@@ -243,20 +243,20 @@ export default function EditQuote({ quote, products }) {
               {/* Current Quote Items */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900">কোটা আইটেম</h2>
+                  <h2 className="text-lg font-semibold text-gray-900">Quota item</h2>
                   <button
                     type="button"
                     onClick={addCustomProduct}
                     className="flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
                   >
                     <FiPlus className="w-4 h-4" />
-                    কাস্টম আইটেম যোগ করুন
+                    Add custom item
                   </button>
                 </div>
 
                 {selectedProducts.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
-                    আপনার ক্যাটালগ থেকে পণ্য যোগ করুন বা কাস্টম আইটেম তৈরি করুন
+                    Add products from your catalog or create custom items
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -269,7 +269,7 @@ export default function EditQuote({ quote, products }) {
                                 type="text"
                                 value={product.name}
                                 onChange={(e) => updateProduct(index, 'name', e.target.value)}
-                                placeholder="পণ্যের নাম"
+                                placeholder=""
                                 className="font-medium text-gray-900 bg-transparent border-b border-gray-300 focus:border-indigo-600 focus:outline-none px-1 py-0.5 w-full"
                                 required
                               />
@@ -277,7 +277,7 @@ export default function EditQuote({ quote, products }) {
                               <h3 className="font-medium text-gray-900">{product.name}</h3>
                             )}
                             {product.isExistingProduct && (
-                              <p className="text-xs text-green-600 mt-1">আপনার ক্যাটালগ থেকে</p>
+                              <p className="text-xs text-green-600 mt-1">from your catalog</p>
                             )}
                           </div>
                           <button
@@ -290,7 +290,7 @@ export default function EditQuote({ quote, products }) {
                         </div>
                         <div className="grid grid-cols-3 gap-3">
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">পরিমাণ</label>
+                            <label className="block text-xs text-gray-500 mb-1">Amount</label>
                             <input
                               type="number"
                               value={product.quantity}
@@ -301,7 +301,7 @@ export default function EditQuote({ quote, products }) {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">একক মূল্য (টাকা)</label>
+                            <label className="block text-xs text-gray-500 mb-1">Single price (Rs.)</label>
                             <input
                               type="number"
                               value={product.unit_price}
@@ -313,7 +313,7 @@ export default function EditQuote({ quote, products }) {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">মোট</label>
+                            <label className="block text-xs text-gray-500 mb-1">total</label>
                             <p className="font-medium text-indigo-600 pt-1">
                               {formatCurrency(product.total_price)}
                             </p>
@@ -325,7 +325,7 @@ export default function EditQuote({ quote, products }) {
                     {/* Quote Total */}
                     <div className="pt-4 border-t border-gray-200">
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold text-gray-900">মোট কোটা পরিমাণ</span>
+                        <span className="font-semibold text-gray-900">Total quota amount</span>
                         <span className="text-2xl font-bold text-indigo-600">
                           {formatCurrency(data.total_amount)}
                         </span>
@@ -338,7 +338,7 @@ export default function EditQuote({ quote, products }) {
               {/* Available Products from Catalog */}
               {availableProducts.length > 0 && (
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-4">আপনার পণ্য থেকে যোগ করুন</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 mb-4">Add from your product</h2>
                   <div className="space-y-3">
                     {availableProducts.map((product) => (
                       <div
@@ -352,7 +352,7 @@ export default function EditQuote({ quote, products }) {
                           <div>
                             <p className="font-medium text-gray-900">{product.name}</p>
                             <p className="text-sm text-gray-500">
-                              মূল মূল্য: {formatCurrency(product.base_price)} | সর্বনিম্ন অর্ডার: {product.minimum_order_quantity} {product.unit}
+                              Original price: {formatCurrency(product.base_price)} | Minimum Order: {product.minimum_order_quantity} {product.unit}
                             </p>
                           </div>
                         </div>
@@ -374,13 +374,13 @@ export default function EditQuote({ quote, products }) {
             <div className="space-y-6">
               {/* Quote Settings */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">কোটা বিবরণ</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quota details</h2>
 
                 <div className="space-y-4">
                   {/* Valid Until */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      মেয়াদ শেষ <span className="text-red-500">*</span>
+                      Expires <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="date"
@@ -400,11 +400,11 @@ export default function EditQuote({ quote, products }) {
                     <div className="flex items-start gap-2">
                       <FiFileText className="w-4 h-4 text-gray-500 mt-0.5" />
                       <div>
-                        <p className="text-xs text-gray-600 font-medium">নোট:</p>
+                        <p className="text-xs text-gray-600 font-medium">Note:</p>
                         <p className="text-xs text-gray-500">
-                          শুধুমাত্র পণ্যের বিবরণ, মোট পরিমাণ এবং মেয়াদ শেষের তারিখ সংরক্ষণ করা হবে।
-                          ডেলিভারি সময় এবং পেমেন্ট শর্তাবলীর মতো অতিরিক্ত বিবরণ বার্তার মাধ্যমে
-                          যোগাযোগ করা উচিত।
+                          Only product details, total amount and expiry date will be stored।
+                          Additional details like delivery time and payment terms via message
+                          Should contact।
                         </p>
                       </div>
                     </div>
@@ -414,26 +414,26 @@ export default function EditQuote({ quote, products }) {
 
               {/* Original Quote Info */}
               <div className="bg-gray-50 rounded-xl p-4">
-                <h3 className="text-sm font-medium text-gray-700 mb-3">মূল কোটা তথ্য</h3>
+                <h3 className="text-sm font-medium text-gray-700 mb-3">Basic Quota Information</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">কোটা নম্বর</span>
+                    <span className="text-gray-500">Quota Number</span>
                     <span className="font-medium text-gray-900">{quote.quote_number}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">জমার তারিখ</span>
+                    <span className="text-gray-500">Submission Date</span>
                     <span className="font-medium text-gray-900">
                       {new Date(quote.created_at).toLocaleDateString('bn-BD')}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">স্ট্যাটাস</span>
+                    <span className="text-gray-500">Status</span>
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full text-xs">
-                      অপেক্ষমান
+                      Awaiting
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">মূল মেয়াদ শেষ</span>
+                    <span className="text-gray-500">Original Expires</span>
                     <span className="font-medium text-gray-900">
                       {new Date(quote.valid_until).toLocaleDateString('bn-BD')}
                     </span>
@@ -446,13 +446,13 @@ export default function EditQuote({ quote, products }) {
                 <div className="flex items-start gap-3">
                   <FiAlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm text-blue-700 font-medium">সম্পাদনা টিপস</p>
+                    <p className="text-sm text-blue-700 font-medium">Editing tips</p>
                     <ul className="mt-2 text-xs text-blue-600 list-disc list-inside space-y-1">
-                      <li>আপনার ক্যাটালগে নেই এমন কাস্টম আইটেম যোগ করতে পারেন</li>
-                      <li>আপডেট করা কোটা ক্রেতার কাছে পুনরায় পাঠানো হবে</li>
-                      <li>মূল্য প্রতিযোগিতামূলক রাখুন</li>
-                      <li>মেয়াদ শেষের তারিখ ভবিষ্যতের হতে হবে</li>
-                      <li>অতিরিক্ত শর্তাবলীর জন্য বার্তা ব্যবস্থা ব্যবহার করুন</li>
+                      <li>You can add custom items not in your catalog</li>
+                      <li>The updated quota will be re-sent to the buyer</li>
+                      <li>Keep prices competitive</li>
+                      <li>The expiration date must be in the future</li>
+                      <li>For additional terms use the messaging system</li>
                     </ul>
                   </div>
                 </div>

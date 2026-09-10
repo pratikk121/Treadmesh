@@ -124,15 +124,15 @@ export default function CreateProduct({ categories, units }) {
 
   return (
     <DashboardLayout>
-      <Head title="নতুন পণ্য তৈরি" />
+      <Head title="Creating new products" />
 
       <div className="space-y-6">
         {/* Header - Page title and action buttons */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">নতুন পণ্য যোগ করুন</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Add New Product</h1>
             <p className="text-sm text-gray-600 mt-1">
-              আপনার ক্যাটালগের জন্য একটি নতুন পণ্য তৈরি করুন
+              Create a new product for your catalog
             </p>
           </div>
           <div className="flex gap-2">
@@ -141,7 +141,7 @@ export default function CreateProduct({ categories, units }) {
               className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
             >
               <FiX className="w-4 h-4" />
-              <span>বাতিল</span>
+              <span>cancel</span>
             </Link>
             <button
               onClick={handleSubmit}
@@ -149,7 +149,7 @@ export default function CreateProduct({ categories, units }) {
               className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
             >
               <FiSave className="w-4 h-4" />
-              <span>{processing ? 'সংরক্ষণ হচ্ছে...' : 'পণ্য সংরক্ষণ'}</span>
+              <span>{processing ? 'Saving...' : 'Product storage'}</span>
             </button>
           </div>
         </div>
@@ -161,13 +161,13 @@ export default function CreateProduct({ categories, units }) {
             <div className="lg:col-span-2 space-y-6">
               {/* Basic Information Section */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">মৌলিক তথ্য</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic information</h2>
 
                 <div className="space-y-4">
                   {/* Product Name */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      পণ্যের নাম <span className="text-red-500">*</span>
+                       <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -184,7 +184,7 @@ export default function CreateProduct({ categories, units }) {
                   {/* Category */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      ক্যাটাগরি <span className="text-red-500">*</span>
+                      Category <span className="text-red-500">*</span>
                     </label>
                     <select
                       value={data.category}
@@ -192,7 +192,7 @@ export default function CreateProduct({ categories, units }) {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     >
-                      <option value="">ক্যাটাগরি নির্বাচন করুন</option>
+                      <option value="">Select Category</option>
                       {categories.map((category) => (
                         <option key={category} value={category}>{category}</option>
                       ))}
@@ -205,7 +205,7 @@ export default function CreateProduct({ categories, units }) {
                   {/* Description */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      বিবরণ <span className="text-red-500">*</span>
+                      Description <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       value={data.description}
@@ -223,13 +223,13 @@ export default function CreateProduct({ categories, units }) {
 
               {/* Pricing & Inventory Section */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">মূল্য ও মজুত</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Price and stock</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Base Price */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      মূল মূল্য (টাকা) <span className="text-red-500">*</span>
+                      Original Price (Rs.)) <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
@@ -248,7 +248,7 @@ export default function CreateProduct({ categories, units }) {
                   {/* Unit */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      ইউনিট <span className="text-red-500">*</span>
+                      Unit <span className="text-red-500">*</span>
                     </label>
                     <select
                       value={data.unit}
@@ -265,7 +265,7 @@ export default function CreateProduct({ categories, units }) {
                   {/* Minimum Order Quantity */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      সর্বনিম্ন অর্ডার পরিমাণ <span className="text-red-500">*</span>
+                      Minimum order quantity <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
@@ -283,7 +283,7 @@ export default function CreateProduct({ categories, units }) {
                   {/* Stock Quantity */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      মজুত পরিমাণ <span className="text-red-500">*</span>
+                      Stock quantity <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
@@ -303,14 +303,14 @@ export default function CreateProduct({ categories, units }) {
               {/* Bulk Pricing Section */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900">বাল্ক মূল্য (ঐচ্ছিক)</h2>
+                  <h2 className="text-lg font-semibold text-gray-900">Bulk Price (optional)</h2>
                   <button
                     type="button"
                     onClick={addBulkPrice}
                     className="flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
                   >
                     <FiPlus className="w-4 h-4" />
-                    স্তর যোগ করুন
+                    Add layers
                   </button>
                 </div>
 
@@ -319,7 +319,7 @@ export default function CreateProduct({ categories, units }) {
                     <div key={index} className="flex items-center gap-3">
                       <input
                         type="number"
-                        placeholder="সর্বনিম্ন পরিমাণ"
+                        placeholder="The minimum amount is"
                         value={price.min_quantity}
                         onChange={(e) => updateBulkPrice(index, 'min_quantity', e.target.value)}
                         className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
@@ -327,14 +327,14 @@ export default function CreateProduct({ categories, units }) {
                       <span className="text-gray-500">-</span>
                       <input
                         type="number"
-                        placeholder="সর্বোচ্চ পরিমাণ"
+                        placeholder="Maximum amount"
                         value={price.max_quantity}
                         onChange={(e) => updateBulkPrice(index, 'max_quantity', e.target.value)}
                         className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       />
                       <input
                         type="number"
-                        placeholder="মূল্য"
+                        placeholder="Price"
                         value={price.price}
                         onChange={(e) => updateBulkPrice(index, 'price', e.target.value)}
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
@@ -353,7 +353,7 @@ export default function CreateProduct({ categories, units }) {
                 </div>
 
                 <p className="text-xs text-gray-500 mt-3">
-                  সর্বোচ্চ পরিমাণ ফাঁকা রাখলে সীমাহীন রেঞ্জ নির্দেশ করে। যেমন: ১০-৫০, ৫০-১০০, ১০০+
+                  Leaving the maximum amount blank indicates an unlimited range. Eg: 10-50, 50-100, 100+
                 </p>
               </div>
             </div>
@@ -362,14 +362,14 @@ export default function CreateProduct({ categories, units }) {
             <div className="space-y-6">
               {/* Main Image Upload */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">প্রধান ছবি</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Main image</h2>
 
                 <div className="space-y-4">
                   {imagePreview ? (
                     <div className="relative">
                       <img
                         src={imagePreview}
-                        alt="প্রিভিউ"
+                        alt="Preview"
                         className="w-full h-48 object-cover rounded-lg border border-gray-200"
                         onError={(e) => {
                           e.currentTarget.src = NoImg;
@@ -389,7 +389,7 @@ export default function CreateProduct({ categories, units }) {
                   ) : (
                     <div className="border-2 border-gray-200 border-dashed rounded-lg p-6 text-center">
                       <FiUpload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-500 mb-2">পণ্যের প্রধান ছবি আপলোড করুন</p>
+                      <p className="text-sm text-gray-500 mb-2">Upload product main image</p>
                       <input
                         type="file"
                         id="main_image"
@@ -402,7 +402,7 @@ export default function CreateProduct({ categories, units }) {
                         onClick={() => document.getElementById('main_image').click()}
                         className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
                       >
-                        ছবি নির্বাচন
+                        Image selection
                       </button>
                     </div>
                   )}
@@ -424,7 +424,7 @@ export default function CreateProduct({ categories, units }) {
 
               {/* Additional Images Upload */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">অতিরিক্ত ছবি</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Additional photos</h2>
 
                 <div className="space-y-4">
                   {/* Image Previews */}
@@ -434,7 +434,7 @@ export default function CreateProduct({ categories, units }) {
                         <div key={index} className="relative">
                           <img
                             src={image.preview}
-                            alt={`অতিরিক্ত ${index + 1}`}
+                            alt={`Additional ${index + 1}`}
                             className="w-full h-20 object-cover rounded-lg border border-gray-200"
                             onError={(e) => {
                               e.currentTarget.src = NoImg;
@@ -466,10 +466,10 @@ export default function CreateProduct({ categories, units }) {
                       onClick={() => document.getElementById('additional_images').click()}
                       className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
                     >
-                      + আরো ছবি যোগ করুন
+                      + Add more images
                     </button>
                     <p className="text-xs text-gray-500 mt-1">
-                      আপনি একাধিক ছবি নির্বাচন করতে পারেন
+                      You can select multiple images
                     </p>
                   </div>
 
@@ -484,10 +484,10 @@ export default function CreateProduct({ categories, units }) {
                 <div className="flex items-start gap-3">
                   <FiInfo className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm text-blue-700 font-medium">পণ্য অনুমোদন</p>
+                    <p className="text-sm text-blue-700 font-medium">Product approval</p>
                     <p className="text-xs text-blue-600 mt-1">
-                      নতুন পণ্য অ্যাডমিন দ্বারা পর্যালোচনা করা হবে এবং তারপর ক্রেতাদের কাছে দৃশ্যমান হবে।
-                      এটি সাধারণত ১-২ কার্যদিবস সময় নেয়।
+                      New product will be reviewed by admin and then visible to buyers।
+                      It usually takes 1-2 working days।
                     </p>
                   </div>
                 </div>

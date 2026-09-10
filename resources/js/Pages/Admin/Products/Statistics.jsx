@@ -65,9 +65,9 @@ export default function Statistics({ stats }) {
 
   // Prepare status data for pie chart - Filter out zero values
   const statusData = [
-    { name: 'অনুমোদিত', value: by_status.find(s => s.status === 'approved')?.total || 0, color: COLORS.approved },
-    { name: 'বিচারাধীন', value: by_status.find(s => s.status === 'pending')?.total || 0, color: COLORS.pending },
-    { name: 'প্রত্যাখ্যাত', value: by_status.find(s => s.status === 'rejected')?.total || 0, color: COLORS.rejected },
+    { name: 'Approved', value: by_status.find(s => s.status === 'approved')?.total || 0, color: COLORS.approved },
+    { name: 'Pending', value: by_status.find(s => s.status === 'pending')?.total || 0, color: COLORS.pending },
+    { name: 'Rejected', value: by_status.find(s => s.status === 'rejected')?.total || 0, color: COLORS.rejected },
   ].filter(item => item.value > 0);
 
   // Calculate total products from status data
@@ -75,7 +75,7 @@ export default function Statistics({ stats }) {
 
   return (
     <DashboardLayout>
-      <Head title="পণ্য পরিসংখ্যান" />
+      <Head title="Product statistics" />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -87,9 +87,9 @@ export default function Statistics({ stats }) {
             <FiArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">পণ্য পরিসংখ্যান</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Product statistics</h1>
             <p className="text-sm text-gray-600 mt-1">
-              মার্কেটপ্লেসের সকল পণ্যের বিস্তারিত পরিসংখ্যান
+              Detailed statistics of all products in the marketplace
             </p>
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-indigo-100 text-sm">মোট পণ্য</p>
+                <p className="text-indigo-100 text-sm">Total Products</p>
                 <p className="text-3xl font-bold mt-1">{totalProducts}</p>
               </div>
               <FiPackage className="w-8 h-8 text-indigo-200" />
@@ -109,7 +109,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm">মোট মজুত মূল্য</p>
+                <p className="text-green-100 text-sm">Total stock value is</p>
                 <p className="text-2xl font-bold mt-1">{formatCurrency(inventory_value.total)}</p>
               </div>
               <FiDollarSign className="w-8 h-8 text-green-200" />
@@ -119,7 +119,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm">ক্যাটাগরি</p>
+                <p className="text-purple-100 text-sm">Category</p>
                 <p className="text-3xl font-bold mt-1">{by_category.length}</p>
               </div>
               <MdOutlineCategory className="w-8 h-8 text-purple-200" />
@@ -129,9 +129,9 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-yellow-100 text-sm">সাম্প্রতিক সংযোজন</p>
+                <p className="text-yellow-100 text-sm">Recent additions</p>
                 <p className="text-3xl font-bold mt-1">{recent_additions}</p>
-                <p className="text-xs text-yellow-200 mt-1">গত ৩০ দিনে</p>
+                <p className="text-xs text-yellow-200 mt-1">In the last 30 days</p>
               </div>
               <FiTrendingUp className="w-8 h-8 text-yellow-200" />
             </div>
@@ -144,7 +144,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiPieChart className="w-5 h-5 text-indigo-600" />
-              স্ট্যাটাস অনুযায়ী পণ্য
+              Product according to status
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -163,7 +163,7 @@ export default function Statistics({ stats }) {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [`${value} টি পণ্য`, 'সংখ্যা']} />
+                  <Tooltip formatter={(value) => [`${value} t product`, 'Number']} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -181,7 +181,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MdOutlineCategory className="w-5 h-5 text-indigo-600" />
-              ক্যাটাগরি অনুযায়ী পণ্য
+              Product By Category
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -204,7 +204,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <BsBuilding className="w-5 h-5 text-indigo-600" />
-              শীর্ষ সাপ্লায়ার (পণ্য সংখ্যা অনুযায়ী)
+              Top suppliers (by product no)
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -227,7 +227,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MdOutlineInventory className="w-5 h-5 text-indigo-600" />
-              ক্যাটাগরি অনুযায়ী মজুত মূল্য
+              Stock price by category
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -249,23 +249,23 @@ export default function Statistics({ stats }) {
         {/* Category Breakdown Table - Detailed category analysis */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900">ক্যাটাগরি বিশ্লেষণ</h3>
+            <h3 className="font-semibold text-gray-900">Category Analysis</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ক্যাটাগরি
+                    Category
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    পণ্যের সংখ্যা
+                    Number of products
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    মজুত মূল্য
+                    Stock price
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    মোটের শতাংশ
+                    Percentage of total
                   </th>
                 </tr>
               </thead>

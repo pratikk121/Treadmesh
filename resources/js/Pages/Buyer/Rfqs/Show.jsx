@@ -76,8 +76,8 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
     if (!receiverId) {
       Swal.fire({
         icon: 'warning',
-        title: 'কোনো সাপ্লায়ার নেই',
-        text: 'বার্তা পাঠানোর আগে একটি কোটা পাওয়ার জন্য অপেক্ষা করুন।',
+        title: 'There are no suppliers',
+        text: 'Wait for a quota to be reached before sending messages।',
       });
       return;
     }
@@ -96,7 +96,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
         setSending(false);
         Swal.fire({
           icon: 'success',
-          title: 'বার্তা পাঠানো হয়েছে!',
+          title: 'Message sent to!',
           timer: 1500,
           showConfirmButton: false
         });
@@ -105,8 +105,8 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
         setSending(false);
         Swal.fire({
           icon: 'error',
-          title: 'বার্তা পাঠাতে ব্যর্থ',
-          text: 'কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন।'
+          title: 'Failed to send message',
+          text: 'There are some problems. Try again।'
         });
       }
     });
@@ -136,11 +136,11 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
   const acceptQuote = (quote) => {
     Swal.fire({
       icon: 'warning',
-      title: 'এই কোটা গ্রহণ করবেন?',
-      text: 'এটি অন্যান্য সকল কোটা প্রত্যাখ্যান করবে এবং RFQ বন্ধ করবে।',
+      title: 'Accept this quota?',
+      text: 'This will reject all other quotas and close the RFQ।',
       showCancelButton: true,
-      confirmButtonText: 'হ্যাঁ, গ্রহণ',
-      cancelButtonText: 'বাতিল',
+      confirmButtonText: 'Yes, take',
+      cancelButtonText: 'cancel',
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
@@ -150,7 +150,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             setProcessingQuote(null);
             Swal.fire({
               icon: 'success',
-              title: 'কোটা গ্রহণ করা হয়েছে!',
+              title: 'Quota taken!',
               timer: 1500,
               showConfirmButton: false
             });
@@ -159,8 +159,8 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             setProcessingQuote(null);
             Swal.fire({
               icon: 'error',
-              title: 'কোটা গ্রহণ করতে ব্যর্থ',
-              text: 'আবার চেষ্টা করুন।'
+              title: 'Failed to accept quota',
+              text: 'Try Again।'
             });
           }
         });
@@ -172,11 +172,11 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
   const rejectQuote = (quote) => {
     Swal.fire({
       icon: 'warning',
-      title: 'এই কোটা প্রত্যাখ্যান করবেন?',
-      text: 'আপনি কি এই কোটা প্রত্যাখ্যান করতে চান?',
+      title: 'Reject this quota?',
+      text: 'Do you want to decline this quota?',
       showCancelButton: true,
-      confirmButtonText: 'হ্যাঁ, প্রত্যাখ্যান',
-      cancelButtonText: 'বাতিল',
+      confirmButtonText: 'Yes, reject',
+      cancelButtonText: 'cancel',
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
@@ -186,7 +186,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             setProcessingQuote(null);
             Swal.fire({
               icon: 'success',
-              title: 'কোটা প্রত্যাখ্যান করা হয়েছে!',
+              title: 'Quota rejected!',
               timer: 1500,
               showConfirmButton: false
             });
@@ -195,8 +195,8 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             setProcessingQuote(null);
             Swal.fire({
               icon: 'error',
-              title: 'কোটা প্রত্যাখ্যান করতে ব্যর্থ',
-              text: 'আবার চেষ্টা করুন।'
+              title: 'Failed to reject quota',
+              text: 'Try Again।'
             });
           }
         });
@@ -219,12 +219,12 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
           </Link>
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <h2 className="text-2xl font-bold text-gray-800">RFQ বিবরণ</h2>
+              <h2 className="text-2xl font-bold text-gray-800">RFQ Description</h2>
               <span className={`px-3 py-1 text-sm rounded-full ${getStatusColor(rfq.status)}`}>
-                {rfq.status === 'open' ? 'খোলা' :
-                  rfq.status === 'closed' ? 'বন্ধ' :
-                    rfq.status === 'cancelled' ? 'বাতিল' :
-                      rfq.status === 'pending' ? 'অপেক্ষমান' : rfq.status}
+                {rfq.status === 'open' ? 'open' :
+                  rfq.status === 'closed' ? 'off' :
+                    rfq.status === 'cancelled' ? 'cancel' :
+                      rfq.status === 'pending' ? 'Awaiting' : rfq.status}
               </span>
             </div>
             <p className="text-gray-600 mt-1">RFQ #{rfq.rfq_number}</p>
@@ -236,7 +236,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
               href={route('buyer.rfqs.edit', rfq.id)}
               className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
             >
-              RFQ সম্পাদনা
+              RFQ editing
             </Link>
           )}
         </div>
@@ -255,11 +255,11 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
 
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-gray-500">তৈরির তারিখ</p>
+                  <p className="text-gray-500">Creation Date</p>
                   <p className="font-medium">{formatDate(rfq.created_at)}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500">প্রয়োজনীয় তারিখ</p>
+                  <p className="text-gray-500">Required date</p>
                   <p className="font-medium">{formatDate(rfq.required_by_date)}</p>
                 </div>
               </div>
@@ -268,7 +268,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             {/* Products Requested */}
             <div className="bg-white rounded-xl border p-6">
               <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiPackage className="mr-2" /> প্রয়োজনীয় পণ্য
+                <FiPackage className="mr-2" /> Necessary products
               </h3>
 
               <div className="space-y-4">
@@ -299,7 +299,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             {rfq.quotes?.length > 0 && (
               <div className="bg-white rounded-xl border p-6">
                 <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                  <FiDollarSign className="mr-2" /> প্রাপ্ত কোটা ({rfq.quotes.length})
+                  <FiDollarSign className="mr-2" /> Received Quota ({rfq.quotes.length})
                 </h3>
 
                 <div className="space-y-4">
@@ -311,23 +311,23 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                             <FiUser className="text-gray-400 mr-2" />
                             <p className="font-medium">{quote.supplier?.name}</p>
                           </div>
-                          <p className="text-sm text-gray-500 mt-1">কোটা #{quote.quote_number}</p>
+                          <p className="text-sm text-gray-500 mt-1">Quote #{quote.quote_number}</p>
                         </div>
                         <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(quote.status)}`}>
-                          {quote.status === 'pending' ? 'অপেক্ষমান' :
-                            quote.status === 'accepted' ? 'গৃহীত' :
-                              quote.status === 'rejected' ? 'প্রত্যাখ্যাত' : quote.status}
+                          {quote.status === 'pending' ? 'Awaiting' :
+                            quote.status === 'accepted' ? 'accepted' :
+                              quote.status === 'rejected' ? 'Rejected' : quote.status}
                         </span>
                       </div>
 
                       {/* Quote Details */}
                       <div className="grid grid-cols-2 gap-4 mb-3 text-sm">
                         <div>
-                          <p className="text-gray-500">মোট পরিমাণ</p>
+                          <p className="text-gray-500">total amount</p>
                           <p className="font-bold text-indigo-600">{formatCurrency(quote.total_amount)}</p>
                         </div>
                         <div>
-                          <p className="text-gray-500">মেয়াদ শেষ</p>
+                          <p className="text-gray-500">Expires</p>
                           <p className="font-medium">{formatDate(quote.valid_until)}</p>
                         </div>
                       </div>
@@ -335,7 +335,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                       {/* Product Breakdown */}
                       {quote.product_breakdown && (
                         <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                          <p className="text-xs font-medium text-gray-700 mb-2">মূল্য বিশ্লেষণ:</p>
+                          <p className="text-xs font-medium text-gray-700 mb-2">Price analysis:</p>
                           {quote.product_breakdown.map((item, idx) => (
                             <div key={idx} className="flex justify-between text-xs mb-1">
                               <span>{item.name} x {item.quantity}</span>
@@ -360,7 +360,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                               </svg>
                             ) : (
                               <>
-                                <FiCheck className="mr-1" /> কোটা গ্রহণ
+                                <FiCheck className="mr-1" /> Taking Quota
                               </>
                             )}
                           </button>
@@ -369,7 +369,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                             disabled={processingQuote === quote.id}
                             className="flex-1 px-3 py-2 bg-red-100 text-red-600 text-sm rounded-lg hover:bg-red-200 transition-colors disabled:opacity-50 flex items-center justify-center"
                           >
-                            <FiX className="mr-1" /> প্রত্যাখ্যান
+                            <FiX className="mr-1" /> Rejection
                           </button>
                         </div>
                       )}
@@ -378,21 +378,21 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                       {acceptedQuote && acceptedQuote.id === quote.id && (
                         <div className="mt-4 p-3 bg-green-50 rounded-lg">
                           <p className="text-sm text-green-700 flex items-center">
-                            <FiCheckCircle className="mr-2" /> এই কোটা গ্রহণ করা হয়েছে
+                            <FiCheckCircle className="mr-2" /> This quota has been accepted
                           </p>
                           {!order ? (
                             <Link
                               href={route('buyer.orders.create-from-rfq', [rfq.id, quote.id])}
                               className="mt-2 inline-block px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700"
                             >
-                              অর্ডারে যান
+                              Go to order
                             </Link>
                           ) : (
                             <Link
                               href={route('buyer.orders.show', order.id)}
                               className="mt-2 inline-block px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700"
                             >
-                              অর্ডার দেখুন
+                              View order
                             </Link>
                           )}
                         </div>
@@ -407,26 +407,26 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             {order && (
               <div className="bg-white rounded-xl border p-6">
                 <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                  <FiShoppingBag className="mr-2" /> অর্ডার তথ্য
+                  <FiShoppingBag className="mr-2" /> Order Information
                 </h3>
 
                 <div className="p-4 bg-blue-50 rounded-lg">
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="font-medium">অর্ডার #{order.order_number}</p>
-                      <p className="text-sm text-gray-600 mt-1">স্ট্যাটাস: {order.order_status === 'pending_confirmation' ? 'অপেক্ষমান' :
-                        order.order_status === 'confirmed' ? 'নিশ্চিত' :
-                          order.order_status === 'processing' ? 'প্রক্রিয়াধীন' :
-                            order.order_status === 'shipped' ? 'পাঠানো হয়েছে' :
-                              order.order_status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                                order.order_status === 'cancelled' ? 'বাতিল' : order.order_status}</p>
-                      <p className="text-sm text-gray-600">মোট: {formatCurrency(order.total_amount)}</p>
+                      <p className="font-medium">Order #{order.order_number}</p>
+                      <p className="text-sm text-gray-600 mt-1">Status: {order.order_status === 'pending_confirmation' ? 'Awaiting' :
+                        order.order_status === 'confirmed' ? 'sure' :
+                          order.order_status === 'processing' ? 'In process' :
+                            order.order_status === 'shipped' ? 'has been sent' :
+                              order.order_status === 'delivered' ? 'Delivered' :
+                                order.order_status === 'cancelled' ? 'cancel' : order.order_status}</p>
+                      <p className="text-sm text-gray-600">total: {formatCurrency(order.total_amount)}</p>
                     </div>
                     <Link
                       href={route('buyer.orders.show', order.id)}
                       className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                     >
-                      অর্ডার দেখুন
+                      View order
                     </Link>
                   </div>
                 </div>
@@ -439,13 +439,13 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             {/* Messages Section */}
             <div className="bg-white rounded-xl border p-6">
               <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiMessageCircle className="mr-2" /> বার্তা
+                <FiMessageCircle className="mr-2" /> Message
               </h3>
 
               {/* Message List */}
               <div className="space-y-3 mb-4 max-h-96 overflow-y-auto">
                 {messages.length === 0 ? (
-                  <p className="text-center text-gray-500 py-4">কোনো বার্তা নেই</p>
+                  <p className="text-center text-gray-500 py-4">No message</p>
                 ) : (
                   messages.map((message) => (
                     <div
@@ -474,7 +474,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                   type="text"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="বার্তা লিখুন..."
+                  placeholder="Write Message..."
                   className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500"
                   disabled={rfq.status === 'cancelled'}
                 />
@@ -491,14 +491,14 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             {/* Timeline */}
             <div className="bg-white rounded-xl border p-6">
               <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiClock className="mr-2" /> টাইমলাইন
+                <FiClock className="mr-2" /> Timeline
               </h3>
 
               <div className="space-y-3">
                 <div className="flex items-start">
                   <div className="w-2 h-2 mt-2 bg-green-500 rounded-full mr-3"></div>
                   <div>
-                    <p className="text-sm font-medium">RFQ তৈরি</p>
+                    <p className="text-sm font-medium">RFQ Created by</p>
                     <p className="text-xs text-gray-500">{formatDate(rfq.created_at)}</p>
                   </div>
                 </div>
@@ -509,9 +509,9 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                       quote.status === 'rejected' ? 'bg-red-500' : 'bg-yellow-500'
                       } rounded-full mr-3`}></div>
                     <div>
-                      <p className="text-sm font-medium">{quote.supplier?.name} থেকে কোটা প্রাপ্ত</p>
+                      <p className="text-sm font-medium">{quote.supplier?.name} Received Quota from</p>
                       <p className="text-xs text-gray-500">{formatDate(quote.created_at)}</p>
-                      <p className="text-xs text-gray-600 mt-1">পরিমাণ: {formatCurrency(quote.total_amount)}</p>
+                      <p className="text-xs text-gray-600 mt-1">Amount: {formatCurrency(quote.total_amount)}</p>
                     </div>
                   </div>
                 ))}
@@ -520,7 +520,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                   <div className="flex items-start">
                     <div className="w-2 h-2 mt-2 bg-blue-500 rounded-full mr-3"></div>
                     <div>
-                      <p className="text-sm font-medium">কোটা গ্রহণ করা হয়েছে</p>
+                      <p className="text-sm font-medium">Quota taken</p>
                       <p className="text-xs text-gray-500">{formatDate(acceptedQuote.updated_at)}</p>
                     </div>
                   </div>
@@ -530,7 +530,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                   <div className="flex items-start">
                     <div className="w-2 h-2 mt-2 bg-purple-500 rounded-full mr-3"></div>
                     <div>
-                      <p className="text-sm font-medium">অর্ডার তৈরি</p>
+                      <p className="text-sm font-medium">Order creation</p>
                       <p className="text-xs text-gray-500">{formatDate(order.created_at)}</p>
                     </div>
                   </div>

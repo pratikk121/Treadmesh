@@ -106,14 +106,14 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
     if (selectedProducts.length === 0) return;
 
     Swal.fire({
-      title: 'একাধিক পণ্য অনুমোদন',
-      text: `আপনি কি ${selectedProducts.length} টি পণ্য অনুমোদন করতে চান?`,
+      title: 'Multiple product approval',
+      text: `Are you ${selectedProducts.length} t want to approve the product?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#10B981',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'হ্যাঁ, অনুমোদন করুন',
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: 'Yes, approve',
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.product-approval.bulk-approve'), {
@@ -122,8 +122,8 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
           onSuccess: () => {
             setSelectedProducts([]);
             Swal.fire({
-              title: 'সফল!',
-              text: `${selectedProducts.length} টি পণ্য সফলভাবে অনুমোদন করা হয়েছে।`,
+              title: 'successful!',
+              text: `${selectedProducts.length} t product has been successfully approved।`,
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -164,15 +164,15 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
 
   return (
     <DashboardLayout>
-      <Head title="পণ্য অনুমোদন" />
+      <Head title="Product approval" />
 
       <div className="space-y-6">
         {/* Header - Page title and action buttons */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">পণ্য অনুমোদন</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Product approval</h1>
             <p className="text-sm text-gray-600 mt-1">
-              বিচারাধীন পণ্য জমা পর্যালোচনা ও অনুমোদন করুন
+              Review and approve pending product submissions
             </p>
           </div>
           <Link
@@ -180,7 +180,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
             className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
           >
             <FiPackage className="w-4 h-4" />
-            <span>পরিসংখ্যান দেখুন</span>
+            <span>View Statistics</span>
           </Link>
         </div>
 
@@ -189,7 +189,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">অনুমোদন বিচারাধীন</p>
+                <p className="text-sm text-gray-500">Approval pending</p>
                 <p className="text-2xl font-bold text-yellow-600 mt-1">{stats.pending}</p>
               </div>
               <div className="p-3 bg-yellow-100 rounded-lg">
@@ -201,7 +201,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">আজকে অনুমোদিত</p>
+                <p className="text-sm text-gray-500">Approved today</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{stats.approved_today}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -213,7 +213,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">আজকে বাতিল</p>
+                <p className="text-sm text-gray-500">Cancel today</p>
                 <p className="text-2xl font-bold text-red-600 mt-1">{stats.rejected_today}</p>
               </div>
               <div className="p-3 bg-red-100 rounded-lg">
@@ -225,7 +225,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">ক্যাটাগরি</p>
+                <p className="text-sm text-gray-500">Category</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">{stats.categories}</p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-lg">
@@ -243,7 +243,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="পণ্যের নাম, বিবরণ বা সাপ্লায়ার দ্বারা অনুসন্ধান..."
+                  placeholder="Search by product name, description or supplier..."
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -256,7 +256,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                 className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
               >
                 <FiFilter className="w-4 h-4" />
-                <span>ফিল্টার</span>
+                <span>Filter</span>
                 {activeFilterCount > 0 && (
                   <span className="ml-1 px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-xs">
                     {activeFilterCount}
@@ -268,7 +268,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                   onClick={handleReset}
                   className="px-4 py-2 text-gray-600 hover:text-gray-900"
                 >
-                  মুছুন
+                  delete
                 </button>
               )}
             </div>
@@ -278,19 +278,19 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
           {selectedProducts.length > 0 && (
             <div className="mt-4 flex items-center gap-4 p-3 bg-indigo-50 rounded-lg">
               <span className="text-sm font-medium text-indigo-700">
-                {selectedProducts.length} টি পণ্য নির্বাচিত
+                {selectedProducts.length} products selected
               </span>
               <button
                 onClick={handleBulkApprove}
                 className="px-4 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700"
               >
-                নির্বাচিত অনুমোদন
+                Selected authorization
               </button>
               <button
                 onClick={() => setSelectedProducts([])}
                 className="text-sm text-gray-600 hover:text-gray-900"
               >
-                নির্বাচন মুছুন
+                Delete selection
               </button>
             </div>
           )}
@@ -311,25 +311,25 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                     />
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    পণ্য
+                    Product
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    সাপ্লায়ার
+                    Supplier
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ক্যাটাগরি
+                    Category
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    মূল্য
+                    Price
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    স্টক
+                    stock
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    জমার তারিখ
+                    Submission Date
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    কার্যক্রম
+                    Activities
                   </th>
                 </tr>
               </thead>
@@ -364,7 +364,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                           )}
                           <div>
                             <div className="font-medium text-gray-900">{product.name}</div>
-                            <div className="text-sm text-gray-500">সর্বনিম্ন অর্ডার: {product.minimum_order_quantity} {product.unit}</div>
+                            <div className="text-sm text-gray-500">Minimum Order: {product.minimum_order_quantity} {product.unit}</div>
                           </div>
                         </div>
                       </Link>
@@ -386,7 +386,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-gray-900">{formatCurrency(product.base_price)}</div>
                       {product.bulk_prices && Object.keys(product.bulk_prices).length > 0 && (
-                        <div className="text-xs text-gray-500">বাল্ক মূল্য উপলব্ধ</div>
+                        <div className="text-xs text-gray-500">Bulk pricing available</div>
                       )}
                     </td>
                     <td className="px-6 py-4">
@@ -404,7 +404,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                         className="inline-flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-600 text-sm rounded-lg hover:bg-indigo-100 transition"
                       >
                         <FiEye className="w-4 h-4" />
-                        পর্যালোচনা
+                        Review
                       </Link>
                     </td>
                   </tr>
@@ -418,7 +418,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
             <div className="px-6 py-4 border-t border-gray-100">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-500">
-                  মোট {pendingProducts.total} টির মধ্যে {pendingProducts.from} থেকে {pendingProducts.to} দেখানো হচ্ছে
+                  total {pendingProducts.total} of the {pendingProducts.from} from {pendingProducts.to} Showing
                 </p>
                 <div className="flex gap-2">
                   {pendingProducts.links.map((link, index) => (
@@ -434,8 +434,8 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                         }`}
                       dangerouslySetInnerHTML={{
                         __html: link.label
-                          .replace('Previous', 'পূর্ববর্তী')
-                          .replace('Next', 'পরবর্তী')
+                          .replace('Previous', 'previous')
+                          .replace('Next', 'next')
                       }}
                     />
                   ))}
@@ -450,20 +450,20 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-900">পণ্য ফিল্টার</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Product Filter</h3>
               </div>
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      ক্যাটাগরি
+                      Category
                     </label>
                     <select
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
-                      <option value="">সব ক্যাটাগরি</option>
+                      <option value="">All Categories</option>
                       {categories.map((category) => (
                         <option key={category} value={category}>{category}</option>
                       ))}
@@ -471,14 +471,14 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      সাপ্লায়ার
+                      Supplier
                     </label>
                     <select
                       value={selectedSupplier}
                       onChange={(e) => setSelectedSupplier(e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
-                      <option value="">সব সাপ্লায়ার</option>
+                      <option value="">All suppliers</option>
                       {suppliers.map((supplier) => (
                         <option key={supplier.id} value={supplier.id}>{supplier.company_name}</option>
                       ))}
@@ -488,7 +488,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    তারিখ সীমা
+                    Date range
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -496,21 +496,21 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                       value={dateFrom}
                       onChange={(e) => setDateFrom(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="থেকে"
+                      placeholder="from"
                     />
                     <input
                       type="date"
                       value={dateTo}
                       onChange={(e) => setDateTo(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="পর্যন্ত"
+                      placeholder="up to"
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    মূল্য সীমা (টাকা)
+                    Price range (Rs)
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -518,7 +518,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                       value={minPrice}
                       onChange={(e) => setMinPrice(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="সর্বনিম্ন মূল্য"
+                      placeholder="Lowest Price"
                       min="0"
                     />
                     <input
@@ -526,7 +526,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                       value={maxPrice}
                       onChange={(e) => setMaxPrice(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="সর্বোচ্চ মূল্য"
+                      placeholder="Maximum price"
                       min="0"
                     />
                   </div>
@@ -537,19 +537,19 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
                   onClick={() => setShowFilterModal(false)}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900"
                 >
-                  বাতিল
+                  cancel
                 </button>
                 <button
                   onClick={handleReset}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg"
                 >
-                  রিসেট
+                  Reset
                 </button>
                 <button
                   onClick={handleFilter}
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
-                  ফিল্টার প্রয়োগ
+                  Apply Filter
                 </button>
               </div>
             </div>

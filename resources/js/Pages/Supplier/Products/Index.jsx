@@ -112,7 +112,7 @@ export default function ProductsIndex({ products, stats, categories }) {
 
   // Bulk delete products
   const handleBulkDelete = () => {
-    if (confirm(`আপনি কি ${selectedProducts.length} টি পণ্য মুছে ফেলতে চান?`)) {
+    if (confirm(`Are you ${selectedProducts.length} t want to delete the product?`)) {
       router.post(route('supplier.products.bulk-delete'), {
         product_ids: selectedProducts
       }, {
@@ -134,9 +134,9 @@ export default function ProductsIndex({ products, stats, categories }) {
   // Get status badge with appropriate styling
   const getStatusBadge = (status) => {
     const badges = {
-      active: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'সক্রিয়' },
-      pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: FiClock, label: 'বিচারাধীন' },
-      inactive: { bg: 'bg-gray-100', text: 'text-gray-800', icon: FiXCircle, label: 'নিষ্ক্রিয়' }
+      active: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'Active' },
+      pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: FiClock, label: 'Pending' },
+      inactive: { bg: 'bg-gray-100', text: 'text-gray-800', icon: FiXCircle, label: 'Inactive' }
     };
     const badge = badges[status] || badges.inactive;
     const Icon = badge.icon;
@@ -152,11 +152,11 @@ export default function ProductsIndex({ products, stats, categories }) {
   // Get stock status text based on quantity
   const getStockStatus = (product) => {
     if (product.stock_quantity <= 0) {
-      return <span className="text-red-600 font-medium">স্টক নেই</span>;
+      return <span className="text-red-600 font-medium">Out of Stock</span>;
     } else if (product.stock_quantity <= 10) {
-      return <span className="text-orange-600 font-medium">স্টক কম ({product.stock_quantity})</span>;
+      return <span className="text-orange-600 font-medium">Stock low ({product.stock_quantity})</span>;
     }
-    return <span className="text-green-600 font-medium">{product.stock_quantity} ইউনিট</span>;
+    return <span className="text-green-600 font-medium">{product.stock_quantity} Unit</span>;
   };
 
   // Sort icon component for table headers
@@ -169,15 +169,15 @@ export default function ProductsIndex({ products, stats, categories }) {
 
   return (
     <DashboardLayout>
-      <Head title="পণ্য তালিকা" />
+      <Head title="Product list" />
 
       <div className="space-y-6">
         {/* Header - Page title and add product button */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">পণ্য সমূহ</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Products</h1>
             <p className="text-sm text-gray-600 mt-1">
-              আপনার পণ্য ক্যাটালগ এবং ইনভেন্টরি পরিচালনা করুন
+              Manage your product catalog and inventory
             </p>
           </div>
           <div className="flex gap-2">
@@ -186,7 +186,7 @@ export default function ProductsIndex({ products, stats, categories }) {
               className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
             >
               <FiPlus className="w-4 h-4" />
-              <span>পণ্য যোগ করুন</span>
+              <span>Add product</span>
             </Link>
           </div>
         </div>
@@ -194,27 +194,27 @@ export default function ProductsIndex({ products, stats, categories }) {
         {/* Stats Cards - Key metrics */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <p className="text-sm text-gray-500">মোট</p>
+            <p className="text-sm text-gray-500">total</p>
             <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <p className="text-sm text-gray-500">সক্রিয়</p>
+            <p className="text-sm text-gray-500">Active</p>
             <p className="text-2xl font-bold text-green-600">{stats.active}</p>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <p className="text-sm text-gray-500">বিচারাধীন</p>
+            <p className="text-sm text-gray-500">Pending</p>
             <p className="text-2xl font-bold text-yellow-600">{stats.pending}</p>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <p className="text-sm text-gray-500">নিষ্ক্রিয়</p>
+            <p className="text-sm text-gray-500">Inactive</p>
             <p className="text-2xl font-bold text-gray-600">{stats.inactive}</p>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <p className="text-sm text-gray-500">স্টক কম</p>
+            <p className="text-sm text-gray-500">Stock low</p>
             <p className="text-2xl font-bold text-orange-600">{stats.low_stock}</p>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <p className="text-sm text-gray-500">স্টক নেই</p>
+            <p className="text-sm text-gray-500">Out of Stock</p>
             <p className="text-2xl font-bold text-red-600">{stats.out_of_stock}</p>
           </div>
         </div>
@@ -227,7 +227,7 @@ export default function ProductsIndex({ products, stats, categories }) {
               className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
             >
               <FiFilter className="w-4 h-4" />
-              <span className="font-medium">ফিল্টার</span>
+              <span className="font-medium">Filter</span>
               {showFilters ? <FiChevronUp className="w-4 h-4" /> : <FiChevronDown className="w-4 h-4" />}
             </button>
           </div>
@@ -240,7 +240,7 @@ export default function ProductsIndex({ products, stats, categories }) {
                   <form onSubmit={handleSearch} className="flex">
                     <input
                       type="text"
-                      placeholder="নাম বা বিবরণ দ্বারা অনুসন্ধান..."
+                      placeholder="Search by name or description..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
@@ -261,10 +261,10 @@ export default function ProductsIndex({ products, stats, categories }) {
                     onChange={(e) => setStatusFilter(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   >
-                    <option value="">সব স্ট্যাটাস</option>
-                    <option value="active">সক্রিয়</option>
-                    <option value="pending">বিচারাধীন</option>
-                    <option value="inactive">নিষ্ক্রিয়</option>
+                    <option value="">All statuses are</option>
+                    <option value="active">Active</option>
+                    <option value="pending">Pending</option>
+                    <option value="inactive">Inactive</option>
                   </select>
                 </div>
 
@@ -275,7 +275,7 @@ export default function ProductsIndex({ products, stats, categories }) {
                     onChange={(e) => setCategoryFilter(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   >
-                    <option value="">সব ক্যাটাগরি</option>
+                    <option value="">All Categories</option>
                     {categories.map((category) => (
                       <option key={category} value={category}>{category}</option>
                     ))}
@@ -289,13 +289,13 @@ export default function ProductsIndex({ products, stats, categories }) {
                   onClick={resetFilters}
                   className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
                 >
-                  রিসেট
+                  Reset
                 </button>
                 <button
                   onClick={applyFilters}
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
-                  ফিল্টার প্রয়োগ
+                  Apply Filter
                 </button>
               </div>
             </div>
@@ -306,20 +306,20 @@ export default function ProductsIndex({ products, stats, categories }) {
         {selectedProducts.length > 0 && (
           <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 flex items-center justify-between">
             <span className="text-indigo-700">
-              {selectedProducts.length} টি পণ্য নির্বাচিত
+              {selectedProducts.length} products selected
             </span>
             <div className="flex gap-2">
               <button
                 onClick={handleBulkDelete}
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
               >
-                নির্বাচিত মুছুন
+                Delete selected
               </button>
               <button
                 onClick={() => setSelectedProducts([])}
                 className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
               >
-                নির্বাচন মুছুন
+                Delete selection
               </button>
             </div>
           </div>
@@ -344,19 +344,19 @@ export default function ProductsIndex({ products, stats, categories }) {
                       onClick={() => handleSort('name')}
                       className="flex items-center gap-1 hover:text-gray-700"
                     >
-                      পণ্য
+                      Product
                       <SortIcon field="name" />
                     </button>
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ক্যাটাগরি
+                    Category
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     <button
                       onClick={() => handleSort('base_price')}
                       className="flex items-center gap-1 hover:text-gray-700"
                     >
-                      মূল্য
+                      Price
                       <SortIcon field="base_price" />
                     </button>
                   </th>
@@ -365,24 +365,24 @@ export default function ProductsIndex({ products, stats, categories }) {
                       onClick={() => handleSort('stock_quantity')}
                       className="flex items-center gap-1 hover:text-gray-700"
                     >
-                      মজুত
+                      Stock
                       <SortIcon field="stock_quantity" />
                     </button>
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    স্ট্যাটাস
+                    Status
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     <button
                       onClick={() => handleSort('created_at')}
                       className="flex items-center gap-1 hover:text-gray-700"
                     >
-                      তৈরির তারিখ
+                      Creation Date
                       <SortIcon field="created_at" />
                     </button>
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    কার্যক্রম
+                    Activities
                   </th>
                 </tr>
               </thead>
@@ -426,7 +426,7 @@ export default function ProductsIndex({ products, stats, categories }) {
                     <td className="px-6 py-4">
                       <div>
                         <p className="font-medium text-gray-900">{formatCurrency(product.base_price)}</p>
-                        <p className="text-xs text-gray-500">সর্বনিম্ন অর্ডার: {product.minimum_order_quantity} {product.unit}</p>
+                        <p className="text-xs text-gray-500">Minimum Order: {product.minimum_order_quantity} {product.unit}</p>
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -443,32 +443,32 @@ export default function ProductsIndex({ products, stats, categories }) {
                         <Link
                           href={route('supplier.products.bulk-prices', product.id)}
                           className="p-2 text-gray-400 hover:text-indigo-600"
-                          title="বাল্ক মূল্য"
+                          title="Bulk price"
                         >
                           <FiArchive className="w-5 h-5" />
                         </Link>
                         <Link
                           href={route('supplier.products.edit', product.id)}
                           className="p-2 text-gray-400 hover:text-indigo-600"
-                          title="সম্পাদনা"
+                          title="editing"
                         >
                           <FiEdit2 className="w-5 h-5" />
                         </Link>
                         <button
                           onClick={() => handleDuplicate(product.id)}
                           className="p-2 text-gray-400 hover:text-indigo-600"
-                          title="ডুপ্লিকেট"
+                          title="Duplicate"
                         >
                           <FiCopy className="w-5 h-5" />
                         </button>
                         <button
                           onClick={() => {
-                            if (confirm('আপনি কি এই পণ্য মুছে ফেলতে চান?')) {
+                            if (confirm('Do you want to delete this product?')) {
                               router.delete(route('supplier.products.destroy', product.id));
                             }
                           }}
                           className="p-2 text-gray-400 hover:text-red-600"
-                          title="মুছুন"
+                          title="delete"
                         >
                           <FiTrash2 className="w-5 h-5" />
                         </button>
@@ -482,14 +482,14 @@ export default function ProductsIndex({ products, stats, categories }) {
                   <tr>
                     <td colSpan="8" className="px-6 py-12 text-center">
                       <FiPackage className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                      <p className="text-gray-500 text-lg mb-2">কোনো পণ্য পাওয়া যায়নি</p>
-                      <p className="text-gray-400 mb-4">আপনার প্রথম পণ্য যোগ করে শুরু করুন</p>
+                      <p className="text-gray-500 text-lg mb-2">No products found</p>
+                      <p className="text-gray-400 mb-4">Start by adding your first product</p>
                       <Link
                         href={route('supplier.products.create')}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                       >
                         <FiPlus className="w-4 h-4" />
-                        পণ্য যোগ করুন
+                        Add product
                       </Link>
                     </td>
                   </tr>
@@ -503,7 +503,7 @@ export default function ProductsIndex({ products, stats, categories }) {
             <div className="px-6 py-4 border-t border-gray-100">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-500">
-                  মোট {products.total} টির মধ্যে {products.from} থেকে {products.to} দেখানো হচ্ছে
+                  total {products.total} of the {products.from} from {products.to} Showing
                 </p>
                 <div className="flex gap-2">
                   {products.links.map((link, index) => (
@@ -519,8 +519,8 @@ export default function ProductsIndex({ products, stats, categories }) {
                         }`}
                       dangerouslySetInnerHTML={{
                         __html: link.label
-                          .replace('Previous', 'পূর্ববর্তী')
-                          .replace('Next', 'পরবর্তী')
+                          .replace('Previous', 'previous')
+                          .replace('Next', 'next')
                       }}
                     />
                   ))}

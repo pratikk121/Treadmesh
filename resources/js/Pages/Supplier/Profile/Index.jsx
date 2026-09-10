@@ -64,7 +64,7 @@ export default function ProfileIndex({
       return {
         color: 'bg-gray-100 text-gray-800',
         icon: FiAlertCircle,
-        text: 'শুরু হয়নি'
+        text: 'Not started'
       };
     }
 
@@ -73,19 +73,19 @@ export default function ProfileIndex({
       return {
         color: 'bg-green-100 text-green-800',
         icon: MdVerified,
-        text: 'ভেরিফাইড'
+        text: 'Verified'
       };
     } else if (status === 'pending') {
       return {
         color: 'bg-yellow-100 text-yellow-800',
         icon: MdPending,
-        text: 'ভেরিফিকেশন বিচারাধীন'
+        text: '.Pending'
       };
     } else {
       return {
         color: 'bg-red-100 text-red-800',
         icon: MdWarning,
-        text: 'ভেরিফিকেশন ব্যর্থ'
+        text: 'Verification failed'
       };
     }
   };
@@ -97,15 +97,15 @@ export default function ProfileIndex({
 
   return (
     <DashboardLayout>
-      <Head title="কোম্পানি প্রোফাইল" />
+      <Head title="Company profile" />
 
       <div className="space-y-6">
         {/* Header - Page title and edit button */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">কোম্পানি প্রোফাইল</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Company profile</h1>
             <p className="text-sm text-gray-600 mt-1">
-              আপনার কোম্পানির তথ্য পরিচালনা করুন এবং কর্মক্ষমতা মেট্রিক্স দেখুন
+              Manage your company information and view performance metrics
             </p>
           </div>
           <Link
@@ -113,7 +113,7 @@ export default function ProfileIndex({
             className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
           >
             <FiEdit2 className="w-4 h-4" />
-            <span>প্রোফাইল সম্পাদনা</span>
+            <span>Edit profile</span>
           </Link>
         </div>
 
@@ -126,8 +126,8 @@ export default function ProfileIndex({
               </div>
               <div className="ml-3 flex-1">
                 <p className="text-sm text-blue-700">
-                  আপনার প্রোফাইল <span className="font-bold">{profileCompletion}% সম্পূর্ণ</span>।
-                  ক্রেতাদের সাথে আস্থা এবং দৃশ্যমানতা বাড়াতে আপনার প্রোফাইল সম্পূর্ণ করুন।
+                  Your profile is <span className="font-bold">{profileCompletion}% Complete</span>।
+                  compared to last time Complete your profile to increase trust and visibility with buyers।
                 </p>
                 <div className="mt-2 w-full bg-blue-200 rounded-full h-2">
                   <div
@@ -146,7 +146,7 @@ export default function ProfileIndex({
           <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-6 border-b border-gray-100">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-900">কোম্পানির তথ্য</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Company Information</h2>
                 <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${verificationStatus.color}`}>
                   <StatusIcon className="w-4 h-4" />
                   {verificationStatus.text}
@@ -176,7 +176,7 @@ export default function ProfileIndex({
                       )}
                       {supplier.year_established && (
                         <p className="text-sm text-gray-500 mt-1">
-                          প্রতিষ্ঠিত {supplier.year_established}
+                          Established {supplier.year_established}
                         </p>
                       )}
                     </div>
@@ -187,28 +187,28 @@ export default function ProfileIndex({
                     <div className="flex items-start gap-3">
                       <FiUser className="w-5 h-5 text-gray-400 mt-0.5" />
                       <div>
-                        <p className="text-sm text-gray-500">যোগাযোগের ব্যক্তি</p>
+                        <p className="text-sm text-gray-500">Contact Person</p>
                         <p className="font-medium text-gray-900">{user.name}</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <FiMail className="w-5 h-5 text-gray-400 mt-0.5" />
                       <div>
-                        <p className="text-sm text-gray-500">ইমেইল ঠিকানা</p>
+                        <p className="text-sm text-gray-500">Email address</p>
                         <p className="font-medium text-gray-900">{user.email}</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <FiPhone className="w-5 h-5 text-gray-400 mt-0.5" />
                       <div>
-                        <p className="text-sm text-gray-500">ফোন নম্বর</p>
+                        <p className="text-sm text-gray-500">Phone number</p>
                         <p className="font-medium text-gray-900">{supplier.company_phone}</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <FiMapPin className="w-5 h-5 text-gray-400 mt-0.5" />
                       <div>
-                        <p className="text-sm text-gray-500">ঠিকানা</p>
+                        <p className="text-sm text-gray-500">Address</p>
                         <p className="font-medium text-gray-900">
                           {supplier.company_address}, {supplier.city}
                           {supplier.state && `, ${supplier.state}`}
@@ -222,23 +222,23 @@ export default function ProfileIndex({
                   {/* Business Details Section */}
                   {(supplier.trade_license_number || supplier.tax_id || supplier.website) && (
                     <div className="border-t border-gray-100 pt-4">
-                      <h4 className="text-sm font-medium text-gray-700 mb-3">ব্যবসায়িক বিবরণ</h4>
+                      <h4 className="text-sm font-medium text-gray-700 mb-3">Business Description</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {supplier.trade_license_number && (
                           <div>
-                            <p className="text-sm text-gray-500">ট্রেড লাইসেন্স নম্বর</p>
+                            <p className="text-sm text-gray-500">Trade License No.</p>
                             <p className="font-medium text-gray-900">{supplier.trade_license_number}</p>
                           </div>
                         )}
                         {supplier.tax_id && (
                           <div>
-                            <p className="text-sm text-gray-500">ট্যাক্স আইডি / ভ্যাট নম্বর</p>
+                            <p className="text-sm text-gray-500">Tax ID / VAT Number</p>
                             <p className="font-medium text-gray-900">{supplier.tax_id}</p>
                           </div>
                         )}
                         {supplier.website && (
                           <div>
-                            <p className="text-sm text-gray-500">ওয়েবসাইট</p>
+                            <p className="text-sm text-gray-500"></p>
                             <a
                               href={supplier.website}
                               target="_blank"
@@ -251,7 +251,7 @@ export default function ProfileIndex({
                         )}
                         {supplier.number_of_employees && (
                           <div>
-                            <p className="text-sm text-gray-500">কর্মচারীর সংখ্যা</p>
+                            <p className="text-sm text-gray-500">Number of employees</p>
                             <p className="font-medium text-gray-900">{supplier.number_of_employees}</p>
                           </div>
                         )}
@@ -262,7 +262,7 @@ export default function ProfileIndex({
                   {/* Company Description */}
                   {supplier.description && (
                     <div className="border-t border-gray-100 pt-4">
-                      <h4 className="text-sm font-medium text-gray-700 mb-2">কোম্পানি সম্পর্কে</h4>
+                      <h4 className="text-sm font-medium text-gray-700 mb-2">About the company</h4>
                       <p className="text-gray-600">{supplier.description}</p>
                     </div>
                   )}
@@ -270,7 +270,7 @@ export default function ProfileIndex({
                   {/* Documents Section */}
                   {(supplier.trade_license_document || supplier.certificate_of_incorporation) && (
                     <div className="border-t border-gray-100 pt-4">
-                      <h4 className="text-sm font-medium text-gray-700 mb-3">নথিপত্র</h4>
+                      <h4 className="text-sm font-medium text-gray-700 mb-3">Documents</h4>
                       <div className="space-y-2">
                         {supplier.trade_license_document && (
                           <a
@@ -280,7 +280,7 @@ export default function ProfileIndex({
                             className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700"
                           >
                             <FiFileText className="w-4 h-4" />
-                            <span>ট্রেড লাইসেন্স নথি</span>
+                            <span>Trade License Document</span>
                             <FiEye className="w-4 h-4 ml-auto" />
                           </a>
                         )}
@@ -292,7 +292,7 @@ export default function ProfileIndex({
                             className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700"
                           >
                             <FiFileText className="w-4 h-4" />
-                            <span>নিবন্ধনের সনদ</span>
+                            <span>Certificate of Registration</span>
                             <FiEye className="w-4 h-4 ml-auto" />
                           </a>
                         )}
@@ -306,14 +306,14 @@ export default function ProfileIndex({
                   <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <FiBriefcase className="w-10 h-10 text-gray-400" />
                   </div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">এখনও প্রোফাইল নেই</h3>
-                  <p className="text-gray-500 mb-4">আপনি এখনও আপনার কোম্পানির প্রোফাইল তৈরি করেননি।</p>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No profile yet</h3>
+                  <p className="text-gray-500 mb-4">You have not created your company profile yet।</p>
                   <Link
                     href={route('supplier.profile.edit')}
                     className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
                   >
                     <FiEdit2 className="w-4 h-4" />
-                    <span>প্রোফাইল তৈরি</span>
+                    <span>Create profile</span>
                   </Link>
                 </div>
               )}
@@ -324,10 +324,10 @@ export default function ProfileIndex({
           <div className="space-y-4">
             {/* Verification Status Card */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="text-sm font-medium text-gray-700 mb-4">ভেরিফিকেশন স্ট্যাটাস</h3>
+              <h3 className="text-sm font-medium text-gray-700 mb-4">Verification Status</h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">প্রোফাইল সম্পূর্ণতা</span>
+                  <span className="text-sm text-gray-500">Profile completeness</span>
                   <span className="text-sm font-medium text-gray-900">{profileCompletion}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
@@ -337,7 +337,7 @@ export default function ProfileIndex({
                   />
                 </div>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-sm text-gray-500">ভেরিফিকেশন</span>
+                  <span className="text-sm text-gray-500">Verification</span>
                   <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${verificationStatus.color}`}>
                     <StatusIcon className="w-3 h-3" />
                     {verificationStatus.text}
@@ -348,14 +348,14 @@ export default function ProfileIndex({
 
             {/* Key Metrics */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="text-sm font-medium text-gray-700 mb-4">দ্রুত পরিসংখ্যান</h3>
+              <h3 className="text-sm font-medium text-gray-700 mb-4">Quick stats</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="p-2 bg-blue-100 rounded-lg">
                       <FiPackage className="w-4 h-4 text-blue-600" />
                     </div>
-                    <span className="text-sm text-gray-600">মোট পণ্য</span>
+                    <span className="text-sm text-gray-600">Total Products</span>
                   </div>
                   <span className="text-lg font-bold text-gray-900">{stats.total_products}</span>
                 </div>
@@ -364,7 +364,7 @@ export default function ProfileIndex({
                     <div className="p-2 bg-green-100 rounded-lg">
                       <FiCheckCircle className="w-4 h-4 text-green-600" />
                     </div>
-                    <span className="text-sm text-gray-600">সক্রিয় পণ্য</span>
+                    <span className="text-sm text-gray-600">Active product</span>
                   </div>
                   <span className="text-lg font-bold text-gray-900">{stats.active_products}</span>
                 </div>
@@ -373,7 +373,7 @@ export default function ProfileIndex({
                     <div className="p-2 bg-purple-100 rounded-lg">
                       <FiFileText className="w-4 h-4 text-purple-600" />
                     </div>
-                    <span className="text-sm text-gray-600">মোট কোটা</span>
+                    <span className="text-sm text-gray-600">Total Quota</span>
                   </div>
                   <span className="text-lg font-bold text-gray-900">{stats.total_quotes}</span>
                 </div>
@@ -382,7 +382,7 @@ export default function ProfileIndex({
                     <div className="p-2 bg-yellow-100 rounded-lg">
                       <FiClock className="w-4 h-4 text-yellow-600" />
                     </div>
-                    <span className="text-sm text-gray-600">অপেক্ষমান কোটা</span>
+                    <span className="text-sm text-gray-600">Pending Quota</span>
                   </div>
                   <span className="text-lg font-bold text-gray-900">{stats.pending_quotes}</span>
                 </div>
@@ -391,7 +391,7 @@ export default function ProfileIndex({
                     <div className="p-2 bg-green-100 rounded-lg">
                       <FiCheckCircle className="w-4 h-4 text-green-600" />
                     </div>
-                    <span className="text-sm text-gray-600">গৃহীত কোটা</span>
+                    <span className="text-sm text-gray-600">Accepted Quota</span>
                   </div>
                   <span className="text-lg font-bold text-gray-900">{stats.accepted_quotes}</span>
                 </div>
@@ -400,7 +400,7 @@ export default function ProfileIndex({
                     <div className="p-2 bg-indigo-100 rounded-lg">
                       <FiShoppingCart className="w-4 h-4 text-indigo-600" />
                     </div>
-                    <span className="text-sm text-gray-600">মোট অর্ডার</span>
+                    <span className="text-sm text-gray-600">Total order</span>
                   </div>
                   <span className="text-lg font-bold text-gray-900">{stats.total_orders}</span>
                 </div>
@@ -409,7 +409,7 @@ export default function ProfileIndex({
                     <div className="p-2 bg-green-100 rounded-lg">
                       <FiDollarSign className="w-4 h-4 text-green-600" />
                     </div>
-                    <span className="text-sm text-gray-600">মোট আয়</span>
+                    <span className="text-sm text-gray-600">Total income is</span>
                   </div>
                   <span className="text-lg font-bold text-gray-900">{formatCurrency(stats.total_revenue)}</span>
                 </div>
@@ -429,15 +429,15 @@ export default function ProfileIndex({
                     <FiPackage className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">সাম্প্রতিক পণ্য</h3>
-                    <p className="text-sm text-gray-500">সর্বশেষ ৫ টি পণ্য</p>
+                    <h3 className="font-semibold text-gray-900">Latest products</h3>
+                    <p className="text-sm text-gray-500">Last 5 products</p>
                   </div>
                 </div>
                 <Link
                   href={route('supplier.products.index')}
                   className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
                 >
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
             </div>
@@ -464,7 +464,7 @@ export default function ProfileIndex({
                             <span>•</span>
                             <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${product.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                               }`}>
-                              {product.status === 'active' ? 'সক্রিয়' : 'নিষ্ক্রিয়'}
+                              {product.status === 'active' ? 'Active' : 'Inactive'}
                             </span>
                           </div>
                         </div>
@@ -483,13 +483,13 @@ export default function ProfileIndex({
                   <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <FiPackage className="w-8 h-8 text-gray-400" />
                   </div>
-                  <p className="text-gray-600">কোনো পণ্য নেই</p>
-                  <p className="text-sm text-gray-400 mt-1">আপনার পণ্য যোগ করা শুরু করুন</p>
+                  <p className="text-gray-600">No products</p>
+                  <p className="text-sm text-gray-400 mt-1">Start adding your products</p>
                   <Link
                     href={route('supplier.products.create')}
                     className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition mt-4"
                   >
-                    পণ্য যোগ করুন
+                    Add product
                   </Link>
                 </div>
               )}
@@ -505,15 +505,15 @@ export default function ProfileIndex({
                     <FiShoppingCart className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">সাম্প্রতিক অর্ডার</h3>
-                    <p className="text-sm text-gray-500">সর্বশেষ ৫ টি অর্ডার</p>
+                    <h3 className="font-semibold text-gray-900">Recent Orders</h3>
+                    <p className="text-sm text-gray-500">Last 5 orders</p>
                   </div>
                 </div>
                 <Link
                   href={route('supplier.orders.index')}
                   className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
                 >
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
             </div>
@@ -531,7 +531,7 @@ export default function ProfileIndex({
                             href={route('supplier.orders.show', order.id)}
                             className="font-medium text-gray-900 hover:text-indigo-600"
                           >
-                            অর্ডার #{order.order_number}
+                            Order #{order.order_number}
                           </Link>
                           <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
                             <span>{order.buyer?.name}</span>
@@ -543,12 +543,12 @@ export default function ProfileIndex({
                                 order.order_status === 'shipped' ? 'bg-purple-100 text-purple-800' :
                                   'bg-yellow-100 text-yellow-800'
                               }`}>
-                              {order.order_status === 'pending_confirmation' ? 'অপেক্ষমান' :
-                                order.order_status === 'confirmed' ? 'নিশ্চিত' :
-                                  order.order_status === 'processing' ? 'প্রক্রিয়াধীন' :
-                                    order.order_status === 'shipped' ? 'পাঠানো হয়েছে' :
-                                      order.order_status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                                        order.order_status === 'cancelled' ? 'বাতিল' : order.order_status?.replace('_', ' ')}
+                              {order.order_status === 'pending_confirmation' ? 'Awaiting' :
+                                order.order_status === 'confirmed' ? 'sure' :
+                                  order.order_status === 'processing' ? 'In process' :
+                                    order.order_status === 'shipped' ? 'has been sent' :
+                                      order.order_status === 'delivered' ? 'Delivered' :
+                                        order.order_status === 'cancelled' ? 'cancel' : order.order_status?.replace('_', ' ')}
                             </span>
                           </div>
                         </div>
@@ -564,8 +564,8 @@ export default function ProfileIndex({
                   <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <FiShoppingCart className="w-8 h-8 text-gray-400" />
                   </div>
-                  <p className="text-gray-600">কোনো অর্ডার নেই</p>
-                  <p className="text-sm text-gray-400 mt-1">অর্ডার পেলে সেগুলি এখানে দেখা যাবে</p>
+                  <p className="text-gray-600">No order</p>
+                  <p className="text-sm text-gray-400 mt-1">Orders can be seen here</p>
                 </div>
               )}
             </div>
@@ -574,7 +574,7 @@ export default function ProfileIndex({
 
         {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="text-sm font-medium text-gray-700 mb-4">দ্রুত কার্যক্রম</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-4">Quick operation</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Link
               href={route('supplier.products.create')}
@@ -583,7 +583,7 @@ export default function ProfileIndex({
               <div className="p-3 bg-indigo-100 rounded-full group-hover:bg-indigo-200 transition mb-2">
                 <FiPackage className="w-5 h-5 text-indigo-600" />
               </div>
-              <span className="text-sm font-medium text-gray-700">পণ্য যোগ করুন</span>
+              <span className="text-sm font-medium text-gray-700">Add product</span>
             </Link>
             <Link
               href={route('supplier.orders.index')}
@@ -592,7 +592,7 @@ export default function ProfileIndex({
               <div className="p-3 bg-indigo-100 rounded-full group-hover:bg-indigo-200 transition mb-2">
                 <FiShoppingCart className="w-5 h-5 text-indigo-600" />
               </div>
-              <span className="text-sm font-medium text-gray-700">অর্ডার দেখুন</span>
+              <span className="text-sm font-medium text-gray-700">View order</span>
             </Link>
             <Link
               href={route('supplier.rfqs.index')}
@@ -601,7 +601,7 @@ export default function ProfileIndex({
               <div className="p-3 bg-indigo-100 rounded-full group-hover:bg-indigo-200 transition mb-2">
                 <FiFileText className="w-5 h-5 text-indigo-600" />
               </div>
-              <span className="text-sm font-medium text-gray-700">RFQ ব্রাউজ করুন</span>
+              <span className="text-sm font-medium text-gray-700">RFQ Browse</span>
             </Link>
             <Link
               href={route('supplier.messages.index')}
@@ -610,7 +610,7 @@ export default function ProfileIndex({
               <div className="p-3 bg-indigo-100 rounded-full group-hover:bg-indigo-200 transition mb-2">
                 <FiUser className="w-5 h-5 text-indigo-600" />
               </div>
-              <span className="text-sm font-medium text-gray-700">বার্তা</span>
+              <span className="text-sm font-medium text-gray-700">Message</span>
             </Link>
           </div>
         </div>

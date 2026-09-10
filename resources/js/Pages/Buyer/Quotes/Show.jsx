@@ -54,7 +54,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
 
   return (
     <DashboardLayout>
-      <Head title={`কোটা #${quote.quote_number}`} />
+      <Head title={`Quote #${quote.quote_number}`} />
 
       <div className="space-y-6">
         {/* Header - Back button, title and action buttons */}
@@ -67,19 +67,19 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
           </Link>
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <h2 className="text-2xl font-bold text-gray-800">কোটা বিবরণ</h2>
+              <h2 className="text-2xl font-bold text-gray-800">Quota details</h2>
               <span className={`px-3 py-1 text-sm rounded-full ${getStatusColor(quote.status)}`}>
-                {quote.status === 'pending' ? 'অপেক্ষমান' :
-                  quote.status === 'accepted' ? 'গৃহীত' :
-                    quote.status === 'rejected' ? 'প্রত্যাখ্যাত' : quote.status}
+                {quote.status === 'pending' ? 'Awaiting' :
+                  quote.status === 'accepted' ? 'accepted' :
+                    quote.status === 'rejected' ? 'Rejected' : quote.status}
               </span>
               {isExpired && quote.status === 'pending' && (
                 <span className="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700">
-                  মেয়াদোত্তীর্ণ
+                  Expired
                 </span>
               )}
             </div>
-            <p className="text-gray-600 mt-1">কোটা #{quote.quote_number}</p>
+            <p className="text-gray-600 mt-1">Quote #{quote.quote_number}</p>
           </div>
 
           {/* Action Buttons - Context sensitive */}
@@ -91,14 +91,14 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                   className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center"
                 >
                   <FiCheckCircle className="mr-2" />
-                  কোটা গ্রহণ
+                  Taking Quota
                 </Link>
                 <Link
                   href={route('buyer.quotes.reject-confirm', quote.id)}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center"
                 >
                   <FiXCircle className="mr-2" />
-                  কোটা প্রত্যাখ্যান
+                  Reject quota
                 </Link>
               </>
             )}
@@ -107,7 +107,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
               className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center"
             >
               <FiDownload className="mr-2" />
-              ডাউনলোড PDF
+              Download PDF
             </button>
           </div>
         </div>
@@ -118,9 +118,9 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
             <div className="flex">
               <FiAlertCircle className="text-red-600 mr-3" />
               <div>
-                <p className="text-red-700 font-medium">কোটা মেয়াদোত্তীর্ণ</p>
+                <p className="text-red-700 font-medium">Quota Expired</p>
                 <p className="text-red-600 text-sm mt-1">
-                  এই কোটা {formatDate(quote.valid_until)} তারিখে মেয়াদোত্তীর্ণ হয়েছে এবং আর গ্রহণ করা যাবে না।
+                  This quota is {formatDate(quote.valid_until)} Expired on and can no longer be accepted।
                 </p>
               </div>
             </div>
@@ -133,16 +133,16 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
             <div className="flex">
               <FiCheckCircle className="text-green-600 mr-3" />
               <div className="flex-1">
-                <p className="text-green-700 font-medium">কোটা গৃহীত হয়েছে</p>
+                <p className="text-green-700 font-medium">Quota accepted</p>
                 <p className="text-green-600 text-sm mt-1">
-                  আপনি এই কোটা {formatDate(quote.accepted_at)} তারিখে গ্রহণ করেছেন।
+                  You are this quota {formatDate(quote.accepted_at)} Received on।
                 </p>
                 {!existingOrder && (
                   <Link
                     href={route('buyer.orders.confirm', [quote.rfq_id, quote.id])}
                     className="mt-2 inline-block px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700"
                   >
-                    অর্ডারে যান
+                    Go to order
                   </Link>
                 )}
               </div>
@@ -157,16 +157,16 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
             {/* Quote Information */}
             <div className="bg-white rounded-xl border p-6">
               <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiFileText className="mr-2" /> কোটা তথ্য
+                <FiFileText className="mr-2" /> Quota information
               </h3>
 
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <p className="text-sm text-gray-500">কোটা নম্বর</p>
+                  <p className="text-sm text-gray-500">Quota Number</p>
                   <p className="font-medium">{quote.quote_number}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">RFQ নম্বর</p>
+                  <p className="text-sm text-gray-500">RFQ Number</p>
                   <Link
                     href={route('buyer.rfqs.show', quote.rfq_id)}
                     className="font-medium text-indigo-600 hover:text-indigo-800"
@@ -175,28 +175,28 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                   </Link>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">মেয়াদ শেষ</p>
+                  <p className="text-sm text-gray-500">Expires</p>
                   <p className="font-medium flex items-center">
                     <FiCalendar className="mr-2 text-gray-400" />
                     {formatDate(quote.valid_until)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">জমার তারিখ</p>
+                  <p className="text-sm text-gray-500">Submission Date</p>
                   <p className="font-medium">{formatDate(quote.created_at)}</p>
                 </div>
               </div>
 
               {/* RFQ Title */}
               <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-500">RFQ শিরোনাম</p>
+                <p className="text-sm text-gray-500">RFQ Title</p>
                 <p className="font-medium">{quote.rfq?.title}</p>
               </div>
 
               {/* Acceptance Notes - Only if quote is accepted with notes */}
               {quote.acceptance_notes && (
                 <div className="mt-4">
-                  <p className="text-sm text-gray-500 mb-1">গ্রহণ নোট</p>
+                  <p className="text-sm text-gray-500 mb-1">Note taking</p>
                   <p className="text-sm p-3 bg-green-50 rounded-lg">{quote.acceptance_notes}</p>
                 </div>
               )}
@@ -204,7 +204,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
               {/* Rejection Reason - Only if quote is rejected */}
               {quote.rejection_reason && (
                 <div className="mt-4">
-                  <p className="text-sm text-gray-500 mb-1">প্রত্যাখ্যানের কারণ</p>
+                  <p className="text-sm text-gray-500 mb-1">Reason for rejection</p>
                   <p className="text-sm p-3 bg-red-50 rounded-lg">{quote.rejection_reason}</p>
                 </div>
               )}
@@ -213,7 +213,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
             {/* Product Breakdown */}
             <div className="bg-white rounded-xl border p-6">
               <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiPackage className="mr-2" /> মূল্য বিশ্লেষণ
+                <FiPackage className="mr-2" /> Price analysis
               </h3>
 
               <div className="space-y-4">
@@ -221,7 +221,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                   <div key={index} className="flex items-center justify-between border-b pb-3 last:border-0 last:pb-0">
                     <div className="flex-1">
                       <p className="font-medium">{item.name}</p>
-                      <p className="text-sm text-gray-500">পরিমাণ: {item.quantity}</p>
+                      <p className="text-sm text-gray-500">Amount: {item.quantity}</p>
                       {item.specifications && (
                         <p className="text-xs text-gray-400 mt-1">{item.specifications}</p>
                       )}
@@ -229,7 +229,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                     <div className="text-right">
                       <p className="font-medium">{formatCurrency(item.price)}</p>
                       <p className="text-sm text-gray-500">
-                        {formatCurrency(item.price / item.quantity)} প্রতি ইউনিট
+                        {formatCurrency(item.price / item.quantity)} to generate volume discounts per unit
                       </p>
                     </div>
                   </div>
@@ -238,7 +238,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
 
               {/* Total Amount */}
               <div className="mt-6 pt-4 border-t flex justify-between items-center">
-                <span className="font-medium text-gray-700">মোট পরিমাণ</span>
+                <span className="font-medium text-gray-700">total amount</span>
                 <span className="text-2xl font-bold text-indigo-600">
                   {formatCurrency(quote.total_amount)}
                 </span>
@@ -251,7 +251,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
             {/* Supplier Information */}
             <div className="bg-white rounded-xl border p-6">
               <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiUser className="mr-2" /> সাপ্লায়ার তথ্য
+                <FiUser className="mr-2" /> Supplier Information
               </h3>
 
               <div className="space-y-3">
@@ -269,7 +269,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                 {quote.supplier?.supplier?.verification_status === 'verified' && (
                   <div className="mt-2 flex items-center text-green-600">
                     <FiCheckCircle className="mr-2" />
-                    <span className="text-sm">ভেরিফাইড সাপ্লায়ার</span>
+                    <span className="text-sm">Verified Supplier</span>
                   </div>
                 )}
 
@@ -277,7 +277,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                   href={route('buyer.suppliers.show', quote.supplier_id)}
                   className="mt-3 inline-block text-sm text-indigo-600 hover:text-indigo-800"
                 >
-                  সাপ্লায়ার প্রোফাইল দেখুন →
+                  View Supplier Profile →
                 </Link>
               </div>
             </div>
@@ -286,7 +286,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
             {otherQuotes.length > 0 && (
               <div className="bg-white rounded-xl border p-6">
                 <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                  <FiBarChart2 className="mr-2" /> অন্যান্য কোটা ({otherQuotes.length})
+                  <FiBarChart2 className="mr-2" /> Other Quota ({otherQuotes.length})
                 </h3>
 
                 <div className="space-y-3">
@@ -300,16 +300,16 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                           </p>
                         </div>
                         <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(otherQuote.status)}`}>
-                          {otherQuote.status === 'pending' ? 'অপেক্ষমান' :
-                            otherQuote.status === 'accepted' ? 'গৃহীত' :
-                              otherQuote.status === 'rejected' ? 'প্রত্যাখ্যাত' : otherQuote.status}
+                          {otherQuote.status === 'pending' ? 'Awaiting' :
+                            otherQuote.status === 'accepted' ? 'accepted' :
+                              otherQuote.status === 'rejected' ? 'Rejected' : otherQuote.status}
                         </span>
                       </div>
                       <Link
                         href={route('buyer.quotes.show', otherQuote.id)}
                         className="mt-2 text-xs text-indigo-600 hover:text-indigo-800 inline-block"
                       >
-                        কোটা দেখুন →
+                        blank to keep the current password See Quota →
                       </Link>
                     </div>
                   ))}
@@ -321,7 +321,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                     href={route('buyer.quotes.compare', { quote_ids: [quote.id, ...otherQuotes.slice(0, 1).map(q => q.id)] })}
                     className="mt-4 block text-center px-4 py-2 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition-colors text-sm"
                   >
-                    কোটা তুলনা করুন
+                    Compare Quota
                   </Link>
                 )}
               </div>
@@ -331,23 +331,23 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
             {existingOrder && (
               <div className="bg-white rounded-xl border p-6">
                 <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                  <FiShoppingBag className="mr-2" /> অর্ডার তৈরি হয়েছে
+                  <FiShoppingBag className="mr-2" /> Order created
                 </h3>
 
                 <div className="p-4 bg-blue-50 rounded-lg">
-                  <p className="font-medium">অর্ডার #{existingOrder.order_number}</p>
-                  <p className="text-sm text-gray-600 mt-1">স্ট্যাটাস: {existingOrder.order_status === 'pending_confirmation' ? 'অপেক্ষমান' :
-                    existingOrder.order_status === 'confirmed' ? 'নিশ্চিত' :
-                      existingOrder.order_status === 'processing' ? 'প্রক্রিয়াধীন' :
-                        existingOrder.order_status === 'shipped' ? 'পাঠানো হয়েছে' :
-                          existingOrder.order_status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                            existingOrder.order_status === 'cancelled' ? 'বাতিল' : existingOrder.order_status}</p>
-                  <p className="text-sm text-gray-600">মোট: {formatCurrency(existingOrder.total_amount)}</p>
+                  <p className="font-medium">Order #{existingOrder.order_number}</p>
+                  <p className="text-sm text-gray-600 mt-1">Status: {existingOrder.order_status === 'pending_confirmation' ? 'Awaiting' :
+                    existingOrder.order_status === 'confirmed' ? 'sure' :
+                      existingOrder.order_status === 'processing' ? 'In process' :
+                        existingOrder.order_status === 'shipped' ? 'has been sent' :
+                          existingOrder.order_status === 'delivered' ? 'Delivered' :
+                            existingOrder.order_status === 'cancelled' ? 'cancel' : existingOrder.order_status}</p>
+                  <p className="text-sm text-gray-600">total: {formatCurrency(existingOrder.total_amount)}</p>
                   <Link
                     href={route('buyer.orders.show', existingOrder.id)}
                     className="mt-3 inline-block px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
                   >
-                    অর্ডার দেখুন
+                    View order
                   </Link>
                 </div>
               </div>

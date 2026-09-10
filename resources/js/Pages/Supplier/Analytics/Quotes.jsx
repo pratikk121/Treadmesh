@@ -97,23 +97,23 @@ export default function QuotesAnalytics({
 
   // Prepare data for status pie chart (filter out zero values)
   const statusData = [
-    { name: 'গৃহীত', value: acceptedQuotes, color: '#10B981' },
-    { name: 'অপেক্ষমান', value: pendingQuotes, color: '#F59E0B' },
-    { name: 'প্রত্যাখ্যাত', value: rejectedQuotes, color: '#EF4444' },
-    { name: 'মেয়াদোত্তীর্ণ', value: expiredQuotes, color: '#6B7280' }
+    { name: 'accepted', value: acceptedQuotes, color: '#10B981' },
+    { name: 'Awaiting', value: pendingQuotes, color: '#F59E0B' },
+    { name: 'Rejected', value: rejectedQuotes, color: '#EF4444' },
+    { name: 'Expired', value: expiredQuotes, color: '#6B7280' }
   ].filter(item => item.value > 0);
 
   return (
     <DashboardLayout>
-      <Head title="কোটা বিশ্লেষণ" />
+      <Head title="Quota Analysis" />
 
       <div className="space-y-6">
         {/* Header - Page title and export button */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">কোটা বিশ্লেষণ</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Quota Analysis</h1>
             <p className="text-sm text-gray-600 mt-1">
-              আপনার কোটা কর্মক্ষমতা এবং রূপান্তর মেট্রিক্স ট্র্যাক করুন
+              Track your quota performance and conversion metrics
             </p>
           </div>
           <button
@@ -121,7 +121,7 @@ export default function QuotesAnalytics({
             className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
           >
             <FiDownload className="w-4 h-4" />
-            <span>রিপোর্ট এক্সপোর্ট</span>
+            <span>Report Export</span>
           </button>
         </div>
 
@@ -129,37 +129,37 @@ export default function QuotesAnalytics({
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <FiCalendar className="w-4 h-4" />
-            <span>সময়কাল: {formatDateLabel(dateRange.start)} - {formatDateLabel(dateRange.end)}</span>
+            <span>Duration: {formatDateLabel(dateRange.start)} - {formatDateLabel(dateRange.end)}</span>
           </div>
         </div>
 
         {/* Summary Cards - Key quote metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl p-6 text-white">
-            <p className="text-sm opacity-90">মোট কোটা</p>
+            <p className="text-sm opacity-90">Total Quota</p>
             <p className="text-2xl font-bold mt-1">{formatNumber(totalQuotes)}</p>
-            <p className="text-sm opacity-75 mt-2">মূল্য: {formatCurrency(totalQuoteValue)}</p>
+            <p className="text-sm opacity-75 mt-2">Price: {formatCurrency(totalQuoteValue)}</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">রূপান্তর হার</p>
+            <p className="text-sm text-gray-500">The conversion rate is</p>
             <p className="text-2xl font-bold text-gray-900">{formatPercentage(conversionRate)}</p>
             <div className="flex items-center gap-2 mt-2 text-sm">
               <FiCheckCircle className="w-4 h-4 text-green-500" />
-              <span className="text-gray-600">{acceptedQuotes} গৃহীত</span>
+              <span className="text-gray-600">{acceptedQuotes} accepted</span>
             </div>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">গড় প্রতিক্রিয়া সময়</p>
-            <p className="text-2xl font-bold text-gray-900">{avgResponseHours.toFixed(1)} ঘন্টা</p>
-            <p className="text-sm text-gray-500 mt-2">({avgResponseDays.toFixed(1)} দিন)</p>
+            <p className="text-sm text-gray-500">Average response time is</p>
+            <p className="text-2xl font-bold text-gray-900">{avgResponseHours.toFixed(1)} hours</p>
+            <p className="text-sm text-gray-500 mt-2">({avgResponseDays.toFixed(1)} Give)</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">কোটা থেকে আয়</p>
+            <p className="text-sm text-gray-500">Income from Quota</p>
             <p className="text-2xl font-bold text-green-600">{formatCurrency(revenueFromQuotes)}</p>
-            <p className="text-sm text-gray-500 mt-2">গৃহীত মূল্য: {formatCurrency(acceptedValue)}</p>
+            <p className="text-sm text-gray-500 mt-2">Accepted value is: {formatCurrency(acceptedValue)}</p>
           </div>
         </div>
 
@@ -167,7 +167,7 @@ export default function QuotesAnalytics({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Status Distribution - Pie chart */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">কোটা স্ট্যাটাস বণ্টন</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Allotment of Quota Status</h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -201,7 +201,7 @@ export default function QuotesAnalytics({
 
           {/* Monthly Trend - Bar chart */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">মাসিক কোটা প্রবণতা</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Monthly Quota Trend</h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={Object.entries(quotesByMonth).map(([month, data]) => ({
@@ -222,8 +222,8 @@ export default function QuotesAnalytics({
                     }}
                   />
                   <Legend />
-                  <Bar dataKey="total" name="মোট কোটা" fill="#4F46E5" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="accepted" name="গৃহীত" fill="#10B981" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="total" name="Total Quota" fill="#4F46E5" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="accepted" name="accepted" fill="#10B981" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -231,7 +231,7 @@ export default function QuotesAnalytics({
 
           {/* Success Rate by Response Time */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">প্রতিক্রিয়া সময় অনুযায়ী সাফল্যের হার</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Success rate according to response time</h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={Object.entries(successByResponseTime).map(([time, rate]) => ({
@@ -254,27 +254,27 @@ export default function QuotesAnalytics({
                       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                     }}
                   />
-                  <Bar dataKey="rate" name="সাফল্যের হার" fill="#4F46E5" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="rate" name="Success rate" fill="#4F46E5" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
             <p className="text-sm text-gray-500 mt-4 text-center">
-              ২৪ ঘন্টার মধ্যে প্রতিক্রিয়া জানানো কোটা সর্বোচ্চ সাফল্যের হার পায়
+              Quotas that respond within 24 hours have the highest success rate
             </p>
           </div>
 
           {/* Value Distribution */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">কোটা মূল্য বণ্টন</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Quota Price Distribution</h2>
             <div className="space-y-4">
               {Object.entries(valueDistribution).map(([range, data]) => (
                 <div key={range}>
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-medium text-gray-700">{range}</span>
                     <div className="text-right">
-                      <span className="text-sm font-medium text-gray-900">{data.count} কোটা</span>
+                      <span className="text-sm font-medium text-gray-900">{data.count} Quote</span>
                       <span className="text-xs text-gray-500 ml-2">
-                        ({data.rate.toFixed(1)}% গৃহীত)
+                        ({data.rate.toFixed(1)}% accepted)
                       </span>
                     </div>
                   </div>
@@ -292,18 +292,18 @@ export default function QuotesAnalytics({
 
         {/* Top Buyers Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">কোটা কার্যকলাপ অনুযায়ী শীর্ষ ক্রেতা</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Top Buyer by Quota Activity</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ক্রেতা</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">মোট কোটা</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">গৃহীত</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">প্রত্যাখ্যাত</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">অপেক্ষমান</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">মোট মূল্য</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">গৃহীত মূল্য</th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Buyer</th>
+                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Total Quota</th>
+                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">accepted</th>
+                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Rejected</th>
+                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Awaiting</th>
+                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Total price is</th>
+                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Accepted value is</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">

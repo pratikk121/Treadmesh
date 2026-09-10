@@ -31,7 +31,7 @@ export default function VerifyEmail({ status }) {
 
     return (
         <>
-            <Head title="ইমেইল ভেরিফিকেশন" />
+            <Head title="Email Verification" />
 
             <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
                 {/* Decorative elements - Background design */}
@@ -43,8 +43,8 @@ export default function VerifyEmail({ status }) {
                         <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mb-4 shadow-lg">
                             <MdMarkEmailRead className="w-10 h-10 text-white" />
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-800">আপনার ইমেইল ভেরিফাই করুন</h2>
-                        <p className="text-gray-600 mt-2">একদম শেষ! আপনার ইনবক্স চেক করুন</p>
+                        <h2 className="text-3xl font-bold text-gray-800">Verify your email</h2>
+                        <p className="text-gray-600 mt-2">Done! Check your inbox</p>
                     </div>
 
                     {/* Success Message - New verification link sent */}
@@ -52,7 +52,7 @@ export default function VerifyEmail({ status }) {
                         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center space-x-3">
                             <BsEnvelopeCheck className="w-5 h-5 text-green-600 flex-shrink-0" />
                             <span className="text-sm text-green-700">
-                                একটি নতুন ভেরিফিকেশন লিঙ্ক আপনার ইমেইলে পাঠানো হয়েছে।
+                                A new verification link has been sent to your email।
                             </span>
                         </div>
                     )}
@@ -62,7 +62,7 @@ export default function VerifyEmail({ status }) {
                         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center space-x-3 animate-pulse">
                             <FiSend className="w-5 h-5 text-green-600 flex-shrink-0" />
                             <span className="text-sm text-green-700">
-                                ভেরিফিকেশন ইমেইল সফলভাবে পুনরায় পাঠানো হয়েছে!
+                                The verification email has been resent successfully!
                             </span>
                         </div>
                     )}
@@ -72,7 +72,7 @@ export default function VerifyEmail({ status }) {
                         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-3">
                             <MdError className="w-5 h-5 text-red-600 flex-shrink-0" />
                             <span className="text-sm text-red-700">
-                                {errors.email || 'কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন।'}
+                                {errors.email || 'There are some problems. Try again।'}
                             </span>
                         </div>
                     )}
@@ -84,10 +84,10 @@ export default function VerifyEmail({ status }) {
                             <div className="flex items-start space-x-3">
                                 <BsShieldCheck className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                                 <div className="text-sm text-indigo-700 space-y-2">
-                                    <p className="font-medium">নিবন্ধনের জন্য ধন্যবাদ! 🎉</p>
+                                    <p className="font-medium">Thanks for registering! 🎉</p>
                                     <p>
-                                        শুরু করার আগে, আপনার ইমেইল ঠিকানা ভেরিফাই করুন। আমরা আপনার ইনবক্সে যে লিঙ্ক
-                                        পাঠিয়েছি সেটিতে ক্লিক করুন।
+                                        Before starting, verify your email address. We sent that link to your inbox
+                                        Click on Sent।
                                     </p>
                                 </div>
                             </div>
@@ -96,24 +96,24 @@ export default function VerifyEmail({ status }) {
                         {/* Email Tips */}
                         <div className="bg-gray-50 rounded-lg p-4 space-y-3">
                             <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center">
-                                <FiMail className="mr-1" /> ইমেইল টিপস
+                                <FiMail className="mr-1" /> Email tips
                             </h4>
                             <ul className="text-xs text-gray-600 space-y-2">
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
-                                    ইমেইল না পেলে আপনার স্পাম/জাঙ্ক ফোল্ডার চেক করুন
+                                    If you do not receive the email, please check your spam/junk folder
                                 </li>
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
-                                    noreply@yourdomain.com আপনার কন্টাক্টে যোগ করুন
+                                    noreply@yourdomain.com Add
                                 </li>
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
-                                    ভেরিফিকেশন লিঙ্ক ২৪ ঘন্টার মধ্যে মেয়াদ শেষ হয়
+                                    Verification link expires in 24 hours
                                 </li>
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
-                                    আপনি সঠিক ইমেইল অ্যাকাউন্ট চেক করছেন কিনা নিশ্চিত করুন
+                                    Make sure you are checking the correct email account
                                 </li>
                             </ul>
                         </div>
@@ -132,10 +132,10 @@ export default function VerifyEmail({ status }) {
                                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
-                                        পাঠানো হচ্ছে...
+                                        Sending...
                                     </span>
                                 ) : (
-                                    'ভেরিফিকেশন ইমেইল পুনরায় পাঠান'
+                                    'Resend the verification email'
                                 )}
                             </button>
 
@@ -147,31 +147,31 @@ export default function VerifyEmail({ status }) {
                                 className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
                             >
                                 <FiLogOut className="mr-2 h-4 w-4" />
-                                লগ আউট
+                                Log out
                             </Link>
                         </form>
 
                         {/* Need Help Section */}
                         <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-100">
                             <h4 className="text-xs font-semibold text-yellow-800 uppercase tracking-wider mb-2">
-                                এখনও সমস্যা হচ্ছে?
+                                Still having problems?
                             </h4>
                             <p className="text-xs text-yellow-700">
-                                আপনি যদি আমাদের ইমেইল না পান, আপনার স্পাম ফোল্ডার চেক করুন অথবা{' '}
+                                If you do not receive our email, please check your spam folder or{' '}
                                 <Link
                                     href={route('contact')}
                                     className="font-medium underline hover:text-yellow-900 transition-colors"
                                 >
-                                    সাপোর্টে যোগাযোগ
+                                    Contact support
                                 </Link>
-                                {' '}করুন।
+                                {' '}Do।
                             </p>
                         </div>
 
                         {/* Email Not Received Counter (Optional) */}
                         <div className="text-center text-xs text-gray-500">
-                            <p>ইমেইল পাননি? কয়েক মিনিট অপেক্ষা করে আবার চেষ্টা করুন</p>
-                            <p className="mt-1">আপনি প্রতি ৬০ সেকেন্ড পর পর নতুন লিঙ্ক অনুরোধ করতে পারেন</p>
+                            <p>Didn't get the email? Wait a few minutes and try again</p>
+                            <p className="mt-1">.You can request new links every 60 seconds</p>
                         </div>
                     </div>
                 </div>

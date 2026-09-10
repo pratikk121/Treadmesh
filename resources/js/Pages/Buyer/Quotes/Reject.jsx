@@ -57,7 +57,7 @@ export default function QuoteReject({ quote }) {
 
     // Validate rejection reason
     if (!formData.rejection_reason.trim()) {
-      setErrors({ rejection_reason: 'অনুগ্রহ করে প্রত্যাখ্যানের কারণ উল্লেখ করুন' });
+      setErrors({ rejection_reason: 'Please specify the reason for rejection' });
       return;
     }
 
@@ -75,7 +75,7 @@ export default function QuoteReject({ quote }) {
 
   return (
     <DashboardLayout>
-      <Head title="কোটা প্রত্যাখ্যান" />
+      <Head title="Reject quota" />
 
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Header - Back button and page title */}
@@ -87,33 +87,33 @@ export default function QuoteReject({ quote }) {
             <FiArrowLeft className="text-xl" />
           </Link>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">কোটা প্রত্যাখ্যান</h2>
-            <p className="text-gray-600 mt-1">এই কোটা প্রত্যাখ্যানের কারণ উল্লেখ করুন</p>
+            <h2 className="text-2xl font-bold text-gray-800">Reject quota</h2>
+            <p className="text-gray-600 mt-1">Mention the reason for rejection of this quota</p>
           </div>
         </div>
 
         {/* Quote Summary Section */}
         <div className="bg-white rounded-xl border p-6">
-          <h3 className="font-medium text-gray-700 mb-4">কোটা সারসংক্ষেপ</h3>
+          <h3 className="font-medium text-gray-700 mb-4">Quota summary</h3>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-sm text-gray-500">কোটা নম্বর</p>
+              <p className="text-sm text-gray-500">Quota Number</p>
               <p className="font-medium">{quote.quote_number}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">সাপ্লায়ার</p>
+              <p className="text-sm text-gray-500">Supplier</p>
               <p className="font-medium flex items-center">
                 <FiUser className="mr-2 text-gray-400" />
                 {quote.supplier?.name}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">মোট পরিমাণ</p>
+              <p className="text-sm text-gray-500">total amount</p>
               <p className="font-medium text-indigo-600">{formatCurrency(quote.total_amount)}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">মেয়াদ শেষ</p>
+              <p className="text-sm text-gray-500">Expires</p>
               <p className="font-medium flex items-center">
                 <FiCalendar className="mr-2 text-gray-400" />
                 {formatDate(quote.valid_until)}
@@ -124,12 +124,12 @@ export default function QuoteReject({ quote }) {
 
         {/* Rejection Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-xl border p-6">
-          <h3 className="font-medium text-gray-700 mb-4">প্রত্যাখ্যানের কারণ</h3>
+          <h3 className="font-medium text-gray-700 mb-4">Reason for rejection</h3>
 
           {/* Reason Textarea */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              প্রত্যাখ্যানের কারণ <span className="text-red-500">*</span>
+              Reason for rejection <span className="text-red-500">*</span>
             </label>
             <textarea
               name="rejection_reason"
@@ -138,7 +138,7 @@ export default function QuoteReject({ quote }) {
               rows="4"
               className={`w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.rejection_reason ? 'border-red-500' : ''
                 }`}
-              placeholder="কেন আপনি এই কোটা প্রত্যাখ্যান করছেন তা ব্যাখ্যা করুন..."
+              placeholder="Explain why you are rejecting this quota..."
             />
             {errors.rejection_reason && (
               <p className="mt-2 text-sm text-red-600 flex items-center">
@@ -151,7 +151,7 @@ export default function QuoteReject({ quote }) {
           <div className="mb-6 p-4 bg-yellow-50 rounded-lg">
             <p className="text-sm text-yellow-700 flex items-center">
               <FiAlertCircle className="mr-2" />
-              এই কোটা প্রত্যাখ্যান করলে সাপ্লায়ারকে নোটিফিকেশন পাঠানো হবে। এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।
+              Notification will be sent to the supplier if this quota is rejected. This action cannot be undone।
             </p>
           </div>
 
@@ -161,7 +161,7 @@ export default function QuoteReject({ quote }) {
               href={route('buyer.quotes.show', quote.id)}
               className="px-6 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              বাতিল
+              cancel
             </Link>
             <button
               type="submit"
@@ -174,12 +174,12 @@ export default function QuoteReject({ quote }) {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  প্রক্রিয়াকরণ...
+                  processing...
                 </>
               ) : (
                 <>
                   <FiXCircle className="mr-2" />
-                  প্রত্যাখ্যান নিশ্চিত করুন
+                  Confirm rejection
                 </>
               )}
             </button>

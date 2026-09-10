@@ -63,8 +63,8 @@ export default function Show({ order, timeline, paymentInfo }) {
       onSuccess: () => {
         setShowStatusForm(false);
         Swal.fire({
-          title: 'সফল!',
-          text: 'অর্ডার স্ট্যাটাস সফলভাবে আপডেট হয়েছে।',
+          title: 'successful!',
+          text: 'Order status updated successfully।',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -79,8 +79,8 @@ export default function Show({ order, timeline, paymentInfo }) {
       onSuccess: () => {
         setShowPaymentForm(false);
         Swal.fire({
-          title: 'সফল!',
-          text: 'পেমেন্ট স্ট্যাটাস সফলভাবে আপডেট হয়েছে।',
+          title: 'successful!',
+          text: 'Payment status successfully updated।',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -93,8 +93,8 @@ export default function Show({ order, timeline, paymentInfo }) {
   const handleCancelOrder = () => {
     if (!cancelData.cancellation_reason) {
       Swal.fire({
-        title: 'ত্রুটি!',
-        text: 'অনুগ্রহ করে বাতিলের কারণ উল্লেখ করুন।',
+        title: 'Error!',
+        text: 'Please specify the reason for cancellation।',
         icon: 'error',
         confirmButtonColor: '#4F46E5'
       });
@@ -105,8 +105,8 @@ export default function Show({ order, timeline, paymentInfo }) {
       onSuccess: () => {
         setShowCancelForm(false);
         Swal.fire({
-          title: 'বাতিল!',
-          text: 'অর্ডার সফলভাবে বাতিল করা হয়েছে।',
+          title: 'cancel!',
+          text: 'Order successfully canceled।',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -138,12 +138,12 @@ export default function Show({ order, timeline, paymentInfo }) {
   // Get order status badge with appropriate styling
   const getOrderStatusBadge = (status) => {
     const badges = {
-      pending_confirmation: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'অপেক্ষমান' },
-      confirmed: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'নিশ্চিত' },
-      processing: { color: 'bg-indigo-100 text-indigo-800', icon: FiClock, label: 'প্রক্রিয়াধীন' },
-      shipped: { color: 'bg-purple-100 text-purple-800', icon: MdOutlineLocalShipping, label: 'পাঠানো হয়েছে' },
-      delivered: { color: 'bg-green-100 text-green-800', icon: FiCheckCircle, label: 'ডেলিভারি হয়েছে' },
-      cancelled: { color: 'bg-red-100 text-red-800', icon: FiXCircle, label: 'বাতিল' },
+      pending_confirmation: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'Awaiting' },
+      confirmed: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'sure' },
+      processing: { color: 'bg-indigo-100 text-indigo-800', icon: FiClock, label: 'In process' },
+      shipped: { color: 'bg-purple-100 text-purple-800', icon: MdOutlineLocalShipping, label: 'has been sent' },
+      delivered: { color: 'bg-green-100 text-green-800', icon: FiCheckCircle, label: 'Delivered' },
+      cancelled: { color: 'bg-red-100 text-red-800', icon: FiXCircle, label: 'cancel' },
     };
     const badge = badges[status] || badges.pending_confirmation;
     const Icon = badge.icon;
@@ -158,8 +158,8 @@ export default function Show({ order, timeline, paymentInfo }) {
   // Get payment status badge with appropriate styling
   const getPaymentStatusBadge = (status) => {
     const badges = {
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: FiClock, label: 'অপেক্ষমান' },
-      paid: { color: 'bg-green-100 text-green-800', icon: FiCheckCircle, label: 'পরিশোধিত' },
+      pending: { color: 'bg-yellow-100 text-yellow-800', icon: FiClock, label: 'Awaiting' },
+      paid: { color: 'bg-green-100 text-green-800', icon: FiCheckCircle, label: 'Paid' },
     };
     const badge = badges[status] || badges.pending;
     const Icon = badge.icon;
@@ -173,7 +173,7 @@ export default function Show({ order, timeline, paymentInfo }) {
 
   return (
     <DashboardLayout>
-      <Head title={`অর্ডার #${order.order_number}`} />
+      <Head title={`Order #${order.order_number}`} />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -186,9 +186,9 @@ export default function Show({ order, timeline, paymentInfo }) {
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">অর্ডার #{order.order_number}</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Order #{order.order_number}</h1>
               <p className="text-sm text-gray-600 mt-1">
-                অর্ডারের বিবরণ ও ব্যবস্থাপনা
+                Order Details and Management
               </p>
             </div>
           </div>
@@ -198,7 +198,7 @@ export default function Show({ order, timeline, paymentInfo }) {
               className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
             >
               <FiPrinter className="w-4 h-4" />
-              <span>প্রিন্ট</span>
+              <span>Print</span>
             </button>
           </div>
         </div>
@@ -215,20 +215,20 @@ export default function Show({ order, timeline, paymentInfo }) {
                 onClick={() => setShowStatusForm(true)}
                 className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
               >
-                স্ট্যাটাস আপডেট
+                Status Update
               </button>
               <button
                 onClick={() => setShowPaymentForm(true)}
                 className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm"
               >
-                পেমেন্ট আপডেট
+                Payment Update
               </button>
               {order.canBeCancelled && (
                 <button
                   onClick={() => setShowCancelForm(true)}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm"
                 >
-                  অর্ডার বাতিল
+                  Cancel Order
                 </button>
               )}
             </div>
@@ -238,35 +238,35 @@ export default function Show({ order, timeline, paymentInfo }) {
         {/* Status Update Form - Modal-like form for status changes */}
         {showStatusForm && (
           <div className="bg-white rounded-xl shadow-sm border border-indigo-200 p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">অর্ডার স্ট্যাটাস আপডেট</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">Order Status Update</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  নতুন স্ট্যাটাস
+                  New Status
                 </label>
                 <select
                   value={statusData.order_status}
                   onChange={(e) => setStatusData({ ...statusData, order_status: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
-                  <option value="pending_confirmation">অপেক্ষমান</option>
-                  <option value="confirmed">নিশ্চিত</option>
-                  <option value="processing">প্রক্রিয়াধীন</option>
-                  <option value="shipped">পাঠানো হয়েছে</option>
-                  <option value="delivered">ডেলিভারি হয়েছে</option>
-                  <option value="cancelled">বাতিল</option>
+                  <option value="pending_confirmation">Awaiting</option>
+                  <option value="confirmed">sure</option>
+                  <option value="processing">In process</option>
+                  <option value="shipped">has been sent</option>
+                  <option value="delivered">Delivered</option>
+                  <option value="cancelled">cancel</option>
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  নোট (ঐচ্ছিক)
+                  Notes (Optional)
                 </label>
                 <textarea
                   value={statusData.notes}
                   onChange={(e) => setStatusData({ ...statusData, notes: e.target.value })}
                   rows="3"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  placeholder="এই স্ট্যাটাস পরিবর্তন সম্পর্কে নোট যোগ করুন..."
+                  placeholder="to your contacts Add note about this status change..."
                 />
               </div>
               <div className="flex justify-end gap-2">
@@ -274,13 +274,13 @@ export default function Show({ order, timeline, paymentInfo }) {
                   onClick={() => setShowStatusForm(false)}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900"
                 >
-                  বাতিল
+                  cancel
                 </button>
                 <button
                   onClick={handleStatusUpdate}
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
-                  স্ট্যাটাস আপডেট
+                  Status Update
                 </button>
               </div>
             </div>
@@ -290,55 +290,55 @@ export default function Show({ order, timeline, paymentInfo }) {
         {/* Payment Update Form - Modal-like form for payment changes */}
         {showPaymentForm && (
           <div className="bg-white rounded-xl shadow-sm border border-green-200 p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">পেমেন্ট স্ট্যাটাস আপডেট</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">Payment status update</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  পেমেন্ট স্ট্যাটাস
+                  Payment Status
                 </label>
                 <select
                   value={paymentData.payment_status}
                   onChange={(e) => setPaymentData({ ...paymentData, payment_status: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 >
-                  <option value="pending">অপেক্ষমান</option>
-                  <option value="paid">পরিশোধিত</option>
+                  <option value="pending">Awaiting</option>
+                  <option value="paid">Paid</option>
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  পেমেন্ট পদ্ধতি
+                  Payment Method
                 </label>
                 <input
                   type="text"
                   value={paymentData.payment_method}
                   onChange={(e) => setPaymentData({ ...paymentData, payment_method: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                  placeholder="যেমন: ব্যাংক ট্রান্সফার, ক্রেডিট কার্ড"
+                  placeholder="Eg: Bank Transfer, Credit Card"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  পেমেন্ট রেফারেন্স
+                  Payment reference
                 </label>
                 <input
                   type="text"
                   value={paymentData.payment_reference}
                   onChange={(e) => setPaymentData({ ...paymentData, payment_reference: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                  placeholder="ট্রানজেকশন আইডি বা রেফারেন্স নম্বর"
+                  placeholder="Transaction ID or reference number"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  নোট (ঐচ্ছিক)
+                  Notes (Optional)
                 </label>
                 <textarea
                   value={paymentData.payment_notes}
                   onChange={(e) => setPaymentData({ ...paymentData, payment_notes: e.target.value })}
                   rows="2"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                  placeholder="পেমেন্ট সম্পর্কিত নোট যোগ করুন..."
+                  placeholder="Add note regarding payment..."
                 />
               </div>
               <div className="flex justify-end gap-2">
@@ -346,13 +346,13 @@ export default function Show({ order, timeline, paymentInfo }) {
                   onClick={() => setShowPaymentForm(false)}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900"
                 >
-                  বাতিল
+                  cancel
                 </button>
                 <button
                   onClick={handlePaymentUpdate}
                   className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
                 >
-                  পেমেন্ট আপডেট
+                  Payment Update
                 </button>
               </div>
             </div>
@@ -362,18 +362,18 @@ export default function Show({ order, timeline, paymentInfo }) {
         {/* Cancel Order Form - Modal-like form for order cancellation */}
         {showCancelForm && (
           <div className="bg-white rounded-xl shadow-sm border border-red-200 p-6">
-            <h3 className="font-semibold text-red-600 mb-4">অর্ডার বাতিল</h3>
+            <h3 className="font-semibold text-red-600 mb-4">Cancel Order</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  বাতিলের কারণ *
+                  Reason for cancellation *
                 </label>
                 <textarea
                   value={cancelData.cancellation_reason}
                   onChange={(e) => setCancelData({ ...cancelData, cancellation_reason: e.target.value })}
                   rows="3"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                  placeholder="এই অর্ডার কেন বাতিল করা হচ্ছে তা ব্যাখ্যা করুন..."
+                  placeholder="Explain why this order is being canceled..."
                 />
               </div>
               {order.payment_status === 'paid' && (
@@ -385,7 +385,7 @@ export default function Show({ order, timeline, paymentInfo }) {
                       onChange={(e) => setCancelData({ ...cancelData, refund_required: e.target.checked })}
                       className="rounded border-gray-300 text-red-600 focus:ring-red-500"
                     />
-                    <span className="text-sm text-gray-700">এই অর্ডারের জন্য রিফান্ড প্রক্রিয়া করুন</span>
+                    <span className="text-sm text-gray-700">Process a refund for this order</span>
                   </label>
                 </div>
               )}
@@ -394,13 +394,13 @@ export default function Show({ order, timeline, paymentInfo }) {
                   onClick={() => setShowCancelForm(false)}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900"
                 >
-                  বাতিল
+                  cancel
                 </button>
                 <button
                   onClick={handleCancelOrder}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                 >
-                  বাতিল নিশ্চিত করুন
+                  Confirm Cancel
                 </button>
               </div>
             </div>
@@ -415,7 +415,7 @@ export default function Show({ order, timeline, paymentInfo }) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <FiPackage className="w-5 h-5 text-indigo-600" />
-                অর্ডার আইটেম
+                Order Item
               </h3>
               <div className="space-y-4">
                 {order.items.map((item, index) => (
@@ -449,15 +449,15 @@ export default function Show({ order, timeline, paymentInfo }) {
               {/* Order Summary - Total calculations */}
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">সাবটোটাল</span>
+                  <span className="text-gray-600">Subtotal</span>
                   <span className="font-medium">{formatCurrency(order.total_amount)}</span>
                 </div>
                 <div className="flex justify-between items-center mt-2">
-                  <span className="text-gray-600">শিপিং</span>
-                  <span className="font-medium">অন্তর্ভুক্ত</span>
+                  <span className="text-gray-600">Shipping</span>
+                  <span className="font-medium">Includes</span>
                 </div>
                 <div className="flex justify-between items-center mt-2 pt-2 border-t border-gray-200">
-                  <span className="text-lg font-semibold text-gray-900">মোট</span>
+                  <span className="text-lg font-semibold text-gray-900">total</span>
                   <span className="text-lg font-bold text-indigo-600">{formatCurrency(order.total_amount)}</span>
                 </div>
               </div>
@@ -467,7 +467,7 @@ export default function Show({ order, timeline, paymentInfo }) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <FiMapPin className="w-5 h-5 text-indigo-600" />
-                শিপিং তথ্য
+                Shipping information
               </h3>
               <p className="text-gray-700 whitespace-pre-line">{order.shipping_address}</p>
             </div>
@@ -476,7 +476,7 @@ export default function Show({ order, timeline, paymentInfo }) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <FiClock className="w-5 h-5 text-indigo-600" />
-                অর্ডার টাইমলাইন
+                Order timeline
               </h3>
               <div className="space-y-4">
                 {timeline.map((event, index) => (
@@ -491,12 +491,12 @@ export default function Show({ order, timeline, paymentInfo }) {
                     </div>
                     <div className="flex-1 pb-4">
                       <p className="font-medium text-gray-900">
-                        {event.status === 'pending_confirmation' ? 'অপেক্ষমান' :
-                          event.status === 'confirmed' ? 'নিশ্চিত' :
-                            event.status === 'processing' ? 'প্রক্রিয়াধীন' :
-                              event.status === 'shipped' ? 'পাঠানো হয়েছে' :
-                                event.status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                                  event.status === 'cancelled' ? 'বাতিল' : event.status}
+                        {event.status === 'pending_confirmation' ? 'Awaiting' :
+                          event.status === 'confirmed' ? 'sure' :
+                            event.status === 'processing' ? 'In process' :
+                              event.status === 'shipped' ? 'has been sent' :
+                                event.status === 'delivered' ? 'Delivered' :
+                                  event.status === 'cancelled' ? 'cancel' : event.status}
                       </p>
                       <p className="text-sm text-gray-500">{formatDate(event.date)}</p>
                     </div>
@@ -512,7 +512,7 @@ export default function Show({ order, timeline, paymentInfo }) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <FiUser className="w-5 h-5 text-indigo-600" />
-                ক্রেতার তথ্য
+                Buyer information
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
@@ -523,7 +523,7 @@ export default function Show({ order, timeline, paymentInfo }) {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">{order.buyer?.name}</p>
-                    <p className="text-sm text-gray-500">ক্রেতা</p>
+                    <p className="text-sm text-gray-500">Buyer</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
@@ -539,7 +539,7 @@ export default function Show({ order, timeline, paymentInfo }) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <BsBuilding className="w-5 h-5 text-indigo-600" />
-                সাপ্লায়ারের তথ্য
+                Supplier Information
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
@@ -550,7 +550,7 @@ export default function Show({ order, timeline, paymentInfo }) {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">{order.supplier?.name}</p>
-                    <p className="text-sm text-gray-500">সাপ্লায়ার</p>
+                    <p className="text-sm text-gray-500">Supplier</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
@@ -566,24 +566,24 @@ export default function Show({ order, timeline, paymentInfo }) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <MdOutlinePayment className="w-5 h-5 text-indigo-600" />
-                পেমেন্ট তথ্য
+                Payment information
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-500">স্ট্যাটাস</span>
+                  <span className="text-sm text-gray-500">Status</span>
                   <span>{getPaymentStatusBadge(paymentInfo.status)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-500">পদ্ধতি</span>
+                  <span className="text-sm text-gray-500">Procedure</span>
                   <span className="text-sm font-medium text-gray-900">{paymentInfo.method}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-500">রেফারেন্স</span>
+                  <span className="text-sm text-gray-500">is closed Reference</span>
                   <span className="text-sm font-mono text-gray-900">{paymentInfo.reference}</span>
                 </div>
                 {paymentInfo.paid_at && (
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">পরিশোধের তারিখ</span>
+                    <span className="text-sm text-gray-500">Date of Payment</span>
                     <span className="text-sm text-gray-900">{formatDate(paymentInfo.paid_at)}</span>
                   </div>
                 )}
@@ -595,22 +595,22 @@ export default function Show({ order, timeline, paymentInfo }) {
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                   <MdOutlineReceipt className="w-5 h-5 text-indigo-600" />
-                  RFQ তথ্য
+                  RFQ Information
                 </h3>
                 <div className="space-y-2">
                   <p className="text-sm">
-                    <span className="text-gray-500">RFQ নম্বর:</span>{' '}
+                    <span className="text-gray-500">RFQ Number:</span>{' '}
                     <span className="font-medium text-gray-900">{order.rfq.rfq_number}</span>
                   </p>
                   <p className="text-sm">
-                    <span className="text-gray-500">শিরোনাম:</span>{' '}
+                    <span className="text-gray-500">Title:</span>{' '}
                     <span className="text-gray-900">{order.rfq.title}</span>
                   </p>
                   <Link
                     href={route('admin.rfqs.show', order.rfq.id)}
                     className="inline-flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-700 mt-2"
                   >
-                    RFQ বিস্তারিত দেখুন
+                    RFQ for suppliers See details
                     <FiArrowLeft className="w-3 h-3 rotate-180" />
                   </Link>
                 </div>

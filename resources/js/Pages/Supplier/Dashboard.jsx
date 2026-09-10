@@ -93,15 +93,15 @@ export default function SupplierDashboard({
 
   return (
     <DashboardLayout>
-      <Head title="সাপ্লায়ার ড্যাশবোর্ড" />
+      <Head title="Supplier Dashboard" />
 
       <div className="space-y-6">
         {/* Header - Page title and action buttons */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">সাপ্লায়ার ড্যাশবোর্ড</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Supplier Dashboard</h1>
             <p className="text-sm text-gray-600 mt-1">
-              স্বাগতম! আপনার ব্যবসার কর্মক্ষমতার সারসংক্ষেপ এখানে দেওয়া হল।
+              Welcome! Here is a summary of your business performance।
             </p>
           </div>
           <div className="flex gap-2">
@@ -110,14 +110,14 @@ export default function SupplierDashboard({
               className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
             >
               <FiDownload className="w-4 h-4" />
-              <span>রিপোর্ট এক্সপোর্ট</span>
+              <span>Report Export</span>
             </button>
             <button
               onClick={() => window.location.reload()}
               className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
             >
               <FiRefreshCw className="w-4 h-4" />
-              <span>রিফ্রেশ</span>
+              <span>Refresh</span>
             </button>
           </div>
         </div>
@@ -131,9 +131,9 @@ export default function SupplierDashboard({
               </div>
               <div className="ml-3 flex-1">
                 <p className="text-sm text-blue-700">
-                  আপনার <span className="font-bold">{counts.unreadMessages}</span> টি অপঠিত বার্তা রয়েছে।
+                  Your <span className="font-bold">{counts.unreadMessages}</span> There are t unread messages।
                   <Link href={route('supplier.messages.index')} className="ml-2 font-medium underline text-blue-700 hover:text-blue-600">
-                    বার্তা দেখুন →
+                    See message →
                   </Link>
                 </p>
               </div>
@@ -147,7 +147,7 @@ export default function SupplierDashboard({
           <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6 text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm opacity-90">মাসিক আয়</p>
+                <p className="text-sm opacity-90">Monthly Income</p>
                 <p className="text-2xl font-bold mt-1">
                   {formatCurrency(counts?.monthlyRevenue || 0)}
                 </p>
@@ -157,7 +157,7 @@ export default function SupplierDashboard({
               </div>
             </div>
             <div className="mt-4 flex items-center text-sm">
-              <span className="opacity-90">মোট আয়</span>
+              <span className="opacity-90">Total income is</span>
               <span className="ml-2 font-bold">
                 {formatCurrency(counts?.totalRevenue || 0)}
               </span>
@@ -167,12 +167,12 @@ export default function SupplierDashboard({
                 {sales_analytics.growth.revenue >= 0 ? (
                   <>
                     <FiTrendingUp className="w-3 h-3 mr-1" />
-                    <span>{Math.round(sales_analytics.growth.revenue)}% গত সময়ের তুলনায়</span>
+                    <span>{Math.round(sales_analytics.growth.revenue)}% </span>
                   </>
                 ) : (
                   <>
                     <FiTrendingDown className="w-3 h-3 mr-1" />
-                    <span>{Math.abs(Math.round(sales_analytics.growth.revenue))}% গত সময়ের তুলনায়</span>
+                    <span>{Math.abs(Math.round(sales_analytics.growth.revenue))}% </span>
                   </>
                 )}
               </div>
@@ -183,7 +183,7 @@ export default function SupplierDashboard({
           <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-6 text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm opacity-90">মোট অর্ডার</p>
+                <p className="text-sm opacity-90">Total order</p>
                 <p className="text-2xl font-bold mt-1">{formatNumber(counts?.totalOrders || 0)}</p>
               </div>
               <div className="p-3 bg-white/20 rounded-lg">
@@ -192,15 +192,15 @@ export default function SupplierDashboard({
             </div>
             <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
               <div>
-                <span className="opacity-90">অপেক্ষমান</span>
+                <span className="opacity-90">Awaiting</span>
                 <p className="font-bold">{counts?.pendingOrders || 0}</p>
               </div>
               <div>
-                <span className="opacity-90">প্রক্রিয়াধীন</span>
+                <span className="opacity-90">In process</span>
                 <p className="font-bold">{counts?.processingOrders || 0}</p>
               </div>
               <div>
-                <span className="opacity-90">ডেলিভারি হয়েছে</span>
+                <span className="opacity-90">Delivered</span>
                 <p className="font-bold">{counts?.deliveredOrders || 0}</p>
               </div>
             </div>
@@ -210,7 +210,7 @@ export default function SupplierDashboard({
           <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-6 text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm opacity-90">সক্রিয় পণ্য</p>
+                <p className="text-sm opacity-90">Active product</p>
                 <p className="text-2xl font-bold mt-1">{formatNumber(counts?.activeProducts || 0)}</p>
               </div>
               <div className="p-3 bg-white/20 rounded-lg">
@@ -219,15 +219,15 @@ export default function SupplierDashboard({
             </div>
             <div className="mt-4 flex justify-between text-xs">
               <div>
-                <span className="opacity-90">মোট</span>
+                <span className="opacity-90">total</span>
                 <p className="font-bold">{counts?.totalProducts || 0}</p>
               </div>
               <div>
-                <span className="opacity-90">বিচারাধীন</span>
+                <span className="opacity-90">Pending</span>
                 <p className="font-bold">{counts?.pendingProducts || 0}</p>
               </div>
               <div>
-                <span className="opacity-90">স্টক কম</span>
+                <span className="opacity-90">Stock low</span>
                 <p className="font-bold">{low_stock_alerts?.length || 0}</p>
               </div>
             </div>
@@ -237,7 +237,7 @@ export default function SupplierDashboard({
           <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-xl p-6 text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm opacity-90">কোটা কর্মক্ষমতা</p>
+                <p className="text-sm opacity-90">Quota Performance</p>
                 <p className="text-2xl font-bold mt-1">{Math.round(quote_performance?.acceptanceRate || 0)}%</p>
               </div>
               <div className="p-3 bg-white/20 rounded-lg">
@@ -246,15 +246,15 @@ export default function SupplierDashboard({
             </div>
             <div className="mt-4 flex justify-between text-xs">
               <div>
-                <span className="opacity-90">গৃহীত</span>
+                <span className="opacity-90">accepted</span>
                 <p className="font-bold">{quote_performance?.acceptedQuotes || 0}</p>
               </div>
               <div>
-                <span className="opacity-90">অপেক্ষমান</span>
+                <span className="opacity-90">Awaiting</span>
                 <p className="font-bold">{quote_performance?.pendingQuotes || 0}</p>
               </div>
               <div>
-                <span className="opacity-90">মোট</span>
+                <span className="opacity-90">total</span>
                 <p className="font-bold">{quote_performance?.totalQuotes || 0}</p>
               </div>
             </div>
@@ -267,7 +267,7 @@ export default function SupplierDashboard({
             <div className="p-4 bg-yellow-50 border-b border-yellow-100">
               <div className="flex items-center gap-2">
                 <MdWarning className="w-5 h-5 text-yellow-600" />
-                <h3 className="font-semibold text-yellow-800">স্টক কম সতর্কতা ({low_stock_alerts.length})</h3>
+                <h3 className="font-semibold text-yellow-800">Low stock warning ({low_stock_alerts.length})</h3>
               </div>
             </div>
             <div className="divide-y divide-gray-100">
@@ -285,7 +285,7 @@ export default function SupplierDashboard({
                         <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
                           <span>SKU: {product.sku}</span>
                           <span>•</span>
-                          <span>স্টক: {product.stock_quantity} ইউনিট</span>
+                          <span>stock: {product.stock_quantity} Unit</span>
                         </div>
                       </div>
                     </div>
@@ -293,7 +293,7 @@ export default function SupplierDashboard({
                       href={route('supplier.products.edit', product.id)}
                       className="px-4 py-2 bg-indigo-50 text-indigo-600 text-sm font-medium rounded-lg hover:bg-indigo-100 transition"
                     >
-                      স্টক আপডেট
+                      Stock update
                     </Link>
                   </div>
                 </div>
@@ -307,9 +307,9 @@ export default function SupplierDashboard({
           {/* Sales Trend - Line chart */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold text-gray-900">বিক্রয় প্রবণতা</h3>
+              <h3 className="font-semibold text-gray-900">Sales trend</h3>
               <div className="flex gap-2">
-                <span className="text-xs px-2 py-1 bg-indigo-50 text-indigo-600 rounded">দৈনিক</span>
+                <span className="text-xs px-2 py-1 bg-indigo-50 text-indigo-600 rounded">Daily</span>
               </div>
             </div>
             <div className="h-80 w-full min-h-[320px]">
@@ -343,7 +343,7 @@ export default function SupplierDashboard({
                     yAxisId="left"
                     type="monotone"
                     dataKey="revenue"
-                    name="আয়"
+                    name="Income"
                     stroke="#4F46E5"
                     strokeWidth={2}
                     dot={false}
@@ -352,7 +352,7 @@ export default function SupplierDashboard({
                     yAxisId="right"
                     type="monotone"
                     dataKey="orders"
-                    name="অর্ডার"
+                    name="Order"
                     stroke="#10B981"
                     strokeWidth={2}
                     dot={false}
@@ -364,18 +364,18 @@ export default function SupplierDashboard({
 
           {/* Orders by Status - Pie chart */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="font-semibold text-gray-900 mb-4">স্ট্যাটাস অনুযায়ী অর্ডার</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">Order by status</h3>
             <div className="h-80 w-full min-h-[320px]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={Object.entries(chart_data?.orders_by_status || {}).map(([name, value]) => ({
-                      name: name === 'pending_confirmation' ? 'অপেক্ষমান' :
-                        name === 'confirmed' ? 'নিশ্চিত' :
-                          name === 'processing' ? 'প্রক্রিয়াধীন' :
-                            name === 'shipped' ? 'পাঠানো হয়েছে' :
-                              name === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                                name === 'cancelled' ? 'বাতিল' : name.replace('_', ' ').toUpperCase(),
+                      name: name === 'pending_confirmation' ? 'Awaiting' :
+                        name === 'confirmed' ? 'sure' :
+                          name === 'processing' ? 'In process' :
+                            name === 'shipped' ? 'has been sent' :
+                              name === 'delivered' ? 'Delivered' :
+                                name === 'cancelled' ? 'cancel' : name.replace('_', ' ').toUpperCase(),
                       value
                     }))}
                     cx="50%"
@@ -416,15 +416,15 @@ export default function SupplierDashboard({
                     <FiShoppingCart className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">সাম্প্রতিক অর্ডার</h3>
-                    <p className="text-sm text-gray-500">সর্বশেষ ১০ টি অর্ডার</p>
+                    <h3 className="font-semibold text-gray-900">Recent Orders</h3>
+                    <p className="text-sm text-gray-500">Last 10 orders</p>
                   </div>
                 </div>
                 <Link
                   href={route('supplier.orders.index')}
                   className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
                 >
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
             </div>
@@ -432,11 +432,11 @@ export default function SupplierDashboard({
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">অর্ডার #</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ক্রেতা</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">পরিমাণ</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">তারিখ</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order #</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Buyer</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">the date</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -450,7 +450,7 @@ export default function SupplierDashboard({
                       <td className="px-6 py-4">
                         <div>
                           <p className="text-sm font-medium text-gray-900">{order.buyer?.name}</p>
-                          <p className="text-xs text-gray-500">{order.items?.length} টি আইটেম</p>
+                          <p className="text-xs text-gray-500">{order.items?.length} t item</p>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
@@ -458,12 +458,12 @@ export default function SupplierDashboard({
                       </td>
                       <td className="px-6 py-4">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.order_status)}`}>
-                          {order.order_status === 'pending_confirmation' ? 'অপেক্ষমান' :
-                            order.order_status === 'confirmed' ? 'নিশ্চিত' :
-                              order.order_status === 'processing' ? 'প্রক্রিয়াধীন' :
-                                order.order_status === 'shipped' ? 'পাঠানো হয়েছে' :
-                                  order.order_status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                                    order.order_status === 'cancelled' ? 'বাতিল' : order.order_status?.replace('_', ' ')}
+                          {order.order_status === 'pending_confirmation' ? 'Awaiting' :
+                            order.order_status === 'confirmed' ? 'sure' :
+                              order.order_status === 'processing' ? 'In process' :
+                                order.order_status === 'shipped' ? 'has been sent' :
+                                  order.order_status === 'delivered' ? 'Delivered' :
+                                    order.order_status === 'cancelled' ? 'cancel' : order.order_status?.replace('_', ' ')}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">
@@ -474,7 +474,7 @@ export default function SupplierDashboard({
                   {(!recent_orders || recent_orders.length === 0) && (
                     <tr>
                       <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
-                        কোনো সাম্প্রতিক অর্ডার পাওয়া যায়নি
+                        No recent orders found
                       </td>
                     </tr>
                   )}
@@ -492,15 +492,15 @@ export default function SupplierDashboard({
                     <FiFileText className="w-5 h-5 text-purple-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">মিলে যাওয়া RFQ</h3>
-                    <p className="text-sm text-gray-500">আপনার পণ্যের সাথে মিলে যাওয়া খোলা RFQ</p>
+                    <h3 className="font-semibold text-gray-900">match up RFQ</h3>
+                    <p className="text-sm text-gray-500">Open matching your product RFQ</p>
                   </div>
                 </div>
                 <Link
                   href={route('supplier.rfqs.index')}
                   className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
                 >
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
             </div>
@@ -509,10 +509,10 @@ export default function SupplierDashboard({
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">RFQ #</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">শিরোনাম</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ক্রেতা</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">শেষ তারিখ</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">কার্যক্রম</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Buyer</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Last date</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Activities</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -526,7 +526,7 @@ export default function SupplierDashboard({
                       <td className="px-6 py-4">
                         <div>
                           <p className="text-sm font-medium text-gray-900">{rfq.title}</p>
-                          <p className="text-xs text-gray-500">পরিমাণ: {rfq.quantity}</p>
+                          <p className="text-xs text-gray-500">Amount: {rfq.quantity}</p>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
@@ -542,7 +542,7 @@ export default function SupplierDashboard({
                           href={route('supplier.rfqs.create-quote', rfq.id)}
                           className="px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-medium rounded-lg hover:bg-indigo-100 transition"
                         >
-                          কোটা জমা দিন
+                          Submit Quota
                         </Link>
                       </td>
                     </tr>
@@ -550,7 +550,7 @@ export default function SupplierDashboard({
                   {(!recent_rfqs || recent_rfqs.length === 0) && (
                     <tr>
                       <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
-                        কোনো মিলে যাওয়া RFQ পাওয়া যায়নি
+                        No matching RFQ found
                       </td>
                     </tr>
                   )}
@@ -570,8 +570,8 @@ export default function SupplierDashboard({
                   <FiBarChart2 className="w-5 h-5 text-green-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">শীর্ষ বিক্রিত পণ্য</h3>
-                  <p className="text-sm text-gray-500">এই মাসের সেরা পারফর্মার</p>
+                  <h3 className="font-semibold text-gray-900">Top Selling Products</h3>
+                  <p className="text-sm text-gray-500">This month's best performer is</p>
                 </div>
               </div>
             </div>
@@ -588,8 +588,8 @@ export default function SupplierDashboard({
                           {product.name}
                         </Link>
                         <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
-                          <span>বিক্রি: {formatNumber(product.total_quantity_sold || 0)} ইউনিট</span>
-                          <span>আয়: {formatCurrency(product.total_revenue || 0)}</span>
+                          <span>Selling: {formatNumber(product.total_quantity_sold || 0)} Unit</span>
+                          <span>Income: {formatCurrency(product.total_revenue || 0)}</span>
                         </div>
                       </div>
                     </div>
@@ -604,7 +604,7 @@ export default function SupplierDashboard({
               ))}
               {(!top_products || top_products.length === 0) && (
                 <div className="p-8 text-center text-gray-500">
-                  কোনো বিক্রয় তথ্য পাওয়া যায়নি
+                  No Sales Information Found
                 </div>
               )}
             </div>
@@ -618,8 +618,8 @@ export default function SupplierDashboard({
                   <FiTruck className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">আসন্ন ডেলিভারি</h3>
-                  <p className="text-sm text-gray-500">পরবর্তী ৭ দিনের জন্য নির্ধারিত</p>
+                  <h3 className="font-semibold text-gray-900">Upcoming Delivery</h3>
+                  <p className="text-sm text-gray-500">Scheduled for next 7 days</p>
                 </div>
               </div>
             </div>
@@ -633,29 +633,29 @@ export default function SupplierDashboard({
                       </div>
                       <div>
                         <Link href={route('supplier.orders.show', order.id)} className="font-medium text-gray-900 hover:text-indigo-600">
-                          অর্ডার #{order.order_number}
+                          Order #{order.order_number}
                         </Link>
                         <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
                           <span>{order.buyer?.name}</span>
                           <span>•</span>
-                          <span>আনু: {new Date(order.estimated_delivery).toLocaleDateString('bn-BD')}</span>
+                          <span>Anu: {new Date(order.estimated_delivery).toLocaleDateString('bn-BD')}</span>
                         </div>
                       </div>
                     </div>
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.order_status)}`}>
-                      {order.order_status === 'pending_confirmation' ? 'অপেক্ষমান' :
-                        order.order_status === 'confirmed' ? 'নিশ্চিত' :
-                          order.order_status === 'processing' ? 'প্রক্রিয়াধীন' :
-                            order.order_status === 'shipped' ? 'পাঠানো হয়েছে' :
-                              order.order_status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                                order.order_status === 'cancelled' ? 'বাতিল' : order.order_status?.replace('_', ' ')}
+                      {order.order_status === 'pending_confirmation' ? 'Awaiting' :
+                        order.order_status === 'confirmed' ? 'sure' :
+                          order.order_status === 'processing' ? 'In process' :
+                            order.order_status === 'shipped' ? 'has been sent' :
+                              order.order_status === 'delivered' ? 'Delivered' :
+                                order.order_status === 'cancelled' ? 'cancel' : order.order_status?.replace('_', ' ')}
                     </span>
                   </div>
                 </div>
               ))}
               {(!upcoming_deliveries || upcoming_deliveries.length === 0) && (
                 <div className="p-8 text-center text-gray-500">
-                  কোনো আসন্ন ডেলিভারি নেই
+                  No upcoming deliveries
                 </div>
               )}
             </div>
@@ -673,15 +673,15 @@ export default function SupplierDashboard({
                     <FiMessageSquare className="w-5 h-5 text-indigo-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">সাম্প্রতিক বার্তা</h3>
-                    <p className="text-sm text-gray-500">সর্বশেষ কথোপকথন</p>
+                    <h3 className="font-semibold text-gray-900">Recent messages</h3>
+                    <p className="text-sm text-gray-500">Last conversation</p>
                   </div>
                 </div>
                 <Link
                   href={route('supplier.messages.index')}
                   className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
                 >
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
             </div>
@@ -706,7 +706,7 @@ export default function SupplierDashboard({
                       <p className="text-sm text-gray-600 truncate mt-1">{message.content}</p>
                       {!message.is_read && message.receiver_id === counts?.userId && (
                         <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mt-2">
-                          নতুন
+                          New
                         </span>
                       )}
                     </div>
@@ -715,7 +715,7 @@ export default function SupplierDashboard({
               ))}
               {(!recent_messages || recent_messages.length === 0) && (
                 <div className="p-8 text-center text-gray-500">
-                  কোনো বার্তা নেই
+                  No message
                 </div>
               )}
             </div>
@@ -723,12 +723,12 @@ export default function SupplierDashboard({
 
           {/* Quote Performance Stats */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">কোটা কর্মক্ষমতা</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">Quota Performance</h3>
             <div className="space-y-4">
               {/* Acceptance Rate */}
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-600">গ্রহণের হার</span>
+                  <span className="text-gray-600">Acceptance rate</span>
                   <span className="font-medium text-gray-900">{Math.round(quote_performance?.acceptanceRate || 0)}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
@@ -742,19 +742,19 @@ export default function SupplierDashboard({
               {/* Quote Stats Grid */}
               <div className="grid grid-cols-2 gap-4 pt-2">
                 <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500">মোট কোটা</p>
+                  <p className="text-xs text-gray-500">Total Quota</p>
                   <p className="text-xl font-bold text-gray-900">{formatNumber(quote_performance?.totalQuotes || 0)}</p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500">গৃহীত</p>
+                  <p className="text-xs text-gray-500">accepted</p>
                   <p className="text-xl font-bold text-green-600">{formatNumber(quote_performance?.acceptedQuotes || 0)}</p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500">অপেক্ষমান</p>
+                  <p className="text-xs text-gray-500">Awaiting</p>
                   <p className="text-xl font-bold text-yellow-600">{formatNumber(quote_performance?.pendingQuotes || 0)}</p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500">প্রত্যাখ্যাত</p>
+                  <p className="text-xs text-gray-500">Rejected</p>
                   <p className="text-xl font-bold text-red-600">{formatNumber(quote_performance?.rejectedQuotes || 0)}</p>
                 </div>
               </div>
@@ -764,9 +764,9 @@ export default function SupplierDashboard({
                 <div className="bg-indigo-50 p-4 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-indigo-600">গড় প্রতিক্রিয়া সময়</p>
+                      <p className="text-sm text-indigo-600">Average response time is</p>
                       <p className="text-2xl font-bold text-indigo-700">
-                        {Math.round(quote_performance.averageResponseTime)} ঘন্টা
+                        {Math.round(quote_performance.averageResponseTime)} hours
                       </p>
                     </div>
                     <FiClock className="w-8 h-8 text-indigo-400" />
@@ -788,8 +788,8 @@ export default function SupplierDashboard({
                 <FiPackage className="w-5 h-5 text-indigo-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">পণ্য</p>
-                <p className="text-sm text-gray-500">ইনভেন্টরি পরিচালনা</p>
+                <p className="font-medium text-gray-900">Product</p>
+                <p className="text-sm text-gray-500">Manage inventory</p>
               </div>
             </div>
           </Link>
@@ -802,8 +802,8 @@ export default function SupplierDashboard({
                 <FiShoppingCart className="w-5 h-5 text-indigo-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">অর্ডার</p>
-                <p className="text-sm text-gray-500">অর্ডার প্রক্রিয়াকরণ</p>
+                <p className="font-medium text-gray-900">Order</p>
+                <p className="text-sm text-gray-500">Order Processing</p>
               </div>
             </div>
           </Link>
@@ -817,7 +817,7 @@ export default function SupplierDashboard({
               </div>
               <div>
                 <p className="font-medium text-gray-900">RFQ</p>
-                <p className="text-sm text-gray-500">কোটা জমা দিন</p>
+                <p className="text-sm text-gray-500">Submit Quota</p>
               </div>
             </div>
           </Link>
@@ -830,10 +830,10 @@ export default function SupplierDashboard({
                 <FiMessageSquare className="w-5 h-5 text-indigo-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">বার্তা</p>
+                <p className="font-medium text-gray-900">Message</p>
                 <p className="text-sm text-gray-500">
                   {counts?.unreadMessages > 0 && (
-                    <span className="text-red-500">{counts.unreadMessages} অপঠিত</span>
+                    <span className="text-red-500">{counts.unreadMessages} Unread</span>
                   )}
                 </p>
               </div>

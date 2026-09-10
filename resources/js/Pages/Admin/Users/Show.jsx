@@ -43,23 +43,23 @@ export default function Show({ user, activity }) {
 
   // Handle toggle user status (activate/deactivate)
   const handleToggleStatus = () => {
-    const action = user.is_active ? 'নিষ্ক্রিয়' : 'সক্রিয়';
+    const action = user.is_active ? 'Inactive' : 'Active';
     Swal.fire({
-      title: `${user.is_active ? 'নিষ্ক্রিয়' : 'সক্রিয়'} করুন`,
-      text: `আপনি কি ${user.name} কে ${action} করতে চান?`,
+      title: `${user.is_active ? 'Inactive' : 'Active'} Do`,
+      text: `Are you ${user.name} who ${action} want to?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: user.is_active ? '#EF4444' : '#10B981',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: `হ্যাঁ, ${action} করুন`,
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: `according to income yes, ${action} Do`,
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.users.toggle-status', user.id), {}, {
           onSuccess: () => {
             Swal.fire({
-              title: 'সফল!',
-              text: `ব্যবহারকারী ${action} করা হয়েছে।`,
+              title: 'successful!',
+              text: `User ${action} Done।`,
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -79,8 +79,8 @@ export default function Show({ user, activity }) {
         setShowResetPassword(false);
         setPasswordData({ password: '', password_confirmation: '' });
         Swal.fire({
-          title: 'সফল!',
-          text: 'পাসওয়ার্ড সফলভাবে রিসেট করা হয়েছে।',
+          title: 'successful!',
+          text: 'Password successfully reset।',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -95,14 +95,14 @@ export default function Show({ user, activity }) {
   // Handle delete user
   const handleDelete = () => {
     Swal.fire({
-      title: 'ব্যবহারকারী মুছুন',
-      text: `আপনি কি ${user.name} মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।`,
+      title: 'Delete user',
+      text: `Are you ${user.name} Want to delete? This action cannot be undone।`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'হ্যাঁ, মুছুন',
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: 'Yes, delete',
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.users.destroy', user.id), {
@@ -137,9 +137,9 @@ export default function Show({ user, activity }) {
   // Get role icon and color based on user role
   const getRoleInfo = (role) => {
     const roles = {
-      admin: { icon: MdOutlineAdminPanelSettings, color: 'purple', label: 'অ্যাডমিন' },
-      supplier: { icon: MdOutlineStorefront, color: 'blue', label: 'সাপ্লায়ার' },
-      buyer: { icon: MdOutlineShoppingCart, color: 'green', label: 'ক্রেতা' },
+      admin: { icon: MdOutlineAdminPanelSettings, color: 'purple', label: 'Admin' },
+      supplier: { icon: MdOutlineStorefront, color: 'blue', label: 'Supplier' },
+      buyer: { icon: MdOutlineShoppingCart, color: 'green', label: 'Buyer' },
     };
     return roles[role] || roles.buyer;
   };
@@ -152,7 +152,7 @@ export default function Show({ user, activity }) {
 
   return (
     <DashboardLayout>
-      <Head title={`${user.name} - প্রোফাইল`} />
+      <Head title={`${user.name} - profile`} />
 
       <div className="space-y-6">
         {/* Header - Back button, title and action buttons */}
@@ -165,9 +165,9 @@ export default function Show({ user, activity }) {
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">ব্যবহারকারী প্রোফাইল</h1>
+              <h1 className="text-2xl font-bold text-gray-900">User profile</h1>
               <p className="text-sm text-gray-600 mt-1">
-                ব্যবহারকারীর বিবরণ দেখুন এবং পরিচালনা করুন
+                View and manage user details
               </p>
             </div>
           </div>
@@ -180,21 +180,21 @@ export default function Show({ user, activity }) {
                 }`}
             >
               {user.is_active ? <FiUserX className="w-4 h-4" /> : <FiUserCheck className="w-4 h-4" />}
-              <span>{user.is_active ? 'নিষ্ক্রিয়' : 'সক্রিয়'}</span>
+              <span>{user.is_active ? 'Inactive' : 'Active'}</span>
             </button>
             <Link
               href={route('admin.users.edit', user.id)}
               className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
             >
               <FiEdit2 className="w-4 h-4" />
-              <span>সম্পাদনা</span>
+              <span>editing</span>
             </Link>
             <button
               onClick={handleDelete}
               className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
             >
               <FiTrash2 className="w-4 h-4" />
-              <span>মুছুন</span>
+              <span>delete</span>
             </button>
           </div>
         </div>
@@ -223,7 +223,7 @@ export default function Show({ user, activity }) {
                         : 'bg-red-100 text-red-800'
                         }`}>
                         {user.is_active ? <FiUserCheck className="w-4 h-4 mr-1" /> : <FiUserX className="w-4 h-4 mr-1" />}
-                        {user.is_active ? 'সক্রিয়' : 'নিষ্ক্রিয়'}
+                        {user.is_active ? 'Active' : 'Inactive'}
                       </span>
                     </div>
                   </div>
@@ -233,7 +233,7 @@ export default function Show({ user, activity }) {
                     className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
                   >
                     <FiLock className="w-4 h-4" />
-                    <span>পাসওয়ার্ড রিসেট</span>
+                    <span>Reset password</span>
                   </button>
                 </div>
 
@@ -242,7 +242,7 @@ export default function Show({ user, activity }) {
                   <div className="flex items-center gap-3">
                     <FiMail className="w-5 h-5 text-gray-400" />
                     <div>
-                      <p className="text-sm text-gray-500">ইমেইল</p>
+                      <p className="text-sm text-gray-500">Email</p>
                       <a href={`mailto:${user.email}`} className="text-indigo-600 hover:text-indigo-700">
                         {user.email}
                       </a>
@@ -251,7 +251,7 @@ export default function Show({ user, activity }) {
                   <div className="flex items-center gap-3">
                     <FiCalendar className="w-5 h-5 text-gray-400" />
                     <div>
-                      <p className="text-sm text-gray-500">যোগদানের তারিখ</p>
+                      <p className="text-sm text-gray-500">Date of Joining</p>
                       <p className="text-gray-900">{formatDate(user.created_at)}</p>
                     </div>
                   </div>
@@ -259,7 +259,7 @@ export default function Show({ user, activity }) {
                     <div className="flex items-center gap-3">
                       <FiClock className="w-5 h-5 text-gray-400" />
                       <div>
-                        <p className="text-sm text-gray-500">সর্বশেষ লগইন</p>
+                        <p className="text-sm text-gray-500">Last login</p>
                         <p className="text-gray-900">{formatDate(activity.last_login)}</p>
                       </div>
                     </div>
@@ -272,11 +272,11 @@ export default function Show({ user, activity }) {
           {/* Reset Password Form */}
           {showResetPassword && (
             <div className="border-t border-gray-100 p-6 bg-gray-50">
-              <h3 className="font-semibold text-gray-900 mb-4">পাসওয়ার্ড রিসেট</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Reset password</h3>
               <form onSubmit={handleResetPassword} className="max-w-md space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    নতুন পাসওয়ার্ড *
+                    New Password *
                   </label>
                   <input
                     type="password"
@@ -291,7 +291,7 @@ export default function Show({ user, activity }) {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    নতুন পাসওয়ার্ড নিশ্চিত করুন *
+                    Confirm new password *
                   </label>
                   <input
                     type="password"
@@ -306,13 +306,13 @@ export default function Show({ user, activity }) {
                     onClick={() => setShowResetPassword(false)}
                     className="px-4 py-2 text-gray-700 hover:text-gray-900"
                   >
-                    বাতিল
+                    cancel
                   </button>
                   <button
                     type="submit"
                     className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                   >
-                    পাসওয়ার্ড রিসেট
+                    Reset password
                   </button>
                 </div>
               </form>
@@ -325,7 +325,7 @@ export default function Show({ user, activity }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">তৈরি RFQ</p>
+                <p className="text-sm text-gray-500">Created by RFQ</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">{activity.rfqs_count}</p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-lg">
@@ -337,7 +337,7 @@ export default function Show({ user, activity }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">জমা দেওয়া কোটা</p>
+                <p className="text-sm text-gray-500">Submitted Quota</p>
                 <p className="text-2xl font-bold text-blue-600 mt-1">{activity.quotes_count}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
@@ -349,7 +349,7 @@ export default function Show({ user, activity }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">অর্ডার (ক্রেতা)</p>
+                <p className="text-sm text-gray-500">order ( buyer)</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{activity.orders_as_buyer}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -361,7 +361,7 @@ export default function Show({ user, activity }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">অর্ডার (সাপ্লায়ার)</p>
+                <p className="text-sm text-gray-500">order ( supplier)</p>
                 <p className="text-2xl font-bold text-purple-600 mt-1">{activity.orders_as_supplier}</p>
               </div>
               <div className="p-3 bg-purple-100 rounded-lg">
@@ -378,20 +378,20 @@ export default function Show({ user, activity }) {
               <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                   <MdOutlineAttachMoney className="w-5 h-5 text-indigo-600" />
-                  মোট ব্যয়
+                  total cost
                 </h3>
                 <p className="text-3xl font-bold text-green-600">{formatCurrency(activity.total_spent)}</p>
-                <p className="text-sm text-gray-500 mt-2">সকল পরিশোধিত অর্ডারে</p>
+                <p className="text-sm text-gray-500 mt-2">On All Paid Orders</p>
               </div>
             )}
             {user.role === 'supplier' && (
               <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                   <MdOutlineAttachMoney className="w-5 h-5 text-indigo-600" />
-                  মোট আয়
+                  Total income is
                 </h3>
                 <p className="text-3xl font-bold text-green-600">{formatCurrency(activity.total_earned)}</p>
-                <p className="text-sm text-gray-500 mt-2">সম্পন্ন অর্ডার থেকে</p>
+                <p className="text-sm text-gray-500 mt-2"></p>
               </div>
             )}
           </div>
@@ -403,38 +403,38 @@ export default function Show({ user, activity }) {
             <div className="px-6 py-4 border-b border-gray-100">
               <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                 <BsBuilding className="w-5 h-5 text-indigo-600" />
-                সাপ্লায়ার প্রোফাইল
+                Supplier Profile
               </h3>
             </div>
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-sm text-gray-500">কোম্পানির নাম</p>
+                  <p className="text-sm text-gray-500">Company Name</p>
                   <p className="font-medium text-gray-900">{user.supplier.company_name}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">ট্রেড লাইসেন্স</p>
+                  <p className="text-sm text-gray-500">Trade license</p>
                   <p className="font-medium text-gray-900">{user.supplier.trade_license_number}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">কোম্পানির ফোন</p>
+                  <p className="text-sm text-gray-500">Company Phone</p>
                   <a href={`tel:${user.supplier.company_phone}`} className="text-indigo-600 hover:text-indigo-700">
                     {user.supplier.company_phone}
                   </a>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">কোম্পানির ইমেইল</p>
+                  <p className="text-sm text-gray-500">Company Email</p>
                   <a href={`mailto:${user.supplier.company_email}`} className="text-indigo-600 hover:text-indigo-700">
                     {user.supplier.company_email}
                   </a>
                 </div>
                 <div className="md:col-span-2">
-                  <p className="text-sm text-gray-500">ঠিকানা</p>
+                  <p className="text-sm text-gray-500">Address</p>
                   <p className="text-gray-900">{user.supplier.company_address}</p>
                   <p className="text-sm text-gray-500 mt-1">{user.supplier.city}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">ভেরিফিকেশন স্ট্যাটাস</p>
+                  <p className="text-sm text-gray-500">Verification Status</p>
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user.supplier.verification_status === 'verified'
                     ? 'bg-green-100 text-green-800'
                     : user.supplier.verification_status === 'pending'
@@ -444,9 +444,9 @@ export default function Show({ user, activity }) {
                     {user.supplier.verification_status === 'verified' ? <MdVerified className="w-3 h-3 mr-1" /> :
                       user.supplier.verification_status === 'pending' ? <MdPending className="w-3 h-3 mr-1" /> :
                         <MdWarning className="w-3 h-3 mr-1" />}
-                    {user.supplier.verification_status === 'verified' ? 'ভেরিফাইড' :
-                      user.supplier.verification_status === 'pending' ? 'বিচারাধীন' :
-                        user.supplier.verification_status === 'rejected' ? 'প্রত্যাখ্যাত' : user.supplier.verification_status}
+                    {user.supplier.verification_status === 'verified' ? 'Verified' :
+                      user.supplier.verification_status === 'pending' ? 'Pending' :
+                        user.supplier.verification_status === 'rejected' ? 'Rejected' : user.supplier.verification_status}
                   </span>
                 </div>
               </div>

@@ -56,8 +56,8 @@ export default function Create() {
     router.post(route('admin.users.store'), formData, {
       onSuccess: () => {
         Swal.fire({
-          title: 'সফল!',
-          text: 'ব্যবহারকারী সফলভাবে তৈরি করা হয়েছে।',
+          title: 'successful!',
+          text: 'User successfully created।',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -66,8 +66,8 @@ export default function Create() {
       onError: (errors) => {
         setErrors(errors);
         Swal.fire({
-          title: 'ত্রুটি!',
-          text: 'ফর্মে ত্রুটি আছে। অনুগ্রহ করে পরীক্ষা করুন।',
+          title: 'Error!',
+          text: 'There is an error in the form. Please check।',
           icon: 'error',
           confirmButtonColor: '#4F46E5'
         });
@@ -80,30 +80,30 @@ export default function Create() {
   const roleOptions = [
     {
       value: 'admin',
-      label: 'অ্যাডমিন',
+      label: 'Admin',
       icon: MdOutlineAdminPanelSettings,
-      description: 'সম্পূর্ণ সিস্টেম অ্যাক্সেস',
+      description: 'Full System Access',
       color: 'purple'
     },
     {
       value: 'supplier',
-      label: 'সাপ্লায়ার',
+      label: 'Supplier',
       icon: MdOutlineStorefront,
-      description: 'পণ্য ব্যবস্থাপনা এবং RFQ-তে সাড়া দিতে পারেন',
+      description: 'Product Management and Can Respond to RFQ',
       color: 'blue'
     },
     {
       value: 'buyer',
-      label: 'ক্রেতা',
+      label: 'Buyer',
       icon: MdOutlineShoppingCart,
-      description: 'RFQ তৈরি এবং অর্ডার দিতে পারেন',
+      description: 'RFQ Can make and order',
       color: 'green'
     },
   ];
 
   return (
     <DashboardLayout>
-      <Head title="নতুন ব্যবহারকারী তৈরি" />
+      <Head title="Create new user" />
 
       <div className="max-w-3xl mx-auto">
         <div className="space-y-6">
@@ -116,9 +116,9 @@ export default function Create() {
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">নতুন ব্যবহারকারী তৈরি</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Create new user</h1>
               <p className="text-sm text-gray-600 mt-1">
-                সিস্টেমে একটি নতুন ব্যবহারকারী যোগ করুন
+                Add a new user to the system
               </p>
             </div>
           </div>
@@ -128,12 +128,12 @@ export default function Create() {
             <div className="p-6 space-y-6">
               {/* Basic Information Section */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">মৌলিক তথ্য</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic information</h3>
                 <div className="space-y-4">
                   {/* Name Field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      সম্পূর্ণ নাম *
+                      Full name *
                     </label>
                     <div className="relative">
                       <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -144,7 +144,7 @@ export default function Create() {
                         onChange={handleChange}
                         className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.name ? 'border-red-500' : 'border-gray-300'
                           }`}
-                        placeholder="সম্পূর্ণ নাম লিখুন"
+                        placeholder="Enter full name"
                       />
                     </div>
                     {errors.name && (
@@ -155,7 +155,7 @@ export default function Create() {
                   {/* Email Field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      ইমেইল ঠিকানা *
+                      Email address *
                     </label>
                     <div className="relative">
                       <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -166,7 +166,7 @@ export default function Create() {
                         onChange={handleChange}
                         className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.email ? 'border-red-500' : 'border-gray-300'
                           }`}
-                        placeholder="ইমেইল ঠিকানা লিখুন"
+                        placeholder="Enter email address"
                       />
                     </div>
                     {errors.email && (
@@ -178,12 +178,12 @@ export default function Create() {
 
               {/* Password Section */}
               <div className="border-t pt-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">পাসওয়ার্ড</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">The password is</h3>
                 <div className="space-y-4">
                   {/* Password Field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      পাসওয়ার্ড *
+                      The password is *
                     </label>
                     <div className="relative">
                       <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -194,7 +194,7 @@ export default function Create() {
                         onChange={handleChange}
                         className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.password ? 'border-red-500' : 'border-gray-300'
                           }`}
-                        placeholder="পাসওয়ার্ড লিখুন"
+                        placeholder="Enter the password"
                       />
                     </div>
                     {errors.password && (
@@ -205,7 +205,7 @@ export default function Create() {
                   {/* Confirm Password Field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      পাসওয়ার্ড নিশ্চিত করুন *
+                      Confirm password *
                     </label>
                     <div className="relative">
                       <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -215,7 +215,7 @@ export default function Create() {
                         value={formData.password_confirmation}
                         onChange={handleChange}
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        placeholder="পাসওয়ার্ড নিশ্চিত করুন"
+                        placeholder="Confirm password"
                       />
                     </div>
                   </div>
@@ -224,7 +224,7 @@ export default function Create() {
 
               {/* Role Selection Section */}
               <div className="border-t pt-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">ব্যবহারকারীর ভূমিকা</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">User Role</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {roleOptions.map((option) => {
                     const Icon = option.icon;
@@ -263,8 +263,8 @@ export default function Create() {
                     className="w-5 h-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                   />
                   <div>
-                    <span className="font-medium text-gray-900">সক্রিয় স্ট্যাটাস</span>
-                    <p className="text-sm text-gray-500">ব্যবহারকারী লগ ইন করে সিস্টেম অ্যাক্সেস করতে পারবেন</p>
+                    <span className="font-medium text-gray-900">Active Status</span>
+                    <p className="text-sm text-gray-500">User can access the system by logging in</p>
                   </div>
                 </label>
               </div>
@@ -276,14 +276,14 @@ export default function Create() {
                 href={route('admin.users.index')}
                 className="px-4 py-2 text-gray-700 hover:text-gray-900"
               >
-                বাতিল
+                cancel
               </Link>
               <button
                 type="submit"
                 disabled={processing}
                 className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {processing ? 'তৈরি হচ্ছে...' : 'ব্যবহারকারী তৈরি'}
+                {processing ? 'Creating...' : 'User created'}
               </button>
             </div>
           </form>
@@ -292,8 +292,8 @@ export default function Create() {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
             <FiAlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-blue-700">
-              <p className="font-medium mb-1">নোট:</p>
-              <p>যদি আপনি একটি সাপ্লায়ার অ্যাকাউন্ট তৈরি করেন, তাহলে তৈরি করার পরে আপনাকে তাদের সাপ্লায়ার প্রোফাইল সম্পূর্ণ করতে পুনঃনির্দেশিত করা হবে।</p>
+              <p className="font-medium mb-1">Note:</p>
+              <p>If you create a supplier account, after creation you will be redirected to complete their supplier profile।</p>
             </div>
           </div>
         </div>

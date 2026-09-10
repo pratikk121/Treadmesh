@@ -53,7 +53,7 @@ export default function SupplierProfileShow({
 
   return (
     <DashboardLayout>
-      <Head title={`${supplier.company_name} - সাপ্লায়ার প্রোফাইল`} />
+      <Head title={`${supplier.company_name} - Supplier Profile`} />
 
       <div className="min-h-screen bg-gray-50">
         {/* Cover Image - Gradient banner */}
@@ -91,7 +91,7 @@ export default function SupplierProfileShow({
                     {supplier.verification_status === 'verified' && (
                       <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium w-fit">
                         <MdVerified className="w-4 h-4" />
-                        ভেরিফাইড সাপ্লায়ার
+                        Verified Supplier
                       </span>
                     )}
                   </div>
@@ -106,12 +106,12 @@ export default function SupplierProfileShow({
                     )}
                     <span className="flex items-center gap-1">
                       <FiMapPin className="w-4 h-4" />
-                      {supplier.city}, {supplier.country || 'অবস্থান উল্লেখ নেই'}
+                      {supplier.city}, {supplier.country || 'Location not mentioned'}
                     </span>
                     {stats.member_since && (
                       <span className="flex items-center gap-1">
                         <FiCalendar className="w-4 h-4" />
-                        {stats.member_since} থেকে সদস্য
+                        {stats.member_since} Member from
                       </span>
                     )}
                   </div>
@@ -129,7 +129,7 @@ export default function SupplierProfileShow({
                         />
                       ))}
                       <span className="ml-2 text-sm font-medium text-gray-700">
-                        {averageRating.toFixed(1)} ({totalReviews} টি রিভিউ)
+                        {averageRating.toFixed(1)} ({totalReviews} t review)
                       </span>
                     </div>
                   </div>
@@ -142,7 +142,7 @@ export default function SupplierProfileShow({
                     className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-lg"
                   >
                     <FiMessageSquare className="w-5 h-5" />
-                    <span>সাপ্লায়ারের সাথে যোগাযোগ</span>
+                    <span>Communication with the supplier</span>
                   </Link>
                 </div>
               </div>
@@ -152,19 +152,19 @@ export default function SupplierProfileShow({
             <div className="border-t border-gray-100 bg-gray-50 px-6 py-4">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div>
-                  <p className="text-sm text-gray-500">সক্রিয় পণ্য</p>
+                  <p className="text-sm text-gray-500">Active product</p>
                   <p className="text-xl font-bold text-gray-900">{stats.total_products}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">সম্পন্ন অর্ডার</p>
+                  <p className="text-sm text-gray-500">Order Complete</p>
                   <p className="text-xl font-bold text-gray-900">{stats.completed_orders}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">প্রতিক্রিয়া সময়</p>
+                  <p className="text-sm text-gray-500">reaction time</p>
                   <p className="text-xl font-bold text-gray-900">{stats.response_time}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">ভেরিফাইড</p>
+                  <p className="text-sm text-gray-500">Verified</p>
                   <p className="text-xl font-bold text-gray-900">{stats.verified_since}</p>
                 </div>
               </div>
@@ -177,19 +177,19 @@ export default function SupplierProfileShow({
             <div className="lg:col-span-1 space-y-6">
               {/* Contact Information */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">যোগাযোগের তথ্য</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h2>
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <FiPhone className="w-5 h-5 text-gray-400 mt-0.5" />
                     <div>
-                      <p className="text-sm text-gray-500">ফোন</p>
+                      <p className="text-sm text-gray-500">Phone</p>
                       <p className="font-medium text-gray-900">{supplier.company_phone}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <FiMail className="w-5 h-5 text-gray-400 mt-0.5" />
                     <div>
-                      <p className="text-sm text-gray-500">ইমেইল</p>
+                      <p className="text-sm text-gray-500">Email</p>
                       <p className="font-medium text-gray-900">{supplier.company_email}</p>
                     </div>
                   </div>
@@ -197,7 +197,7 @@ export default function SupplierProfileShow({
                     <div className="flex items-start gap-3">
                       <FiGlobe className="w-5 h-5 text-gray-400 mt-0.5" />
                       <div>
-                        <p className="text-sm text-gray-500">ওয়েবসাইট</p>
+                        <p className="text-sm text-gray-500"></p>
                         <a
                           href={supplier.website}
                           target="_blank"
@@ -212,7 +212,7 @@ export default function SupplierProfileShow({
                   <div className="flex items-start gap-3">
                     <FiMapPin className="w-5 h-5 text-gray-400 mt-0.5" />
                     <div>
-                      <p className="text-sm text-gray-500">ঠিকানা</p>
+                      <p className="text-sm text-gray-500">Address</p>
                       <p className="font-medium text-gray-900">
                         {supplier.company_address}, {supplier.city}
                         {supplier.state && `, ${supplier.state}`}
@@ -226,22 +226,22 @@ export default function SupplierProfileShow({
 
               {/* Business Details */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">ব্যবসায়িক বিবরণ</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Business Description</h2>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-500">ব্যবসার ধরন</p>
-                    <p className="font-medium text-gray-900">{supplier.business_type || 'উল্লেখ নেই'}</p>
+                    <p className="text-sm text-gray-500">Business Type</p>
+                    <p className="font-medium text-gray-900">{supplier.business_type || 'Not mentioned'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">প্রতিষ্ঠার বছর</p>
-                    <p className="font-medium text-gray-900">{supplier.year_established || 'উল্লেখ নেই'}</p>
+                    <p className="text-sm text-gray-500">Year of Establishment</p>
+                    <p className="font-medium text-gray-900">{supplier.year_established || 'Not mentioned'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">কর্মচারীর সংখ্যা</p>
-                    <p className="font-medium text-gray-900">{supplier.number_of_employees || 'উল্লেখ নেই'}</p>
+                    <p className="text-sm text-gray-500">Number of employees</p>
+                    <p className="font-medium text-gray-900">{supplier.number_of_employees || 'Not mentioned'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">ট্রেড লাইসেন্স</p>
+                    <p className="text-sm text-gray-500">Trade license</p>
                     <p className="font-medium text-gray-900">{supplier.trade_license_number}</p>
                   </div>
                 </div>
@@ -250,7 +250,7 @@ export default function SupplierProfileShow({
               {/* Categories */}
               {categories.length > 0 && (
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-4">পণ্যের ক্যাটাগরি</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 mb-4">Product Category</h2>
                   <div className="flex flex-wrap gap-2">
                     {categories.map((category) => (
                       <span
@@ -270,7 +270,7 @@ export default function SupplierProfileShow({
               {/* Company Description */}
               {supplier.description && (
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-4">কোম্পানি সম্পর্কে</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 mb-4">About the company</h2>
                   <p className="text-gray-700 leading-relaxed">{supplier.description}</p>
                 </div>
               )}
@@ -280,9 +280,9 @@ export default function SupplierProfileShow({
                 <div className="p-6 border-b border-gray-100">
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900">পণ্য সমূহ</h2>
+                      <h2 className="text-lg font-semibold text-gray-900">Products</h2>
                       <p className="text-sm text-gray-500 mt-1">
-                        মোট {stats.total_products} টি পণ্যের মধ্যে {filteredProducts.length} টি দেখানো হচ্ছে
+                        total {stats.total_products} Among t products {filteredProducts.length} Showing
                       </p>
                     </div>
 
@@ -293,7 +293,7 @@ export default function SupplierProfileShow({
                         onChange={(e) => setSelectedCategory(e.target.value)}
                         className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       >
-                        <option value="all">সকল ক্যাটাগরি</option>
+                        <option value="all">All Categories</option>
                         {categories.map((category) => (
                           <option key={category} value={category}>{category}</option>
                         ))}
@@ -334,18 +334,18 @@ export default function SupplierProfileShow({
 
                             <div className="space-y-2 mb-3">
                               <p className="text-sm text-gray-600">
-                                সর্বনিম্ন অর্ডার: {product.minimum_order_quantity} {product.unit}
+                                Minimum Order: {product.minimum_order_quantity} {product.unit}
                               </p>
                               {product.stock_quantity !== null && (
                                 <p className="text-sm text-gray-600">
-                                  মজুত: {product.stock_quantity} ইউনিট
+                                  Stock: {product.stock_quantity} Unit
                                 </p>
                               )}
                             </div>
 
                             <div className="flex items-center justify-between">
                               <div>
-                                <p className="text-sm text-gray-500">শুরুর মূল্য</p>
+                                <p className="text-sm text-gray-500">Starting price is</p>
                                 <p className="text-xl font-bold text-indigo-600">
                                   {formatCurrency(product.base_price)}
                                 </p>
@@ -354,7 +354,7 @@ export default function SupplierProfileShow({
                                 href={route('buyer.products.show', product.slug)}
                                 className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
                               >
-                                বিস্তারিত দেখুন
+                                for suppliers See details
                               </Link>
                             </div>
 
@@ -363,7 +363,7 @@ export default function SupplierProfileShow({
                               <div className="mt-3 pt-3 border-t border-gray-100">
                                 <p className="text-xs text-gray-500 flex items-center gap-1">
                                   <FiDollarSign className="w-3 h-3" />
-                                  বড় পরিমাণের জন্য বাল্ক মূল্য উপলব্ধ
+                                  Bulk pricing available for larger quantities
                                 </p>
                               </div>
                             )}
@@ -374,7 +374,7 @@ export default function SupplierProfileShow({
                   ) : (
                     <div className="text-center py-12">
                       <FiPackage className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                      <p className="text-gray-500">এই ক্যাটাগরিতে কোনো পণ্য পাওয়া যায়নি</p>
+                      <p className="text-gray-500">No products found in this category</p>
                     </div>
                   )}
                 </div>
@@ -386,7 +386,7 @@ export default function SupplierProfileShow({
                       href={route('supplier.products.public', supplier.id)}
                       className="block w-full text-center px-4 py-2 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition"
                     >
-                      সকল পণ্য দেখুন ({stats.total_products})
+                      See all products ({stats.total_products})
                     </Link>
                   </div>
                 )}
@@ -400,8 +400,8 @@ export default function SupplierProfileShow({
                       <FiCheckCircle className="w-5 h-5 text-green-600" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">অর্ডার সম্পাদন</p>
-                      <p className="text-lg font-bold text-gray-900">৯৮%</p>
+                      <p className="text-sm text-gray-500">Order execution</p>
+                      <p className="text-lg font-bold text-gray-900">98%</p>
                     </div>
                   </div>
                 </div>
@@ -411,8 +411,8 @@ export default function SupplierProfileShow({
                       <FiClock className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">সময়মত ডেলিভারি</p>
-                      <p className="text-lg font-bold text-gray-900">৯৫%</p>
+                      <p className="text-sm text-gray-500">On-Time Delivery</p>
+                      <p className="text-lg font-bold text-gray-900">95%</p>
                     </div>
                   </div>
                 </div>

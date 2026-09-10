@@ -40,14 +40,14 @@ export default function Verify({ verificationData }) {
   // Handle approve supplier
   const handleApprove = () => {
     Swal.fire({
-      title: 'সাপ্লায়ার অনুমোদন',
-      text: `আপনি কি ${supplier.company_name} অনুমোদন করতে চান?`,
+      title: 'Supplier Approval',
+      text: `Are you ${supplier.company_name} Want to approve?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#10B981',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'হ্যাঁ, অনুমোদন',
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: 'Yes, approval',
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.supplier-verification.approve', supplier.id), {
@@ -56,8 +56,8 @@ export default function Verify({ verificationData }) {
         }, {
           onSuccess: () => {
             Swal.fire({
-              title: 'অনুমোদিত!',
-              text: 'সাপ্লায়ার সফলভাবে ভেরিফাই করা হয়েছে।',
+              title: 'Approved!',
+              text: 'Supplier successfully verified।',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -72,8 +72,8 @@ export default function Verify({ verificationData }) {
   const handleReject = () => {
     if (!rejectionReason) {
       Swal.fire({
-        title: 'ত্রুটি!',
-        text: 'প্রত্যাখ্যানের কারণ প্রদান করুন।',
+        title: 'Error!',
+        text: 'Provide reason for rejection।',
         icon: 'error',
         confirmButtonColor: '#4F46E5'
       });
@@ -81,14 +81,14 @@ export default function Verify({ verificationData }) {
     }
 
     Swal.fire({
-      title: 'সাপ্লায়ার প্রত্যাখ্যান',
-      text: `আপনি কি ${supplier.company_name} প্রত্যাখ্যান করতে চান?`,
+      title: 'Reject supplier',
+      text: `Are you ${supplier.company_name} want to reject?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'হ্যাঁ, প্রত্যাখ্যান',
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: 'Yes, reject',
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.supplier-verification.reject', supplier.id), {
@@ -97,8 +97,8 @@ export default function Verify({ verificationData }) {
         }, {
           onSuccess: () => {
             Swal.fire({
-              title: 'প্রত্যাখ্যাত!',
-              text: 'সাপ্লায়ার ভেরিফিকেশন প্রত্যাখ্যান করা হয়েছে।',
+              title: 'Rejected!',
+              text: 'Supplier Verification Rejected।',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -113,8 +113,8 @@ export default function Verify({ verificationData }) {
   const handleDocumentRequest = () => {
     if (!documentRequest.message) {
       Swal.fire({
-        title: 'ত্রুটি!',
-        text: 'সাপ্লায়ারের জন্য একটি বার্তা প্রদান করুন।',
+        title: 'Error!',
+        text: 'Leave a message for the supplier।',
         icon: 'error',
         confirmButtonColor: '#4F46E5'
       });
@@ -125,8 +125,8 @@ export default function Verify({ verificationData }) {
       onSuccess: () => {
         setShowDocRequestForm(false);
         Swal.fire({
-          title: 'অনুরোধ পাঠানো!',
-          text: 'নথির অনুরোধ সাপ্লায়ারের কাছে পাঠানো হয়েছে।',
+          title: '!',
+          text: 'Document request sent to supplier।',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -161,7 +161,7 @@ export default function Verify({ verificationData }) {
 
   return (
     <DashboardLayout>
-      <Head title={`${supplier.company_name} - ভেরিফিকেশন`} />
+      <Head title={`${supplier.company_name} - Verification`} />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -173,9 +173,9 @@ export default function Verify({ verificationData }) {
             <FiArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">সাপ্লায়ার ভেরিফিকেশন</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Supplier Verification</h1>
             <p className="text-sm text-gray-600 mt-1">
-              {supplier.company_name} - এর তথ্য পর্যালোচনা ও ভেরিফাই করুন
+              {supplier.company_name} - Review and verify information on
             </p>
           </div>
         </div>
@@ -188,26 +188,26 @@ export default function Verify({ verificationData }) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <MdOutlineStorefront className="w-5 h-5 text-indigo-600" />
-                কোম্পানির তথ্য
+                Company Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-500">কোম্পানির নাম</p>
+                    <p className="text-sm text-gray-500">Company Name</p>
                     <p className="font-medium text-gray-900">{supplier.company_name}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">যোগাযোগের ব্যক্তি</p>
+                    <p className="text-sm text-gray-500">Contact Person</p>
                     <p className="font-medium text-gray-900">{supplier.user?.name || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">ইমেইল</p>
+                    <p className="text-sm text-gray-500">Email</p>
                     <a href={`mailto:${supplier.company_email}`} className="font-medium text-indigo-600 hover:text-indigo-700">
                       {supplier.company_email}
                     </a>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">ফোন</p>
+                    <p className="text-sm text-gray-500">Phone</p>
                     <a href={`tel:${supplier.company_phone}`} className="font-medium text-gray-900 hover:text-indigo-600">
                       {supplier.company_phone || 'N/A'}
                     </a>
@@ -215,16 +215,16 @@ export default function Verify({ verificationData }) {
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-500">ট্রেড লাইসেন্স নম্বর</p>
+                    <p className="text-sm text-gray-500">Trade License No.</p>
                     <p className="font-medium text-gray-900">{supplier.trade_license_number || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">ঠিকানা</p>
+                    <p className="text-sm text-gray-500">Address</p>
                     <p className="font-medium text-gray-900">{supplier.company_address || 'N/A'}</p>
                     <p className="text-sm text-gray-500">{supplier.city || 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">জমার তারিখ</p>
+                    <p className="text-sm text-gray-500">Submission Date</p>
                     <p className="font-medium text-gray-900">
                       {new Date(supplier.created_at).toLocaleDateString('bn-BD', {
                         year: 'numeric',
@@ -243,7 +243,7 @@ export default function Verify({ verificationData }) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <MdOutlineDescription className="w-5 h-5 text-indigo-600" />
-                প্রয়োজনীয় নথি
+                Required Documents
               </h3>
               <div className="space-y-4">
                 {Object.entries(documents).map(([key, doc]) => (
@@ -255,16 +255,16 @@ export default function Verify({ verificationData }) {
                           {key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                         </p>
                         {doc.number && (
-                          <p className="text-sm text-gray-500">নম্বর: {doc.number}</p>
+                          <p className="text-sm text-gray-500">Number: {doc.number}</p>
                         )}
                         {doc.company_name && (
-                          <p className="text-sm text-gray-500">কোম্পানি: {doc.company_name}</p>
+                          <p className="text-sm text-gray-500">Company: {doc.company_name}</p>
                         )}
                       </div>
                     </div>
                     <div>
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDocumentStatusColor(doc.status)}`}>
-                        {doc.status === 'present' ? 'উপস্থিত' : 'অনুপস্থিত'}
+                        {doc.status === 'present' ? 'present' : 'Missing'}
                       </span>
                     </div>
                   </div>
@@ -274,12 +274,12 @@ export default function Verify({ verificationData }) {
 
             {/* Verification Notes */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">ভেরিফিকেশন নোট</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Verification Note</h3>
               <textarea
                 rows="4"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="এই ভেরিফিকেশন সম্পর্কে নোট যোগ করুন..."
+                placeholder="Add note about this verification..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               />
               <div className="mt-4 flex items-center gap-2">
@@ -291,7 +291,7 @@ export default function Verify({ verificationData }) {
                   className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                 />
                 <label htmlFor="sendNotification" className="text-sm text-gray-700">
-                  সাপ্লায়ারকে ইমেইল নোটিফিকেশন পাঠান
+                  Send email notification to supplier
                 </label>
               </div>
             </div>
@@ -301,18 +301,18 @@ export default function Verify({ verificationData }) {
               <div className="bg-white rounded-xl shadow-sm border border-red-200 p-6">
                 <h3 className="font-semibold text-red-600 mb-4 flex items-center gap-2">
                   <MdWarning className="w-5 h-5" />
-                  প্রত্যাখ্যানের কারণ
+                  Reason for rejection
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      প্রত্যাখ্যানের কারণ *
+                      Reason for rejection *
                     </label>
                     <textarea
                       rows="3"
                       value={rejectionReason}
                       onChange={(e) => setRejectionReason(e.target.value)}
-                      placeholder="কেন এই সাপ্লায়ার প্রত্যাখ্যান করা হচ্ছে তা ব্যাখ্যা করুন..."
+                      placeholder="Explain why this supplier is being rejected..."
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
                     />
                   </div>
@@ -321,13 +321,13 @@ export default function Verify({ verificationData }) {
                       onClick={() => setShowRejectForm(false)}
                       className="px-4 py-2 text-gray-700 hover:text-gray-900"
                     >
-                      বাতিল
+                      cancel
                     </button>
                     <button
                       onClick={handleReject}
                       className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                     >
-                      প্রত্যাখ্যান নিশ্চিত
+                      Refusal is confirmed
                     </button>
                   </div>
                 </div>
@@ -339,18 +339,18 @@ export default function Verify({ verificationData }) {
               <div className="bg-white rounded-xl shadow-sm border border-yellow-200 p-6">
                 <h3 className="font-semibold text-yellow-600 mb-4 flex items-center gap-2">
                   <FiSend className="w-5 h-5" />
-                  অতিরিক্ত তথ্য অনুরোধ
+                  Request additional information
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      সাপ্লায়ারের জন্য বার্তা
+                      Message to supplier
                     </label>
                     <textarea
                       rows="4"
                       value={documentRequest.message}
                       onChange={(e) => setDocumentRequest({ message: e.target.value })}
-                      placeholder="কি অতিরিক্ত তথ্য বা নথি প্রয়োজন তা ব্যাখ্যা করুন..."
+                      placeholder="Explain what additional information or documents are required..."
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
                     />
                   </div>
@@ -359,13 +359,13 @@ export default function Verify({ verificationData }) {
                       onClick={() => setShowDocRequestForm(false)}
                       className="px-4 py-2 text-gray-700 hover:text-gray-900"
                     >
-                      বাতিল
+                      cancel
                     </button>
                     <button
                       onClick={handleDocumentRequest}
                       className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
                     >
-                      অনুরোধ পাঠান
+                      Send request
                     </button>
                   </div>
                 </div>
@@ -377,46 +377,46 @@ export default function Verify({ verificationData }) {
           <div className="space-y-6">
             {/* Action Buttons */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">কার্যক্রম</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Activities</h3>
               <div className="space-y-3">
                 <button
                   onClick={handleApprove}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
                 >
                   <FiCheckCircle className="w-5 h-5" />
-                  সাপ্লায়ার অনুমোদন
+                  Supplier Approval
                 </button>
                 <button
                   onClick={() => setShowRejectForm(true)}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
                 >
                   <FiXCircle className="w-5 h-5" />
-                  সাপ্লায়ার প্রত্যাখ্যান
+                  Reject supplier
                 </button>
                 <button
                   onClick={() => setShowDocRequestForm(true)}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition"
                 >
                   <FiSend className="w-5 h-5" />
-                  তথ্য অনুরোধ
+                  Information Request
                 </button>
               </div>
             </div>
 
             {/* User Status */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">অ্যাকাউন্ট স্ট্যাটাস</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Account Status</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">ইউজার অ্যাকাউন্ট</span>
+                  <span className="text-sm text-gray-500">User account</span>
                   <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${user_status.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                    {user_status.is_active ? 'সক্রিয়' : 'নিষ্ক্রিয়'}
+                    {user_status.is_active ? 'Active' : 'Inactive'}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">ইমেইল ভেরিফিকেশন</span>
+                  <span className="text-sm text-gray-500">Email Verification</span>
                   <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${user_status.email_verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                    {user_status.email_verified ? 'ভেরিফাইড' : 'অভেরিফাইড'}
+                    {user_status.email_verified ? 'Verified' : 'Verified'}
                   </span>
                 </div>
               </div>
@@ -426,15 +426,15 @@ export default function Verify({ verificationData }) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <FiPackage className="w-5 h-5 text-indigo-600" />
-                পণ্য
+                Product
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">মোট পণ্য</span>
+                  <span className="text-sm text-gray-500">Total Products</span>
                   <span className="font-medium text-gray-900">{existing_products}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">বিচারাধীন পণ্য</span>
+                  <span className="text-sm text-gray-500">Product under trial</span>
                   <span className="font-medium text-gray-900">{supplier.products?.length || 0}</span>
                 </div>
               </div>

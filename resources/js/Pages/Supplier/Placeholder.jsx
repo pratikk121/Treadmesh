@@ -18,7 +18,7 @@ import {
 export default function SupplierPlaceholder({ title, description }) {
   return (
     <DashboardLayout>
-      <Head title={title || 'পৃষ্ঠা' | 'সাপ্লায়ার'} />
+      <Head title={title || 'page' | 'Supplier'} />
 
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
         {/* Icon */}
@@ -30,12 +30,12 @@ export default function SupplierPlaceholder({ title, description }) {
 
         {/* Title */}
         <h1 className="text-3xl font-bold text-gray-900 text-center mb-3">
-          {title || 'পৃষ্ঠা স্থানান্তরিত হচ্ছে'}
+          {title || 'Relocating page'}
         </h1>
 
         {/* Description */}
         <p className="text-lg text-gray-600 text-center max-w-2xl mb-8">
-          {description || 'এই পৃষ্ঠাটি Inertia.js-এ স্থানান্তরিত হচ্ছে। শীঘ্রই এটি উপলব্ধ হবে।'}
+          {description || 'This page is moving to Inertia.js. It will be available soon।'}
         </p>
 
         {/* Action Buttons */}
@@ -45,7 +45,7 @@ export default function SupplierPlaceholder({ title, description }) {
             className="inline-flex items-center justify-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
           >
             <FiHome className="mr-2 w-5 h-5" />
-            ড্যাশবোর্ডে ফিরে যান
+            Back to Dashboard
           </Link>
 
           <button
@@ -53,7 +53,7 @@ export default function SupplierPlaceholder({ title, description }) {
             className="inline-flex items-center justify-center px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
           >
             <FiArrowLeft className="mr-2 w-5 h-5" />
-            পূর্ববর্তী পৃষ্ঠায় যান
+            Go to previous page
           </button>
         </div>
 
@@ -62,11 +62,11 @@ export default function SupplierPlaceholder({ title, description }) {
           <div className="flex items-start gap-3">
             <FiAlertCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-semibold text-blue-800 mb-2">স্থানান্তর প্রক্রিয়া</h3>
+              <h3 className="font-semibold text-blue-800 mb-2">Transfer process</h3>
               <p className="text-sm text-blue-700 leading-relaxed">
-                আমরা আমাদের অ্যাপ্লিকেশনকে Inertia.js-এ স্থানান্তরিত করছি যাতে আরও ভালো পারফরম্যান্স
-                এবং ব্যবহারকারীর অভিজ্ঞতা প্রদান করা যায়। এই পৃষ্ঠাটি বর্তমানে উন্নয়নাধীন।
-                দয়া করে কিছুক্ষণ পর আবার চেষ্টা করুন।
+                We are migrating our application to Inertia.js for better performance
+                and provide user experience. This page is currently under development।
+                Please try again later।
               </p>
             </div>
           </div>

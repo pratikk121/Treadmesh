@@ -50,7 +50,7 @@ export default function Edit({ supplier }) {
 
   return (
     <DashboardLayout>
-      <Head title={`${supplier.company_name} - সম্পাদনা`} />
+      <Head title={`${supplier.company_name} - editing`} />
 
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Header - Back button and page title */}
@@ -62,9 +62,9 @@ export default function Edit({ supplier }) {
             <FiArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">সাপ্লায়ার সম্পাদনা</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Edit Supplier</h1>
             <p className="text-sm text-gray-600 mt-1">
-              {supplier.company_name} - এর তথ্য আপডেট করুন
+              {supplier.company_name} - Update information on
             </p>
           </div>
         </div>
@@ -75,7 +75,7 @@ export default function Edit({ supplier }) {
             {/* Company Name */}
             <div>
               <label htmlFor="company_name" className="block text-sm font-medium text-gray-700 mb-2">
-                কোম্পানির নাম *
+                Company Name *
               </label>
               <input
                 type="text"
@@ -94,7 +94,7 @@ export default function Edit({ supplier }) {
             {/* Trade License Number */}
             <div>
               <label htmlFor="trade_license_number" className="block text-sm font-medium text-gray-700 mb-2">
-                ট্রেড লাইসেন্স নম্বর *
+                Trade License No. *
               </label>
               <input
                 type="text"
@@ -114,7 +114,7 @@ export default function Edit({ supplier }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="company_phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  ফোন নম্বর *
+                  Phone number *
                 </label>
                 <input
                   type="text"
@@ -132,7 +132,7 @@ export default function Edit({ supplier }) {
 
               <div>
                 <label htmlFor="company_email" className="block text-sm font-medium text-gray-700 mb-2">
-                  ইমেইল ঠিকানা *
+                  Email address *
                 </label>
                 <input
                   type="email"
@@ -152,7 +152,7 @@ export default function Edit({ supplier }) {
             {/* Company Address */}
             <div>
               <label htmlFor="company_address" className="block text-sm font-medium text-gray-700 mb-2">
-                কোম্পানির ঠিকানা *
+                Company Address *
               </label>
               <textarea
                 id="company_address"
@@ -171,7 +171,7 @@ export default function Edit({ supplier }) {
             {/* City */}
             <div>
               <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
-                শহর *
+                City *
               </label>
               <input
                 type="text"
@@ -190,7 +190,7 @@ export default function Edit({ supplier }) {
             {/* Verification Status */}
             <div>
               <label htmlFor="verification_status" className="block text-sm font-medium text-gray-700 mb-2">
-                ভেরিফিকেশন স্ট্যাটাস
+                Verification Status
               </label>
               <select
                 id="verification_status"
@@ -199,9 +199,9 @@ export default function Edit({ supplier }) {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               >
-                <option value="pending">বিচারাধীন</option>
-                <option value="verified">ভেরিফাইড</option>
-                <option value="rejected">প্রত্যাখ্যাত</option>
+                <option value="pending">Pending</option>
+                <option value="verified">Verified</option>
+                <option value="rejected">Rejected</option>
               </select>
             </div>
 
@@ -211,7 +211,7 @@ export default function Edit({ supplier }) {
                 href={route('admin.suppliers.show', supplier.id)}
                 className="px-4 py-2 text-gray-700 hover:text-gray-900"
               >
-                বাতিল
+                cancel
               </Link>
               <button
                 type="submit"
@@ -219,7 +219,7 @@ export default function Edit({ supplier }) {
                 className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FiSave className="w-4 h-4" />
-                <span>{processing ? 'সংরক্ষণ হচ্ছে...' : 'পরিবর্তন সংরক্ষণ'}</span>
+                <span>{processing ? 'Saving...' : 'Save changes'}</span>
               </button>
             </div>
           </form>

@@ -81,25 +81,25 @@ export default function AdminDashboard({
 
   return (
     <DashboardLayout>
-      <Head title="অ্যাডমিন ড্যাশবোর্ড" />
+      <Head title="Admin Dashboard" />
 
       <div className="space-y-6">
         {/* Header - Page title and action buttons */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">অ্যাডমিন ড্যাশবোর্ড</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
             <p className="text-sm text-gray-600 mt-1">
-              স্বাগতম! আজ আপনার মার্কেটপ্লেসে কী ঘটছে তা এখানে দেখা যাচ্ছে।
+              Welcome! Here's what's happening in your marketplace today।
             </p>
           </div>
           <div className="flex gap-2">
             <button className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition">
               <FiDownload className="w-4 h-4" />
-              <span>রিপোর্ট এক্সপোর্ট</span>
+              <span>Report Export</span>
             </button>
             <button className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
               <FiRefreshCw className="w-4 h-4" />
-              <span>রিফ্রেশ</span>
+              <span>Refresh</span>
             </button>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function AdminDashboard({
           <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6 text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm opacity-90">আজকের আয়</p>
+                <p className="text-sm opacity-90">Today's Earnings</p>
                 <p className="text-2xl font-bold mt-1">
                   {formatCurrency(stats?.revenue_today || 0)}
                 </p>
@@ -120,7 +120,7 @@ export default function AdminDashboard({
               </div>
             </div>
             <div className="mt-4 flex items-center text-sm">
-              <span className="opacity-90">গত মাসের তুলনায়</span>
+              <span className="opacity-90"></span>
               <span className="ml-2 flex items-center">
                 {stats?.revenue_this_month > stats?.revenue_last_month ? (
                   <>
@@ -141,7 +141,7 @@ export default function AdminDashboard({
           <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-6 text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm opacity-90">আজকের অর্ডার</p>
+                <p className="text-sm opacity-90">Today's order is</p>
                 <p className="text-2xl font-bold mt-1">{stats?.orders_today || 0}</p>
               </div>
               <div className="p-3 bg-white/20 rounded-lg">
@@ -150,15 +150,15 @@ export default function AdminDashboard({
             </div>
             <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
               <div>
-                <span className="opacity-90">বিচারাধীন</span>
+                <span className="opacity-90">Pending</span>
                 <p className="font-bold">{stats?.orders_by_status?.pending_confirmation || 0}</p>
               </div>
               <div>
-                <span className="opacity-90">প্রক্রিয়াধীন</span>
+                <span className="opacity-90">In process</span>
                 <p className="font-bold">{stats?.orders_by_status?.processing || 0}</p>
               </div>
               <div>
-                <span className="opacity-90">ডেলিভারি</span>
+                <span className="opacity-90">Delivery</span>
                 <p className="font-bold">{stats?.orders_by_status?.delivered || 0}</p>
               </div>
             </div>
@@ -168,7 +168,7 @@ export default function AdminDashboard({
           <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-6 text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm opacity-90">মোট ব্যবহারকারী</p>
+                <p className="text-sm opacity-90">Total users</p>
                 <p className="text-2xl font-bold mt-1">{stats?.total_users || 0}</p>
               </div>
               <div className="p-3 bg-white/20 rounded-lg">
@@ -177,15 +177,15 @@ export default function AdminDashboard({
             </div>
             <div className="mt-4 flex justify-between text-xs">
               <div>
-                <span className="opacity-90">ক্রেতা</span>
+                <span className="opacity-90">Buyer</span>
                 <p className="font-bold">{stats?.users_by_role?.buyer || 0}</p>
               </div>
               <div>
-                <span className="opacity-90">সাপ্লায়ার</span>
+                <span className="opacity-90">Supplier</span>
                 <p className="font-bold">{stats?.users_by_role?.supplier || 0}</p>
               </div>
               <div>
-                <span className="opacity-90">আজকের নতুন</span>
+                <span className="opacity-90">Today's new</span>
                 <p className="font-bold">{stats?.new_users_today || 0}</p>
               </div>
             </div>
@@ -195,7 +195,7 @@ export default function AdminDashboard({
           <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-xl p-6 text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm opacity-90">সক্রিয় পণ্য</p>
+                <p className="text-sm opacity-90">Active product</p>
                 <p className="text-2xl font-bold mt-1">{stats?.approved_products || 0}</p>
               </div>
               <div className="p-3 bg-white/20 rounded-lg">
@@ -204,15 +204,15 @@ export default function AdminDashboard({
             </div>
             <div className="mt-4 flex justify-between text-xs">
               <div>
-                <span className="opacity-90">স্টক কম</span>
+                <span className="opacity-90">Stock low</span>
                 <p className="font-bold">{stats?.low_stock_products || 0}</p>
               </div>
               <div>
-                <span className="opacity-90">স্টক নেই</span>
+                <span className="opacity-90">Out of Stock</span>
                 <p className="font-bold">{stats?.out_of_stock || 0}</p>
               </div>
               <div>
-                <span className="opacity-90">বিচারাধীন</span>
+                <span className="opacity-90">Pending</span>
                 <p className="font-bold">{stats?.pending_products || 0}</p>
               </div>
             </div>
@@ -230,15 +230,15 @@ export default function AdminDashboard({
                     <MdPending className="w-5 h-5 text-orange-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">সাপ্লায়ার ভেরিফিকেশন বিচারাধীন</h3>
-                    <p className="text-sm text-gray-500">অনুমোদনের অপেক্ষায় থাকা সাপ্লায়ার</p>
+                    <h3 className="font-semibold text-gray-900">to permanently delete your account Pending Supplier Verification</h3>
+                    <p className="text-sm text-gray-500">Suppliers Awaiting Approval</p>
                   </div>
                 </div>
                 <Link
                   href={route('admin.supplier-verification.index')}
                   className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
                 >
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
             </div>
@@ -265,7 +265,7 @@ export default function AdminDashboard({
                         href={supplier.url}
                         className="px-4 py-2 bg-indigo-50 text-indigo-600 text-sm font-medium rounded-lg hover:bg-indigo-100 transition"
                       >
-                        পর্যালোচনা
+                        Review
                       </Link>
                     </div>
                   </div>
@@ -275,8 +275,8 @@ export default function AdminDashboard({
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <FiCheckCircle className="w-8 h-8 text-green-600" />
                   </div>
-                  <p className="text-gray-600">কোন সাপ্লায়ার ভেরিফিকেশন বিচারাধীন নেই</p>
-                  <p className="text-sm text-gray-400 mt-1">সব সাপ্লায়ার পর্যালোচনা করা হয়েছে</p>
+                  <p className="text-gray-600">No supplier verification pending</p>
+                  <p className="text-sm text-gray-400 mt-1">All suppliers reviewed</p>
                 </div>
               )}
             </div>
@@ -291,15 +291,15 @@ export default function AdminDashboard({
                     <FiClock className="w-5 h-5 text-yellow-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">পণ্য অনুমোদন বিচারাধীন</h3>
-                    <p className="text-sm text-gray-500">পর্যালোচনার অপেক্ষায় থাকা নতুন পণ্য</p>
+                    <h3 className="font-semibold text-gray-900">Product approval pending</h3>
+                    <p className="text-sm text-gray-500">New products awaiting review</p>
                   </div>
                 </div>
                 <Link
                   href={route('admin.product-approval.index')}
                   className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
                 >
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
             </div>
@@ -315,7 +315,7 @@ export default function AdminDashboard({
                         <div>
                           <p className="font-medium text-gray-900">{product.name}</p>
                           <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
-                            <span>দ্বারা: {product.supplier}</span>
+                            <span>by: {product.supplier}</span>
                             <span>•</span>
                             <span>{formatCurrency(product.price)}</span>
                           </div>
@@ -326,7 +326,7 @@ export default function AdminDashboard({
                         href={product.url}
                         className="px-4 py-2 bg-indigo-50 text-indigo-600 text-sm font-medium rounded-lg hover:bg-indigo-100 transition"
                       >
-                        পর্যালোচনা
+                        Review
                       </Link>
                     </div>
                   </div>
@@ -336,8 +336,8 @@ export default function AdminDashboard({
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <FiCheckCircle className="w-8 h-8 text-green-600" />
                   </div>
-                  <p className="text-gray-600">কোন পণ্য অনুমোদন বিচারাধীন নেই</p>
-                  <p className="text-sm text-gray-400 mt-1">সব পণ্য পর্যালোচনা করা হয়েছে</p>
+                  <p className="text-gray-600">No product approval pending</p>
+                  <p className="text-sm text-gray-400 mt-1">All products have been reviewed by</p>
                 </div>
               )}
             </div>
@@ -348,7 +348,7 @@ export default function AdminDashboard({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Revenue Trend Chart - 30 days revenue trend */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="font-semibold text-gray-900 mb-4">আয়ের প্রবণতা (৩০ দিন)</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">Earnings Trend (30 days)</h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={charts?.revenue_trend}>
@@ -360,7 +360,7 @@ export default function AdminDashboard({
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
                   <XAxis dataKey="date" stroke="#6B7280" fontSize={12} />
-                  <YAxis stroke="#6B7280" fontSize={12} tickFormatter={(value) => `৳${value / 1000}K`} />
+                  <YAxis stroke="#6B7280" fontSize={12} tickFormatter={(value) => `$${value / 1000}K`} />
                   <Tooltip
                     formatter={(value) => formatCurrency(value)}
                     contentStyle={{
@@ -384,7 +384,7 @@ export default function AdminDashboard({
 
           {/* Order Trend Chart - 30 days order trend */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="font-semibold text-gray-900 mb-4">অর্ডারের প্রবণতা (৩০ দিন)</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">Order Trend (30 days)</h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={charts?.order_trend}>
@@ -417,15 +417,15 @@ export default function AdminDashboard({
                     <FiShoppingCart className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">সাম্প্রতিক অর্ডার</h3>
-                    <p className="text-sm text-gray-500">সর্বশেষ ১০টি অর্ডার</p>
+                    <h3 className="font-semibold text-gray-900">Recent Orders</h3>
+                    <p className="text-sm text-gray-500">Last 10 orders</p>
                   </div>
                 </div>
                 <Link
                   href={route('admin.orders.index')}
                   className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
                 >
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
             </div>
@@ -433,11 +433,11 @@ export default function AdminDashboard({
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">অর্ডার #</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ক্রেতা</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">পরিমাণ</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">পেমেন্ট</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order #</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Buyer</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Payment</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -459,18 +459,18 @@ export default function AdminDashboard({
                       </td>
                       <td className="px-6 py-4">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
-                          {order.status === 'pending' ? 'বিচারাধীন' :
-                            order.status === 'processing' ? 'প্রক্রিয়াধীন' :
-                              order.status === 'shipped' ? 'পাঠানো হয়েছে' :
-                                order.status === 'delivered' ? 'ডেলিভারি হয়েছে' :
-                                  order.status === 'cancelled' ? 'বাতিল' : order.status}
+                          {order.status === 'pending' ? 'Pending' :
+                            order.status === 'processing' ? 'In process' :
+                              order.status === 'shipped' ? 'has been sent' :
+                                order.status === 'delivered' ? 'Delivered' :
+                                  order.status === 'cancelled' ? 'cancel' : order.status}
                         </span>
                       </td>
                       <td className="px-6 py-4">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.payment_status)}`}>
-                          {order.payment_status === 'paid' ? 'পরিশোধিত' :
-                            order.payment_status === 'unpaid' ? 'অপরিশোধিত' :
-                              order.payment_status === 'pending' ? 'বিচারাধীন' : order.payment_status}
+                          {order.payment_status === 'paid' ? 'Paid' :
+                            order.payment_status === 'unpaid' ? 'Unrefined' :
+                              order.payment_status === 'pending' ? 'Pending' : order.payment_status}
                         </span>
                       </td>
                     </tr>
@@ -489,15 +489,15 @@ export default function AdminDashboard({
                     <FiFileText className="w-5 h-5 text-purple-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">সাম্প্রতিক RFQ</h3>
-                    <p className="text-sm text-gray-500">সর্বশেষ ১০টি কোটা অনুরোধ</p>
+                    <h3 className="font-semibold text-gray-900">Recent RFQ</h3>
+                    <p className="text-sm text-gray-500">Last 10 quota requests</p>
                   </div>
                 </div>
                 <Link
                   href={route('admin.rfqs.index')}
                   className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
                 >
-                  সব দেখুন →
+                  View All →
                 </Link>
               </div>
             </div>
@@ -506,10 +506,10 @@ export default function AdminDashboard({
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">RFQ #</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">শিরোনাম</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ক্রেতা</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">কোটা</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">স্ট্যাটাস</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Buyer</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quote</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -523,7 +523,7 @@ export default function AdminDashboard({
                       <td className="px-6 py-4">
                         <div>
                           <p className="text-sm font-medium text-gray-900">{rfq.title}</p>
-                          <p className="text-xs text-gray-500">পরিমাণ: {rfq.quantity}</p>
+                          <p className="text-xs text-gray-500">Amount: {rfq.quantity}</p>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
@@ -534,9 +534,9 @@ export default function AdminDashboard({
                       </td>
                       <td className="px-6 py-4">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(rfq.status)}`}>
-                          {rfq.status === 'open' ? 'খোলা' :
-                            rfq.status === 'quoted' ? 'কোটা প্রাপ্ত' :
-                              rfq.status === 'closed' ? 'বন্ধ' : rfq.status}
+                          {rfq.status === 'open' ? 'open' :
+                            rfq.status === 'quoted' ? 'Quota received' :
+                              rfq.status === 'closed' ? 'off' : rfq.status}
                         </span>
                       </td>
                     </tr>
@@ -555,7 +555,7 @@ export default function AdminDashboard({
                 <MdVerified className="w-5 h-5 text-indigo-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">ভেরিফাইড সাপ্লায়ার</p>
+                <p className="text-sm text-gray-500">Verified Supplier</p>
                 <p className="text-xl font-bold text-gray-900">{stats?.verified_suppliers || 0}</p>
               </div>
             </div>
@@ -566,7 +566,7 @@ export default function AdminDashboard({
                 <FiCheckCircle className="w-5 h-5 text-green-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">অনুমোদিত পণ্য</p>
+                <p className="text-sm text-gray-500">Approved Products</p>
                 <p className="text-xl font-bold text-gray-900">{stats?.approved_products || 0}</p>
               </div>
             </div>
@@ -577,7 +577,7 @@ export default function AdminDashboard({
                 <FiFileText className="w-5 h-5 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">খোলা RFQ</p>
+                <p className="text-sm text-gray-500">open RFQ</p>
                 <p className="text-xl font-bold text-gray-900">{stats?.open_rfqs || 0}</p>
               </div>
             </div>
@@ -588,7 +588,7 @@ export default function AdminDashboard({
                 <FiDollarSign className="w-5 h-5 text-purple-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-500">গড় অর্ডার মূল্য</p>
+                <p className="text-sm text-gray-500">Average order value</p>
                 <p className="text-xl font-bold text-gray-900">
                   {formatCurrency(stats?.average_order_value || 0)}
                 </p>
@@ -599,11 +599,11 @@ export default function AdminDashboard({
 
         {/* System Health - System status monitoring */}
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h3 className="font-semibold text-gray-900 mb-4">সিস্টেম হেলথ</h3>
+          <h3 className="font-semibold text-gray-900 mb-4">System Health</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-500">স্টোরেজ ব্যবহার</span>
+                <span className="text-sm text-gray-500">Storage Usage</span>
                 <span className="text-sm font-medium text-gray-900">{systemHealth?.storage_usage?.percentage}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
@@ -617,15 +617,15 @@ export default function AdminDashboard({
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">পেন্ডিং জব</p>
+              <p className="text-sm text-gray-500">Pending Job</p>
               <p className="text-xl font-bold text-gray-900">{systemHealth?.pending_jobs || 0}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">ফেইলড জব</p>
+              <p className="text-sm text-gray-500">Failed Job</p>
               <p className="text-xl font-bold text-gray-900">{systemHealth?.failed_jobs || 0}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">সর্বশেষ ব্যাকআপ</p>
+              <p className="text-sm text-gray-500">Last backup</p>
               <p className="text-xl font-bold text-gray-900">{systemHealth?.last_backup || 'N/A'}</p>
             </div>
           </div>
@@ -642,8 +642,8 @@ export default function AdminDashboard({
                 <FiUsers className="w-5 h-5 text-indigo-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">সাপ্লায়ার</p>
-                <p className="text-sm text-gray-500">সব সাপ্লায়ার ব্যবস্থাপনা</p>
+                <p className="font-medium text-gray-900">Supplier</p>
+                <p className="text-sm text-gray-500">All supplier management</p>
               </div>
             </div>
           </Link>
@@ -656,8 +656,8 @@ export default function AdminDashboard({
                 <FiPackage className="w-5 h-5 text-indigo-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">পণ্য</p>
-                <p className="text-sm text-gray-500">সব পণ্য ব্যবস্থাপনা</p>
+                <p className="font-medium text-gray-900">Product</p>
+                <p className="text-sm text-gray-500">All product management</p>
               </div>
             </div>
           </Link>
@@ -670,8 +670,8 @@ export default function AdminDashboard({
                 <FiShoppingCart className="w-5 h-5 text-indigo-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">অর্ডার</p>
-                <p className="text-sm text-gray-500">সব অর্ডার ব্যবস্থাপনা</p>
+                <p className="font-medium text-gray-900">Order</p>
+                <p className="text-sm text-gray-500">All order management</p>
               </div>
             </div>
           </Link>
@@ -685,7 +685,7 @@ export default function AdminDashboard({
               </div>
               <div>
                 <p className="font-medium text-gray-900">RFQ</p>
-                <p className="text-sm text-gray-500">সব RFQ ব্যবস্থাপনা</p>
+                <p className="text-sm text-gray-500">All RFQ management</p>
               </div>
             </div>
           </Link>

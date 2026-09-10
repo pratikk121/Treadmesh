@@ -45,17 +45,17 @@ export default function Index({ users, stats, filters }) {
 
   // Role options for dropdown
   const roleOptions = [
-    { value: '', label: 'সব ভূমিকা' },
-    { value: 'admin', label: 'অ্যাডমিন', icon: MdOutlineAdminPanelSettings, color: 'text-purple-600' },
-    { value: 'supplier', label: 'সাপ্লায়ার', icon: MdOutlineStorefront, color: 'text-blue-600' },
-    { value: 'buyer', label: 'ক্রেতা', icon: MdOutlineShoppingCart, color: 'text-green-600' },
+    { value: '', label: 'All roles' },
+    { value: 'admin', label: 'Admin', icon: MdOutlineAdminPanelSettings, color: 'text-purple-600' },
+    { value: 'supplier', label: 'Supplier', icon: MdOutlineStorefront, color: 'text-blue-600' },
+    { value: 'buyer', label: 'Buyer', icon: MdOutlineShoppingCart, color: 'text-green-600' },
   ];
 
   // Status options for dropdown
   const statusOptions = [
-    { value: '', label: 'সব স্ট্যাটাস' },
-    { value: 'true', label: 'সক্রিয়', color: 'bg-green-100 text-green-800' },
-    { value: 'false', label: 'নিষ্ক্রিয়', color: 'bg-red-100 text-red-800' },
+    { value: '', label: 'All statuses are' },
+    { value: 'true', label: 'Active', color: 'bg-green-100 text-green-800' },
+    { value: 'false', label: 'Inactive', color: 'bg-red-100 text-red-800' },
   ];
 
   // Handle search form submission
@@ -123,23 +123,23 @@ export default function Index({ users, stats, filters }) {
 
   // Handle toggle user status (activate/deactivate)
   const handleToggleStatus = (user) => {
-    const action = user.is_active ? 'নিষ্ক্রিয়' : 'সক্রিয়';
+    const action = user.is_active ? 'Inactive' : 'Active';
     Swal.fire({
-      title: `${user.is_active ? 'নিষ্ক্রিয়' : 'সক্রিয়'} করুন`,
-      text: `আপনি কি ${user.name} কে ${action} করতে চান?`,
+      title: `${user.is_active ? 'Inactive' : 'Active'} Do`,
+      text: `Are you ${user.name} who ${action} want to?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: user.is_active ? '#EF4444' : '#10B981',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: `হ্যাঁ, ${action} করুন`,
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: `according to income yes, ${action} Do`,
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.patch(route('admin.users.toggle-status', user.id), {}, {
           onSuccess: () => {
             Swal.fire({
-              title: 'সফল!',
-              text: `ব্যবহারকারী ${action} করা হয়েছে।`,
+              title: 'successful!',
+              text: `User ${action} Done।`,
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -153,21 +153,21 @@ export default function Index({ users, stats, filters }) {
   // Handle delete single user
   const handleDelete = (user) => {
     Swal.fire({
-      title: 'ব্যবহারকারী মুছুন',
-      text: `আপনি কি ${user.name} মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।`,
+      title: 'Delete user',
+      text: `Are you ${user.name} Want to delete? This action cannot be undone।`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'হ্যাঁ, মুছুন',
-      cancelButtonText: 'বাতিল'
+      confirmButtonText: 'Yes, delete',
+      cancelButtonText: 'cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.users.destroy', user.id), {
           onSuccess: () => {
             Swal.fire({
-              title: 'মুছে ফেলা হয়েছে!',
-              text: 'ব্যবহারকারী মুছে ফেলা হয়েছে।',
+              title: 'Deleted!',
+              text: 'User Deleted।',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -205,9 +205,9 @@ export default function Index({ users, stats, filters }) {
   // Get role badge with appropriate styling
   const getRoleBadge = (role) => {
     const badges = {
-      admin: { color: 'bg-purple-100 text-purple-800', icon: MdOutlineAdminPanelSettings, label: 'অ্যাডমিন' },
-      supplier: { color: 'bg-blue-100 text-blue-800', icon: MdOutlineStorefront, label: 'সাপ্লায়ার' },
-      buyer: { color: 'bg-green-100 text-green-800', icon: MdOutlineShoppingCart, label: 'ক্রেতা' },
+      admin: { color: 'bg-purple-100 text-purple-800', icon: MdOutlineAdminPanelSettings, label: 'Admin' },
+      supplier: { color: 'bg-blue-100 text-blue-800', icon: MdOutlineStorefront, label: 'Supplier' },
+      buyer: { color: 'bg-green-100 text-green-800', icon: MdOutlineShoppingCart, label: 'Buyer' },
     };
     const badge = badges[role] || badges.buyer;
     const Icon = badge.icon;
@@ -224,11 +224,11 @@ export default function Index({ users, stats, filters }) {
     return isActive
       ? <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
         <FiUserCheck className="w-3 h-3 mr-1" />
-        সক্রিয়
+        Active
       </span>
       : <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
         <FiUserX className="w-3 h-3 mr-1" />
-        নিষ্ক্রিয়
+        Inactive
       </span>;
   };
 
@@ -242,15 +242,15 @@ export default function Index({ users, stats, filters }) {
 
   return (
     <DashboardLayout>
-      <Head title="ব্যবহারকারী ব্যবস্থাপনা" />
+      <Head title="User Management" />
 
       <div className="space-y-6">
         {/* Header - Page title and action buttons */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">ব্যবহারকারী ব্যবস্থাপনা</h1>
+            <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
             <p className="text-sm text-gray-600 mt-1">
-              সকল ব্যবহারকারী, ভূমিকা এবং অনুমতি পরিচালনা করুন
+              Manage all users, roles and permissions
             </p>
           </div>
           <div className="flex gap-2">
@@ -259,14 +259,14 @@ export default function Index({ users, stats, filters }) {
               className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
             >
               <FiDownload className="w-4 h-4" />
-              <span>এক্সপোর্ট</span>
+              <span>Export</span>
             </button>
             <Link
               href={route('admin.users.create')}
               className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
             >
               <FiUserPlus className="w-4 h-4" />
-              <span>ব্যবহারকারী যোগ করুন</span>
+              <span>Add user</span>
             </Link>
           </div>
         </div>
@@ -276,7 +276,7 @@ export default function Index({ users, stats, filters }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট ব্যবহারকারী</p>
+                <p className="text-sm text-gray-500">Total users</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">{stats.total}</p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-lg">
@@ -288,7 +288,7 @@ export default function Index({ users, stats, filters }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">সক্রিয় ব্যবহারকারী</p>
+                <p className="text-sm text-gray-500">Active user</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{stats.active}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -300,7 +300,7 @@ export default function Index({ users, stats, filters }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">সাপ্লায়ার</p>
+                <p className="text-sm text-gray-500">Supplier</p>
                 <p className="text-2xl font-bold text-blue-600 mt-1">{stats.suppliers}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
@@ -312,7 +312,7 @@ export default function Index({ users, stats, filters }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">ক্রেতা</p>
+                <p className="text-sm text-gray-500">Buyer</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{stats.buyers}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -330,7 +330,7 @@ export default function Index({ users, stats, filters }) {
                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="নাম বা ইমেইল দ্বারা অনুসন্ধান..."
+                  placeholder="Search by name or email..."
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -361,7 +361,7 @@ export default function Index({ users, stats, filters }) {
                 className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
               >
                 <FiFilter className="w-4 h-4" />
-                <span>আরো ফিল্টার</span>
+                <span>More filters</span>
                 {activeFilterCount > 0 && (
                   <span className="ml-1 px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-xs">
                     {activeFilterCount}
@@ -373,7 +373,7 @@ export default function Index({ users, stats, filters }) {
                   onClick={handleReset}
                   className="px-4 py-2 text-gray-600 hover:text-gray-900"
                 >
-                  মুছুন
+                  delete
                 </button>
               )}
             </div>
@@ -383,7 +383,7 @@ export default function Index({ users, stats, filters }) {
           {selectedUsers.length > 0 && (
             <div className="mt-4 flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
               <span className="text-sm font-medium text-indigo-700">
-                {selectedUsers.length} টি ব্যবহারকারী নির্বাচিত
+                {selectedUsers.length} T user selected
               </span>
               <div className="relative">
                 <button
@@ -391,7 +391,7 @@ export default function Index({ users, stats, filters }) {
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
                   <FiMoreVertical className="w-4 h-4" />
-                  একাধিক কার্যক্রম
+                  Multiple activities
                 </button>
                 {bulkActionMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border z-10">
@@ -402,7 +402,7 @@ export default function Index({ users, stats, filters }) {
                       }}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      নির্বাচিত এক্সপোর্ট
+                      Selected export
                     </button>
                   </div>
                 )}
@@ -429,34 +429,34 @@ export default function Index({ users, stats, filters }) {
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('name')}
                   >
-                    ব্যবহারকারী <SortIndicator field="name" />
+                    User <SortIndicator field="name" />
                   </th>
                   <th
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('email')}
                   >
-                    ইমেইল <SortIndicator field="email" />
+                    Email <SortIndicator field="email" />
                   </th>
                   <th
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('role')}
                   >
-                    ভূমিকা <SortIndicator field="role" />
+                    Introduction <SortIndicator field="role" />
                   </th>
                   <th
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('is_active')}
                   >
-                    স্ট্যাটাস <SortIndicator field="is_active" />
+                    Status <SortIndicator field="is_active" />
                   </th>
                   <th
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
                     onClick={() => handleSort('created_at')}
                   >
-                    যোগদানের তারিখ <SortIndicator field="created_at" />
+                    Date of Joining <SortIndicator field="created_at" />
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    কার্যক্রম
+                    Activities
                   </th>
                 </tr>
               </thead>
@@ -502,14 +502,14 @@ export default function Index({ users, stats, filters }) {
                         <Link
                           href={route('admin.users.show', user.id)}
                           className="p-1 text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
-                          title="দেখুন"
+                          title="See"
                         >
                           <FiEye className="w-4 h-4" />
                         </Link>
                         <Link
                           href={route('admin.users.edit', user.id)}
                           className="p-1 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                          title="সম্পাদনা"
+                          title="editing"
                         >
                           <FiEdit2 className="w-4 h-4" />
                         </Link>
@@ -519,14 +519,14 @@ export default function Index({ users, stats, filters }) {
                             ? 'text-yellow-600 hover:bg-yellow-50'
                             : 'text-green-600 hover:bg-green-50'
                             }`}
-                          title={user.is_active ? 'নিষ্ক্রিয় করুন' : 'সক্রিয় করুন'}
+                          title={user.is_active ? 'Disable' : 'Activate'}
                         >
                           {user.is_active ? <FiUserX className="w-4 h-4" /> : <FiUserCheck className="w-4 h-4" />}
                         </button>
                         <button
                           onClick={() => handleDelete(user)}
                           className="p-1 text-red-600 hover:bg-red-50 rounded-lg transition"
-                          title="মুছুন"
+                          title="delete"
                         >
                           <FiTrash2 className="w-4 h-4" />
                         </button>
@@ -543,7 +543,7 @@ export default function Index({ users, stats, filters }) {
             <div className="px-6 py-4 border-t border-gray-100">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-500">
-                  মোট {users.total} টির মধ্যে {users.from} থেকে {users.to} দেখানো হচ্ছে
+                  total {users.total} of the {users.from} from {users.to} Showing
                 </p>
                 <div className="flex gap-2">
                   {users.links.map((link, index) => (
@@ -559,8 +559,8 @@ export default function Index({ users, stats, filters }) {
                         }`}
                       dangerouslySetInnerHTML={{
                         __html: link.label
-                          .replace('Previous', 'পূর্ববর্তী')
-                          .replace('Next', 'পরবর্তী')
+                          .replace('Previous', 'previous')
+                          .replace('Next', 'next')
                       }}
                     />
                   ))}
@@ -575,12 +575,12 @@ export default function Index({ users, stats, filters }) {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-900">আরো ফিল্টার</h3>
+                <h3 className="text-lg font-semibold text-gray-900">More filters</h3>
               </div>
               <div className="p-6 space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    তারিখ সীমা
+                    Date range
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -588,14 +588,14 @@ export default function Index({ users, stats, filters }) {
                       value={dateFrom}
                       onChange={(e) => setDateFrom(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="থেকে"
+                      placeholder="from"
                     />
                     <input
                       type="date"
                       value={dateTo}
                       onChange={(e) => setDateTo(e.target.value)}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="পর্যন্ত"
+                      placeholder="up to"
                     />
                   </div>
                 </div>
@@ -605,19 +605,19 @@ export default function Index({ users, stats, filters }) {
                   onClick={() => setShowFilterModal(false)}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900"
                 >
-                  বাতিল
+                  cancel
                 </button>
                 <button
                   onClick={handleReset}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg"
                 >
-                  রিসেট
+                  Reset
                 </button>
                 <button
                   onClick={handleFilter}
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
-                  ফিল্টার প্রয়োগ
+                  Apply Filter
                 </button>
               </div>
             </div>

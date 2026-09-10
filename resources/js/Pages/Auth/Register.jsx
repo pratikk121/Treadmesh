@@ -75,9 +75,9 @@ export default function Register() {
 
     // Get password strength text
     const getStrengthText = () => {
-        if (passwordStrength <= 2) return 'দুর্বল';
-        if (passwordStrength <= 4) return 'মাঝারি';
-        return 'শক্তিশালী';
+        if (passwordStrength <= 2) return 'Weak';
+        if (passwordStrength <= 4) return 'Medium';
+        return 'Strong';
     };
 
     // Next step
@@ -111,7 +111,7 @@ export default function Register() {
 
     return (
         <>
-            <Head title="নিবন্ধন" />
+            <Head title="Register" />
 
             <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
                 {/* Decorative elements - Background design */}
@@ -128,12 +128,12 @@ export default function Register() {
                             )}
                         </div>
                         <h2 className="text-3xl font-bold text-gray-800">
-                            {userType === 'buyer' ? 'ক্রেতা অ্যাকাউন্ট খুলুন' : 'সাপ্লায়ার হিসেবে নিবন্ধন'}
+                            {userType === 'buyer' ? 'Open Buyer Account' : 'Register as a supplier'}
                         </h2>
                         <p className="text-gray-600 mt-2">
                             {userType === 'buyer'
-                                ? 'আমাদের কমিউনিটিতে যোগ দিন এবং কেনাকাটা শুরু করুন'
-                                : 'আমাদের সাথে অংশীদার হোন এবং আপনার ব্যবসা বাড়ান'}
+                                ? '.Join our community and start shopping'
+                                : 'Partner with us and grow your business'}
                         </p>
                     </div>
 
@@ -148,7 +148,7 @@ export default function Register() {
                                 }`}
                         >
                             <FiUser className="w-5 h-5" />
-                            <span>ক্রেতা হিসেবে নিবন্ধন</span>
+                            <span>Register as a buyer</span>
                         </button>
                         <button
                             type="button"
@@ -159,7 +159,7 @@ export default function Register() {
                                 }`}
                         >
                             <BsTruck className="w-5 h-5" />
-                            <span>সাপ্লায়ার হিসেবে নিবন্ধন</span>
+                            <span>Register as a supplier</span>
                         </button>
                     </div>
 
@@ -177,7 +177,7 @@ export default function Register() {
                                                 {step > stepNumber ? '✓' : stepNumber}
                                             </div>
                                             <p className="text-xs mt-2 font-medium text-gray-600">
-                                                {stepNumber === 1 ? 'অ্যাকাউন্ট' : stepNumber === 2 ? 'কোম্পানি' : 'যাচাইকরণ'}
+                                                {stepNumber === 1 ? 'Account' : stepNumber === 2 ? 'Company' : 'Verification'}
                                             </p>
                                         </div>
                                     </div>
@@ -191,8 +191,8 @@ export default function Register() {
                         <div className="mb-6 p-3 bg-indigo-50 rounded-lg border border-indigo-100 flex items-center space-x-2">
                             <BsShieldCheck className="w-5 h-5 text-indigo-600" />
                             <span className="text-sm text-indigo-800">
-                                আপনি <span className="font-semibold">ক্রেতা</span> হিসেবে নিবন্ধন করছেন।
-                                আপনার অ্যাকাউন্ট সক্রিয় করার জন্য অনুমোদন প্রয়োজন হবে।
+                                You are <span className="font-semibold">Buyer</span> Registering as।
+                                Authorization will be required to activate your account।
                             </span>
                         </div>
                     )}
@@ -202,8 +202,8 @@ export default function Register() {
                         <div className="mb-6 p-3 bg-yellow-50 rounded-lg border border-yellow-100 flex items-center space-x-2">
                             <MdPending className="w-5 h-5 text-yellow-600" />
                             <span className="text-sm text-yellow-800">
-                                আপনার সাপ্লায়ার আবেদন আমাদের টিম দ্বারা পর্যালোচনা করা হবে।
-                                যাচাইকরণ সম্পন্ন হলে আপনি একটি ইমেইল পাবেন।
+                                Your supplier application will be reviewed by our team।
+                                You will receive an email once the verification is complete।
                             </span>
                         </div>
                     )}
@@ -221,7 +221,7 @@ export default function Register() {
                                     </div>
                                     <div className="ml-3">
                                         <h3 className="text-sm font-medium text-red-800">
-                                            নিচের ত্রুটিগুলো সংশোধন করুন:
+                                            Correct the following errors:
                                         </h3>
                                         <div className="mt-2 text-sm text-red-700">
                                             <ul className="list-disc list-inside">
@@ -240,12 +240,12 @@ export default function Register() {
                         {/* Step 1: Account Information (Common for both) */}
                         {(userType === 'buyer' || step === 1) && (
                             <div className="space-y-5">
-                                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">অ্যাকাউন্টের তথ্য</h3>
+                                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Account Information</h3>
 
                                 {/* Name Field */}
                                 <div>
                                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                                        সম্পূর্ণ নাম <span className="text-red-500">*</span>
+                                        Full name <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -258,7 +258,7 @@ export default function Register() {
                                             value={data.name}
                                             onChange={(e) => setData('name', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="রহিম মিয়া"
+                                            placeholder="Rahim Mia"
                                             autoComplete="name"
                                             autoFocus
                                             required
@@ -274,7 +274,7 @@ export default function Register() {
                                 {/* Email Field */}
                                 <div>
                                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                                        ইমেইল ঠিকানা <span className="text-red-500">*</span>
+                                        Email address <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -302,7 +302,7 @@ export default function Register() {
                                 {/* Password Field */}
                                 <div>
                                     <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                                        পাসওয়ার্ড <span className="text-red-500">*</span>
+                                        The password is <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -348,7 +348,7 @@ export default function Register() {
                                                 </span>
                                             </div>
                                             <p className="text-xs text-gray-500">
-                                                কমপক্ষে ৮ অক্ষর ব্যবহার করুন (অক্ষর, সংখ্যা ও বিশেষ চিহ্ন সহ)
+                                                Use at least 8 characters (letters, numbers and the product name with the special symbol)
                                             </p>
                                         </div>
                                     )}
@@ -363,7 +363,7 @@ export default function Register() {
                                 {/* Confirm Password Field */}
                                 <div>
                                     <label htmlFor="password_confirmation" className="block text-sm font-medium text-gray-700 mb-1">
-                                        পাসওয়ার্ড নিশ্চিত করুন <span className="text-red-500">*</span>
+                                        Confirm password <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -396,8 +396,8 @@ export default function Register() {
                                             : 'text-red-600'
                                             }`}>
                                             {data.password === data.password_confirmation
-                                                ? '✓ পাসওয়ার্ড মিলেছে'
-                                                : '✗ পাসওয়ার্ড মিলেনি'}
+                                                ? '✓ Password Matched'
+                                                : '✗ Password not found'}
                                         </p>
                                     )}
 
@@ -413,12 +413,12 @@ export default function Register() {
                         {/* Step 2: Company Information (Supplier only) */}
                         {userType === 'supplier' && step === 2 && (
                             <div className="space-y-5">
-                                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">কোম্পানির তথ্য</h3>
+                                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Company Information</h3>
 
                                 {/* Company Name */}
                                 <div>
                                     <label htmlFor="company_name" className="block text-sm font-medium text-gray-700 mb-1">
-                                        কোম্পানির নাম <span className="text-red-500">*</span>
+                                        Company Name <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -431,7 +431,7 @@ export default function Register() {
                                             value={data.company_name}
                                             onChange={(e) => setData('company_name', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="আপনার কোম্পানির নাম"
+                                            placeholder="Your company name is"
                                             required
                                         />
                                     </div>
@@ -443,7 +443,7 @@ export default function Register() {
                                 {/* Trade License Number */}
                                 <div>
                                     <label htmlFor="trade_license_number" className="block text-sm font-medium text-gray-700 mb-1">
-                                        ট্রেড লাইসেন্স নম্বর <span className="text-red-500">*</span>
+                                        Trade License No. <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -456,7 +456,7 @@ export default function Register() {
                                             value={data.trade_license_number}
                                             onChange={(e) => setData('trade_license_number', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="TR-১২৩৪৫-২০২৪"
+                                            placeholder="TR-12345-2024"
                                             required
                                         />
                                     </div>
@@ -468,7 +468,7 @@ export default function Register() {
                                 {/* Company Phone */}
                                 <div>
                                     <label htmlFor="company_phone" className="block text-sm font-medium text-gray-700 mb-1">
-                                        কোম্পানির ফোন <span className="text-red-500">*</span>
+                                        Company Phone <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -481,7 +481,7 @@ export default function Register() {
                                             value={data.company_phone}
                                             onChange={(e) => setData('company_phone', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="০২-৫৫৫১২৩৪"
+                                            placeholder="02-5551234"
                                             required
                                         />
                                     </div>
@@ -493,7 +493,7 @@ export default function Register() {
                                 {/* Company Email */}
                                 <div>
                                     <label htmlFor="company_email" className="block text-sm font-medium text-gray-700 mb-1">
-                                        কোম্পানির ইমেইল <span className="text-red-500">*</span>
+                                        Company Email <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -520,12 +520,12 @@ export default function Register() {
                         {/* Step 3: Address & Verification (Supplier only) */}
                         {userType === 'supplier' && step === 3 && (
                             <div className="space-y-5">
-                                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">ঠিকানা ও যাচাইকরণ</h3>
+                                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Address and Verification</h3>
 
                                 {/* Company Address */}
                                 <div>
                                     <label htmlFor="company_address" className="block text-sm font-medium text-gray-700 mb-1">
-                                        কোম্পানির ঠিকানা <span className="text-red-500">*</span>
+                                        Company Address <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute top-3 left-0 pl-3 flex items-start pointer-events-none">
@@ -538,7 +538,7 @@ export default function Register() {
                                             onChange={(e) => setData('company_address', e.target.value)}
                                             rows="3"
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="১২৩ গুলশান এভিনিউ, ঢাকা"
+                                            placeholder="123 Gulshan Avenue, Dhaka"
                                             required
                                         ></textarea>
                                     </div>
@@ -550,7 +550,7 @@ export default function Register() {
                                 {/* City */}
                                 <div>
                                     <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
-                                        শহর <span className="text-red-500">*</span>
+                                        City <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -563,7 +563,7 @@ export default function Register() {
                                             value={data.city}
                                             onChange={(e) => setData('city', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="ঢাকা"
+                                            placeholder="Dhaka"
                                             required
                                         />
                                     </div>
@@ -580,15 +580,15 @@ export default function Register() {
                                     <div className="flex items-start space-x-3">
                                         <FiAward className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                                         <div>
-                                            <h4 className="font-semibold text-blue-800">যাচাইকরণ প্রক্রিয়া</h4>
+                                            <h4 className="font-semibold text-blue-800">Verification Process</h4>
                                             <p className="text-sm text-blue-600 mt-1">
-                                                আপনার সাপ্লায়ার অ্যাকাউন্ট ২-৩ কার্যদিবসের মধ্যে পর্যালোচনা করা হবে।
-                                                যাচাইকরণ সম্পন্ন হলে আপনি একটি ইমেইল নিশ্চিতকরণ পাবেন।
+                                                Your supplier account will be reviewed within 2-3 business days।
+                                                Once verification is complete you will receive an email confirmation।
                                             </p>
                                             <ul className="mt-2 text-sm text-blue-600 list-disc list-inside">
-                                                <li>ট্রেড লাইসেন্স যাচাইকরণ</li>
-                                                <li>কোম্পানির ঠিকানা নিশ্চিতকরণ</li>
-                                                <li>ব্যবসায়িক ইমেইল ভ্যালিডেশন</li>
+                                                <li>Trade License Verification</li>
+                                                <li>Company Address Confirmation</li>
+                                                <li>Business email validation</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -607,15 +607,15 @@ export default function Register() {
                                     required
                                 />
                                 <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
-                                    আমি{' '}
+                                    Me{' '}
                                     <Link href="/terms" className="text-indigo-600 hover:text-indigo-800 font-medium">
-                                        সেবার শর্তাবলী
+                                        Terms of Service
                                     </Link>{' '}
-                                    এবং{' '}
+                                    and{' '}
                                     <Link href="/privacy" className="text-indigo-600 hover:text-indigo-800 font-medium">
-                                        গোপনীয়তা নীতি
+                                        Privacy Policy
                                     </Link>{' '}
-                                    মেনে নিচ্ছি
+                                    Accepting
                                 </label>
                             </div>
                         )}
@@ -629,7 +629,7 @@ export default function Register() {
                                     className="flex items-center space-x-2 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition duration-200"
                                 >
                                     <FiArrowLeft className="w-5 h-5" />
-                                    <span>পূর্ববর্তী</span>
+                                    <span>previous</span>
                                 </button>
                             )}
 
@@ -645,16 +645,16 @@ export default function Register() {
                                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                             </svg>
-                                            প্রসেসিং...
+                                            Processing...
                                         </span>
                                     ) : (
                                         <>
                                             <span>
                                                 {userType === 'buyer'
-                                                    ? 'অ্যাকাউন্ট খুলুন'
+                                                    ? 'Open Account'
                                                     : step === 3
-                                                        ? 'আবেদন জমা দিন'
-                                                        : 'পরবর্তী'}
+                                                        ? 'Submit application'
+                                                        : 'next'}
                                             </span>
                                             {userType === 'supplier' && step < 3 && <FiArrowRight className="w-5 h-5" />}
                                         </>
@@ -666,12 +666,12 @@ export default function Register() {
                         {/* Login Link */}
                         <div className="text-center mt-6">
                             <p className="text-sm text-gray-600">
-                                ইতিমধ্যে অ্যাকাউন্ট আছে?{' '}
+                                Already have account?{' '}
                                 <Link
                                     href={route('login')}
                                     className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
                                 >
-                                    এখানে সাইন ইন করুন
+                                    Sign in here
                                 </Link>
                             </p>
                         </div>
@@ -679,8 +679,8 @@ export default function Register() {
                         {/* Account activation notice */}
                         {userType === 'buyer' && (
                             <div className="text-center text-xs text-gray-500 mt-4 border-t pt-4">
-                                <p>অ্যাকাউন্ট খোলার মাধ্যমে আপনি ক্রেতা ভূমিকা পাবেন।</p>
-                                <p className="mt-1">আপনার অ্যাকাউন্ট অ্যাডমিনিস্ট্রেটর দ্বারা সক্রিয় করা প্রয়োজন হবে।</p>
+                                <p>By opening the account you will get the buyer role।</p>
+                                <p className="mt-1">Your account will need to be activated by an administrator।</p>
                             </div>
                         )}
                     </form>

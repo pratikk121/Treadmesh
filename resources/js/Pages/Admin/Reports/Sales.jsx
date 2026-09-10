@@ -94,25 +94,25 @@ export default function Sales({ salesData, period, dateRange }) {
 
   // Period options for dropdown
   const periodOptions = [
-    { value: 'daily', label: 'দৈনিক' },
-    { value: 'weekly', label: 'সাপ্তাহিক' },
-    { value: 'monthly', label: 'মাসিক' },
-    { value: 'quarterly', label: 'ত্রৈমাসিক' },
-    { value: 'yearly', label: 'বার্ষিক' },
-    { value: 'custom', label: 'কাস্টম রেঞ্জ' },
+    { value: 'daily', label: 'Daily' },
+    { value: 'weekly', label: 'Weekly' },
+    { value: 'monthly', label: 'Monthly' },
+    { value: 'quarterly', label: 'Quarterly' },
+    { value: 'yearly', label: 'Annually' },
+    { value: 'custom', label: 'Custom Range' },
   ];
 
   return (
     <DashboardLayout>
-      <Head title="বিক্রয় রিপোর্ট" />
+      <Head title="Sales report" />
 
       <div className="space-y-6">
         {/* Header - Page title, period selector and export button */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">বিক্রয় রিপোর্ট</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Sales report</h1>
             <p className="text-sm text-gray-600 mt-1">
-              বিক্রয় কর্মক্ষমতা ও আয়ের প্রবণতা বিশ্লেষণ করুন
+              Analyze Sales Performance & Revenue Trends
             </p>
           </div>
           <div className="flex gap-2">
@@ -135,7 +135,7 @@ export default function Sales({ salesData, period, dateRange }) {
               className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
             >
               <FiDownload className="w-4 h-4" />
-              <span>এক্সপোর্ট</span>
+              <span>Export</span>
             </button>
           </div>
         </div>
@@ -145,7 +145,7 @@ export default function Sales({ salesData, period, dateRange }) {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
             <div className="flex items-center gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">থেকে</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">from</label>
                 <input
                   type="date"
                   value={customDateRange.start}
@@ -154,7 +154,7 @@ export default function Sales({ salesData, period, dateRange }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">পর্যন্ত</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">up to</label>
                 <input
                   type="date"
                   value={customDateRange.end}
@@ -166,13 +166,13 @@ export default function Sales({ salesData, period, dateRange }) {
                 onClick={handleCustomDateApply}
                 className="mt-6 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
               >
-                প্রয়োগ
+                application
               </button>
               <button
                 onClick={() => setShowDatePicker(false)}
                 className="mt-6 px-4 py-2 text-gray-600 hover:text-gray-900"
               >
-                বাতিল
+                cancel
               </button>
             </div>
           </div>
@@ -182,7 +182,7 @@ export default function Sales({ salesData, period, dateRange }) {
         <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 flex items-center gap-2 text-indigo-700">
           <FiCalendar className="w-4 h-4" />
           <span className="text-sm font-medium">
-            রিপোর্ট সময়কাল: {new Date(dateRange.start).toLocaleDateString('bn-BD')} - {new Date(dateRange.end).toLocaleDateString('bn-BD')}
+            Report period: {new Date(dateRange.start).toLocaleDateString('bn-BD')} - {new Date(dateRange.end).toLocaleDateString('bn-BD')}
           </span>
         </div>
 
@@ -191,7 +191,7 @@ export default function Sales({ salesData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট আয়</p>
+                <p className="text-sm text-gray-500">Total income is</p>
                 <p className="text-2xl font-bold text-green-600 mt-1">{formatCurrency(overview.total_revenue)}</p>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
@@ -203,7 +203,7 @@ export default function Sales({ salesData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">মোট অর্ডার</p>
+                <p className="text-sm text-gray-500">Total order</p>
                 <p className="text-2xl font-bold text-indigo-600 mt-1">{formatNumber(overview.total_orders)}</p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-lg">
@@ -215,7 +215,7 @@ export default function Sales({ salesData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">গড় অর্ডার মূল্য</p>
+                <p className="text-sm text-gray-500">Average order value</p>
                 <p className="text-2xl font-bold text-blue-600 mt-1">{formatCurrency(overview.average_order_value)}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
@@ -227,7 +227,7 @@ export default function Sales({ salesData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">রূপান্তর হার</p>
+                <p className="text-sm text-gray-500">The conversion rate is</p>
                 <p className="text-2xl font-bold text-purple-600 mt-1">{overview.conversion_rate}%</p>
               </div>
               <div className="p-3 bg-purple-100 rounded-lg">
@@ -243,7 +243,7 @@ export default function Sales({ salesData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 lg:col-span-2">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiTrendingUp className="w-5 h-5 text-indigo-600" />
-              আয়ের প্রবণতা
+              Revenue Trends
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -266,9 +266,9 @@ export default function Sales({ salesData, period, dateRange }) {
                     stroke="#4F46E5"
                     fillOpacity={1}
                     fill="url(#revenueGradient)"
-                    name="আয়"
+                    name="Income"
                   />
-                  <Bar yAxisId="left" dataKey="orders" fill="#10B981" name="অর্ডার" />
+                  <Bar yAxisId="left" dataKey="orders" fill="#10B981" name="Order" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -278,7 +278,7 @@ export default function Sales({ salesData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MdOutlineCategory className="w-5 h-5 text-indigo-600" />
-              ক্যাটাগরি অনুযায়ী বিক্রয়
+              Category wise sales
             </h3>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -308,7 +308,7 @@ export default function Sales({ salesData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <BsBuilding className="w-5 h-5 text-indigo-600" />
-              আয় অনুযায়ী শীর্ষ সাপ্লায়ার
+              Top Supplier by Revenue
             </h3>
             <div className="space-y-4">
               {by_supplier.map((supplier, index) => (
@@ -319,7 +319,7 @@ export default function Sales({ salesData, period, dateRange }) {
                     </span>
                     <div>
                       <p className="text-sm font-medium text-gray-900">{supplier.supplier_name}</p>
-                      <p className="text-xs text-gray-500">{supplier.order_count} টি অর্ডার</p>
+                      <p className="text-xs text-gray-500">{supplier.order_count} t order</p>
                     </div>
                   </div>
                   <span className="text-sm font-medium text-indigo-600">
@@ -334,16 +334,16 @@ export default function Sales({ salesData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 lg:col-span-2">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiBarChart2 className="w-5 h-5 text-indigo-600" />
-              সময়কালভিত্তিক কর্মক্ষমতা
+              Performance over time
             </h3>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="bg-gray-50">
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">সময়কাল</th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">অর্ডার</th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">আয়</th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">গড় অর্ডার মূল্য</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Duration</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Order</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Income</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Average order value</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -364,17 +364,17 @@ export default function Sales({ salesData, period, dateRange }) {
         {/* Category Breakdown Table - Detailed category analysis */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900">ক্যাটাগরি কর্মক্ষমতার বিবরণ</h3>
+            <h3 className="font-semibold text-gray-900">Category Performance Description</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ক্যাটাগরি</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">অর্ডার</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">বিক্রিত পরিমাণ</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">আয়</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">মোটের শতাংশ</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Order</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Amount sold is</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Income</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Percentage of total</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">

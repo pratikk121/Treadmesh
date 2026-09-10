@@ -31,7 +31,7 @@ export default function Waiting({ user, supplier }) {
       title: title,
       text: message,
       confirmButtonColor: '#4f46e5',
-      confirmButtonText: 'ঠিক আছে',
+      confirmButtonText: 'OK',
       background: '#ffffff',
       backdrop: `
                 rgba(0,0,0,0.4)
@@ -50,8 +50,8 @@ export default function Waiting({ user, supplier }) {
       onSuccess: () => {
         showSwal(
           'info',
-          '📧 ডেমো মোড',
-          'এটি একটি মক ইমেইল প্রম্পট। বাস্তব অ্যাপ্লিকেশনে, অ্যাডমিনের কাছে একটি ইমেইল পাঠানো হবে। কোনো প্রকৃত ইমেইল পাঠানো হয়নি।'
+          '📧 Demo mode',
+          'This is a mock email prompt. In real applications, an email will be sent to the admin. No actual email was sent।'
         );
         setData('message', '');
         setShowMessage(false);
@@ -59,8 +59,8 @@ export default function Waiting({ user, supplier }) {
       onError: () => {
         showSwal(
           'error',
-          'ত্রুটি',
-          'কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন।'
+          'Error',
+          'There are some problems. Try again।'
         );
       }
     });
@@ -68,7 +68,7 @@ export default function Waiting({ user, supplier }) {
 
   return (
     <>
-      <Head title="অনুমোদনের অপেক্ষায়" />
+      <Head title="Awaiting Approval" />
 
       <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
         {/* Decorative elements - Background design */}
@@ -80,8 +80,8 @@ export default function Waiting({ user, supplier }) {
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mb-4 shadow-lg animate-pulse">
               <IoMdTime className="w-10 h-10 text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-800">আবেদন বিচারাধীন</h2>
-            <p className="text-gray-600 mt-2">আপনার ধৈর্যের জন্য ধন্যবাদ</p>
+            <h2 className="text-3xl font-bold text-gray-800">Application Pending</h2>
+            <p className="text-gray-600 mt-2">Thanks for your patience</p>
           </div>
 
           {/* Status Banner */}
@@ -89,9 +89,9 @@ export default function Waiting({ user, supplier }) {
             <div className="flex items-center space-x-3">
               <BsHourglassSplit className="w-5 h-5 text-amber-600 flex-shrink-0 animate-spin-slow" />
               <div>
-                <h3 className="font-semibold text-amber-800">অ্যাকাউন্ট পর্যালোচনাধীন</h3>
+                <h3 className="font-semibold text-amber-800">Account under review</h3>
                 <p className="text-xs text-amber-700 mt-0.5">
-                  আপনার অ্যাকাউন্ট আমাদের অ্যাডমিনিস্ট্রেটর দ্বারা পর্যালোচনা করা হচ্ছে
+                  Your account is being reviewed by our administrator
                 </p>
               </div>
             </div>
@@ -102,7 +102,7 @@ export default function Waiting({ user, supplier }) {
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-3">
               <MdError className="w-5 h-5 text-red-600 flex-shrink-0" />
               <span className="text-sm text-red-700">
-                {errors.message || 'কিছু সমস্যা হয়েছে। আবার চেষ্টা করুন।'}
+                {errors.message || 'There are some problems. Try again।'}
               </span>
             </div>
           )}
@@ -116,33 +116,33 @@ export default function Waiting({ user, supplier }) {
                   <MdPendingActions className="w-5 h-5 text-indigo-600" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-2">অ্যাকাউন্টের বিবরণ</h4>
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">Account details</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-500">নাম:</span>
+                      <span className="text-gray-500">name:</span>
                       <span className="font-medium text-gray-800">{user?.name}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">ইমেইল:</span>
+                      <span className="text-gray-500">Email:</span>
                       <span className="font-medium text-gray-800">{user?.email}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">ভূমিকা:</span>
+                      <span className="text-gray-500">Introduction:</span>
                       <span className="font-medium capitalize text-gray-800">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs ${user?.role === 'supplier' ? 'bg-purple-100 text-purple-800' :
                           user?.role === 'buyer' ? 'bg-pink-100 text-pink-800' :
                             'bg-indigo-100 text-indigo-800'
                           }`}>
-                          {user?.role === 'supplier' ? 'সাপ্লায়ার' :
-                            user?.role === 'buyer' ? 'ক্রেতা' : user?.role}
+                          {user?.role === 'supplier' ? 'Supplier' :
+                            user?.role === 'buyer' ? 'Buyer' : user?.role}
                         </span>
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">স্ট্যাটাস:</span>
+                      <span className="text-gray-500">Status:</span>
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">
                         <span className="w-1.5 h-1.5 bg-yellow-600 rounded-full animate-pulse mr-1"></span>
-                        অনুমোদন বিচারাধীন
+                        Approval pending
                       </span>
                     </div>
                   </div>
@@ -158,20 +158,20 @@ export default function Waiting({ user, supplier }) {
                     <BsBuilding className="w-5 h-5 text-purple-600" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-sm font-semibold text-gray-700 mb-2">কোম্পানির বিবরণ</h4>
+                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Company Details</h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-gray-500">কোম্পানি:</span>
+                        <span className="text-gray-500">Company:</span>
                         <span className="font-medium text-gray-800">{supplier.company_name}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-500">শহর:</span>
+                        <span className="text-gray-500">City:</span>
                         <span className="font-medium text-gray-800">{supplier.city}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-500">ভেরিফিকেশন:</span>
+                        <span className="text-gray-500">Verification:</span>
                         <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">
-                          {supplier.verification_status === 'pending' ? 'বিচারাধীন' : supplier.verification_status}
+                          {supplier.verification_status === 'pending' ? 'Pending' : supplier.verification_status}
                         </span>
                       </div>
                     </div>
@@ -183,24 +183,24 @@ export default function Waiting({ user, supplier }) {
             {/* What to Expect */}
             <div className="bg-gray-50 rounded-lg p-4 space-y-3">
               <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center">
-                <FiClock className="mr-1" /> কী আশা করবেন
+                <FiClock className="mr-1" /> what to expect
               </h4>
               <ul className="text-xs text-gray-600 space-y-2">
                 <li className="flex items-start">
                   <span className="text-green-500 mr-2">✓</span>
-                  অ্যাডমিন ২৪-৪৮ ঘন্টার মধ্যে আপনার অ্যাকাউন্ট পর্যালোচনা করবে
+                  Admin will review your account within 24-48 hours
                 </li>
                 <li className="flex items-start">
                   <span className="text-green-500 mr-2">✓</span>
-                  অনুমোদনের পর আপনি ইমেইল নোটিফিকেশন পাবেন
+                  After approval you will receive email notification
                 </li>
                 <li className="flex items-start">
                   <span className="text-green-500 mr-2">✓</span>
-                  অনুমোদনের পর আপনার ড্যাশবোর্ডে সম্পূর্ণ অ্যাক্সেস পাবেন
+                  After approval you will get full access to your dashboard
                 </li>
                 <li className="flex items-start">
                   <span className="text-green-500 mr-2">✓</span>
-                  অপেক্ষার সময় আপনি অ্যাডমিনের সাথে যোগাযোগ করতে পারেন (ডেমো ফিচার)
+                  While waiting you can contact admin (demo feature)
                 </li>
               </ul>
             </div>
@@ -212,16 +212,16 @@ export default function Waiting({ user, supplier }) {
                 className="w-full flex items-center justify-center px-4 py-3 border-2 border-dashed border-indigo-300 rounded-lg text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
               >
                 <FiMail className="mr-2 h-4 w-4" />
-                অ্যাডমিনের সাথে যোগাযোগ (ডেমো)
+                Contact Admin (Demo)
               </button>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4 border-t border-gray-200 pt-4">
-                <h4 className="text-sm font-medium text-gray-700">অ্যাডমিনকে বার্তা পাঠান</h4>
+                <h4 className="text-sm font-medium text-gray-700">Send message to admin</h4>
 
                 {/* Email Field */}
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    আপনার ইমেইল
+                    Your email is
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -242,7 +242,7 @@ export default function Waiting({ user, supplier }) {
                 {/* Message Field */}
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                    বার্তা
+                    Message
                   </label>
                   <textarea
                     id="message"
@@ -250,7 +250,7 @@ export default function Waiting({ user, supplier }) {
                     onChange={e => setData('message', e.target.value)}
                     rows={3}
                     className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                    placeholder="আপনার বার্তা এখানে লিখুন..."
+                    placeholder="Enter your message here..."
                     required
                   />
                 </div>
@@ -270,7 +270,7 @@ export default function Waiting({ user, supplier }) {
                         </svg>
                       </span>
                     ) : (
-                      'বার্তা পাঠান'
+                      'send message'
                     )}
                   </button>
                   <button
@@ -278,7 +278,7 @@ export default function Waiting({ user, supplier }) {
                     onClick={() => setShowMessage(false)}
                     className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
                   >
-                    বাতিল
+                    cancel
                   </button>
                 </div>
 
@@ -287,8 +287,8 @@ export default function Waiting({ user, supplier }) {
                   <p className="text-xs text-blue-700 flex items-start">
                     <BsShieldCheck className="w-4 h-4 text-blue-500 mr-1 flex-shrink-0 mt-0.5" />
                     <span>
-                      <span className="font-medium">ডেমো মোড:</span> এটি একটি ডেমোনস্ট্রেশন ফিচার।
-                      কোনো প্রকৃত ইমেইল পাঠানো হবে না। সেন্ড বাটনে ক্লিক করলে একটি SweetAlert কনফার্মেশন দেখাবে।
+                      <span className="font-medium">Demo mode:</span> This is a demonstration feature।
+                      No actual email will be sent. Clicking the send button will display a SweetAlert confirmation।
                     </span>
                   </p>
                 </div>
@@ -298,12 +298,12 @@ export default function Waiting({ user, supplier }) {
             {/* Quick Stats */}
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-white p-3 rounded-lg border border-gray-200 text-center">
-                <div className="text-2xl font-bold text-indigo-600">২৪-৪৮</div>
-                <div className="text-xs text-gray-500">ঘন্টা পর্যালোচনা সময়</div>
+                <div className="text-2xl font-bold text-indigo-600">24-48</div>
+                <div className="text-xs text-gray-500">Hours review time</div>
               </div>
               <div className="bg-white p-3 rounded-lg border border-gray-200 text-center">
-                <div className="text-2xl font-bold text-green-600">১০০%</div>
-                <div className="text-xs text-gray-500">নিরাপদ প্রক্রিয়া</div>
+                <div className="text-2xl font-bold text-green-600">100%</div>
+                <div className="text-xs text-gray-500">Safe Process</div>
               </div>
             </div>
 
@@ -315,12 +315,12 @@ export default function Waiting({ user, supplier }) {
               className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
             >
               <FiLogOut className="mr-2 h-4 w-4" />
-              লগ আউট
+              Log out
             </Link>
 
             {/* Support Text */}
             <div className="text-center text-xs text-gray-500">
-              <p>তাৎক্ষণিক সহায়তা প্রয়োজন? সাপোর্টে যোগাযোগ করুন</p>
+              <p>Need immediate assistance? Contact support</p>
               <p className="mt-1 text-indigo-600">support@example.com</p>
             </div>
           </div>

@@ -60,7 +60,7 @@ export default function Conversation() {
 
   return (
     <DashboardLayout>
-      <Head title={`${otherUser?.name || 'বার্তা'} - কথোপকথন`} />
+      <Head title={`${otherUser?.name || 'Message'} - the conversation`} />
 
       <div className="space-y-4">
         {/* Header - Back button, conversation title and RFQ info */}
@@ -70,10 +70,10 @@ export default function Conversation() {
             className="inline-flex items-center text-sm text-indigo-600 hover:text-indigo-800"
           >
             <FiArrowLeft className="mr-1" />
-            বার্তায় ফিরে যান
+            Return to message
           </Link>
           <h2 className="text-xl font-semibold text-gray-800">
-            {otherUser?.name || 'কথোপকথন'}
+            {otherUser?.name || 'the conversation'}
           </h2>
           {rfq && (
             <span className="text-sm text-gray-500">
@@ -89,14 +89,14 @@ export default function Conversation() {
             messageList.map((message) => (
               <div key={message.id} className="text-sm text-gray-700">
                 <span className="font-medium">
-                  {message.sender?.name || 'ব্যবহারকারী'}:
+                  {message.sender?.name || 'User'}:
                 </span>{' '}
                 {message.message}
               </div>
             ))
           ) : (
             // Empty state - No messages yet
-            <div className="text-gray-500 text-sm">কোনো বার্তা নেই।</div>
+            <div className="text-gray-500 text-sm">No message।</div>
           )}
         </div>
       </div>

@@ -144,15 +144,15 @@ export default function ProductsAnalytics({
 
   return (
     <DashboardLayout>
-      <Head title="পণ্য বিশ্লেষণ" />
+      <Head title="Product analysis" />
 
       <div className="space-y-6">
         {/* Header - Page title and export button */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">পণ্য বিশ্লেষণ</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Product analysis</h1>
             <p className="text-sm text-gray-600 mt-1">
-              আপনার পণ্যের কর্মক্ষমতা এবং ইনভেন্টরি মেট্রিক্স বিশ্লেষণ করুন
+              Analyze your product performance and inventory metrics
             </p>
           </div>
           <button
@@ -160,7 +160,7 @@ export default function ProductsAnalytics({
             className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
           >
             <FiDownload className="w-4 h-4" />
-            <span>রিপোর্ট এক্সপোর্ট</span>
+            <span>Report Export</span>
           </button>
         </div>
 
@@ -168,30 +168,30 @@ export default function ProductsAnalytics({
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <FiCalendar className="w-4 h-4" />
-            <span>সময়কাল: {formatDateLabel(dateRange.start)} - {formatDateLabel(dateRange.end)}</span>
+            <span>Duration: {formatDateLabel(dateRange.start)} - {formatDateLabel(dateRange.end)}</span>
           </div>
         </div>
 
         {/* Inventory Metrics - Key inventory statistics */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">মোট পণ্য</p>
+            <p className="text-sm text-gray-500">Total Products</p>
             <p className="text-2xl font-bold text-gray-900">{formatNumber(inventoryMetrics.total_products)}</p>
           </div>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">সক্রিয় পণ্য</p>
+            <p className="text-sm text-gray-500">Active product</p>
             <p className="text-2xl font-bold text-green-600">{formatNumber(inventoryMetrics.active_products)}</p>
           </div>
           <div className="bg-orange-50 rounded-xl shadow-sm border border-orange-100 p-6">
-            <p className="text-sm text-orange-600">স্টক কম</p>
+            <p className="text-sm text-orange-600">Stock low</p>
             <p className="text-2xl font-bold text-orange-700">{formatNumber(inventoryMetrics.low_stock)}</p>
           </div>
           <div className="bg-red-50 rounded-xl shadow-sm border border-red-100 p-6">
-            <p className="text-sm text-red-600">স্টক নেই</p>
+            <p className="text-sm text-red-600">Out of Stock</p>
             <p className="text-2xl font-bold text-red-700">{formatNumber(inventoryMetrics.out_of_stock)}</p>
           </div>
           <div className="bg-indigo-50 rounded-xl shadow-sm border border-indigo-100 p-6">
-            <p className="text-sm text-indigo-600">স্টক মূল্য</p>
+            <p className="text-sm text-indigo-600">Stock price</p>
             <p className="text-2xl font-bold text-indigo-700">{formatCurrency(inventoryMetrics.total_stock_value)}</p>
           </div>
         </div>
@@ -200,7 +200,7 @@ export default function ProductsAnalytics({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Category Performance Pie Chart */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">ক্যাটাগরি কর্মক্ষমতা</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Category performance</h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
@@ -237,7 +237,7 @@ export default function ProductsAnalytics({
 
           {/* Category Breakdown Stats */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">ক্যাটাগরি বিশ্লেষণ</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Category Analysis</h2>
             <div className="space-y-4">
               {categoryData.map((item) => (
                 <div key={item.name}>
@@ -246,9 +246,9 @@ export default function ProductsAnalytics({
                     <span className="font-bold text-indigo-600">{formatCurrency(item.revenue)}</span>
                   </div>
                   <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <span>{formatNumber(item.quantity)} ইউনিট বিক্রিত</span>
+                    <span>{formatNumber(item.quantity)} Units sold</span>
                     <span>•</span>
-                    <span>{item.products} টি পণ্য</span>
+                    <span>{item.products} t product</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                     <div
@@ -266,7 +266,7 @@ export default function ProductsAnalytics({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Top 5 by Revenue */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">আয় অনুযায়ী শীর্ষ ৫</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Top 5 by Revenue</h2>
             <div className="space-y-4">
               {topByRevenue.map((product, index) => (
                 <div key={product.id} className="flex items-center justify-between">
@@ -277,7 +277,7 @@ export default function ProductsAnalytics({
                     <div>
                       <p className="font-medium text-gray-900">{product.name}</p>
                       <p className="text-sm text-gray-500">
-                        {formatNumber(product.total_quantity_sold)} ইউনিট · {product.order_count} অর্ডার
+                        {formatNumber(product.total_quantity_sold)} Unit · {product.order_count} Order
                       </p>
                     </div>
                   </div>
@@ -291,7 +291,7 @@ export default function ProductsAnalytics({
 
           {/* Bottom 5 by Revenue */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">আয় অনুযায়ী নিম্ন ৫</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Low 5</h2>
             <div className="space-y-4">
               {bottomByRevenue.map((product, index) => (
                 <div key={product.id} className="flex items-center justify-between">
@@ -302,7 +302,7 @@ export default function ProductsAnalytics({
                     <div>
                       <p className="font-medium text-gray-900">{product.name}</p>
                       <p className="text-sm text-gray-500">
-                        {formatNumber(product.total_quantity_sold)} ইউনিট · {product.order_count} অর্ডার
+                        {formatNumber(product.total_quantity_sold)} Unit · {product.order_count} Order
                       </p>
                     </div>
                   </div>
@@ -319,7 +319,7 @@ export default function ProductsAnalytics({
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="p-6 border-b border-gray-100">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">সকল পণ্যের কর্মক্ষমতা</h2>
+              <h2 className="text-lg font-semibold text-gray-900">Performance of all products</h2>
               <div className="flex items-center gap-4">
                 <select
                   value={categoryFilter}
@@ -328,7 +328,7 @@ export default function ProductsAnalytics({
                 >
                   {categories.map(cat => (
                     <option key={cat} value={cat}>
-                      {cat === 'all' ? 'সকল ক্যাটাগরি' : cat}
+                      {cat === 'all' ? 'All Categories' : cat}
                     </option>
                   ))}
                 </select>
@@ -342,38 +342,38 @@ export default function ProductsAnalytics({
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     <button onClick={() => handleSort('name')} className="flex items-center gap-1">
-                      পণ্য
+                      Product
                       {sortField === 'name' && (sortDirection === 'asc' ? <FiChevronUp /> : <FiChevronDown />)}
                     </button>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ক্যাটাগরি</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                     <button onClick={() => handleSort('base_price')} className="flex items-center gap-1">
-                      মূল্য
+                      Price
                       {sortField === 'base_price' && (sortDirection === 'asc' ? <FiChevronUp /> : <FiChevronDown />)}
                     </button>
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                     <button onClick={() => handleSort('stock_quantity')} className="flex items-center gap-1">
-                      স্টক
+                      stock
                       {sortField === 'stock_quantity' && (sortDirection === 'asc' ? <FiChevronUp /> : <FiChevronDown />)}
                     </button>
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                     <button onClick={() => handleSort('total_quantity_sold')} className="flex items-center gap-1">
-                      বিক্রিত ইউনিট
+                      Sold Units
                       {sortField === 'total_quantity_sold' && (sortDirection === 'asc' ? <FiChevronUp /> : <FiChevronDown />)}
                     </button>
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                     <button onClick={() => handleSort('total_revenue')} className="flex items-center gap-1">
-                      আয়
+                      Income
                       {sortField === 'total_revenue' && (sortDirection === 'asc' ? <FiChevronUp /> : <FiChevronDown />)}
                     </button>
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                     <button onClick={() => handleSort('order_count')} className="flex items-center gap-1">
-                      অর্ডার
+                      Order
                       {sortField === 'order_count' && (sortDirection === 'asc' ? <FiChevronUp /> : <FiChevronDown />)}
                     </button>
                   </th>
@@ -391,10 +391,10 @@ export default function ProductsAnalytics({
                           {product.name}
                         </Link>
                         <p className={`text-xs mt-1 px-2 py-0.5 rounded-full inline-block ${getStockStatusColor(product.stock_status)}`}>
-                          {product.stock_status === 'Out of Stock' ? 'স্টক নেই' :
-                            product.stock_status === 'Low Stock' ? 'স্টক কম' :
-                              product.stock_status === 'Medium Stock' ? 'মাঝারি স্টক' :
-                                product.stock_status === 'High Stock' ? 'পর্যাপ্ত স্টক' : product.stock_status}
+                          {product.stock_status === 'Out of Stock' ? 'Out of Stock' :
+                            product.stock_status === 'Low Stock' ? 'Stock low' :
+                              product.stock_status === 'Medium Stock' ? 'Average Stock' :
+                                product.stock_status === 'High Stock' ? 'Adequate stock' : product.stock_status}
                         </p>
                       </div>
                     </td>

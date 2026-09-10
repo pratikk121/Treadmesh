@@ -63,7 +63,7 @@ export default function OrderConfirm({ rfq, quote }) {
 
     // Validate terms acceptance
     if (!formData.terms_accepted) {
-      setErrors({ terms_accepted: 'আপনাকে শর্তাবলী accept করতে হবে' });
+      setErrors({ terms_accepted: 'You have to accept the terms' });
       return;
     }
 
@@ -81,7 +81,7 @@ export default function OrderConfirm({ rfq, quote }) {
 
   return (
     <DashboardLayout>
-      <Head title="অর্ডার নিশ্চিতকরণ" />
+      <Head title="Order confirmation" />
 
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Header - Back button and page title */}
@@ -93,8 +93,8 @@ export default function OrderConfirm({ rfq, quote }) {
             <FiArrowLeft className="text-xl" />
           </Link>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">অর্ডার নিশ্চিত করুন</h2>
-            <p className="text-gray-600 mt-1">আপনার অর্ডারের বিবরণ পর্যালোচনা ও নিশ্চিত করুন</p>
+            <h2 className="text-2xl font-bold text-gray-800">Confirm order</h2>
+            <p className="text-gray-600 mt-1">Review and confirm your order details</p>
           </div>
         </div>
 
@@ -103,9 +103,9 @@ export default function OrderConfirm({ rfq, quote }) {
           <div className="flex">
             <FiCheckCircle className="text-green-600 mr-3" />
             <div>
-              <p className="text-green-700 font-medium">কোটা সফলভাবে গৃহীত হয়েছে</p>
+              <p className="text-green-700 font-medium">Quota successfully accepted</p>
               <p className="text-green-600 text-sm mt-1">
-                নিচের অর্ডারের বিবরণ পর্যালোচনা করুন এবং চালিয়ে যেতে নিশ্চিত করুন।
+                Review the order details below and confirm to continue।
               </p>
             </div>
           </div>
@@ -116,7 +116,7 @@ export default function OrderConfirm({ rfq, quote }) {
           {/* Order Summary Section */}
           <div className="bg-white rounded-xl border p-6">
             <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-              <FiShoppingBag className="mr-2" /> অর্ডারের সারসংক্ষেপ
+              <FiShoppingBag className="mr-2" /> Order Summary
             </h3>
 
             {/* RFQ Information */}
@@ -131,7 +131,7 @@ export default function OrderConfirm({ rfq, quote }) {
                 <div key={index} className="flex justify-between items-center border-b pb-2">
                   <div>
                     <p className="font-medium">{product.name}</p>
-                    <p className="text-sm text-gray-500">পরিমাণ: {product.quantity} {product.unit}</p>
+                    <p className="text-sm text-gray-500">Amount: {product.quantity} {product.unit}</p>
                   </div>
                   <p className="font-medium text-indigo-600">
                     {formatCurrency(quote.total_amount / rfq.products_requested.length)}
@@ -142,7 +142,7 @@ export default function OrderConfirm({ rfq, quote }) {
 
             {/* Total Amount */}
             <div className="flex justify-between items-center pt-3 border-t">
-              <span className="font-medium">মোট পরিমাণ</span>
+              <span className="font-medium">total amount</span>
               <span className="text-xl font-bold text-indigo-600">
                 {formatCurrency(quote.total_amount)}
               </span>
@@ -152,20 +152,20 @@ export default function OrderConfirm({ rfq, quote }) {
           {/* Quote Details Section */}
           <div className="bg-white rounded-xl border p-6">
             <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-              <FiFileText className="mr-2" /> কোটা বিবরণ
+              <FiFileText className="mr-2" /> Quota details
             </h3>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-500">কোটা নম্বর</p>
+                <p className="text-sm text-gray-500">Quota Number</p>
                 <p className="font-medium">{quote.quote_number}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">মেয়াদ শেষ</p>
+                <p className="text-sm text-gray-500">Expires</p>
                 <p className="font-medium">{new Date(quote.valid_until).toLocaleDateString('bn-BD')}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">সাপ্লায়ার</p>
+                <p className="text-sm text-gray-500">Supplier</p>
                 <p className="font-medium">{quote.supplier?.name}</p>
               </div>
             </div>
@@ -173,7 +173,7 @@ export default function OrderConfirm({ rfq, quote }) {
             {/* Price Breakdown - Detailed product pricing */}
             {quote.product_breakdown && (
               <div className="mt-4">
-                <p className="text-sm font-medium text-gray-700 mb-2">মূল্য বিশ্লেষণ:</p>
+                <p className="text-sm font-medium text-gray-700 mb-2">Price analysis:</p>
                 <div className="space-y-2">
                   {quote.product_breakdown.map((item, index) => (
                     <div key={index} className="flex justify-between text-sm">
@@ -189,7 +189,7 @@ export default function OrderConfirm({ rfq, quote }) {
           {/* Shipping Address Section */}
           <div className="bg-white rounded-xl border p-6">
             <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-              <FiMapPin className="mr-2" /> শিপিং ঠিকানা
+              <FiMapPin className="mr-2" /> Shipping address is
             </h3>
 
             <textarea
@@ -199,7 +199,7 @@ export default function OrderConfirm({ rfq, quote }) {
               rows="4"
               className={`w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.shipping_address ? 'border-red-500' : ''
                 }`}
-              placeholder="আপনার শিপিং ঠিকানা লিখুন"
+              placeholder="Enter your shipping address"
             />
             {errors.shipping_address && (
               <p className="mt-1 text-sm text-red-600 flex items-center">
@@ -210,14 +210,14 @@ export default function OrderConfirm({ rfq, quote }) {
 
           {/* Additional Notes Section */}
           <div className="bg-white rounded-xl border p-6">
-            <h3 className="font-medium text-gray-700 mb-4">অতিরিক্ত নোট (ঐচ্ছিক)</h3>
+            <h3 className="font-medium text-gray-700 mb-4">Additional Notes (Optional)</h3>
             <textarea
               name="notes"
               value={formData.notes}
               onChange={handleChange}
               rows="3"
               className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="সাপ্লায়ারের জন্য বিশেষ নির্দেশনা..."
+              placeholder="SPECIAL INSTRUCTIONS FOR SUPPLIERS..."
             />
           </div>
 
@@ -232,15 +232,15 @@ export default function OrderConfirm({ rfq, quote }) {
                 className="mt-1 mr-3"
               />
               <span className="text-sm text-gray-600">
-                আমি নিশ্চিত করছি যে অর্ডারের বিবরণ সঠিক এবং আমি
+                I confirm that the order details are correct and I
                 <Link href="/terms" className="text-indigo-600 hover:text-indigo-800 mx-1">
-                  শর্তাবলী
+                  Conditions
                 </Link>
-                এবং
+                and
                 <Link href="/privacy" className="text-indigo-600 hover:text-indigo-800 mx-1">
-                  গোপনীয়তা নীতি
+                  Privacy Policy
                 </Link>
-                মেনে নিচ্ছি।
+                Accepting।
               </span>
             </label>
             {errors.terms_accepted && (
@@ -256,7 +256,7 @@ export default function OrderConfirm({ rfq, quote }) {
               href={route('buyer.rfqs.show', rfq.id)}
               className="px-6 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              বাতিল
+              cancel
             </Link>
             <button
               type="submit"
@@ -269,10 +269,10 @@ export default function OrderConfirm({ rfq, quote }) {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  প্রক্রিয়াকরণ...
+                  processing...
                 </>
               ) : (
-                'অর্ডার নিশ্চিত করুন'
+                'Confirm order'
               )}
             </button>
           </div>

@@ -113,32 +113,32 @@ export default function RfqCreate({ recentProducts, categories }) {
 
     // Validate title
     if (!formData.title) {
-      newErrors.title = 'শিরোনাম প্রয়োজন';
+      newErrors.title = 'Title required';
     }
 
     // Validate required by date
     if (!formData.required_by_date) {
-      newErrors.required_by_date = 'প্রয়োজনীয় তারিখ প্রয়োজন';
+      newErrors.required_by_date = 'Required date required';
     } else {
       const selectedDate = new Date(formData.required_by_date);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
       if (selectedDate <= today) {
-        newErrors.required_by_date = 'প্রয়োজনীয় তারিখ ভবিষ্যতের হতে হবে';
+        newErrors.required_by_date = 'The required date must be in the future';
       }
     }
 
     // Validate each product
     formData.products_requested.forEach((product, index) => {
       if (!product.name) {
-        newErrors[`products_requested.${index}.name`] = 'পণ্যের নাম প্রয়োজন';
+        newErrors[`products_requested.${index}.name`] = 'Product name required';
       }
       if (!product.quantity || product.quantity < 1) {
-        newErrors[`products_requested.${index}.quantity`] = 'বৈধ পরিমাণ প্রয়োজন';
+        newErrors[`products_requested.${index}.quantity`] = 'Valid amount required';
       }
       if (!product.unit) {
-        newErrors[`products_requested.${index}.unit`] = 'ইউনিট প্রয়োজন';
+        newErrors[`products_requested.${index}.unit`] = 'Unit required';
       }
     });
 
@@ -169,7 +169,7 @@ export default function RfqCreate({ recentProducts, categories }) {
 
   return (
     <DashboardLayout>
-      <Head title="নতুন RFQ তৈরি" />
+      <Head title="Create new RFQ" />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -181,8 +181,8 @@ export default function RfqCreate({ recentProducts, categories }) {
             <FiArrowLeft className="text-xl" />
           </Link>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">নতুন RFQ তৈরি</h2>
-            <p className="text-gray-600 mt-1">ভেরিফাইড সাপ্লায়ারদের কাছ থেকে কোটা অনুরোধ করুন</p>
+            <h2 className="text-2xl font-bold text-gray-800">Create new RFQ</h2>
+            <p className="text-gray-600 mt-1">Request Quota from Verified Suppliers</p>
           </div>
         </div>
 
@@ -192,7 +192,7 @@ export default function RfqCreate({ recentProducts, categories }) {
           {recentProducts?.length > 0 && (
             <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6">
               <h3 className="font-medium text-gray-700 mb-3 flex items-center">
-                <FiPackage className="mr-2" /> সাম্প্রতিক পণ্য থেকে দ্রুত নির্বাচন
+                <FiPackage className="mr-2" /> Quick selection from recent products
               </h3>
               <div className="flex flex-wrap gap-2">
                 {recentProducts.map((product) => (
@@ -212,21 +212,21 @@ export default function RfqCreate({ recentProducts, categories }) {
           {/* Basic Information Section */}
           <div className="bg-white rounded-xl border p-6">
             <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-              <FiFileText className="mr-2" /> মৌলিক তথ্য
+              <FiFileText className="mr-2" /> Basic information
             </h3>
 
             <div className="space-y-4">
               {/* Title Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  RFQ শিরোনাম <span className="text-red-500">*</span>
+                  RFQ Title <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  placeholder="যেমন: অফিস স্টেশনারি সরবরাহ প্রয়োজন"
+                  placeholder="Eg: Office stationery supplies required"
                   className={`w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.title ? 'border-red-500' : ''
                     }`}
                 />
@@ -240,14 +240,14 @@ export default function RfqCreate({ recentProducts, categories }) {
               {/* Description Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  বিবরণ (ঐচ্ছিক)
+                  Details (Optional)
                 </label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
                   rows="3"
-                  placeholder="আপনার প্রয়োজনীয়তা সম্পর্কে অতিরিক্ত বিবরণ দিন..."
+                  placeholder="Provide additional details about your requirements..."
                   className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
@@ -258,14 +258,14 @@ export default function RfqCreate({ recentProducts, categories }) {
           <div className="bg-white rounded-xl border p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-medium text-gray-700 flex items-center">
-                <FiPackage className="mr-2" /> প্রয়োজনীয় পণ্য <span className="text-red-500 ml-1">*</span>
+                <FiPackage className="mr-2" /> Necessary products <span className="text-red-500 ml-1">*</span>
               </h3>
               <button
                 type="button"
                 onClick={addProduct}
                 className="px-3 py-1 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition-colors text-sm flex items-center"
               >
-                <FiPlus className="mr-1" /> পণ্য যোগ করুন
+                <FiPlus className="mr-1" /> Add product
               </button>
             </div>
 
@@ -287,13 +287,13 @@ export default function RfqCreate({ recentProducts, categories }) {
                     {/* Product Name */}
                     <div>
                       <label className="block text-xs font-medium text-gray-500 mb-1">
-                        পণ্যের নাম <span className="text-red-500">*</span>
+                         <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         value={product.name}
                         onChange={(e) => handleProductChange(index, 'name', e.target.value)}
-                        placeholder="যেমন: A4 কাগজ"
+                        placeholder="For example: A4 paper"
                         className={`w-full border rounded-lg px-3 py-2 text-sm ${errors[`products_requested.${index}.name`] ? 'border-red-500' : ''
                           }`}
                       />
@@ -305,7 +305,7 @@ export default function RfqCreate({ recentProducts, categories }) {
                     {/* Quantity */}
                     <div>
                       <label className="block text-xs font-medium text-gray-500 mb-1">
-                        পরিমাণ <span className="text-red-500">*</span>
+                        Amount <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="number"
@@ -323,7 +323,7 @@ export default function RfqCreate({ recentProducts, categories }) {
                     {/* Unit */}
                     <div>
                       <label className="block text-xs font-medium text-gray-500 mb-1">
-                        ইউনিট <span className="text-red-500">*</span>
+                        Unit <span className="text-red-500">*</span>
                       </label>
                       <select
                         value={product.unit}
@@ -331,17 +331,17 @@ export default function RfqCreate({ recentProducts, categories }) {
                         className={`w-full border rounded-lg px-3 py-2 text-sm ${errors[`products_requested.${index}.unit`] ? 'border-red-500' : ''
                           }`}
                       >
-                        <option value="pcs">পিস (pcs)</option>
-                        <option value="kg">কিলোগ্রাম (kg)</option>
-                        <option value="g">গ্রাম (g)</option>
-                        <option value="ton">টন</option>
-                        <option value="m">মিটার (m)</option>
-                        <option value="cm">সেন্টিমিটার (cm)</option>
-                        <option value="l">লিটার (l)</option>
-                        <option value="ml">মিলিলিটার (ml)</option>
-                        <option value="box">বক্স</option>
-                        <option value="pack">প্যাক</option>
-                        <option value="set">সেট</option>
+                        <option value="pcs">Piece (pcs)</option>
+                        <option value="kg">Kilogram (kg)</option>
+                        <option value="g">the village (g)</option>
+                        <option value="ton">tons</option>
+                        <option value="m">meter (m)</option>
+                        <option value="cm">Centimeter (cm)</option>
+                        <option value="l">Liter (l)</option>
+                        <option value="ml">milliliter (ml)</option>
+                        <option value="box">Box</option>
+                        <option value="pack">pack</option>
+                        <option value="set">Set</option>
                       </select>
                       {errors[`products_requested.${index}.unit`] && (
                         <p className="mt-1 text-xs text-red-600">{errors[`products_requested.${index}.unit`]}</p>
@@ -351,14 +351,14 @@ export default function RfqCreate({ recentProducts, categories }) {
                     {/* Category */}
                     <div>
                       <label className="block text-xs font-medium text-gray-500 mb-1">
-                        ক্যাটাগরি (ঐচ্ছিক)
+                        Category (Optional)
                       </label>
                       <select
                         value={product.category}
                         onChange={(e) => handleProductChange(index, 'category', e.target.value)}
                         className="w-full border rounded-lg px-3 py-2 text-sm"
                       >
-                        <option value="">ক্যাটাগরি নির্বাচন</option>
+                        <option value="">Category selection</option>
                         {categories.map((category) => (
                           <option key={category} value={category}>{category}</option>
                         ))}
@@ -368,13 +368,13 @@ export default function RfqCreate({ recentProducts, categories }) {
                     {/* Specifications */}
                     <div className="md:col-span-4">
                       <label className="block text-xs font-medium text-gray-500 mb-1">
-                        বিবরণ (ঐচ্ছিক)
+                        Details (Optional)
                       </label>
                       <textarea
                         value={product.specifications}
                         onChange={(e) => handleProductChange(index, 'specifications', e.target.value)}
                         rows="2"
-                        placeholder="যেমন: সাইজ: A4, ওজন: ৮০gsm, ব্র্যান্ড: যেকোনো"
+                        placeholder="Ex: Size: A4, Weight: 80gsm, Brand: Any"
                         className="w-full border rounded-lg px-3 py-2 text-sm"
                       />
                     </div>
@@ -387,14 +387,14 @@ export default function RfqCreate({ recentProducts, categories }) {
           {/* Additional Information Section */}
           <div className="bg-white rounded-xl border p-6">
             <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-              <FiInfo className="mr-2" /> অতিরিক্ত তথ্য
+              <FiInfo className="mr-2" /> Additional information
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Required By Date */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  প্রয়োজনীয় তারিখ <span className="text-red-500">*</span>
+                  Required date <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <FiCalendar className="absolute left-3 top-3 text-gray-400" />
@@ -418,14 +418,14 @@ export default function RfqCreate({ recentProducts, categories }) {
               {/* Additional Notes */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  অতিরিক্ত নোট (ঐচ্ছিক)
+                  Additional Notes (Optional)
                 </label>
                 <textarea
                   name="notes"
                   value={formData.notes}
                   onChange={handleChange}
                   rows="3"
-                  placeholder="সাপ্লায়ারদের জন্য বিশেষ প্রয়োজনীয়তা বা নির্দেশনা..."
+                  placeholder="Special requirements or instructions for suppliers..."
                   className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
@@ -438,7 +438,7 @@ export default function RfqCreate({ recentProducts, categories }) {
               href={route('buyer.rfqs.index')}
               className="px-6 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              বাতিল
+              cancel
             </Link>
             <button
               type="submit"
@@ -451,10 +451,10 @@ export default function RfqCreate({ recentProducts, categories }) {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  তৈরি হচ্ছে...
+                  Creating...
                 </>
               ) : (
-                'RFQ তৈরি করুন'
+                'RFQ Create'
               )}
             </button>
           </div>

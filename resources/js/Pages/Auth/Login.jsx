@@ -37,7 +37,7 @@ export default function Login({ status, canResetPassword }) {
 
     return (
         <>
-            <Head title="লগ ইন" />
+            <Head title="Log In" />
 
             <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
                 {/* Decorative elements - Background design */}
@@ -49,8 +49,8 @@ export default function Login({ status, canResetPassword }) {
                         <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mb-4 shadow-lg">
                             <FiLogIn className="w-10 h-10 text-white" />
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-800">আবার স্বাগতম</h2>
-                        <p className="text-gray-600 mt-2">আপনার অ্যাকাউন্টে সাইন ইন করুন</p>
+                        <h2 className="text-3xl font-bold text-gray-800">Welcome back</h2>
+                        <p className="text-gray-600 mt-2">Sign in to your account</p>
                     </div>
 
                     {/* Status Message (like after registration) */}
@@ -66,7 +66,7 @@ export default function Login({ status, canResetPassword }) {
                         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-3">
                             <MdError className="w-5 h-5 text-red-600 flex-shrink-0" />
                             <span className="text-sm text-red-700">
-                                {errors.email || errors.password || 'আপনার তথ্য যাচাই করুন'}
+                                {errors.email || errors.password || 'Verify your information'}
                             </span>
                         </div>
                     )}
@@ -75,7 +75,7 @@ export default function Login({ status, canResetPassword }) {
                         {/* Email Field */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                                ইমেইল ঠিকানা <span className="text-red-500">*</span>
+                                Email address <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -104,7 +104,7 @@ export default function Login({ status, canResetPassword }) {
                         {/* Password Field */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                                পাসওয়ার্ড <span className="text-red-500">*</span>
+                                The password is <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -150,7 +150,7 @@ export default function Login({ status, canResetPassword }) {
                                     onChange={(e) => setData('remember', e.target.checked)}
                                     className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                                 />
-                                <span className="text-sm text-gray-700">আমাকে মনে রাখুন</span>
+                                <span className="text-sm text-gray-700">Remember me</span>
                             </label>
 
                             {canResetPassword && (
@@ -158,7 +158,7 @@ export default function Login({ status, canResetPassword }) {
                                     href={route('password.request')}
                                     className="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
                                 >
-                                    পাসওয়ার্ড ভুলে গেছেন?
+                                    Forgot password?
                                 </Link>
                             )}
                         </div>
@@ -175,10 +175,10 @@ export default function Login({ status, canResetPassword }) {
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    সাইন ইন হচ্ছে...
+                                    Signing in is...
                                 </span>
                             ) : (
-                                'সাইন ইন'
+                                'Sign in'
                             )}
                         </button>
 
@@ -188,23 +188,23 @@ export default function Login({ status, canResetPassword }) {
                                 <div className="w-full border-t border-gray-300"></div>
                             </div>
                             <div className="relative flex justify-center text-sm">
-                                <span className="px-2 bg-white/90 text-gray-500">ডেমো ক্রেডেনশিয়াল</span>
+                                <span className="px-2 bg-white/90 text-gray-500">Demo Credentials</span>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3 text-xs">
                             <div className="p-2 bg-indigo-50 rounded border border-indigo-100">
-                                <p className="font-semibold text-indigo-800">অ্যাডমিন</p>
+                                <p className="font-semibold text-indigo-800">Admin</p>
                                 <p className="text-indigo-600">admin@example.com</p>
                                 <p className="text-indigo-600">12345678</p>
                             </div>
                             <div className="p-2 bg-purple-50 rounded border border-purple-100">
-                                <p className="font-semibold text-purple-800">সাপ্লায়ার</p>
+                                <p className="font-semibold text-purple-800">Supplier</p>
                                 <p className="text-purple-600">supplier@example.com</p>
                                 <p className="text-purple-600">12345678</p>
                             </div>
                             <div className="p-2 bg-pink-50 rounded border border-pink-100 col-span-2">
-                                <p className="font-semibold text-pink-800">ক্রেতা</p>
+                                <p className="font-semibold text-pink-800">Buyer</p>
                                 <p className="text-pink-600">buyer@example.com</p>
                                 <p className="text-pink-600">12345678</p>
                             </div>
@@ -213,19 +213,19 @@ export default function Login({ status, canResetPassword }) {
                         {/* Register Link */}
                         <div className="text-center mt-6 pt-4 border-t border-gray-200">
                             <p className="text-sm text-gray-600">
-                                অ্যাকাউন্ট নেই?{' '}
+                                No account?{' '}
                                 <Link
                                     href={route('register')}
                                     className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
                                 >
-                                    অ্যাকাউন্ট খুলুন
+                                    Open Account
                                 </Link>
                             </p>
                         </div>
 
                         {/* Account status notice */}
                         <div className="text-center text-xs text-gray-500">
-                            <p>সম্পূর্ণ অ্যাক্সেসের জন্য অ্যাডমিন অ্যাক্টিভেশন প্রয়োজন</p>
+                            <p>Admin activation is required for full access</p>
                         </div>
                     </form>
                 </div>

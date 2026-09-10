@@ -98,32 +98,32 @@ export default function RfqEdit({ rfq }) {
 
     // Validate title
     if (!formData.title) {
-      newErrors.title = 'শিরোনাম প্রয়োজন';
+      newErrors.title = 'Title required';
     }
 
     // Validate required by date
     if (!formData.required_by_date) {
-      newErrors.required_by_date = 'প্রয়োজনীয় তারিখ প্রয়োজন';
+      newErrors.required_by_date = 'Required date required';
     } else {
       const selectedDate = new Date(formData.required_by_date);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
       if (selectedDate <= today) {
-        newErrors.required_by_date = 'প্রয়োজনীয় তারিখ ভবিষ্যতের হতে হবে';
+        newErrors.required_by_date = 'The required date must be in the future';
       }
     }
 
     // Validate each product
     formData.products_requested.forEach((product, index) => {
       if (!product.name) {
-        newErrors[`products_requested.${index}.name`] = 'পণ্যের নাম প্রয়োজন';
+        newErrors[`products_requested.${index}.name`] = 'Product name required';
       }
       if (!product.quantity || product.quantity < 1) {
-        newErrors[`products_requested.${index}.quantity`] = 'বৈধ পরিমাণ প্রয়োজন';
+        newErrors[`products_requested.${index}.quantity`] = 'Valid amount required';
       }
       if (!product.unit) {
-        newErrors[`products_requested.${index}.unit`] = 'ইউনিট প্রয়োজন';
+        newErrors[`products_requested.${index}.unit`] = 'Unit required';
       }
     });
 
@@ -154,7 +154,7 @@ export default function RfqEdit({ rfq }) {
 
   return (
     <DashboardLayout>
-      <Head title={`RFQ #${rfq.rfq_number} - সম্পাদনা`} />
+      <Head title={`RFQ #${rfq.rfq_number} - editing`} />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -166,7 +166,7 @@ export default function RfqEdit({ rfq }) {
             <FiArrowLeft className="text-xl" />
           </Link>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">RFQ সম্পাদনা</h2>
+            <h2 className="text-2xl font-bold text-gray-800">RFQ editing</h2>
             <p className="text-gray-600 mt-1">RFQ #{rfq.rfq_number}</p>
           </div>
         </div>
@@ -176,9 +176,9 @@ export default function RfqEdit({ rfq }) {
           <div className="flex">
             <FiAlertCircle className="text-yellow-600 mr-3" />
             <div>
-              <p className="text-yellow-700 font-medium">খোলা RFQ সম্পাদনা করা হচ্ছে</p>
+              <p className="text-yellow-700 font-medium">Editing open RFQ</p>
               <p className="text-yellow-600 text-sm mt-1">
-                পরিবর্তনগুলি সাপ্লায়ারদের কাছে দৃশ্যমান হবে। যদি আপনি ইতিমধ্যে কোটা পেয়ে থাকেন, তবে পরিবর্তে একটি নতুন RFQ তৈরি করার বিবেচনা করুন।
+                Changes will be visible to suppliers. If you already have quota, consider creating a new RFQ instead।
               </p>
             </div>
           </div>
@@ -189,14 +189,14 @@ export default function RfqEdit({ rfq }) {
           {/* Basic Information Section */}
           <div className="bg-white rounded-xl border p-6">
             <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-              <FiFileText className="mr-2" /> মৌলিক তথ্য
+              <FiFileText className="mr-2" /> Basic information
             </h3>
 
             <div className="space-y-4">
               {/* Title Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  RFQ শিরোনাম <span className="text-red-500">*</span>
+                  RFQ Title <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -216,7 +216,7 @@ export default function RfqEdit({ rfq }) {
               {/* Description Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  বিবরণ (ঐচ্ছিক)
+                  Details (Optional)
                 </label>
                 <textarea
                   name="description"
@@ -233,14 +233,14 @@ export default function RfqEdit({ rfq }) {
           <div className="bg-white rounded-xl border p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-medium text-gray-700 flex items-center">
-                <FiPackage className="mr-2" /> প্রয়োজনীয় পণ্য <span className="text-red-500 ml-1">*</span>
+                <FiPackage className="mr-2" /> Necessary products <span className="text-red-500 ml-1">*</span>
               </h3>
               <button
                 type="button"
                 onClick={addProduct}
                 className="px-3 py-1 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition-colors text-sm flex items-center"
               >
-                <FiPlus className="mr-1" /> পণ্য যোগ করুন
+                <FiPlus className="mr-1" /> Add product
               </button>
             </div>
 
@@ -262,7 +262,7 @@ export default function RfqEdit({ rfq }) {
                     {/* Product Name */}
                     <div>
                       <label className="block text-xs font-medium text-gray-500 mb-1">
-                        পণ্যের নাম <span className="text-red-500">*</span>
+                         <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -279,7 +279,7 @@ export default function RfqEdit({ rfq }) {
                     {/* Quantity */}
                     <div>
                       <label className="block text-xs font-medium text-gray-500 mb-1">
-                        পরিমাণ <span className="text-red-500">*</span>
+                        Amount <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="number"
@@ -297,7 +297,7 @@ export default function RfqEdit({ rfq }) {
                     {/* Unit */}
                     <div>
                       <label className="block text-xs font-medium text-gray-500 mb-1">
-                        ইউনিট <span className="text-red-500">*</span>
+                        Unit <span className="text-red-500">*</span>
                       </label>
                       <select
                         value={product.unit}
@@ -305,17 +305,17 @@ export default function RfqEdit({ rfq }) {
                         className={`w-full border rounded-lg px-3 py-2 text-sm ${errors[`products_requested.${index}.unit`] ? 'border-red-500' : ''
                           }`}
                       >
-                        <option value="pcs">পিস (pcs)</option>
-                        <option value="kg">কিলোগ্রাম (kg)</option>
-                        <option value="g">গ্রাম (g)</option>
-                        <option value="ton">টন</option>
-                        <option value="m">মিটার (m)</option>
-                        <option value="cm">সেন্টিমিটার (cm)</option>
-                        <option value="l">লিটার (l)</option>
-                        <option value="ml">মিলিলিটার (ml)</option>
-                        <option value="box">বক্স</option>
-                        <option value="pack">প্যাক</option>
-                        <option value="set">সেট</option>
+                        <option value="pcs">Piece (pcs)</option>
+                        <option value="kg">Kilogram (kg)</option>
+                        <option value="g">the village (g)</option>
+                        <option value="ton">tons</option>
+                        <option value="m">meter (m)</option>
+                        <option value="cm">Centimeter (cm)</option>
+                        <option value="l">Liter (l)</option>
+                        <option value="ml">milliliter (ml)</option>
+                        <option value="box">Box</option>
+                        <option value="pack">pack</option>
+                        <option value="set">Set</option>
                       </select>
                       {errors[`products_requested.${index}.unit`] && (
                         <p className="mt-1 text-xs text-red-600">{errors[`products_requested.${index}.unit`]}</p>
@@ -325,13 +325,13 @@ export default function RfqEdit({ rfq }) {
                     {/* Category */}
                     <div>
                       <label className="block text-xs font-medium text-gray-500 mb-1">
-                        ক্যাটাগরি (ঐচ্ছিক)
+                        Category (Optional)
                       </label>
                       <input
                         type="text"
                         value={product.category || ''}
                         onChange={(e) => handleProductChange(index, 'category', e.target.value)}
-                        placeholder="যেমন: ইলেকট্রনিক্স"
+                        placeholder="Eg: Electronics"
                         className="w-full border rounded-lg px-3 py-2 text-sm"
                       />
                     </div>
@@ -339,13 +339,13 @@ export default function RfqEdit({ rfq }) {
                     {/* Specifications */}
                     <div className="md:col-span-4">
                       <label className="block text-xs font-medium text-gray-500 mb-1">
-                        বিবরণ (ঐচ্ছিক)
+                        Details (Optional)
                       </label>
                       <textarea
                         value={product.specifications || ''}
                         onChange={(e) => handleProductChange(index, 'specifications', e.target.value)}
                         rows="2"
-                        placeholder="যেমন: সাইজ: A4, ওজন: ৮০gsm, ব্র্যান্ড: যেকোনো"
+                        placeholder="Ex: Size: A4, Weight: 80gsm, Brand: Any"
                         className="w-full border rounded-lg px-3 py-2 text-sm"
                       />
                     </div>
@@ -358,14 +358,14 @@ export default function RfqEdit({ rfq }) {
           {/* Additional Information Section */}
           <div className="bg-white rounded-xl border p-6">
             <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-              <FiInfo className="mr-2" /> অতিরিক্ত তথ্য
+              <FiInfo className="mr-2" /> Additional information
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Required By Date */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  প্রয়োজনীয় তারিখ <span className="text-red-500">*</span>
+                  Required date <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <FiCalendar className="absolute left-3 top-3 text-gray-400" />
@@ -389,7 +389,7 @@ export default function RfqEdit({ rfq }) {
               {/* Additional Notes */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  অতিরিক্ত নোট (ঐচ্ছিক)
+                  Additional Notes (Optional)
                 </label>
                 <textarea
                   name="notes"
@@ -408,7 +408,7 @@ export default function RfqEdit({ rfq }) {
               href={route('buyer.rfqs.show', rfq.id)}
               className="px-6 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              বাতিল
+              cancel
             </Link>
             <button
               type="submit"
@@ -421,10 +421,10 @@ export default function RfqEdit({ rfq }) {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  আপডেট হচ্ছে...
+                  Updating...
                 </>
               ) : (
-                'RFQ আপডেট'
+                'RFQ Update'
               )}
             </button>
           </div>

@@ -82,15 +82,15 @@ export default function QuoteShow({
         bg: 'bg-gray-100',
         text: 'text-gray-800',
         icon: FiClock,
-        label: 'মেয়াদোত্তীর্ণ'
+        label: 'Expired'
       };
     }
 
     const badges = {
-      pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: MdPending, label: 'অপেক্ষমান' },
-      accepted: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'গৃহীত' },
-      rejected: { bg: 'bg-red-100', text: 'text-red-800', icon: FiXCircle, label: 'প্রত্যাখ্যাত' },
-      withdrawn: { bg: 'bg-gray-100', text: 'text-gray-800', icon: FiXCircle, label: 'প্রত্যাহার' }
+      pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: MdPending, label: 'Awaiting' },
+      accepted: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'accepted' },
+      rejected: { bg: 'bg-red-100', text: 'text-red-800', icon: FiXCircle, label: 'Rejected' },
+      withdrawn: { bg: 'bg-gray-100', text: 'text-gray-800', icon: FiXCircle, label: 'Withdraw' }
     };
     return badges[quote.status] || badges.pending;
   };
@@ -103,19 +103,19 @@ export default function QuoteShow({
     if (!withdrawReason.trim()) {
       Swal.fire({
         icon: "warning",
-        title: "কারণ প্রয়োজন",
-        text: "অনুগ্রহ করে প্রত্যাহারের কারণ প্রদান করুন"
+        title: "Reason is necessary",
+        text: "Please provide reason for withdrawal"
       });
       return;
     }
 
     Swal.fire({
-      title: "আপনি কি নিশ্চিত?",
-      text: "এই কোটা প্রত্যাহার করা হবে",
+      title: "Are you sure?",
+      text: "This quota will be withdrawn",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "হ্যাঁ, প্রত্যাহার করুন",
-      cancelButtonText: "না",
+      confirmButtonText: "Yes, withdraw",
+      cancelButtonText: "No",
       confirmButtonColor: "#dc2626"
     }).then((result) => {
       if (result.isConfirmed) {
@@ -128,8 +128,8 @@ export default function QuoteShow({
 
             Swal.fire({
               icon: "success",
-              title: "সফল",
-              text: "কোটা সফলভাবে প্রত্যাহার করা হয়েছে"
+              title: "successful",
+              text: "Quota successfully revoked"
             });
           }
         });
@@ -142,18 +142,18 @@ export default function QuoteShow({
     if (!newValidUntil) {
       Swal.fire({
         icon: "warning",
-        title: "তারিখ প্রয়োজন",
-        text: "অনুগ্রহ করে একটি নতুন মেয়াদ শেষের তারিখ নির্বাচন করুন"
+        title: "Date required",
+        text: "Please select a new expiration date"
       });
       return;
     }
 
     Swal.fire({
-      title: "মেয়াদ বাড়াতে চান?",
+      title: "Want to extend?",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "হ্যাঁ, বাড়ান",
-      cancelButtonText: "না",
+      confirmButtonText: "Yes, increase",
+      cancelButtonText: "No",
       confirmButtonColor: "#16a34a"
     }).then((result) => {
       if (result.isConfirmed) {
@@ -168,8 +168,8 @@ export default function QuoteShow({
 
             Swal.fire({
               icon: "success",
-              title: "সফল",
-              text: "কোটার মেয়াদ বাড়ানো হয়েছে"
+              title: "successful",
+              text: "Quota has been extended to"
             });
           }
         });
@@ -179,12 +179,12 @@ export default function QuoteShow({
   // Handle quote duplication
   const handleDuplicate = () => {
     Swal.fire({
-      title: "নতুন কপি তৈরি করবেন?",
-      text: "এই কোটার একটি ডুপ্লিকেট তৈরি হবে",
+      title: "Make a new copy?",
+      text: "A duplicate of this quota will be created",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "হ্যাঁ, তৈরি করুন",
-      cancelButtonText: "না",
+      confirmButtonText: "Yes, make it",
+      cancelButtonText: "No",
       confirmButtonColor: "#16a34a"
     }).then((result) => {
       if (result.isConfirmed) {
@@ -192,8 +192,8 @@ export default function QuoteShow({
           onSuccess: () => {
             Swal.fire({
               icon: "success",
-              title: "সফল",
-              text: "কোটার নতুন কপি তৈরি হয়েছে"
+              title: "successful",
+              text: "A new copy of quota has been created"
             });
           }
         });
@@ -225,7 +225,7 @@ export default function QuoteShow({
 
   return (
     <DashboardLayout>
-      <Head title={`কোটা #${quote.quote_number}`} />
+      <Head title={`Quote #${quote.quote_number}`} />
 
       <div className="space-y-6">
         {/* Header - Back button, title and action buttons */}
@@ -239,14 +239,14 @@ export default function QuoteShow({
             </Link>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-bold text-gray-900">কোটা #{quote.quote_number}</h1>
+                <h1 className="text-2xl font-bold text-gray-900">Quote #{quote.quote_number}</h1>
                 <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${badge.bg} ${badge.text}`}>
                   <StatusIcon className="w-4 h-4" />
                   {badge.label}
                 </span>
               </div>
               <p className="text-sm text-gray-600 mt-1">
-                {formatDateTime(quote.created_at)} তারিখে জমা দেওয়া হয়েছে
+                {formatDateTime(quote.created_at)} Date Submitted
               </p>
             </div>
           </div>
@@ -258,14 +258,14 @@ export default function QuoteShow({
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
                   <FiEdit2 className="w-4 h-4" />
-                  <span>কোটা সম্পাদনা</span>
+                  <span>Edit Quota</span>
                 </Link>
                 <button
                   onClick={() => setShowWithdrawConfirm(true)}
                   className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                 >
                   <FiXCircle className="w-4 h-4" />
-                  <span>প্রত্যাহার</span>
+                  <span>Withdraw</span>
                 </button>
               </>
             )}
@@ -274,7 +274,7 @@ export default function QuoteShow({
               className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50"
             >
               <FiCopy className="w-4 h-4" />
-              <span>ডুপ্লিকেট</span>
+              <span>Duplicate</span>
             </button>
           </div>
         </div>
@@ -286,16 +286,16 @@ export default function QuoteShow({
               <FiAlertCircle className="w-5 h-5 text-red-400 mr-3 mt-0.5" />
               <div className="flex-1">
                 <p className="text-sm text-red-700 font-medium">
-                  এই কোটা মেয়াদোত্তীর্ণ হয়েছে
+                  This quota has expired
                 </p>
                 <p className="text-sm text-red-600 mt-1">
-                  মেয়াদ শেষ হয়েছে {formatDate(quote.valid_until)} তারিখে।
+                  Expired {formatDate(quote.valid_until)} On date।
                   {isPending && (
                     <button
                       onClick={() => setShowExtendValidity(true)}
                       className="ml-2 font-medium underline hover:text-red-700"
                     >
-                      মেয়াদ বাড়ান →
+                      Extend →
                     </button>
                   )}
                 </p>
@@ -311,12 +311,12 @@ export default function QuoteShow({
               <FiCheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5" />
               <div>
                 <p className="text-sm text-green-700 font-medium">
-                  এই কোটা গৃহীত হয়েছে!
+                  This Quota Accepted!
                 </p>
                 <p className="text-sm text-green-600 mt-1">
-                  একটি অর্ডার তৈরি করা হয়েছে।
+                  An Order Created।
                   <Link href={route('supplier.orders.show', quote.order.id)} className="ml-2 font-medium underline">
-                    অর্ডার #{quote.order.order_number} দেখুন →
+                    Order #{quote.order.order_number} See →
                   </Link>
                 </p>
               </div>
@@ -331,7 +331,7 @@ export default function QuoteShow({
             {/* Quote Items */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6 border-b border-gray-100">
-                <h2 className="text-lg font-semibold text-gray-900">কোটা আইটেম</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Quota item</h2>
               </div>
               <div className="divide-y divide-gray-100">
                 {quote.product_breakdown.map((item, index) => (
@@ -344,15 +344,15 @@ export default function QuoteShow({
                         <h3 className="font-medium text-gray-900">{item.name}</h3>
                         <div className="grid grid-cols-3 gap-4 mt-2">
                           <div>
-                            <p className="text-xs text-gray-500">পরিমাণ</p>
+                            <p className="text-xs text-gray-500">Amount</p>
                             <p className="font-medium">{item.quantity}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500">একক মূল্য</p>
+                            <p className="text-xs text-gray-500">Unit price is</p>
                             <p className="font-medium">{formatCurrency(item.unit_price)}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500">মোট</p>
+                            <p className="text-xs text-gray-500">total</p>
                             <p className="font-bold text-indigo-600">{formatCurrency(item.total_price)}</p>
                           </div>
                         </div>
@@ -363,7 +363,7 @@ export default function QuoteShow({
               </div>
               <div className="p-4 bg-gray-50 border-t border-gray-100">
                 <div className="flex justify-between items-center">
-                  <span className="font-semibold text-gray-900">মোট কোটা পরিমাণ</span>
+                  <span className="font-semibold text-gray-900">Total quota amount</span>
                   <span className="text-2xl font-bold text-indigo-600">
                     {formatCurrency(quote.total_amount)}
                   </span>
@@ -373,23 +373,23 @@ export default function QuoteShow({
 
             {/* Terms & Conditions */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">শর্তাবলী</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Conditions</h2>
               <div className="space-y-4">
                 {quote.delivery_estimate && (
                   <div>
-                    <p className="text-sm text-gray-500">ডেলিভারি সময়</p>
+                    <p className="text-sm text-gray-500">Delivery time</p>
                     <p className="font-medium text-gray-900">{quote.delivery_estimate}</p>
                   </div>
                 )}
                 {quote.payment_terms && (
                   <div>
-                    <p className="text-sm text-gray-500">পেমেন্ট শর্তাবলী</p>
+                    <p className="text-sm text-gray-500">Payment Terms</p>
                     <p className="font-medium text-gray-900">{quote.payment_terms}</p>
                   </div>
                 )}
                 {quote.notes && (
                   <div>
-                    <p className="text-sm text-gray-500">অতিরিক্ত নোট</p>
+                    <p className="text-sm text-gray-500">Additional Notes</p>
                     <p className="text-gray-700 whitespace-pre-line">{quote.notes}</p>
                   </div>
                 )}
@@ -404,8 +404,8 @@ export default function QuoteShow({
                     <FiMessageSquare className="w-5 h-5 text-indigo-600" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-semibold text-gray-900">বার্তা</h2>
-                    <p className="text-sm text-gray-500">ক্রেতার সাথে যোগাযোগ করুন</p>
+                    <h2 className="text-lg font-semibold text-gray-900">Message</h2>
+                    <p className="text-sm text-gray-500">Contact Buyer</p>
                   </div>
                 </div>
               </div>
@@ -437,7 +437,7 @@ export default function QuoteShow({
 
                   {messages.length === 0 && (
                     <div className="text-center py-8 text-gray-500">
-                      এখনও কোনো বার্তা নেই। ক্রেতার সাথে কথোপকথন শুরু করুন।
+                      No messages yet. Start a conversation with the buyer।
                     </div>
                   )}
                 </div>
@@ -448,7 +448,7 @@ export default function QuoteShow({
                     type="text"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="আপনার বার্তা লিখুন..."
+                    placeholder="Enter your message..."
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   />
                   <button
@@ -457,7 +457,7 @@ export default function QuoteShow({
                     className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2"
                   >
                     <FiSend className="w-4 h-4" />
-                    <span>পাঠান</span>
+                    <span>Send</span>
                   </button>
                 </form>
               </div>
@@ -468,10 +468,10 @@ export default function QuoteShow({
           <div className="space-y-6">
             {/* RFQ Information */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">RFQ বিবরণ</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">RFQ Description</h2>
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-500">RFQ নম্বর</p>
+                  <p className="text-sm text-gray-500">RFQ Number</p>
                   <Link
                     href={route('supplier.rfqs.show', quote.rfq.id)}
                     className="font-medium text-indigo-600 hover:text-indigo-700"
@@ -480,11 +480,11 @@ export default function QuoteShow({
                   </Link>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">শিরোনাম</p>
+                  <p className="text-sm text-gray-500">Title</p>
                   <p className="font-medium text-gray-900">{quote.rfq?.title}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">প্রয়োজনীয় তারিখ</p>
+                  <p className="text-sm text-gray-500">Required date</p>
                   <p className="font-medium text-gray-900">{formatDate(quote.rfq?.required_by_date)}</p>
                 </div>
               </div>
@@ -492,19 +492,19 @@ export default function QuoteShow({
 
             {/* Buyer Information */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">ক্রেতার তথ্য</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Buyer information</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <FiUser className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">নাম</p>
+                    <p className="text-sm text-gray-500">name</p>
                     <p className="font-medium text-gray-900">{buyer.name}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <FiMail className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">ইমেইল</p>
+                    <p className="text-sm text-gray-500">Email</p>
                     <a href={`mailto:${buyer.email}`} className="font-medium text-indigo-600 hover:text-indigo-700">
                       {buyer.email}
                     </a>
@@ -514,7 +514,7 @@ export default function QuoteShow({
                   <div className="flex items-start gap-3">
                     <FiPhone className="w-5 h-5 text-gray-400 mt-0.5" />
                     <div>
-                      <p className="text-sm text-gray-500">ফোন</p>
+                      <p className="text-sm text-gray-500">Phone</p>
                       <p className="font-medium text-gray-900">{buyer.phone}</p>
                     </div>
                   </div>
@@ -524,10 +524,10 @@ export default function QuoteShow({
 
             {/* Quote Validity */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">কোটা মেয়াদ</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Quota period</h2>
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-500">মেয়াদ শেষ</p>
+                  <p className="text-sm text-gray-500">Expires</p>
                   <div className="flex items-center gap-2 mt-1">
                     <FiCalendar className="w-4 h-4 text-gray-400" />
                     <span className={`font-medium ${isExpired ? 'text-red-600' : 'text-gray-900'}`}>
@@ -541,7 +541,7 @@ export default function QuoteShow({
                     onClick={() => setShowExtendValidity(true)}
                     className="w-full mt-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
                   >
-                    মেয়াদ বাড়ান
+                    Extend
                   </button>
                 )}
               </div>
@@ -550,18 +550,18 @@ export default function QuoteShow({
             {/* Other Quotes Comparison */}
             {otherQuotes.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">অন্যান্য কোটা</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Other Quota</h2>
                 <p className="text-sm text-gray-500 mb-3">
-                  এই RFQ-র জন্য {otherQuotes.length} টি অন্যান্য কোটা
+                   {otherQuotes.length} t other quota
                 </p>
                 <div className="space-y-3">
                   {otherQuotes.map((otherQuote) => (
                     <div key={otherQuote.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
                         <p className="font-medium text-gray-900">
-                          {otherQuote.supplier?.supplier?.company_name || 'অন্যান্য সাপ্লায়ার'}
+                          {otherQuote.supplier?.supplier?.company_name || 'Other suppliers'}
                         </p>
-                        <p className="text-xs text-gray-500">কোটা #{otherQuote.quote_number}</p>
+                        <p className="text-xs text-gray-500">Quote #{otherQuote.quote_number}</p>
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-indigo-600">{formatCurrency(otherQuote.total_amount)}</p>
@@ -572,10 +572,10 @@ export default function QuoteShow({
                             : 'text-gray-500'
                           }`}>
                           {otherQuote.total_amount < quote.total_amount
-                            ? 'আপনার থেকে কম'
+                            ? 'less than you'
                             : otherQuote.total_amount > quote.total_amount
-                              ? 'আপনার থেকে বেশি'
-                              : 'আপনার সমান'}
+                              ? 'More than you'
+                              : 'equal to you'}
                         </p>
                       </div>
                     </div>
@@ -590,20 +590,20 @@ export default function QuoteShow({
         {showWithdrawConfirm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-xl max-w-md w-full mx-4 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">কোটা প্রত্যাহার</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Withdrawal of Quota</h3>
               <p className="text-sm text-gray-600 mb-4">
-                আপনি কি এই কোটা প্রত্যাহার করতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।
+                Do you want to revoke this quota? This action cannot be undone।
               </p>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  প্রত্যাহারের কারণ <span className="text-red-500">*</span>
+                  Reason for withdrawal <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   value={withdrawReason}
                   onChange={(e) => setWithdrawReason(e.target.value)}
                   rows="3"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                  placeholder="কেন আপনি এই কোটা প্রত্যাহার করছেন তা ব্যাখ্যা করুন..."
+                  placeholder="Explain why you are withdrawing this quota..."
                   required
                 />
               </div>
@@ -613,7 +613,7 @@ export default function QuoteShow({
                   disabled={!withdrawReason}
                   className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
                 >
-                  প্রত্যাহার নিশ্চিত
+                  Withdrawal confirmed
                 </button>
                 <button
                   onClick={() => {
@@ -622,7 +622,7 @@ export default function QuoteShow({
                   }}
                   className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
                 >
-                  বাতিল
+                  cancel
                 </button>
               </div>
             </div>
@@ -633,11 +633,11 @@ export default function QuoteShow({
         {showExtendValidity && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-xl max-w-md w-full mx-4 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">কোটা মেয়াদ বাড়ান</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Extend the quota period</h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    নতুন মেয়াদ শেষের তারিখ <span className="text-red-500">*</span>
+                    New Expiry Date <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="date"
@@ -650,14 +650,14 @@ export default function QuoteShow({
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    বাড়ানোর কারণ
+                    Increase factor
                   </label>
                   <textarea
                     value={extensionReason}
                     onChange={(e) => setExtensionReason(e.target.value)}
                     rows="3"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                    placeholder="ঐচ্ছিক: কেন আপনি মেয়াদ বাড়াচ্ছেন তা ব্যাখ্যা করুন..."
+                    placeholder="Optional: Explain why you are extending..."
                   />
                 </div>
               </div>
@@ -667,7 +667,7 @@ export default function QuoteShow({
                   disabled={!newValidUntil}
                   className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
                 >
-                  মেয়াদ বাড়ান
+                  Extend
                 </button>
                 <button
                   onClick={() => {
@@ -677,7 +677,7 @@ export default function QuoteShow({
                   }}
                   className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
                 >
-                  বাতিল
+                  cancel
                 </button>
               </div>
             </div>

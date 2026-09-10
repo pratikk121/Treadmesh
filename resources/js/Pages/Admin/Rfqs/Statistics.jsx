@@ -61,7 +61,7 @@ export default function Statistics({ stats }) {
 
   return (
     <DashboardLayout>
-      <Head title="RFQ পরিসংখ্যান" />
+      <Head title="RFQ Statistics" />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -73,9 +73,9 @@ export default function Statistics({ stats }) {
             <FiArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">RFQ পরিসংখ্যান</h1>
+            <h1 className="text-2xl font-bold text-gray-900">RFQ Statistics</h1>
             <p className="text-sm text-gray-600 mt-1">
-              সকল কোটা অনুরোধের বিস্তারিত পরিসংখ্যান
+              Detailed statistics of all quota requests
             </p>
           </div>
         </div>
@@ -85,7 +85,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-indigo-100 text-sm">মোট RFQ</p>
+                <p className="text-indigo-100 text-sm">total RFQ</p>
                 <p className="text-3xl font-bold mt-1">{totalRfqs}</p>
               </div>
               <FiFileText className="w-8 h-8 text-indigo-200" />
@@ -95,7 +95,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm">প্রতিক্রিয়া হার</p>
+                <p className="text-green-100 text-sm">Response Rate</p>
                 <p className="text-3xl font-bold mt-1">{responseRate}%</p>
               </div>
               <BsGraphUp className="w-8 h-8 text-green-200" />
@@ -105,7 +105,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm">গড় কোটা/RFQ</p>
+                <p className="text-purple-100 text-sm">Average Quota/RFQ</p>
                 <p className="text-3xl font-bold mt-1">{response_rate.avg_quotes_per_rfq?.toFixed(1) || '0'}</p>
               </div>
               <BsPeople className="w-8 h-8 text-purple-200" />
@@ -115,7 +115,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-yellow-100 text-sm">জনপ্রিয় পণ্য</p>
+                <p className="text-yellow-100 text-sm">Popular products</p>
                 <p className="text-3xl font-bold mt-1">{popular_products.length}</p>
               </div>
               <FiTrendingUp className="w-8 h-8 text-yellow-200" />
@@ -129,7 +129,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiPieChart className="w-5 h-5 text-indigo-600" />
-              স্ট্যাটাস অনুযায়ী RFQ
+              According to the status RFQ
             </h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -140,9 +140,9 @@ export default function Statistics({ stats }) {
                     cy="50%"
                     labelLine={false}
                     label={({ status, percent }) =>
-                      `${status === 'open' ? 'খোলা' :
-                        status === 'quoted' ? 'কোটা প্রাপ্ত' :
-                          status === 'closed' ? 'বন্ধ' : status}: ${(percent * 100).toFixed(0)}%`
+                      `${status === 'open' ? 'open' :
+                        status === 'quoted' ? 'Quota received' :
+                          status === 'closed' ? 'off' : status}: ${(percent * 100).toFixed(0)}%`
                     }
                     outerRadius={80}
                     fill="#8884d8"
@@ -162,9 +162,9 @@ export default function Statistics({ stats }) {
                 <div key={item.status} className="text-center">
                   <span className="text-2xl font-bold" style={{ color: COLORS[item.status] }}>{item.total}</span>
                   <p className="text-xs text-gray-500 capitalize">
-                    {item.status === 'open' ? 'খোলা' :
-                      item.status === 'quoted' ? 'কোটা প্রাপ্ত' :
-                        item.status === 'closed' ? 'বন্ধ' : item.status}
+                    {item.status === 'open' ? 'open' :
+                      item.status === 'quoted' ? 'Quota received' :
+                        item.status === 'closed' ? 'off' : item.status}
                   </p>
                 </div>
               ))}
@@ -175,7 +175,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiCalendar className="w-5 h-5 text-indigo-600" />
-              মাসিক প্রবণতা (১২ মাস)
+              Monthly trends (12 months)
             </h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -197,7 +197,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiUsers className="w-5 h-5 text-indigo-600" />
-              RFQ সংখ্যা অনুযায়ী শীর্ষ ক্রেতা
+              RFQ Top buyers by number
             </h3>
             <div className="space-y-3">
               {by_buyer.map((buyer, index) => (
@@ -210,11 +210,11 @@ export default function Statistics({ stats }) {
                       <span className="text-sm font-medium text-gray-900 block">
                         {buyer.buyer?.name}
                       </span>
-                      <span className="text-xs text-gray-500">গড় পরিমাণ: {Math.round(buyer.avg_quantity)}</span>
+                      <span className="text-xs text-gray-500">The average amount is: {Math.round(buyer.avg_quantity)}</span>
                     </div>
                   </div>
                   <span className="text-sm font-medium text-indigo-600">
-                    {buyer.total_rfqs} টি RFQ
+                    {buyer.total_rfqs} T RFQ
                   </span>
                 </div>
               ))}
@@ -225,7 +225,7 @@ export default function Statistics({ stats }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MdOutlineAttachMoney className="w-5 h-5 text-indigo-600" />
-              সর্বাধিক অনুরোধকৃত পণ্য
+              Most requested product
             </h3>
             <div className="space-y-3">
               {popular_products.map((product, index) => (
@@ -239,7 +239,7 @@ export default function Statistics({ stats }) {
                     </span>
                   </div>
                   <span className="text-sm font-medium text-indigo-600">
-                    {product.count} টি অনুরোধ
+                    {product.count} t request
                   </span>
                 </div>
               ))}
@@ -250,26 +250,26 @@ export default function Statistics({ stats }) {
         {/* Response Rate Breakdown - Detailed analysis */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900">প্রতিক্রিয়া হার বিশ্লেষণ</h3>
+            <h3 className="font-semibold text-gray-900">Reaction rate analysis</h3>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-500 mb-1">কোটা সহ RFQ</p>
+                <p className="text-sm text-gray-500 mb-1">with quotas RFQ</p>
                 <p className="text-2xl font-bold text-green-600">{response_rate.with_quotes}</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  {totalRfqs > 0 ? ((response_rate.with_quotes / totalRfqs) * 100).toFixed(1) : 0}% মোটের
+                  {totalRfqs > 0 ? ((response_rate.with_quotes / totalRfqs) * 100).toFixed(1) : 0}% A total of
                 </p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-500 mb-1">কোটা ছাড়া RFQ</p>
+                <p className="text-sm text-gray-500 mb-1"> RFQ</p>
                 <p className="text-2xl font-bold text-yellow-600">{response_rate.without_quotes}</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  {totalRfqs > 0 ? ((response_rate.without_quotes / totalRfqs) * 100).toFixed(1) : 0}% মোটের
+                  {totalRfqs > 0 ? ((response_rate.without_quotes / totalRfqs) * 100).toFixed(1) : 0}% A total of
                 </p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-500 mb-1">প্রতি RFQ-তে গড় কোটা</p>
+                <p className="text-sm text-gray-500 mb-1">Average quota per RFQ is</p>
                 <p className="text-2xl font-bold text-indigo-600">{response_rate.avg_quotes_per_rfq?.toFixed(2) || '0'}</p>
               </div>
             </div>
@@ -277,7 +277,7 @@ export default function Statistics({ stats }) {
             {/* Progress Bar */}
             <div className="mt-6">
               <div className="flex justify-between text-sm text-gray-600 mb-2">
-                <span>প্রতিক্রিয়া হার</span>
+                <span>Response Rate</span>
                 <span>{responseRate}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-3">
@@ -293,23 +293,23 @@ export default function Statistics({ stats }) {
         {/* Status Breakdown Table - Detailed status analysis */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900">স্ট্যাটাস বিশ্লেষণ</h3>
+            <h3 className="font-semibold text-gray-900">Status analysis</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    স্ট্যাটাস
+                    Status
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    সংখ্যা
+                    Number
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    শতাংশ
+                    Percentage
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ভিজুয়াল
+                    Visual
                   </th>
                 </tr>
               </thead>
@@ -320,9 +320,9 @@ export default function Statistics({ stats }) {
                     <tr key={item.status} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
                         <span className="capitalize text-gray-900">
-                          {item.status === 'open' ? 'খোলা' :
-                            item.status === 'quoted' ? 'কোটা প্রাপ্ত' :
-                              item.status === 'closed' ? 'বন্ধ' : item.status}
+                          {item.status === 'open' ? 'open' :
+                            item.status === 'quoted' ? 'Quota received' :
+                              item.status === 'closed' ? 'off' : item.status}
                         </span>
                       </td>
                       <td className="px-6 py-4">

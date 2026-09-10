@@ -44,9 +44,9 @@ export default function Quotes({ rfq, quotes }) {
   // Get status badge with appropriate styling
   const getStatusBadge = (status) => {
     const badges = {
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'অপেক্ষমান' },
-      accepted: { color: 'bg-green-100 text-green-800', icon: MdVerified, label: 'গৃহীত' },
-      rejected: { color: 'bg-red-100 text-red-800', icon: MdWarning, label: 'প্রত্যাখ্যাত' },
+      pending: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'Awaiting' },
+      accepted: { color: 'bg-green-100 text-green-800', icon: MdVerified, label: 'accepted' },
+      rejected: { color: 'bg-red-100 text-red-800', icon: MdWarning, label: 'Rejected' },
     };
     const badge = badges[status] || badges.pending;
     const Icon = badge.icon;
@@ -65,7 +65,7 @@ export default function Quotes({ rfq, quotes }) {
 
   return (
     <DashboardLayout>
-      <Head title={`RFQ #${rfq.rfq_number} - কোটা সমূহ`} />
+      <Head title={`RFQ #${rfq.rfq_number} - Quotas`} />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -77,9 +77,9 @@ export default function Quotes({ rfq, quotes }) {
             <FiArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">RFQ #{rfq.rfq_number} - কোটা সমূহ</h1>
+            <h1 className="text-2xl font-bold text-gray-900">RFQ #{rfq.rfq_number} - Quotas</h1>
             <p className="text-sm text-gray-600 mt-1">
-              {rfq.title} - জমা দেওয়া সকল কোটা
+              {rfq.title} - All quotas submitted are
             </p>
           </div>
         </div>
@@ -90,7 +90,7 @@ export default function Quotes({ rfq, quotes }) {
             // Empty state - No quotes submitted
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
               <FiDollarSign className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">এই RFQ-এর জন্য এখনও কোনো কোটা জমা দেওয়া হয়নি।</p>
+              <p className="text-gray-500">No quotas have been submitted for this RFQ yet।</p>
             </div>
           ) : (
             // List of quotes
@@ -112,7 +112,7 @@ export default function Quotes({ rfq, quotes }) {
                       {getStatusBadge(quote.status)}
                       {!isValidQuote(quote) && quote.status === 'pending' && (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                          মেয়াদোত্তীর্ণ
+                          Expired
                         </span>
                       )}
                     </div>
@@ -121,18 +121,18 @@ export default function Quotes({ rfq, quotes }) {
                   {/* Quote Details - Summary cards */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-500 mb-1">মোট পরিমাণ</p>
+                      <p className="text-sm text-gray-500 mb-1">total amount</p>
                       <p className="text-2xl font-bold text-indigo-600">{formatCurrency(quote.total_amount)}</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-500 mb-1">মেয়াদ শেষ</p>
+                      <p className="text-sm text-gray-500 mb-1">Expires</p>
                       <div className="flex items-center gap-2">
                         <FiCalendar className="w-4 h-4 text-gray-400" />
                         <span className="text-lg font-semibold text-gray-900">{formatDate(quote.valid_until)}</span>
                       </div>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-500 mb-1">কোটা নম্বর</p>
+                      <p className="text-sm text-gray-500 mb-1">Quota Number</p>
                       <p className="text-lg font-mono font-semibold text-gray-900">{quote.quote_number}</p>
                     </div>
                   </div>
@@ -140,13 +140,13 @@ export default function Quotes({ rfq, quotes }) {
                   {/* Product Breakdown - Detailed pricing */}
                   {quote.product_breakdown && (
                     <div className="mt-4">
-                      <h4 className="font-medium text-gray-900 mb-3">পণ্যের বিবরণ</h4>
+                      <h4 className="font-medium text-gray-900 mb-3">Product details</h4>
                       <div className="bg-gray-50 rounded-lg p-4">
                         {Array.isArray(quote.product_breakdown) ? (
                           <div className="space-y-2">
                             {quote.product_breakdown.map((item, index) => (
                               <div key={index} className="flex justify-between items-center">
-                                <span className="text-sm text-gray-600">{item.product_name || 'পণ্য'}</span>
+                                <span className="text-sm text-gray-600">{item.product_name || 'Product'}</span>
                                 <div className="text-right">
                                   <span className="text-sm text-gray-900">{item.quantity} x {formatCurrency(item.price)}</span>
                                   <span className="text-sm font-medium text-indigo-600 ml-4">
@@ -170,7 +170,7 @@ export default function Quotes({ rfq, quotes }) {
                     <div className="flex items-center gap-4 text-sm text-gray-500">
                       <span className="flex items-center gap-1">
                         <FiClock className="w-4 h-4" />
-                        জমা: {formatDate(quote.created_at)}
+                        Deposit: {formatDate(quote.created_at)}
                       </span>
                       {quote.supplierProfile && (
                         <span className="flex items-center gap-1">
@@ -184,7 +184,7 @@ export default function Quotes({ rfq, quotes }) {
                         href={route('admin.orders.show', quote.order.id)}
                         className="inline-flex items-center gap-1 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
                       >
-                        অর্ডার দেখুন
+                        View order
                         <FiArrowLeft className="w-4 h-4 rotate-180" />
                       </Link>
                     )}

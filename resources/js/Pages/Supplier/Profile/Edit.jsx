@@ -97,23 +97,23 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
 
   // Tab configuration
   const tabs = [
-    { id: 'basic', name: 'মৌলিক তথ্য' },
-    { id: 'business', name: 'ব্যবসায়িক বিবরণ' },
-    { id: 'documents', name: 'নথিপত্র' },
-    { id: 'password', name: 'নিরাপত্তা' },
+    { id: 'basic', name: 'Basic information' },
+    { id: 'business', name: 'Business Description' },
+    { id: 'documents', name: 'Documents' },
+    { id: 'password', name: 'Security' },
   ];
 
   return (
     <DashboardLayout>
-      <Head title="প্রোফাইল সম্পাদনা" />
+      <Head title="Edit profile" />
 
       <div className="space-y-6">
         {/* Header - Page title and action buttons */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">প্রোফাইল সম্পাদনা</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Edit profile</h1>
             <p className="text-sm text-gray-600 mt-1">
-              আপনার কোম্পানির তথ্য এবং সেটিংস আপডেট করুন
+              Update your company information and settings
             </p>
           </div>
           <div className="flex gap-2">
@@ -122,7 +122,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
               className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
             >
               <FiX className="w-4 h-4" />
-              <span>বাতিল</span>
+              <span>cancel</span>
             </Link>
             <button
               onClick={handleSubmit}
@@ -130,7 +130,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
               className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
             >
               <FiSave className="w-4 h-4" />
-              <span>{processing ? 'সংরক্ষণ হচ্ছে...' : 'পরিবর্তন সংরক্ষণ'}</span>
+              <span>{processing ? 'Saving...' : 'Save changes'}</span>
             </button>
           </div>
         </div>
@@ -158,9 +158,9 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
           {activeTab === 'basic' && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">মৌলিক তথ্য</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Basic information</h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  আপনার মৌলিক যোগাযোগের তথ্য এবং কোম্পানির বিবরণ আপডেট করুন।
+                  Update your basic contact information and company details।
                 </p>
               </div>
 
@@ -168,7 +168,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Company Name */}
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    কোম্পানির নাম <span className="text-red-500">*</span>
+                    Company Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -185,7 +185,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Contact Person */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    যোগাযোগের ব্যক্তির নাম <span className="text-red-500">*</span>
+                    Name of contact person <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -200,7 +200,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Email */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    ইমেইল ঠিকানা <span className="text-red-500">*</span>
+                    Email address <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -215,7 +215,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Company Email */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    কোম্পানির ইমেইল <span className="text-red-500">*</span>
+                    Company Email <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -232,7 +232,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Company Phone */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    কোম্পানির ফোন <span className="text-red-500">*</span>
+                    Company Phone <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="tel"
@@ -249,7 +249,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Website */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    ওয়েবসাইট
+                    
                   </label>
                   <input
                     type="url"
@@ -264,7 +264,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Company Address */}
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    রাস্তার ঠিকানা <span className="text-red-500">*</span>
+                    The street address is <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     value={data.company_address}
@@ -281,7 +281,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* City */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    শহর <span className="text-red-500">*</span>
+                    City <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -296,7 +296,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* State */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    রাজ্য / প্রদেশ
+                    State / Province
                   </label>
                   <input
                     type="text"
@@ -309,7 +309,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Postal Code */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    পোস্টাল কোড
+                    Postal Code
                   </label>
                   <input
                     type="text"
@@ -322,14 +322,14 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Country */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    দেশ
+                    Country
                   </label>
                   <select
                     value={data.country}
                     onChange={e => setData('country', e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   >
-                    <option value="">দেশ নির্বাচন করুন</option>
+                    <option value="">Select country</option>
                     {countries.map((country) => (
                       <option key={country} value={country}>{country}</option>
                     ))}
@@ -343,9 +343,9 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
           {activeTab === 'business' && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">ব্যবসায়িক বিবরণ</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Business Description</h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  আপনার ব্যবসা সম্পর্কে অতিরিক্ত তথ্য প্রদান করুন।
+                  Provide additional information about your business।
                 </p>
               </div>
 
@@ -353,7 +353,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Trade License Number */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    ট্রেড লাইসেন্স নম্বর <span className="text-red-500">*</span>
+                    Trade License No. <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -370,7 +370,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Tax ID */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    ট্যাক্স আইডি / ভ্যাট নম্বর
+                    Tax ID / VAT Number
                   </label>
                   <input
                     type="text"
@@ -383,14 +383,14 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Business Type */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    ব্যবসার ধরন
+                    Business Type
                   </label>
                   <select
                     value={data.business_type}
                     onChange={e => setData('business_type', e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   >
-                    <option value="">ব্যবসার ধরন নির্বাচন করুন</option>
+                    <option value="">Select Business Type</option>
                     {businessTypes.map((type) => (
                       <option key={type} value={type}>{type}</option>
                     ))}
@@ -400,7 +400,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Year Established */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    প্রতিষ্ঠার বছর
+                    Year of Establishment
                   </label>
                   <input
                     type="number"
@@ -415,7 +415,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Number of Employees */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    কর্মচারীর সংখ্যা
+                    Number of employees
                   </label>
                   <input
                     type="number"
@@ -429,36 +429,36 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Annual Revenue */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    বার্ষিক আয়ের পরিসীমা
+                    Annual Income Range
                   </label>
                   <select
                     value={data.annual_revenue}
                     onChange={e => setData('annual_revenue', e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   >
-                    <option value="">পরিসীমা নির্বাচন করুন</option>
-                    <option value="< 1M">$১M এর কম</option>
-                    <option value="1M - 5M">$১M - $৫M</option>
-                    <option value="5M - 10M">$৫M - $১০M</option>
-                    <option value="10M - 50M">$১০M - $৫০M</option>
-                    <option value="> 50M">$৫০M এর বেশি</option>
+                    <option value="">Select the range</option>
+                    <option value="< 1M">$Less than 1M</option>
+                    <option value="1M - 5M">$1M - $5M</option>
+                    <option value="5M - 10M">$5M - $10M</option>
+                    <option value="10M - 50M">$10M - $50M</option>
+                    <option value="> 50M">$More than 50M</option>
                   </select>
                 </div>
 
                 {/* Description */}
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    কোম্পানির বিবরণ
+                    Company Details
                   </label>
                   <textarea
                     value={data.description}
                     onChange={e => setData('description', e.target.value)}
                     rows="4"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                    placeholder="ক্রেতাদের আপনার কোম্পানি, আপনার দক্ষতা এবং আপনার বিশেষত্ব সম্পর্কে জানান..."
+                    placeholder="Tell buyers about your company, your expertise and your specialty..."
                   />
                   <p className="mt-1 text-xs text-gray-500">
-                    সর্বোচ্চ ২০০০ অক্ষর। এটি আপনার পাবলিক প্রোফাইলে প্রদর্শিত হবে।
+                    Maximum 2000 characters. This will appear on your public profile।
                   </p>
                   {errors.description && (
                     <p className="mt-1 text-sm text-red-600">{errors.description}</p>
@@ -472,9 +472,9 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
           {activeTab === 'documents' && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">নথিপত্র</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Documents</h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  ভেরিফিকেশনের জন্য প্রয়োজনীয় নথি আপলোড করুন। সকল নথি পরিষ্কার এবং বৈধ হতে হবে।
+                  Upload required documents for verification. All documents must be clear and valid।
                 </p>
               </div>
 
@@ -482,14 +482,14 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Logo Upload */}
                 <div className="border-2 border-gray-200 border-dashed rounded-lg p-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    কোম্পানির লোগো
+                    Company Logo
                   </label>
                   <div className="flex items-start gap-6">
                     {logoPreview ? (
                       <div className="relative">
                         <img
                           src={logoPreview}
-                          alt="লোগো প্রিভিউ"
+                          alt="Logo preview"
                           className="w-24 h-24 object-cover rounded-lg border border-gray-200"
                         />
                         <button
@@ -518,10 +518,10 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                         onClick={() => document.getElementById('logo').click()}
                         className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
                       >
-                        ফাইল নির্বাচন
+                        Select file
                       </button>
                       <p className="mt-2 text-xs text-gray-500">
-                        প্রস্তাবিত: বর্গাকার ছবি, কমপক্ষে ২০০x২০০px। সর্বোচ্চ ২MB।
+                        Recommended: Square image, at least 200x200px. Maximum 2MB।
                       </p>
                       {progress?.logo && (
                         <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
@@ -539,7 +539,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Trade License Document */}
                 <div className="border-2 border-gray-200 border-dashed rounded-lg p-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    ট্রেড লাইসেন্স নথি
+                    Trade License Document
                   </label>
                   <div className="flex items-start gap-6">
                     {licensePreview ? (
@@ -573,10 +573,10 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                         onClick={() => document.getElementById('trade_license_document').click()}
                         className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
                       >
-                        ফাইল নির্বাচন
+                        Select file
                       </button>
                       <p className="mt-2 text-xs text-gray-500">
-                        গৃহীত ফরম্যাট: PDF, JPG, PNG। সর্বোচ্চ ৫MB।
+                        Accepted formats: PDF, JPG, PNG. Maximum 5MB।
                       </p>
                       {progress?.trade_license_document && (
                         <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
@@ -596,7 +596,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Certificate of Incorporation */}
                 <div className="border-2 border-gray-200 border-dashed rounded-lg p-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    নিবন্ধনের সনদ (ঐচ্ছিক)
+                    Certificate of Registration (Optional)
                   </label>
                   <div className="flex items-start gap-6">
                     {certificatePreview ? (
@@ -630,10 +630,10 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                         onClick={() => document.getElementById('certificate_of_incorporation').click()}
                         className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
                       >
-                        ফাইল নির্বাচন
+                        Select file
                       </button>
                       <p className="mt-2 text-xs text-gray-500">
-                        গৃহীত ফরম্যাট: PDF, JPG, PNG। সর্বোচ্চ ৫MB।
+                        Accepted formats: PDF, JPG, PNG. Maximum 5MB।
                       </p>
                       {progress?.certificate_of_incorporation && (
                         <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
@@ -654,12 +654,12 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
               <div className="bg-blue-50 rounded-lg p-4 flex items-start gap-3">
                 <FiInfo className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-blue-700 font-medium">নথির প্রয়োজনীয়তা</p>
+                  <p className="text-sm text-blue-700 font-medium">Document Requirements</p>
                   <ul className="mt-2 text-sm text-blue-600 list-disc list-inside">
-                    <li>নথিগুলি বৈধ এবং মেয়াদোত্তীর্ণ নয় হতে হবে</li>
-                    <li>সমস্ত তথ্য পরিষ্কারভাবে দৃশ্যমান হওয়া উচিত</li>
-                    <li>গৃহীত ফরম্যাট: PDF, JPG, PNG (সর্বোচ্চ ৫MB প্রতিটি)</li>
-                    <li>ভেরিফিকেশন সাধারণত ২-৩ কার্যদিবস সময় নেয়</li>
+                    <li>Documents must be valid and not expired</li>
+                    <li>All information should be clearly visible</li>
+                    <li>Accepted formats: PDF, JPG, PNG (Maximum 5MB each))</li>
+                    <li>Verification usually takes 2-3 working days</li>
                   </ul>
                 </div>
               </div>
@@ -670,9 +670,9 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
           {activeTab === 'password' && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">পাসওয়ার্ড পরিবর্তন</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Change password</h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  আপনার অ্যাকাউন্ট নিরাপদ রাখতে পাসওয়ার্ড আপডেট করুন।
+                  Update password to keep your account secure।
                 </p>
               </div>
 
@@ -680,7 +680,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Current Password */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    বর্তমান পাসওয়ার্ড
+                    Current password is
                   </label>
                   <input
                     type="password"
@@ -696,7 +696,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* New Password */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    নতুন পাসওয়ার্ড
+                    New Password
                   </label>
                   <input
                     type="password"
@@ -712,7 +712,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Confirm New Password */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    নতুন পাসওয়ার্ড নিশ্চিত করুন
+                    Confirm new password
                   </label>
                   <input
                     type="password"
@@ -725,12 +725,12 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 <div className="bg-yellow-50 rounded-lg p-4 flex items-start gap-3">
                   <FiAlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm text-yellow-700 font-medium">পাসওয়ার্ড প্রয়োজনীয়তা</p>
+                    <p className="text-sm text-yellow-700 font-medium">Password requirements</p>
                     <ul className="mt-2 text-sm text-yellow-600 list-disc list-inside">
-                      <li>সর্বনিম্ন ৮ অক্ষর</li>
-                      <li>অন্তত একটি বড় হাতের অক্ষর থাকতে হবে</li>
-                      <li>অন্তত একটি সংখ্যা থাকতে হবে</li>
-                      <li>অন্তত একটি বিশেষ অক্ষর থাকতে হবে</li>
+                      <li>Minimum 8 characters</li>
+                      <li>Must contain at least one uppercase letter</li>
+                      <li>Must contain at least one number</li>
+                      <li>Must contain at least one special character</li>
                     </ul>
                   </div>
                 </div>

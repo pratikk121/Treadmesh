@@ -124,17 +124,17 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
 
   return (
     <DashboardLayout>
-      <Head title={`${product.name} - পণ্যের বিবরণ`} />
+      <Head title={`${product.name} - Product details`} />
 
       <div className="space-y-6">
         {/* Breadcrumb Navigation */}
         <div className="flex items-center space-x-2 text-sm">
           <Link href={route('buyer.dashboard')} className="text-gray-500 hover:text-gray-700">
-            ড্যাশবোর্ড
+            Dashboard
           </Link>
           <span className="text-gray-400">/</span>
           <Link href={route('buyer.products.index')} className="text-gray-500 hover:text-gray-700">
-            পণ্য
+            Product
           </Link>
           <span className="text-gray-400">/</span>
           <span className="text-gray-800 font-medium">{product.name}</span>
@@ -145,7 +145,7 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
           onClick={() => window.history.back()}
           className="flex items-center text-gray-600 hover:text-gray-800"
         >
-          <FiArrowLeft className="mr-2" /> পণ্যে ফিরে যান
+          <FiArrowLeft className="mr-2" /> Back to Product
         </button>
 
         {/* Main Product Section */}
@@ -182,7 +182,7 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
                   </span>
                   {product.bulk_prices?.length > 0 && (
                     <span className="px-3 py-1 bg-green-100 text-green-600 text-sm rounded-full flex items-center">
-                      <BsGraphUp className="mr-1" /> বাল্ক মূল্য উপলব্ধ
+                      <BsGraphUp className="mr-1" /> Bulk pricing available
                     </span>
                   )}
                 </div>
@@ -192,12 +192,12 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">সাপ্লায়ার</p>
+                    <p className="text-sm text-gray-500 mb-1">Supplier</p>
                     <div className="flex items-center">
                       <FiTruck className="text-gray-400 mr-2" />
                       <span className="font-medium text-gray-800">{product.supplier?.user?.name}</span>
                       {product.supplier?.verification_status === 'verified' && (
-                        <FiCheckCircle className="ml-2 text-green-500" title="ভেরিফাইড সাপ্লায়ার" />
+                        <FiCheckCircle className="ml-2 text-green-500" title="Verified Supplier" />
                       )}
                     </div>
                   </div>
@@ -205,26 +205,26 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
                     href={route('buyer.suppliers.show', product.supplier_id)}
                     className="text-sm text-indigo-600 hover:text-indigo-800"
                   >
-                    সাপ্লায়ার প্রোফাইল দেখুন →
+                    View Supplier Profile →
                   </Link>
                 </div>
               </div>
 
               {/* Product Description */}
               <div className="mb-6">
-                <h3 className="font-medium text-gray-700 mb-2">পণ্যের বিবরণ</h3>
-                <p className="text-gray-600">{product.description || 'কোনো বিবরণ দেওয়া হয়নি।'}</p>
+                <h3 className="font-medium text-gray-700 mb-2">Product details</h3>
+                <p className="text-gray-600">{product.description || 'No Details Provided।'}</p>
               </div>
 
               {/* Pricing and Quantity Section */}
               <div className="mb-6 p-4 border rounded-lg">
-                <h3 className="font-medium text-gray-700 mb-4">মূল্য ও পরিমাণ</h3>
+                <h3 className="font-medium text-gray-700 mb-4">Price and Quantity</h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Quantity Input */}
                   <div>
                     <label className="block text-sm text-gray-500 mb-1">
-                      পরিমাণ ({product.unit})
+                      Amount ({product.unit})
                     </label>
 
                     <div className="flex items-center gap-2">
@@ -237,31 +237,31 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
                       />
 
                       <span className="text-sm text-gray-500">
-                        (সর্বনিম্ন: {product.minimum_order_quantity})
+                        (Minimum: {product.minimum_order_quantity})
                       </span>
                     </div>
                   </div>
 
                   {/* Unit Price Display */}
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">একক মূল্য</p>
+                    <p className="text-sm text-gray-500 mb-1">Unit price is</p>
                     <p className="text-2xl font-bold text-indigo-600">
                       {formatCurrency(priceInfo.unitPrice)}
                     </p>
                     {priceInfo.savings > 0 && (
                       <p className="text-sm text-green-600 mt-1">
-                        আপনি {priceInfo.savings}% সাশ্রয় করছেন
+                        You are {priceInfo.savings}% saving
                       </p>
                     )}
                   </div>
 
                   {/* Total Amount Display */}
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">মোট পরিমাণ</p>
+                    <p className="text-sm text-gray-500 mb-1">total amount</p>
                     <p className="text-xl font-bold text-gray-800">
                       {quantity < product.minimum_order_quantity ? (
                         <span className="text-red-500 text-sm font-medium">
-                          অনুমোদিত নয় (সর্বনিম্ন {product.minimum_order_quantity})
+                          Not Allowed (Minimum {product.minimum_order_quantity})
                         </span>
                       ) : (
                         formatCurrency(priceInfo.totalPrice)
@@ -275,16 +275,16 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
               {bulkTiers?.length > 0 && (
                 <div className="mb-6">
                   <h3 className="font-medium text-gray-700 mb-3 flex items-center">
-                    <BsGraphUp className="mr-2" /> বাল্ক মূল্য স্তর
+                    <BsGraphUp className="mr-2" /> Bulk price level
                   </h3>
                   <div className="overflow-x-auto">
                     <table className="min-w-full bg-white border rounded-lg">
                       <thead className="bg-gray-50">
                         <tr>
-                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">পরিমাণ</th>
-                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">একক মূল্য</th>
-                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">মোট</th>
-                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">সাশ্রয়</th>
+                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Amount</th>
+                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Unit price is</th>
+                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">total</th>
+                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">saving</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y">
@@ -303,7 +303,7 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
                               {formatCurrency(tier.total)}
                             </td>
                             <td className="px-4 py-2 text-sm text-green-600">
-                              {tier.savings ? `সাশ্রয় ${tier.savings}%` : '-'}
+                              {tier.savings ? `saving ${tier.savings}%` : '-'}
                             </td>
                           </tr>
                         ))}
@@ -321,14 +321,14 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
                   className="flex-1 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
                   <FiShoppingCart className="mr-2" />
-                  এখনই অর্ডার করুন
+                  Order now
                 </button>
                 <button
                   onClick={createRFQ}
                   className="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center"
                 >
                   <FiPackage className="mr-2" />
-                  RFQ তৈরি করুন
+                  RFQ Create
                 </button>
               </div>
             </div>
@@ -339,28 +339,28 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Product Specifications */}
           <div className="lg:col-span-2 bg-white rounded-xl border p-6">
-            <h3 className="font-medium text-gray-700 mb-4">পণ্যের বিবরণ</h3>
+            <h3 className="font-medium text-gray-700 mb-4">Product details</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-500">সর্বনিম্ন অর্ডার পরিমাণ</p>
+                <p className="text-sm text-gray-500">Minimum order quantity</p>
                 <p className="font-medium">{product.minimum_order_quantity} {product.unit}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">স্টক অবস্থা</p>
+                <p className="text-sm text-gray-500">Stock Status</p>
                 <p className="font-medium">
                   {product.stock_quantity > 0 ? (
-                    <span className="text-green-600">স্টকে আছে ({product.stock_quantity})</span>
+                    <span className="text-green-600"> ({product.stock_quantity})</span>
                   ) : (
-                    <span className="text-red-600">স্টকে নেই</span>
+                    <span className="text-red-600">Out of stock</span>
                   )}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">ইউনিট</p>
+                <p className="text-sm text-gray-500">Unit</p>
                 <p className="font-medium">{product.unit}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">ক্যাটাগরি</p>
+                <p className="text-sm text-gray-500">Category</p>
                 <p className="font-medium">{product.category}</p>
               </div>
             </div>
@@ -368,21 +368,21 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
 
           {/* Supplier Badges */}
           <div className="bg-white rounded-xl border p-6">
-            <h3 className="font-medium text-gray-700 mb-4">সাপ্লায়ার তথ্য</h3>
+            <h3 className="font-medium text-gray-700 mb-4">Supplier Information</h3>
             <div className="space-y-3">
               {product.supplier?.verification_status === 'verified' && (
                 <div className="flex items-center text-green-600">
                   <FiShield className="mr-2" />
-                  <span className="text-sm">ভেরিফাইড সাপ্লায়ার</span>
+                  <span className="text-sm">Verified Supplier</span>
                 </div>
               )}
               <div className="flex items-center text-gray-600">
                 <FiAward className="mr-2" />
-                <span className="text-sm">{new Date(product.supplier?.created_at).getFullYear()} থেকে সদস্য</span>
+                <span className="text-sm">{new Date(product.supplier?.created_at).getFullYear()} Member from</span>
               </div>
               <div className="flex items-center text-gray-600">
                 <FiClock className="mr-2" />
-                <span className="text-sm">প্রতিক্রিয়া সময়: &lt; ২৪ ঘন্টা</span>
+                <span className="text-sm">Response time: < 24 hours</span>
               </div>
             </div>
           </div>
@@ -391,7 +391,7 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
         {/* Related Products */}
         {relatedProducts?.length > 0 && (
           <div className="bg-white rounded-xl border p-6">
-            <h3 className="font-medium text-gray-700 mb-4">সম্পর্কিত পণ্য</h3>
+            <h3 className="font-medium text-gray-700 mb-4">Related Products</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {relatedProducts.map((product) => (
                 <Link
