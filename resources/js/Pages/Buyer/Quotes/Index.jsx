@@ -150,13 +150,13 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
 
   return (
     <DashboardLayout>
-      <Head title="Received Quota" />
+      <Head title="Quotes Received" />
 
       <div className="space-y-6">
         {/* Header - Page title and compare button */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Received Quota</h2>
+            <h2 className="text-2xl font-bold text-gray-800">Quotes Received</h2>
             <p className="text-gray-600 mt-1">Review and compare quotes from suppliers</p>
           </div>
 
@@ -175,7 +175,7 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
         {/* Stats Cards - Quote status counts */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">Total Quota</p>
+            <p className="text-sm text-gray-500">Total Quotes</p>
             <p className="text-2xl font-bold">{quotes.total}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
@@ -209,7 +209,7 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                     type="text"
                     value={filters.search}
                     onChange={(e) => handleFilterChange('search', e.target.value)}
-                    placeholder="Quota #, RFQ #, Title..."
+                    placeholder="Quote #, RFQ #, Title..."
                     className="w-full pl-10 border rounded-lg px-3 py-2 text-sm"
                   />
                 </div>
@@ -324,8 +324,8 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
           // Empty State - No quotes
           <div className="bg-white rounded-xl p-12 text-center border">
             <FiFileText className="mx-auto text-5xl text-gray-400 mb-4" />
-            <h3 className="text-xl font-medium text-gray-700 mb-2">No Quota</h3>
-            <p className="text-gray-500 mb-6">When suppliers respond to your RFQ, the quota will show here</p>
+            <h3 className="text-xl font-medium text-gray-700 mb-2">No Quotes</h3>
+            <p className="text-gray-500 mb-6">When suppliers respond to your RFQ, the quote will show here</p>
             <Link
               href={route('buyer.rfqs.create')}
               className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 inline-flex items-center"
@@ -414,7 +414,7 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                       </div>
                       <div>
                         <p className="text-xs text-gray-500">Item</p>
-                        <p className="text-sm">{quote.rfq?.products_requested?.length || 0} t product</p>
+                        <p className="text-sm">{quote.rfq?.products_requested?.length || 0} products</p>
                       </div>
                     </div>
 

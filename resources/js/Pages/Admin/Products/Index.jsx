@@ -146,35 +146,35 @@ export default function Index({ products, stats, categories, suppliers, filters 
     const actionConfig = {
       approve: {
         title: 'Multiple product approval',
-        text: `Are you ${selectedProducts.length} t want to approve the product?`,
+        text: `Are you sure you want to approve ${selectedProducts.length} products?`,
         icon: 'question',
         confirmColor: '#10B981',
         action: 'approve'
       },
       reject: {
         title: 'Rejection of multiple products',
-        text: `Are you ${selectedProducts.length} t want to reject the product?`,
+        text: `Are you sure you want to reject ${selectedProducts.length} products?`,
         icon: 'warning',
         confirmColor: '#EF4444',
         action: 'reject'
       },
       feature: {
         title: 'Multiple product promotions',
-        text: `Are you ${selectedProducts.length} T want to mark the product as promoted?`,
+        text: `Are you sure you want to promote ${selectedProducts.length} products?`,
         icon: 'question',
         confirmColor: '#8B5CF6',
         action: 'feature'
       },
       unfeature: {
         title: 'Cancel multiple product promotions',
-        text: `Are you ${selectedProducts.length} T want to remove the promoted mark from the product?`,
+        text: `Are you sure you want to unpromote ${selectedProducts.length} products?`,
         icon: 'question',
         confirmColor: '#6B7280',
         action: 'unfeature'
       },
       delete: {
         title: 'Delete multiple products',
-        text: `Are you ${selectedProducts.length} Want to remove t products? This action cannot be undone।`,
+        text: `Are you sure you want to remove ${selectedProducts.length} products? This action cannot be undone.`,
         icon: 'warning',
         confirmColor: '#EF4444',
         action: 'delete'
@@ -191,7 +191,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
       confirmButtonColor: config.confirmColor,
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, continue',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.products.bulk-update'), {
@@ -203,7 +203,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
             setBulkActionMenu(false);
             Swal.fire({
               title: 'successful!',
-              text: `to start sending messages Multiple operations completed successfully।`,
+              text: `to start sending messages Multiple operations completed successfully.`,
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -218,20 +218,20 @@ export default function Index({ products, stats, categories, suppliers, filters 
   const handleDelete = (product) => {
     Swal.fire({
       title: 'Delete product',
-      text: `Are you ${product.name} Want to delete? This action cannot be undone।`,
+      text: `Are you sure you want to delete "${product.name}"? This action cannot be undone.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, delete',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.products.destroy', product.id), {
           onSuccess: () => {
             Swal.fire({
               title: 'Deleted!',
-              text: 'The product has been deleted।',
+              text: 'The product has been deleted.',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -248,7 +248,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
       onSuccess: () => {
         Swal.fire({
           title: 'successful!',
-          text: `The product is ${product.is_featured ? 'Unpublished' : 'Promoted'} marked as।`,
+          text: `The product is ${product.is_featured ? 'Unpublished' : 'Promoted'} marked as.`,
           icon: 'success',
           timer: 1500,
           showConfirmButton: false
@@ -461,7 +461,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
                   <FiMoreVertical className="w-4 h-4" />
-                  Multiple activities
+                  Bulk Actions
                 </button>
                 {bulkActionMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border z-10">

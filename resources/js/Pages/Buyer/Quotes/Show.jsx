@@ -67,7 +67,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
           </Link>
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <h2 className="text-2xl font-bold text-gray-800">Quota details</h2>
+              <h2 className="text-2xl font-bold text-gray-800">Quote Details</h2>
               <span className={`px-3 py-1 text-sm rounded-full ${getStatusColor(quote.status)}`}>
                 {quote.status === 'pending' ? 'Awaiting' :
                   quote.status === 'accepted' ? 'accepted' :
@@ -91,14 +91,14 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                   className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center"
                 >
                   <FiCheckCircle className="mr-2" />
-                  Taking Quota
+                  Accept Quote
                 </Link>
                 <Link
                   href={route('buyer.quotes.reject-confirm', quote.id)}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center"
                 >
                   <FiXCircle className="mr-2" />
-                  Reject quota
+                  Reject Quote
                 </Link>
               </>
             )}
@@ -118,9 +118,9 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
             <div className="flex">
               <FiAlertCircle className="text-red-600 mr-3" />
               <div>
-                <p className="text-red-700 font-medium">Quota Expired</p>
+                <p className="text-red-700 font-medium">Quote Expired</p>
                 <p className="text-red-600 text-sm mt-1">
-                  This quota is {formatDate(quote.valid_until)} Expired on and can no longer be accepted।
+                  This quote is {formatDate(quote.valid_until)} Expired on and can no longer be accepted.
                 </p>
               </div>
             </div>
@@ -133,9 +133,9 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
             <div className="flex">
               <FiCheckCircle className="text-green-600 mr-3" />
               <div className="flex-1">
-                <p className="text-green-700 font-medium">Quota accepted</p>
+                <p className="text-green-700 font-medium">Quote Accepted</p>
                 <p className="text-green-600 text-sm mt-1">
-                  You are this quota {formatDate(quote.accepted_at)} Received on।
+                  You are this quote {formatDate(quote.accepted_at)} Received on.
                 </p>
                 {!existingOrder && (
                   <Link
@@ -157,12 +157,12 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
             {/* Quote Information */}
             <div className="bg-white rounded-xl border p-6">
               <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiFileText className="mr-2" /> Quota information
+                <FiFileText className="mr-2" /> Quote Information
               </h3>
 
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <p className="text-sm text-gray-500">Quota Number</p>
+                  <p className="text-sm text-gray-500">Quote Number</p>
                   <p className="font-medium">{quote.quote_number}</p>
                 </div>
                 <div>
@@ -269,7 +269,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                 {quote.supplier?.supplier?.verification_status === 'verified' && (
                   <div className="mt-2 flex items-center text-green-600">
                     <FiCheckCircle className="mr-2" />
-                    <span className="text-sm">Verified Supplier</span>
+                    <span className="text-sm">Verified Suppliers</span>
                   </div>
                 )}
 
@@ -286,7 +286,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
             {otherQuotes.length > 0 && (
               <div className="bg-white rounded-xl border p-6">
                 <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                  <FiBarChart2 className="mr-2" /> Other Quota ({otherQuotes.length})
+                  <FiBarChart2 className="mr-2" /> Other Quotes ({otherQuotes.length})
                 </h3>
 
                 <div className="space-y-3">
@@ -309,7 +309,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                         href={route('buyer.quotes.show', otherQuote.id)}
                         className="mt-2 text-xs text-indigo-600 hover:text-indigo-800 inline-block"
                       >
-                        blank to keep the current password See Quota →
+                        View Quote →
                       </Link>
                     </div>
                   ))}
@@ -321,7 +321,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                     href={route('buyer.quotes.compare', { quote_ids: [quote.id, ...otherQuotes.slice(0, 1).map(q => q.id)] })}
                     className="mt-4 block text-center px-4 py-2 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition-colors text-sm"
                   >
-                    Compare Quota
+                    Compare Quotes
                   </Link>
                 )}
               </div>
@@ -339,7 +339,7 @@ export default function QuoteShow({ quote, isExpired, otherQuotes, existingOrder
                   <p className="text-sm text-gray-600 mt-1">Status: {existingOrder.order_status === 'pending_confirmation' ? 'Awaiting' :
                     existingOrder.order_status === 'confirmed' ? 'sure' :
                       existingOrder.order_status === 'processing' ? 'In process' :
-                        existingOrder.order_status === 'shipped' ? 'has been sent' :
+                        existingOrder.order_status === 'shipped' ? 'Sent' :
                           existingOrder.order_status === 'delivered' ? 'Delivered' :
                             existingOrder.order_status === 'cancelled' ? 'cancel' : existingOrder.order_status}</p>
                   <p className="text-sm text-gray-600">total: {formatCurrency(existingOrder.total_amount)}</p>

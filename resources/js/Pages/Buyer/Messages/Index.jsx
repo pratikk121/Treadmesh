@@ -203,7 +203,7 @@ export default function MessagesIndex({ conversationList, rfqs }) {
                       {conversation.last_message_sender === 'You' && (
                         <div className="flex items-center mt-1">
                           <BsCheck2All className="text-blue-500 text-xs" />
-                          <span className="text-xs text-gray-400 ml-1">has been sent</span>
+                          <span className="text-xs text-gray-400 ml-1">Sent</span>
                         </div>
                       )}
                     </div>
@@ -220,9 +220,9 @@ export default function MessagesIndex({ conversationList, rfqs }) {
             <div className="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <FiMessageCircle className="text-4xl text-indigo-600" />
             </div>
-            <h3 className="text-xl font-medium text-gray-800 mb-2">Your message is</h3>
+            <h3 className="text-xl font-medium text-gray-800 mb-2">Your Messages</h3>
             <p className="text-gray-600 mb-6">
-              RFQ And select a conversation from the list to chat with the suppliers about the order।
+              Select a conversation from the list to chat with suppliers regarding RFQs and orders.
             </p>
             <button
               onClick={() => setShowNewMessageModal(true)}
@@ -279,7 +279,7 @@ export default function MessagesIndex({ conversationList, rfqs }) {
                     onChange={(e) => setNewMessage({ ...newMessage, receiver_id: e.target.value })}
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    You may only send messages to suppliers with whom you have a business relationship।
+                    You may only send messages to suppliers with whom you have an active RFQ or order.
                   </p>
                 </div>
 

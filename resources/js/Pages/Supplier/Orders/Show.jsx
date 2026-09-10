@@ -80,7 +80,7 @@ export default function OrderShow({
       pending_confirmation: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: MdPending, label: 'Awaiting' },
       confirmed: { bg: 'bg-blue-100', text: 'text-blue-800', icon: MdVerified, label: 'sure' },
       processing: { bg: 'bg-indigo-100', text: 'text-indigo-800', icon: FiPackage, label: 'In process' },
-      shipped: { bg: 'bg-purple-100', text: 'text-purple-800', icon: FiTruck, label: 'has been sent' },
+      shipped: { bg: 'bg-purple-100', text: 'text-purple-800', icon: FiTruck, label: 'Sent' },
       delivered: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'Delivered' },
       cancelled: { bg: 'bg-red-100', text: 'text-red-800', icon: FiXCircle, label: 'cancel' }
     };
@@ -97,7 +97,7 @@ export default function OrderShow({
 
   // Handle order confirmation
   const handleConfirmOrder = () => {
-    if (confirm('Do you want to confirm this order?')) {
+    if (confirm('Are you sure you want to confirm this order?')) {
       router.post(route('supplier.orders.confirm', order.id));
     }
   };
@@ -233,7 +233,7 @@ export default function OrderShow({
                     This order is awaiting your confirmation
                   </p>
                   <p className="text-sm text-yellow-600 mt-1">
-                    Please review the order details and confirm within 24 hours।
+                    Please review the order details and confirm within 24 hours.
                   </p>
                 </div>
               </div>
@@ -327,7 +327,7 @@ export default function OrderShow({
                             {event.status === 'pending_confirmation' ? 'Awaiting' :
                               event.status === 'confirmed' ? 'sure' :
                                 event.status === 'processing' ? 'In process' :
-                                  event.status === 'shipped' ? 'has been sent' :
+                                  event.status === 'shipped' ? 'Sent' :
                                     event.status === 'delivered' ? 'Delivered' :
                                       event.status === 'cancelled' ? 'cancel' : event.status}
                           </p>
@@ -485,7 +485,7 @@ export default function OrderShow({
                           className="w-full px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
                         >
                           {status === 'processing' ? 'In process' :
-                            status === 'shipped' ? 'has been sent' :
+                            status === 'shipped' ? 'Sent' :
                               status === 'delivered' ? 'Delivered' : label}
                         </button>
                       ))}
@@ -635,7 +635,7 @@ export default function OrderShow({
 
               {messages.length === 0 && (
                 <div className="text-center py-8 text-gray-500">
-                  No messages yet. Start a conversation with the buyer।
+                  No messages yet. Start a conversation with the buyer.
                 </div>
               )}
             </div>

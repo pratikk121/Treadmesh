@@ -73,7 +73,7 @@ export default function BuyerDashboard() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-800">Buyer Dashboard</h2>
-            <p className="text-gray-600 mt-1">Welcome! Here is a summary of your Marketplace activity।</p>
+            <p className="text-gray-600 mt-1">Welcome! Here is a summary of your marketplace activity.</p>
           </div>
           <div className="flex space-x-3 mt-3 md:mt-0">
             <Link
@@ -149,7 +149,7 @@ export default function BuyerDashboard() {
           <div className="bg-white rounded-xl p-6 border hover:shadow-lg transition-shadow">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-gray-500 text-sm">Received Quota</p>
+                <p className="text-gray-500 text-sm">Quotes Received</p>
                 <h3 className="text-2xl font-bold mt-1">{statistics.total_quotes}</h3>
                 <p className="text-sm mt-2">
                   <span className="text-green-600">{statistics.pending_quotes} Awaiting</span>
@@ -204,7 +204,7 @@ export default function BuyerDashboard() {
             </div>
             <div className="mt-4 flex items-center text-sm">
               <FiUsers className="mr-1 text-gray-500" />
-              <span className="text-gray-600">{savedSuppliersCount} T Supplier</span>
+              <span className="text-gray-600">{savedSuppliersCount} saved suppliers</span>
             </div>
           </div>
         </div>
@@ -258,7 +258,7 @@ export default function BuyerDashboard() {
                 </div>
               </div>
               <p className="text-xs text-gray-500 mt-3">
-                Bars are independently scaled for readability।
+                Bars are independently scaled for readability.
               </p>
             </div>
           </div>
@@ -299,7 +299,7 @@ export default function BuyerDashboard() {
                         </div>
                         {rfq.quotes_count > 0 && (
                           <p className="text-sm text-indigo-600 mt-2 font-medium">
-                            {rfq.quotes_count} Received t quota
+                            {rfq.quotes_count} quotes received
                           </p>
                         )}
                       </div>
@@ -321,7 +321,7 @@ export default function BuyerDashboard() {
             <div className="bg-white rounded-xl p-6 border">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold text-lg flex items-center">
-                  <FiPackage className="mr-2" /> Recent Quota
+                  <FiPackage className="mr-2" /> Recent Quotes
                 </h3>
                 <Link href={route('buyer.quotes.index')} className="text-sm text-indigo-600 hover:text-indigo-800">
                   View All →
@@ -333,7 +333,7 @@ export default function BuyerDashboard() {
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center">
-                          <h4 className="font-medium">{quote.supplier?.name} Quota from</h4>
+                          <h4 className="font-medium">Quote from {quote.supplier?.name}</h4>
                           <span className={`ml-3 px-2 py-1 text-xs rounded-full ${getStatusColor(quote.status)}`}>
                             {quote.status === 'pending' ? 'Awaiting' :
                               quote.status === 'accepted' ? 'accepted' :
@@ -359,7 +359,7 @@ export default function BuyerDashboard() {
                     </div>
                   </div>
                 )) : (
-                  <p className="text-gray-500 text-center py-4">No quota found yet</p>
+                  <p className="text-gray-500 text-center py-4">No quotes found yet</p>
                 )}
               </div>
             </div>
@@ -390,7 +390,7 @@ export default function BuyerDashboard() {
                         {order.order_status === 'pending_confirmation' ? 'Awaiting' :
                           order.order_status === 'confirmed' ? 'sure' :
                             order.order_status === 'processing' ? 'In process' :
-                              order.order_status === 'shipped' ? 'has been sent' :
+                              order.order_status === 'shipped' ? 'Sent' :
                                 order.order_status === 'delivered' ? 'Delivered' :
                                   order.order_status === 'cancelled' ? 'cancel' : order.order_status.replace('_', ' ')}
                       </span>
@@ -452,7 +452,7 @@ export default function BuyerDashboard() {
               <h3 className="font-semibold text-lg mb-4 flex items-center">
                 <FiUsers className="mr-2" /> Supplier ({savedSuppliersCount})
               </h3>
-              <p className="text-sm text-gray-600 mb-4">You are {savedSuppliersCount} T contacted supplier</p>
+              <p className="text-sm text-gray-600 mb-4">You have connected with {savedSuppliersCount} suppliers</p>
               <Link
                 href={route('buyer.suppliers.index')}
                 className="inline-block w-full text-center px-4 py-2 bg-white text-indigo-600 rounded-lg hover:bg-gray-50 transition-colors"

@@ -51,7 +51,7 @@ export default function Waiting({ user, supplier }) {
         showSwal(
           'info',
           '📧 Demo mode',
-          'This is a mock email prompt. In real applications, an email will be sent to the admin. No actual email was sent।'
+          'This is a mock email prompt. In real applications, an email will be sent to the admin. No actual email was sent.'
         );
         setData('message', '');
         setShowMessage(false);
@@ -60,7 +60,7 @@ export default function Waiting({ user, supplier }) {
         showSwal(
           'error',
           'Error',
-          'There are some problems. Try again।'
+          'An error occurred. Please try again.'
         );
       }
     });
@@ -102,7 +102,7 @@ export default function Waiting({ user, supplier }) {
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-3">
               <MdError className="w-5 h-5 text-red-600 flex-shrink-0" />
               <span className="text-sm text-red-700">
-                {errors.message || 'There are some problems. Try again।'}
+                {errors.message || 'An error occurred. Please try again.'}
               </span>
             </div>
           )}
@@ -287,8 +287,8 @@ export default function Waiting({ user, supplier }) {
                   <p className="text-xs text-blue-700 flex items-start">
                     <BsShieldCheck className="w-4 h-4 text-blue-500 mr-1 flex-shrink-0 mt-0.5" />
                     <span>
-                      <span className="font-medium">Demo mode:</span> This is a demonstration feature।
-                      No actual email will be sent. Clicking the send button will display a SweetAlert confirmation।
+                      <span className="font-medium">Demo mode:</span> This is a demonstration feature.
+                      No actual email will be sent. Clicking the send button will display a SweetAlert confirmation.
                     </span>
                   </p>
                 </div>

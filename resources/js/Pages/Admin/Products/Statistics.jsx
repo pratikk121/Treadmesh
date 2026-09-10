@@ -163,7 +163,7 @@ export default function Statistics({ stats }) {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [`${value} t product`, 'Number']} />
+                  <Tooltip formatter={(value) => [`${value} products`, 'Number']} />
                 </PieChart>
               </ResponsiveContainer>
             </div>

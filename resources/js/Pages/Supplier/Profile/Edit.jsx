@@ -160,7 +160,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Basic information</h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  Update your basic contact information and company details।
+                  Update your basic contact information and company details.
                 </p>
               </div>
 
@@ -345,7 +345,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Business Description</h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  Provide additional information about your business।
+                  Provide additional information about your business.
                 </p>
               </div>
 
@@ -458,7 +458,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                     placeholder="Tell buyers about your company, your expertise and your specialty..."
                   />
                   <p className="mt-1 text-xs text-gray-500">
-                    Maximum 2000 characters. This will appear on your public profile।
+                    Maximum 2,000 characters. This will appear on your public profile.
                   </p>
                   {errors.description && (
                     <p className="mt-1 text-sm text-red-600">{errors.description}</p>
@@ -474,7 +474,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Documents</h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  Upload required documents for verification. All documents must be clear and valid।
+                  Upload required documents for verification. All documents must be clear and valid.
                 </p>
               </div>
 
@@ -521,7 +521,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                         Select file
                       </button>
                       <p className="mt-2 text-xs text-gray-500">
-                        Recommended: Square image, at least 200x200px. Maximum 2MB।
+                        Recommended: Square image, at least 200x200px. Maximum 2MB.
                       </p>
                       {progress?.logo && (
                         <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
@@ -576,7 +576,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                         Select file
                       </button>
                       <p className="mt-2 text-xs text-gray-500">
-                        Accepted formats: PDF, JPG, PNG. Maximum 5MB।
+                        Accepted formats: PDF, JPG, PNG. Maximum 5MB.
                       </p>
                       {progress?.trade_license_document && (
                         <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
@@ -633,7 +633,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                         Select file
                       </button>
                       <p className="mt-2 text-xs text-gray-500">
-                        Accepted formats: PDF, JPG, PNG. Maximum 5MB।
+                        Accepted formats: PDF, JPG, PNG. Maximum 5MB.
                       </p>
                       {progress?.certificate_of_incorporation && (
                         <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
@@ -672,7 +672,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Change password</h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  Update password to keep your account secure।
+                  Update password to keep your account secure.
                 </p>
               </div>
 

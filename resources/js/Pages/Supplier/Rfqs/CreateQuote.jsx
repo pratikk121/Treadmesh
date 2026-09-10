@@ -95,7 +95,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
       Swal.fire({
         icon: "warning",
         title: "Add product",
-        text: "Please add at least one product to your quota",
+        text: "Please add at least one product to your quote",
         confirmButtonText: "OK"
       });
       return;
@@ -103,7 +103,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
 
     Swal.fire({
       title: "Are you sure?",
-      text: "Do You Want to Submit This Quota?",
+      text: "Are you sure you want to submit this quote?",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes, submit",
@@ -115,15 +115,15 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
           onSuccess: () => {
             Swal.fire({
               icon: "success",
-              title: "successful",
-              text: "Quota successfully submitted"
+              title: 'Success',
+              text: "Quote successfully submitted"
             });
           },
           onError: () => {
             Swal.fire({
               icon: "error",
               title: "Error",
-              text: "Quota could not be submitted"
+              text: "Quote could not be submitted"
             });
           }
         });
@@ -138,7 +138,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
 
   return (
     <DashboardLayout>
-      <Head title={`RFQ #${rfq.rfq_number} - Quota creation`} />
+      <Head title={`RFQ #${rfq.rfq_number} - Create Quote`} />
 
       <div className="space-y-6">
         {/* Header - Back button, title and action buttons */}
@@ -151,7 +151,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Quota creation</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Create Quote</h1>
               <p className="text-sm text-gray-600 mt-1">
                 RFQ: {rfq.rfq_number} - {rfq.title} -for
               </p>
@@ -171,7 +171,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
               className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
             >
               <FiSave className="w-4 h-4" />
-              <span>{processing ? 'Submitting...' : 'Submit Quota'}</span>
+              <span>{processing ? 'Submitting...' : 'Submit Quote'}</span>
             </button>
           </div>
         </div>
@@ -185,7 +185,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">RFQ Summary</h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-gray-500">without quota Total requested amount is</p>
+                    <p className="text-sm text-gray-500">Estimated RFQ Total:</p>
                     <p className="font-bold text-gray-900">{rfq.quantity}</p>
                   </div>
                   <div>
@@ -248,11 +248,11 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
 
               {/* Quote Items */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quota item</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quote Items</h2>
 
                 {selectedProducts.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
-                    Select the product above to add to your quota
+                    Select the product above to add to your quote
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -303,7 +303,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                     {/* Quote Total */}
                     <div className="pt-4 border-t border-gray-200">
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold text-gray-900">Total quota amount</span>
+                        <span className="font-semibold text-gray-900">Total Quote Amount</span>
                         <span className="text-2xl font-bold text-indigo-600">
                           {formatCurrency(data.total_amount)}
                         </span>
@@ -318,7 +318,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
             <div className="space-y-6">
               {/* Quote Settings */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quota details</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quote Details</h2>
 
                 <div className="space-y-4">
                   {/* Valid Until */}
@@ -394,12 +394,12 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                 <div className="flex items-start gap-3">
                   <FiAlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm text-blue-700 font-medium">Quota Tips</p>
+                    <p className="text-sm text-blue-700 font-medium">Quote Tips</p>
                     <ul className="mt-2 text-xs text-blue-600 list-disc list-inside space-y-1">
                       <li>Keep your prices competitive</li>
                       <li>Set a realistic delivery time</li>
                       <li>Clear payment terms help build trust</li>
-                      <li>Buyers prefer quotas with detailed price analysis</li>
+                      <li>Buyers prefer quotes with detailed price breakdowns</li>
                     </ul>
                   </div>
                 </div>

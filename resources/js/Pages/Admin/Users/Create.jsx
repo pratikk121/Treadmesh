@@ -57,7 +57,7 @@ export default function Create() {
       onSuccess: () => {
         Swal.fire({
           title: 'successful!',
-          text: 'User successfully created।',
+          text: 'User successfully created.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -67,7 +67,7 @@ export default function Create() {
         setErrors(errors);
         Swal.fire({
           title: 'Error!',
-          text: 'There is an error in the form. Please check।',
+          text: 'There is an error in the form. Please check your inputs.',
           icon: 'error',
           confirmButtonColor: '#4F46E5'
         });
@@ -293,7 +293,7 @@ export default function Create() {
             <FiAlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-blue-700">
               <p className="font-medium mb-1">Note:</p>
-              <p>If you create a supplier account, after creation you will be redirected to complete their supplier profile।</p>
+              <p>If you create a supplier account, after creation you will be redirected to complete their supplier profile.</p>
             </div>
           </div>
         </div>

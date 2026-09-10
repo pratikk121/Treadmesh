@@ -84,7 +84,7 @@ export default function RfqIndex({ rfqs, counts }) {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-800">My RFQ</h2>
-            <p className="text-gray-600 mt-1">Manage Your Quota Requests</p>
+            <p className="text-gray-600 mt-1">Manage Your RFQs & Quotes</p>
           </div>
           <Link
             href={route('buyer.rfqs.create')}
@@ -105,7 +105,7 @@ export default function RfqIndex({ rfqs, counts }) {
             <p className="text-2xl font-bold text-green-600">{counts.open}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">Quota received</p>
+            <p className="text-sm text-gray-500">Quotes Received</p>
             <p className="text-2xl font-bold text-blue-600">{counts.quoted}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
@@ -212,7 +212,7 @@ export default function RfqIndex({ rfqs, counts }) {
                       </div>
                       <div className="flex items-center">
                         <FiFileText className="mr-1" />
-                        {rfq.quotes?.length || 0} Received t quota
+                        {rfq.quotes?.length || 0} quotes received
                       </div>
                       <div className="flex items-center">
                         Creation Date: {formatDate(rfq.created_at)}
@@ -223,7 +223,7 @@ export default function RfqIndex({ rfqs, counts }) {
                     {rfq.quotes?.length > 0 && (
                       <div className="mt-4 p-3 bg-green-50 rounded-lg">
                         <p className="text-sm font-medium text-green-800 mb-2 flex items-center">
-                          <FiDollarSign className="mr-1" /> Latest Quota:
+                          <FiDollarSign className="mr-1" /> Latest Quote:
                         </p>
                         {rfq.quotes.slice(0, 1).map((quote) => (
                           <div key={quote.id} className="flex items-center justify-between text-sm">
@@ -256,7 +256,7 @@ export default function RfqIndex({ rfqs, counts }) {
                         </Link>
                         <button
                           onClick={() => {
-                            if (confirm('Do you want to cancel this RFQ?')) {
+                            if (confirm('Are you sure you want to cancel this RFQ?')) {
                               router.delete(route('buyer.rfqs.cancel', rfq.id));
                             }
                           }}

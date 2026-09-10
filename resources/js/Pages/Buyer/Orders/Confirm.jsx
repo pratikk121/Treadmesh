@@ -103,9 +103,9 @@ export default function OrderConfirm({ rfq, quote }) {
           <div className="flex">
             <FiCheckCircle className="text-green-600 mr-3" />
             <div>
-              <p className="text-green-700 font-medium">Quota successfully accepted</p>
+              <p className="text-green-700 font-medium">Quote successfully accepted</p>
               <p className="text-green-600 text-sm mt-1">
-                Review the order details below and confirm to continue।
+                Review the order details below and confirm to continue.
               </p>
             </div>
           </div>
@@ -152,12 +152,12 @@ export default function OrderConfirm({ rfq, quote }) {
           {/* Quote Details Section */}
           <div className="bg-white rounded-xl border p-6">
             <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-              <FiFileText className="mr-2" /> Quota details
+              <FiFileText className="mr-2" /> Quote Details
             </h3>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-500">Quota Number</p>
+                <p className="text-sm text-gray-500">Quote Number</p>
                 <p className="font-medium">{quote.quote_number}</p>
               </div>
               <div>
@@ -240,7 +240,7 @@ export default function OrderConfirm({ rfq, quote }) {
                 <Link href="/privacy" className="text-indigo-600 hover:text-indigo-800 mx-1">
                   Privacy Policy
                 </Link>
-                Accepting।
+                Processing acceptance.
               </span>
             </label>
             {errors.terms_accepted && (

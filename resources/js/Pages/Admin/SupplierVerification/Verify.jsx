@@ -41,13 +41,13 @@ export default function Verify({ verificationData }) {
   const handleApprove = () => {
     Swal.fire({
       title: 'Supplier Approval',
-      text: `Are you ${supplier.company_name} Want to approve?`,
+      text: `Are you sure you want to approve ${supplier.company_name}?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#10B981',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, approval',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.supplier-verification.approve', supplier.id), {
@@ -57,7 +57,7 @@ export default function Verify({ verificationData }) {
           onSuccess: () => {
             Swal.fire({
               title: 'Approved!',
-              text: 'Supplier successfully verified।',
+              text: 'Supplier successfully verified.',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -73,7 +73,7 @@ export default function Verify({ verificationData }) {
     if (!rejectionReason) {
       Swal.fire({
         title: 'Error!',
-        text: 'Provide reason for rejection।',
+        text: 'Provide reason for rejection.',
         icon: 'error',
         confirmButtonColor: '#4F46E5'
       });
@@ -82,13 +82,13 @@ export default function Verify({ verificationData }) {
 
     Swal.fire({
       title: 'Reject supplier',
-      text: `Are you ${supplier.company_name} want to reject?`,
+      text: `Are you sure you want to reject ${supplier.company_name}?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, reject',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.supplier-verification.reject', supplier.id), {
@@ -98,7 +98,7 @@ export default function Verify({ verificationData }) {
           onSuccess: () => {
             Swal.fire({
               title: 'Rejected!',
-              text: 'Supplier Verification Rejected।',
+              text: 'Supplier Verification Rejected.',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -114,7 +114,7 @@ export default function Verify({ verificationData }) {
     if (!documentRequest.message) {
       Swal.fire({
         title: 'Error!',
-        text: 'Leave a message for the supplier।',
+        text: 'Leave a message for the supplier.',
         icon: 'error',
         confirmButtonColor: '#4F46E5'
       });
@@ -126,7 +126,7 @@ export default function Verify({ verificationData }) {
         setShowDocRequestForm(false);
         Swal.fire({
           title: '!',
-          text: 'Document request sent to supplier।',
+          text: 'Document request sent to supplier.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false

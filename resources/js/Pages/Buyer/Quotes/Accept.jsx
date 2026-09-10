@@ -67,7 +67,7 @@ export default function QuoteAccept({ quote }) {
 
     // Validate confirmation checkbox
     if (!formData.confirmation) {
-      setErrors({ confirmation: 'You must confirm to accept this Quota' });
+      setErrors({ confirmation: 'You must confirm to accept this quote' });
       return;
     }
 
@@ -85,7 +85,7 @@ export default function QuoteAccept({ quote }) {
 
   return (
     <DashboardLayout>
-      <Head title="Taking Quota" />
+      <Head title="Accept Quote" />
 
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Header - Back button and page title */}
@@ -97,21 +97,21 @@ export default function QuoteAccept({ quote }) {
             <FiArrowLeft className="text-xl" />
           </Link>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Taking Quota</h2>
-            <p className="text-gray-600 mt-1">Confirm acceptance of this quota</p>
+            <h2 className="text-2xl font-bold text-gray-800">Accept Quote</h2>
+            <p className="text-gray-600 mt-1">Confirm acceptance of this quote</p>
           </div>
         </div>
 
         {/* Quote Summary Section */}
         <div className="bg-white rounded-xl border p-6">
           <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-            <FiCheckCircle className="mr-2 text-green-600" /> Quota summary
+            <FiCheckCircle className="mr-2 text-green-600" /> Quote Summary
           </h3>
 
           {/* Quote Details Grid */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <p className="text-sm text-gray-500">Quota Number</p>
+              <p className="text-sm text-gray-500">Quote Number</p>
               <p className="font-medium">{quote.quote_number}</p>
             </div>
             <div>
@@ -178,7 +178,7 @@ export default function QuoteAccept({ quote }) {
               onChange={handleChange}
               rows="3"
               className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Any note about taking this quota..."
+              placeholder="Any note about accepting this quote..."
             />
           </div>
 
@@ -193,8 +193,8 @@ export default function QuoteAccept({ quote }) {
                 className="mt-1 mr-3"
               />
               <span className="text-sm text-gray-600">
-                I confirm that I want to accept this quota. By accepting, this quota will be marked as accepted,
-                All other quotas for this RFQ will be rejected, and the RFQ will be closed Will be।
+                I confirm that I want to accept this quote. By accepting, this quote will be marked as accepted,
+                All other quotess for this RFQ will be rejected, and the RFQ will be closed .
               </span>
             </label>
             {errors.confirmation && (

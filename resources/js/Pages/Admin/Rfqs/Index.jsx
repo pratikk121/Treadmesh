@@ -47,7 +47,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
   const statusOptions = [
     { value: '', label: 'All statuses are' },
     { value: 'open', label: 'open', color: 'green' },
-    { value: 'quoted', label: 'Quota received', color: 'blue' },
+    { value: 'quoted', label: 'Quotes Received', color: 'blue' },
     { value: 'closed', label: 'off', color: 'red' },
   ];
 
@@ -120,20 +120,20 @@ export default function Index({ rfqs, stats, buyers, filters }) {
   const handleDelete = (rfq) => {
     Swal.fire({
       title: 'RFQ delete',
-      text: `Are you RFQ ${rfq.rfq_number} Want to delete? This action cannot be undone।`,
+      text: `Are you sure you want to delete RFQ #${rfq.rfq_number}? This action cannot be undone.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, delete',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.rfqs.destroy', rfq.id), {
           onSuccess: () => {
             Swal.fire({
               title: 'Deleted!',
-              text: 'RFQ Deleted।',
+              text: 'RFQ Deleted.',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -157,7 +157,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
   const getStatusBadge = (status) => {
     const badges = {
       open: { color: 'bg-green-100 text-green-800', icon: MdPending, label: 'open' },
-      quoted: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'Quota received' },
+      quoted: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'Quotes Received' },
       closed: { color: 'bg-red-100 text-red-800', icon: MdWarning, label: 'off' },
     };
     const badge = badges[status] || badges.open;
@@ -190,7 +190,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">RFQ Management</h1>
             <p className="text-sm text-gray-600 mt-1">
-              for this RFQ Manage and monitor all quota requests
+              for this RFQ Manage and monitor all quote requests
             </p>
           </div>
           <div className="flex gap-2">
@@ -240,7 +240,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Quota received</p>
+                <p className="text-sm text-gray-500">Quotes Received</p>
                 <p className="text-2xl font-bold text-blue-600 mt-1">{stats.quoted}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
@@ -314,7 +314,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
           {selectedRfqs.length > 0 && (
             <div className="mt-4 flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
               <span className="text-sm font-medium text-indigo-700">
-                {selectedRfqs.length} T RFQ selected
+                {selectedRfqs.length} RFQs selected
               </span>
               <div className="relative">
                 <button
@@ -322,7 +322,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
                   <FiMoreVertical className="w-4 h-4" />
-                  Multiple activities
+                  Bulk Actions
                 </button>
                 {bulkActionMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border z-10">
@@ -333,7 +333,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                       }}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      Selected export
+                      Export Selected
                     </button>
                   </div>
                 )}
@@ -431,7 +431,7 @@ export default function Index({ rfqs, stats, buyers, filters }) {
                     </td>
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                        {rfq.quotes_count || 0} t quota
+                        {rfq.quotes_count || 0} quotes
                       </span>
                     </td>
                     <td className="px-6 py-4">

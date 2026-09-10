@@ -107,13 +107,13 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
 
     Swal.fire({
       title: 'Multiple product approval',
-      text: `Are you ${selectedProducts.length} t want to approve the product?`,
+      text: `Are you sure you want to approve ${selectedProducts.length} products?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#10B981',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, approve',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.product-approval.bulk-approve'), {
@@ -123,7 +123,7 @@ export default function Index({ pendingProducts, stats, categories, suppliers, f
             setSelectedProducts([]);
             Swal.fire({
               title: 'successful!',
-              text: `${selectedProducts.length} t product has been successfully approved।`,
+              text: `${selectedProducts.length} products have been successfully approved.`,
               icon: 'success',
               timer: 2000,
               showConfirmButton: false

@@ -165,7 +165,7 @@ export default function OrderShow({ order, tracking }) {
   const handlePayment = () => {
     Swal.fire({
       title: "Complete payment?",
-      text: "This is a demo project. Payment will be simulated।",
+      text: "This is a demo project. Payment will be simulated.",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes, pay",
@@ -180,7 +180,7 @@ export default function OrderShow({ order, tracking }) {
             Swal.fire({
               icon: "success",
               title: "Payment is successful",
-              text: "Your payment has been completed।",
+              text: "Your payment has been completed.",
               timer: 2000,
               showConfirmButton: false,
             });
@@ -218,7 +218,7 @@ export default function OrderShow({ order, tracking }) {
                 {order.order_status === 'pending_confirmation' ? 'Awaiting' :
                   order.order_status === 'confirmed' ? 'sure' :
                     order.order_status === 'processing' ? 'In process' :
-                      order.order_status === 'shipped' ? 'has been sent' :
+                      order.order_status === 'shipped' ? 'Sent' :
                         order.order_status === 'delivered' ? 'Delivered' :
                           order.order_status === 'cancelled' ? 'cancel' : order.order_status.replace('_', ' ')}
               </span>

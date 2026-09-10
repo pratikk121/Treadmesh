@@ -191,8 +191,8 @@ export default function Register() {
                         <div className="mb-6 p-3 bg-indigo-50 rounded-lg border border-indigo-100 flex items-center space-x-2">
                             <BsShieldCheck className="w-5 h-5 text-indigo-600" />
                             <span className="text-sm text-indigo-800">
-                                You are <span className="font-semibold">Buyer</span> Registering as।
-                                Authorization will be required to activate your account।
+                                You are <span className="font-semibold">Buyer</span> Registering as.
+                                Authorization will be required to activate your account.
                             </span>
                         </div>
                     )}
@@ -202,8 +202,8 @@ export default function Register() {
                         <div className="mb-6 p-3 bg-yellow-50 rounded-lg border border-yellow-100 flex items-center space-x-2">
                             <MdPending className="w-5 h-5 text-yellow-600" />
                             <span className="text-sm text-yellow-800">
-                                Your supplier application will be reviewed by our team।
-                                You will receive an email once the verification is complete।
+                                Your supplier application will be reviewed by our team.
+                                You will receive an email once the verification is complete.
                             </span>
                         </div>
                     )}
@@ -582,8 +582,8 @@ export default function Register() {
                                         <div>
                                             <h4 className="font-semibold text-blue-800">Verification Process</h4>
                                             <p className="text-sm text-blue-600 mt-1">
-                                                Your supplier account will be reviewed within 2-3 business days।
-                                                Once verification is complete you will receive an email confirmation।
+                                                Your supplier account will be reviewed within 2-3 business days.
+                                                Once verification is complete you will receive an email confirmation.
                                             </p>
                                             <ul className="mt-2 text-sm text-blue-600 list-disc list-inside">
                                                 <li>Trade License Verification</li>
@@ -679,8 +679,8 @@ export default function Register() {
                         {/* Account activation notice */}
                         {userType === 'buyer' && (
                             <div className="text-center text-xs text-gray-500 mt-4 border-t pt-4">
-                                <p>By opening the account you will get the buyer role।</p>
-                                <p className="mt-1">Your account will need to be activated by an administrator।</p>
+                                <p>By opening the account you will get the buyer role.</p>
+                                <p className="mt-1">Your account will need to be activated by an administrator.</p>
                             </div>
                         )}
                     </form>

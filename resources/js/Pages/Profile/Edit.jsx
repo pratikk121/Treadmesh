@@ -62,7 +62,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
             onSuccess: () => {
                 Swal.fire({
                     title: 'successful!',
-                    text: 'Profile updated successfully।',
+                    text: 'Profile updated successfully.',
                     icon: 'success',
                     timer: 2000,
                     showConfirmButton: false
@@ -72,7 +72,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                 setErrors(errors);
                 Swal.fire({
                     title: 'Error!',
-                    text: 'There is an error in the form. Please check।',
+                    text: 'There is an error in the form. Please check your inputs.',
                     icon: 'error',
                     confirmButtonColor: '#4F46E5'
                 });
@@ -96,7 +96,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                 });
                 Swal.fire({
                     title: 'successful!',
-                    text: 'Password successfully updated।',
+                    text: 'Password successfully updated.',
                     icon: 'success',
                     timer: 2000,
                     showConfirmButton: false
@@ -106,7 +106,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                 setErrors(errors);
                 Swal.fire({
                     title: 'Error!',
-                    text: 'There is an error in the form. Please check।',
+                    text: 'There is an error in the form. Please check your inputs.',
                     icon: 'error',
                     confirmButtonColor: '#4F46E5'
                 });
@@ -119,13 +119,13 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
     const handleDeleteAccount = () => {
         Swal.fire({
             title: 'Delete Account',
-            text: 'Do you want to delete your account? This action cannot be undone।',
+            text: 'Are you sure you want to delete your account? This action cannot be undone.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#EF4444',
             cancelButtonColor: '#6B7280',
             confirmButtonText: 'Yes, delete my account',
-            cancelButtonText: 'cancel',
+            cancelButtonText: 'Cancel',
             input: 'password',
             inputLabel: 'The password is',
             inputPlaceholder: 'is in stock Enter your password',
@@ -139,7 +139,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                     onSuccess: () => {
                         Swal.fire({
                             title: 'Deleted!',
-                            text: 'Your account has been deleted।',
+                            text: 'Your account has been deleted.',
                             icon: 'success',
                             timer: 2000,
                             showConfirmButton: false
@@ -240,12 +240,12 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                         {mustVerifyEmail && user.email_verified_at === null && (
                             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                                 <p className="text-sm text-yellow-700">
-                                    Your email address has not been verified।
+                                    Your email address has not been verified.
                                     <button
                                         onClick={() => router.post(route('verification.send'))}
                                         className="ml-2 text-yellow-600 underline hover:text-yellow-500"
                                     >
-                                        Click here to resend verification email।
+                                        Click here to resend verification email.
                                     </button>
                                 </p>
                             </div>
@@ -386,7 +386,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
                                 <p className="text-sm text-blue-700 flex items-center gap-2">
                                     <FiAlertCircle className="w-4 h-4" />
-                                    Supplier profile information can only be updated by contacting Support।
+                                    Supplier profile information can only be updated by contacting support.
                                 </p>
                             </div>
                         </div>
@@ -473,8 +473,8 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                     </div>
                     <div className="p-6">
                         <p className="text-sm text-gray-600 mb-4">
-                            If your account is deleted, all its resources and data will be permanently deleted।
-                            Enter your password।
+                            If your account is deleted, all of its resources and data will be permanently deleted.
+                            Enter your password to confirm.
                         </p>
                         <button
                             onClick={handleDeleteAccount}

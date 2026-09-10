@@ -213,7 +213,7 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
               {/* Product Description */}
               <div className="mb-6">
                 <h3 className="font-medium text-gray-700 mb-2">Product details</h3>
-                <p className="text-gray-600">{product.description || 'No Details Provided।'}</p>
+                <p className="text-gray-600">{product.description || 'No details provided.'}</p>
               </div>
 
               {/* Pricing and Quantity Section */}
@@ -328,7 +328,7 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
                   className="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center"
                 >
                   <FiPackage className="mr-2" />
-                  RFQ Create
+                  Submit RFQ
                 </button>
               </div>
             </div>
@@ -373,7 +373,7 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
               {product.supplier?.verification_status === 'verified' && (
                 <div className="flex items-center text-green-600">
                   <FiShield className="mr-2" />
-                  <span className="text-sm">Verified Supplier</span>
+                  <span className="text-sm">Verified Suppliers</span>
                 </div>
               )}
               <div className="flex items-center text-gray-600">

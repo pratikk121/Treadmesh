@@ -267,7 +267,7 @@ export default function Suppliers({ supplierData, period, dateRange }) {
                     </span>
                     <div>
                       <p className="text-sm font-medium text-gray-900">{supplier.company_name}</p>
-                      <p className="text-xs text-gray-500">{supplier.products_count} t product</p>
+                      <p className="text-xs text-gray-500">{supplier.products_count} products</p>
                     </div>
                   </div>
                   <span className="text-sm font-medium text-green-600">

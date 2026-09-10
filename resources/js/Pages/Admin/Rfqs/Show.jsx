@@ -40,7 +40,7 @@ export default function Show({ rfq }) {
     if (!closeData.reason) {
       Swal.fire({
         title: 'Error!',
-        text: 'RFQ Provide reason for termination।',
+        text: 'RFQ Provide reason for termination.',
         icon: 'error',
         confirmButtonColor: '#4F46E5'
       });
@@ -52,7 +52,7 @@ export default function Show({ rfq }) {
         setShowCloseForm(false);
         Swal.fire({
           title: 'off!',
-          text: 'RFQ Successfully closed।',
+          text: 'RFQ Successfully closed.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -71,14 +71,14 @@ export default function Show({ rfq }) {
       confirmButtonColor: '#10B981',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, reopen',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.rfqs.reopen', rfq.id), {}, {
           onSuccess: () => {
             Swal.fire({
               title: 'Reopened!',
-              text: 'RFQ Successfully reopened।',
+              text: 'RFQ Successfully reopened.',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -93,13 +93,13 @@ export default function Show({ rfq }) {
   const handleDelete = () => {
     Swal.fire({
       title: 'RFQ delete',
-      text: `Are you RFQ ${rfq.rfq_number} Want to delete? This action cannot be undone।`,
+      text: `Are you sure you want to delete RFQ #${rfq.rfq_number}? This action cannot be undone.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, delete',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.rfqs.destroy', rfq.id), {
@@ -135,7 +135,7 @@ export default function Show({ rfq }) {
   const getStatusBadge = (status) => {
     const badges = {
       open: { color: 'bg-green-100 text-green-800', icon: MdPending, label: 'open' },
-      quoted: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'Quota received' },
+      quoted: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'Quotes Received' },
       closed: { color: 'bg-red-100 text-red-800', icon: MdWarning, label: 'off' },
     };
     const badge = badges[status] || badges.open;
@@ -170,7 +170,7 @@ export default function Show({ rfq }) {
             <div>
               <h1 className="text-2xl font-bold text-gray-900">RFQ #{rfq.rfq_number}</h1>
               <p className="text-sm text-gray-600 mt-1">
-                Quota Request Details
+                RFQ Details
               </p>
             </div>
           </div>
@@ -391,7 +391,7 @@ export default function Show({ rfq }) {
                     ) : (
                       <div className="text-center py-8">
                         <FiPackage className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-500">No quota found yet।</p>
+                        <p className="text-gray-500">No quotes found yet.</p>
                       </div>
                     )}
                   </div>
@@ -421,7 +421,7 @@ export default function Show({ rfq }) {
                     ) : (
                       <div className="text-center py-8">
                         <FiMessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-500">There are no messages for this RFQ।</p>
+                        <p className="text-gray-500">There are no messages for this RFQ.</p>
                       </div>
                     )}
                   </div>
@@ -482,7 +482,7 @@ export default function Show({ rfq }) {
                       {rfq.order.order_status === 'delivered' ? 'Delivered' :
                         rfq.order.order_status === 'cancelled' ? 'cancel' :
                           rfq.order.order_status === 'processing' ? 'In process' :
-                            rfq.order.order_status === 'shipped' ? 'has been sent' :
+                            rfq.order.order_status === 'shipped' ? 'Sent' :
                               rfq.order.order_status === 'confirmed' ? 'sure' :
                                 rfq.order.order_status === 'pending_confirmation' ? 'Awaiting' : rfq.order.order_status}
                     </span>

@@ -65,7 +65,7 @@ export default function Quotes({ rfq, quotes }) {
 
   return (
     <DashboardLayout>
-      <Head title={`RFQ #${rfq.rfq_number} - Quotas`} />
+      <Head title={`RFQ #${rfq.rfq_number} - Quotes`} />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -77,9 +77,9 @@ export default function Quotes({ rfq, quotes }) {
             <FiArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">RFQ #{rfq.rfq_number} - Quotas</h1>
+            <h1 className="text-2xl font-bold text-gray-900">RFQ #{rfq.rfq_number} - Quotes</h1>
             <p className="text-sm text-gray-600 mt-1">
-              {rfq.title} - All quotas submitted are
+              {rfq.title} - All quotes submitted are
             </p>
           </div>
         </div>
@@ -90,7 +90,7 @@ export default function Quotes({ rfq, quotes }) {
             // Empty state - No quotes submitted
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
               <FiDollarSign className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No quotas have been submitted for this RFQ yet।</p>
+              <p className="text-gray-500">No quotes have been submitted for this RFQ yet.</p>
             </div>
           ) : (
             // List of quotes
@@ -132,7 +132,7 @@ export default function Quotes({ rfq, quotes }) {
                       </div>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-500 mb-1">Quota Number</p>
+                      <p className="text-sm text-gray-500 mb-1">Quote Number</p>
                       <p className="text-lg font-mono font-semibold text-gray-900">{quote.quote_number}</p>
                     </div>
                   </div>

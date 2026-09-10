@@ -77,7 +77,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
       Swal.fire({
         icon: 'warning',
         title: 'There are no suppliers',
-        text: 'Wait for a quota to be reached before sending messages।',
+        text: 'Wait for a quote to be reached before sending messages.',
       });
       return;
     }
@@ -106,7 +106,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
         Swal.fire({
           icon: 'error',
           title: 'Failed to send message',
-          text: 'There are some problems. Try again।'
+          text: 'An error occurred. Please try again.'
         });
       }
     });
@@ -136,11 +136,11 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
   const acceptQuote = (quote) => {
     Swal.fire({
       icon: 'warning',
-      title: 'Accept this quota?',
-      text: 'This will reject all other quotas and close the RFQ।',
+      title: 'Accept this quote?',
+      text: 'This will reject all other quotess and close the RFQ.',
       showCancelButton: true,
       confirmButtonText: 'Yes, take',
-      cancelButtonText: 'cancel',
+      cancelButtonText: 'Cancel',
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
@@ -150,7 +150,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             setProcessingQuote(null);
             Swal.fire({
               icon: 'success',
-              title: 'Quota taken!',
+              title: 'Quote accepted!',
               timer: 1500,
               showConfirmButton: false
             });
@@ -159,8 +159,8 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             setProcessingQuote(null);
             Swal.fire({
               icon: 'error',
-              title: 'Failed to accept quota',
-              text: 'Try Again।'
+              title: 'Failed to accept quote',
+              text: 'Please try again.'
             });
           }
         });
@@ -172,11 +172,11 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
   const rejectQuote = (quote) => {
     Swal.fire({
       icon: 'warning',
-      title: 'Reject this quota?',
-      text: 'Do you want to decline this quota?',
+      title: 'Reject this quote?',
+      text: 'Are you sure you want to decline this quote?',
       showCancelButton: true,
       confirmButtonText: 'Yes, reject',
-      cancelButtonText: 'cancel',
+      cancelButtonText: 'Cancel',
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
@@ -186,7 +186,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             setProcessingQuote(null);
             Swal.fire({
               icon: 'success',
-              title: 'Quota rejected!',
+              title: 'Quote Rejected!',
               timer: 1500,
               showConfirmButton: false
             });
@@ -195,8 +195,8 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             setProcessingQuote(null);
             Swal.fire({
               icon: 'error',
-              title: 'Failed to reject quota',
-              text: 'Try Again।'
+              title: 'Failed to reject quote',
+              text: 'Please try again.'
             });
           }
         });
@@ -299,7 +299,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
             {rfq.quotes?.length > 0 && (
               <div className="bg-white rounded-xl border p-6">
                 <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                  <FiDollarSign className="mr-2" /> Received Quota ({rfq.quotes.length})
+                  <FiDollarSign className="mr-2" /> Quotes Received ({rfq.quotes.length})
                 </h3>
 
                 <div className="space-y-4">
@@ -360,7 +360,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                               </svg>
                             ) : (
                               <>
-                                <FiCheck className="mr-1" /> Taking Quota
+                                <FiCheck className="mr-1" /> Accept Quote
                               </>
                             )}
                           </button>
@@ -378,7 +378,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                       {acceptedQuote && acceptedQuote.id === quote.id && (
                         <div className="mt-4 p-3 bg-green-50 rounded-lg">
                           <p className="text-sm text-green-700 flex items-center">
-                            <FiCheckCircle className="mr-2" /> This quota has been accepted
+                            <FiCheckCircle className="mr-2" /> This quote has been accepted
                           </p>
                           {!order ? (
                             <Link
@@ -417,7 +417,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                       <p className="text-sm text-gray-600 mt-1">Status: {order.order_status === 'pending_confirmation' ? 'Awaiting' :
                         order.order_status === 'confirmed' ? 'sure' :
                           order.order_status === 'processing' ? 'In process' :
-                            order.order_status === 'shipped' ? 'has been sent' :
+                            order.order_status === 'shipped' ? 'Sent' :
                               order.order_status === 'delivered' ? 'Delivered' :
                                 order.order_status === 'cancelled' ? 'cancel' : order.order_status}</p>
                       <p className="text-sm text-gray-600">total: {formatCurrency(order.total_amount)}</p>
@@ -498,7 +498,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                 <div className="flex items-start">
                   <div className="w-2 h-2 mt-2 bg-green-500 rounded-full mr-3"></div>
                   <div>
-                    <p className="text-sm font-medium">RFQ Created by</p>
+                    <p className="text-sm font-medium">Submit RFQd by</p>
                     <p className="text-xs text-gray-500">{formatDate(rfq.created_at)}</p>
                   </div>
                 </div>
@@ -509,7 +509,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                       quote.status === 'rejected' ? 'bg-red-500' : 'bg-yellow-500'
                       } rounded-full mr-3`}></div>
                     <div>
-                      <p className="text-sm font-medium">{quote.supplier?.name} Received Quota from</p>
+                      <p className="text-sm font-medium">{quote.supplier?.name} Quotes Received from</p>
                       <p className="text-xs text-gray-500">{formatDate(quote.created_at)}</p>
                       <p className="text-xs text-gray-600 mt-1">Amount: {formatCurrency(quote.total_amount)}</p>
                     </div>
@@ -520,7 +520,7 @@ export default function RfqShow({ rfq, messages: initialMessages, acceptedQuote,
                   <div className="flex items-start">
                     <div className="w-2 h-2 mt-2 bg-blue-500 rounded-full mr-3"></div>
                     <div>
-                      <p className="text-sm font-medium">Quota taken</p>
+                      <p className="text-sm font-medium">Quote Accepted</p>
                       <p className="text-xs text-gray-500">{formatDate(acceptedQuote.updated_at)}</p>
                     </div>
                   </div>

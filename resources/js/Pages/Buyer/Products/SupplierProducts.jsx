@@ -42,7 +42,7 @@ export default function SupplierProducts({ products }) {
           <div className="bg-white rounded-xl p-12 text-center border">
             <FiPackage className="mx-auto text-5xl text-gray-400 mb-4" />
             <h3 className="text-xl font-medium text-gray-700 mb-2">No products found</h3>
-            <p className="text-gray-500">This supplier has not yet listed any products।</p>
+            <p className="text-gray-500">This supplier has not yet listed any products.</p>
           </div>
         ) : (
           // Product Grid

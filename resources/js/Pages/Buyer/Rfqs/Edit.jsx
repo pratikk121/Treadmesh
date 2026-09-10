@@ -178,7 +178,7 @@ export default function RfqEdit({ rfq }) {
             <div>
               <p className="text-yellow-700 font-medium">Editing open RFQ</p>
               <p className="text-yellow-600 text-sm mt-1">
-                Changes will be visible to suppliers. If you already have quota, consider creating a new RFQ instead।
+                Changes will be visible to suppliers. If you already have quotes, consider creating a new RFQ instead.
               </p>
             </div>
           </div>

@@ -121,7 +121,7 @@ export default function OrdersIndex({ orders, stats, orderStatuses, paymentStatu
       pending_confirmation: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: MdPending, label: 'Awaiting' },
       confirmed: { bg: 'bg-blue-100', text: 'text-blue-800', icon: MdVerified, label: 'sure' },
       processing: { bg: 'bg-indigo-100', text: 'text-indigo-800', icon: FiPackage, label: 'In process' },
-      shipped: { bg: 'bg-purple-100', text: 'text-purple-800', icon: FiTruck, label: 'has been sent' },
+      shipped: { bg: 'bg-purple-100', text: 'text-purple-800', icon: FiTruck, label: 'Sent' },
       delivered: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'Delivered' },
       cancelled: { bg: 'bg-red-100', text: 'text-red-800', icon: FiXCircle, label: 'cancel' }
     };
@@ -196,7 +196,7 @@ export default function OrdersIndex({ orders, stats, orderStatuses, paymentStatu
             <p className="text-2xl font-bold text-blue-700">{stats.processing}</p>
           </div>
           <div className="bg-purple-50 rounded-xl shadow-sm border border-purple-100 p-4">
-            <p className="text-sm text-purple-600">has been sent</p>
+            <p className="text-sm text-purple-600">Sent</p>
             <p className="text-2xl font-bold text-purple-700">{stats.shipped}</p>
           </div>
           <div className="bg-green-50 rounded-xl shadow-sm border border-green-100 p-4">
@@ -383,7 +383,7 @@ export default function OrdersIndex({ orders, stats, orderStatuses, paymentStatu
                     <td className="px-6 py-4">
                       <div>
                         <p className="font-bold text-gray-900">{formatCurrency(order.total_amount)}</p>
-                        <p className="text-xs text-gray-500">{order.items?.length} t item</p>
+                        <p className="text-xs text-gray-500">{order.items?.length} items</p>
                       </div>
                     </td>
                     <td className="px-6 py-4">

@@ -54,7 +54,7 @@ export default function ForgotPassword({ status }) {
                             <FiSend className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                             <div className="text-sm text-green-700">
                                 <p className="font-medium mb-1">Reset link sent to!</p>
-                                <p>Check your email for the password reset link. Don't forget to check your spam folder as well।</p>
+                                <p>Check your email for the password reset link. Don't forget to check your spam folder as well.</p>
                             </div>
                         </div>
                     )}
@@ -72,7 +72,7 @@ export default function ForgotPassword({ status }) {
                     {/* Info Message */}
                     <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
                         <p className="text-sm text-indigo-700">
-                            Forgot your password? No problem. Just enter your email address and we'll send you a password reset link।
+                            Forgot your password? No problem. Just enter your email address and we'll send you a password reset link.
                         </p>
                     </div>
 

@@ -75,7 +75,7 @@ export default function Statistics({ stats }) {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">RFQ Statistics</h1>
             <p className="text-sm text-gray-600 mt-1">
-              Detailed statistics of all quota requests
+              Detailed statistics of all quote requests
             </p>
           </div>
         </div>
@@ -105,7 +105,7 @@ export default function Statistics({ stats }) {
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl shadow-lg text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm">Average Quota/RFQ</p>
+                <p className="text-purple-100 text-sm">Average Quotes/RFQ</p>
                 <p className="text-3xl font-bold mt-1">{response_rate.avg_quotes_per_rfq?.toFixed(1) || '0'}</p>
               </div>
               <BsPeople className="w-8 h-8 text-purple-200" />
@@ -141,7 +141,7 @@ export default function Statistics({ stats }) {
                     labelLine={false}
                     label={({ status, percent }) =>
                       `${status === 'open' ? 'open' :
-                        status === 'quoted' ? 'Quota received' :
+                        status === 'quoted' ? 'Quotes Received' :
                           status === 'closed' ? 'off' : status}: ${(percent * 100).toFixed(0)}%`
                     }
                     outerRadius={80}
@@ -163,7 +163,7 @@ export default function Statistics({ stats }) {
                   <span className="text-2xl font-bold" style={{ color: COLORS[item.status] }}>{item.total}</span>
                   <p className="text-xs text-gray-500 capitalize">
                     {item.status === 'open' ? 'open' :
-                      item.status === 'quoted' ? 'Quota received' :
+                      item.status === 'quoted' ? 'Quotes Received' :
                         item.status === 'closed' ? 'off' : item.status}
                   </p>
                 </div>
@@ -214,7 +214,7 @@ export default function Statistics({ stats }) {
                     </div>
                   </div>
                   <span className="text-sm font-medium text-indigo-600">
-                    {buyer.total_rfqs} T RFQ
+                    {buyer.total_rfqs} RFQs
                   </span>
                 </div>
               ))}
@@ -239,7 +239,7 @@ export default function Statistics({ stats }) {
                     </span>
                   </div>
                   <span className="text-sm font-medium text-indigo-600">
-                    {product.count} t request
+                    {product.count} requests
                   </span>
                 </div>
               ))}
@@ -255,7 +255,7 @@ export default function Statistics({ stats }) {
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-500 mb-1">with quotas RFQ</p>
+                <p className="text-sm text-gray-500 mb-1">with quotes RFQ</p>
                 <p className="text-2xl font-bold text-green-600">{response_rate.with_quotes}</p>
                 <p className="text-xs text-gray-500 mt-1">
                   {totalRfqs > 0 ? ((response_rate.with_quotes / totalRfqs) * 100).toFixed(1) : 0}% A total of
@@ -269,7 +269,7 @@ export default function Statistics({ stats }) {
                 </p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-500 mb-1">Average quota per RFQ is</p>
+                <p className="text-sm text-gray-500 mb-1">Average quotes per RFQ</p>
                 <p className="text-2xl font-bold text-indigo-600">{response_rate.avg_quotes_per_rfq?.toFixed(2) || '0'}</p>
               </div>
             </div>
@@ -321,7 +321,7 @@ export default function Statistics({ stats }) {
                       <td className="px-6 py-4">
                         <span className="capitalize text-gray-900">
                           {item.status === 'open' ? 'open' :
-                            item.status === 'quoted' ? 'Quota received' :
+                            item.status === 'quoted' ? 'Quotes Received' :
                               item.status === 'closed' ? 'off' : item.status}
                         </span>
                       </td>

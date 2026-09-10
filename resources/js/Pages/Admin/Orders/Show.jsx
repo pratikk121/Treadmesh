@@ -64,7 +64,7 @@ export default function Show({ order, timeline, paymentInfo }) {
         setShowStatusForm(false);
         Swal.fire({
           title: 'successful!',
-          text: 'Order status updated successfully।',
+          text: 'Order status updated successfully.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -80,7 +80,7 @@ export default function Show({ order, timeline, paymentInfo }) {
         setShowPaymentForm(false);
         Swal.fire({
           title: 'successful!',
-          text: 'Payment status successfully updated।',
+          text: 'Payment status successfully updated.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -94,7 +94,7 @@ export default function Show({ order, timeline, paymentInfo }) {
     if (!cancelData.cancellation_reason) {
       Swal.fire({
         title: 'Error!',
-        text: 'Please specify the reason for cancellation।',
+        text: 'Please specify the reason for cancellation.',
         icon: 'error',
         confirmButtonColor: '#4F46E5'
       });
@@ -106,7 +106,7 @@ export default function Show({ order, timeline, paymentInfo }) {
         setShowCancelForm(false);
         Swal.fire({
           title: 'cancel!',
-          text: 'Order successfully canceled।',
+          text: 'Order successfully canceled.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -141,7 +141,7 @@ export default function Show({ order, timeline, paymentInfo }) {
       pending_confirmation: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'Awaiting' },
       confirmed: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'sure' },
       processing: { color: 'bg-indigo-100 text-indigo-800', icon: FiClock, label: 'In process' },
-      shipped: { color: 'bg-purple-100 text-purple-800', icon: MdOutlineLocalShipping, label: 'has been sent' },
+      shipped: { color: 'bg-purple-100 text-purple-800', icon: MdOutlineLocalShipping, label: 'Sent' },
       delivered: { color: 'bg-green-100 text-green-800', icon: FiCheckCircle, label: 'Delivered' },
       cancelled: { color: 'bg-red-100 text-red-800', icon: FiXCircle, label: 'cancel' },
     };
@@ -252,7 +252,7 @@ export default function Show({ order, timeline, paymentInfo }) {
                   <option value="pending_confirmation">Awaiting</option>
                   <option value="confirmed">sure</option>
                   <option value="processing">In process</option>
-                  <option value="shipped">has been sent</option>
+                  <option value="shipped">Sent</option>
                   <option value="delivered">Delivered</option>
                   <option value="cancelled">cancel</option>
                 </select>
@@ -494,7 +494,7 @@ export default function Show({ order, timeline, paymentInfo }) {
                         {event.status === 'pending_confirmation' ? 'Awaiting' :
                           event.status === 'confirmed' ? 'sure' :
                             event.status === 'processing' ? 'In process' :
-                              event.status === 'shipped' ? 'has been sent' :
+                              event.status === 'shipped' ? 'Sent' :
                                 event.status === 'delivered' ? 'Delivered' :
                                   event.status === 'cancelled' ? 'cancel' : event.status}
                       </p>

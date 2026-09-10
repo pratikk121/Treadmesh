@@ -52,7 +52,7 @@ export default function VerifyEmail({ status }) {
                         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center space-x-3">
                             <BsEnvelopeCheck className="w-5 h-5 text-green-600 flex-shrink-0" />
                             <span className="text-sm text-green-700">
-                                A new verification link has been sent to your email।
+                                A new verification link Sent to your email.
                             </span>
                         </div>
                     )}
@@ -72,7 +72,7 @@ export default function VerifyEmail({ status }) {
                         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-3">
                             <MdError className="w-5 h-5 text-red-600 flex-shrink-0" />
                             <span className="text-sm text-red-700">
-                                {errors.email || 'There are some problems. Try again।'}
+                                {errors.email || 'An error occurred. Please try again.'}
                             </span>
                         </div>
                     )}
@@ -87,7 +87,7 @@ export default function VerifyEmail({ status }) {
                                     <p className="font-medium">Thanks for registering! 🎉</p>
                                     <p>
                                         Before starting, verify your email address. We sent that link to your inbox
-                                        Click on Sent।
+                                        Click Resend.
                                     </p>
                                 </div>
                             </div>
@@ -164,7 +164,7 @@ export default function VerifyEmail({ status }) {
                                 >
                                     Contact support
                                 </Link>
-                                {' '}Do।
+                                {' '}Do.
                             </p>
                         </div>
 

@@ -207,7 +207,7 @@ export default function Statistics({ stats }) {
                     {item.order_status === 'pending_confirmation' ? 'Awaiting' :
                       item.order_status === 'confirmed' ? 'sure' :
                         item.order_status === 'processing' ? 'In process' :
-                          item.order_status === 'shipped' ? 'has been sent' :
+                          item.order_status === 'shipped' ? 'Sent' :
                             item.order_status === 'delivered' ? 'Delivered' :
                               item.order_status === 'cancelled' ? 'cancel' : item.order_status.replace('_', ' ')}
                   </span>
@@ -300,7 +300,7 @@ export default function Statistics({ stats }) {
                       <span className="text-sm font-medium text-gray-900 block">
                         {buyer.buyer?.name}
                       </span>
-                      <span className="text-xs text-gray-500">{buyer.order_count} t order</span>
+                      <span className="text-xs text-gray-500">{buyer.order_count} orders</span>
                     </div>
                   </div>
                   <span className="text-sm font-medium text-indigo-600">
@@ -345,7 +345,7 @@ export default function Statistics({ stats }) {
                           {item.order_status === 'pending_confirmation' ? 'Awaiting' :
                             item.order_status === 'confirmed' ? 'sure' :
                               item.order_status === 'processing' ? 'In process' :
-                                item.order_status === 'shipped' ? 'has been sent' :
+                                item.order_status === 'shipped' ? 'Sent' :
                                   item.order_status === 'delivered' ? 'Delivered' :
                                     item.order_status === 'cancelled' ? 'cancel' : item.order_status.replace('_', ' ')}
                         </span>

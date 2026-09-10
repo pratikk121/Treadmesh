@@ -105,15 +105,15 @@ export default function QuotesAnalytics({
 
   return (
     <DashboardLayout>
-      <Head title="Quota Analysis" />
+      <Head title="Quote Analytics" />
 
       <div className="space-y-6">
         {/* Header - Page title and export button */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Quota Analysis</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Quote Analytics</h1>
             <p className="text-sm text-gray-600 mt-1">
-              Track your quota performance and conversion metrics
+              Track your quote performance and conversion metrics
             </p>
           </div>
           <button
@@ -136,7 +136,7 @@ export default function QuotesAnalytics({
         {/* Summary Cards - Key quote metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl p-6 text-white">
-            <p className="text-sm opacity-90">Total Quota</p>
+            <p className="text-sm opacity-90">Total Quotes</p>
             <p className="text-2xl font-bold mt-1">{formatNumber(totalQuotes)}</p>
             <p className="text-sm opacity-75 mt-2">Price: {formatCurrency(totalQuoteValue)}</p>
           </div>
@@ -157,7 +157,7 @@ export default function QuotesAnalytics({
           </div>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">Income from Quota</p>
+            <p className="text-sm text-gray-500">Revenue from Accepted Quotes</p>
             <p className="text-2xl font-bold text-green-600">{formatCurrency(revenueFromQuotes)}</p>
             <p className="text-sm text-gray-500 mt-2">Accepted value is: {formatCurrency(acceptedValue)}</p>
           </div>
@@ -167,7 +167,7 @@ export default function QuotesAnalytics({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Status Distribution - Pie chart */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Allotment of Quota Status</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Quote Status Breakdown</h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -201,7 +201,7 @@ export default function QuotesAnalytics({
 
           {/* Monthly Trend - Bar chart */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Monthly Quota Trend</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Monthly Quotes Trend</h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={Object.entries(quotesByMonth).map(([month, data]) => ({
@@ -222,7 +222,7 @@ export default function QuotesAnalytics({
                     }}
                   />
                   <Legend />
-                  <Bar dataKey="total" name="Total Quota" fill="#4F46E5" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="total" name="Total Quotes" fill="#4F46E5" radius={[4, 4, 0, 0]} />
                   <Bar dataKey="accepted" name="accepted" fill="#10B981" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
@@ -259,13 +259,13 @@ export default function QuotesAnalytics({
               </ResponsiveContainer>
             </div>
             <p className="text-sm text-gray-500 mt-4 text-center">
-              Quotas that respond within 24 hours have the highest success rate
+              Quotes submitted within 24 hours have the highest acceptance rate
             </p>
           </div>
 
           {/* Value Distribution */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Quota Price Distribution</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Quote Price Distribution</h2>
             <div className="space-y-4">
               {Object.entries(valueDistribution).map(([range, data]) => (
                 <div key={range}>
@@ -292,13 +292,13 @@ export default function QuotesAnalytics({
 
         {/* Top Buyers Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Top Buyer by Quota Activity</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Top Buyers by Quote Activity</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Buyer</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Total Quota</th>
+                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Total Quotes</th>
                   <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">accepted</th>
                   <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Rejected</th>
                   <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Awaiting</th>

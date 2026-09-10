@@ -49,13 +49,13 @@ export default function Show({ product, salesData, recentOrders }) {
   const handleDelete = () => {
     Swal.fire({
       title: 'Delete product',
-      text: `Are you ${product.name} Want to delete? This action cannot be undone।`,
+      text: `Are you sure you want to delete "${product.name}"? This action cannot be undone.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, delete',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.products.destroy', product.id), {
@@ -73,7 +73,7 @@ export default function Show({ product, salesData, recentOrders }) {
       onSuccess: () => {
         Swal.fire({
           title: 'successful!',
-          text: `The product is ${product.is_featured ? 'Unpublished' : 'Promoted'} marked as।`,
+          text: `The product is ${product.is_featured ? 'Unpublished' : 'Promoted'} marked as.`,
           icon: 'success',
           timer: 1500,
           showConfirmButton: false
@@ -89,7 +89,7 @@ export default function Show({ product, salesData, recentOrders }) {
         setShowStockForm(false);
         Swal.fire({
           title: 'successful!',
-          text: 'Stock updated successfully।',
+          text: 'Stock updated successfully.',
           icon: 'success',
           timer: 1500,
           showConfirmButton: false

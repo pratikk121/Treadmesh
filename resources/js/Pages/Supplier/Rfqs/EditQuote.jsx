@@ -122,7 +122,7 @@ export default function EditQuote({ quote, products }) {
       Swal.fire({
         icon: "warning",
         title: "Add product",
-        text: "Please add at least one product to your quota"
+        text: "Please add at least one product to your quote"
       });
       return;
     }
@@ -143,7 +143,7 @@ export default function EditQuote({ quote, products }) {
 
     Swal.fire({
       title: "Are you sure?",
-      text: "Do you want to update this quota??",
+      text: "Do you want to update this quote?",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes, update",
@@ -155,15 +155,15 @@ export default function EditQuote({ quote, products }) {
           onSuccess: () => {
             Swal.fire({
               icon: "success",
-              title: "successful",
-              text: "Quota successfully updated"
+              title: 'Success',
+              text: "Quote successfully updated"
             });
           },
           onError: () => {
             Swal.fire({
               icon: "error",
               title: "Error",
-              text: "Quota could not be updated"
+              text: "Quote could not be updated"
             });
           }
         });
@@ -196,7 +196,7 @@ export default function EditQuote({ quote, products }) {
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Edit Quota</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Edit Quote</h1>
               <p className="text-sm text-gray-600 mt-1">
                 Quote #{quote.quote_number} - RFQ: {quote.rfq?.rfq_number} - {quote.rfq?.title} -for
               </p>
@@ -216,7 +216,7 @@ export default function EditQuote({ quote, products }) {
               className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
             >
               <FiSave className="w-4 h-4" />
-              <span>{processing ? 'Updating...' : 'Quota Update'}</span>
+              <span>{processing ? 'Updating...' : 'Update Quote'}</span>
             </button>
           </div>
         </div>
@@ -227,10 +227,10 @@ export default function EditQuote({ quote, products }) {
             <FiAlertCircle className="w-5 h-5 text-yellow-400 mr-3 mt-0.5" />
             <div>
               <p className="text-sm text-yellow-700 font-medium">
-                You are editing a pending quota
+                You are editing a pending quote
               </p>
               <p className="text-sm text-yellow-600 mt-1">
-                Changes will be immediately visible to the buyer. Make sure all information is correct।
+                Changes will be immediately visible to the buyer. Make sure all information is correct.
               </p>
             </div>
           </div>
@@ -243,7 +243,7 @@ export default function EditQuote({ quote, products }) {
               {/* Current Quote Items */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900">Quota item</h2>
+                  <h2 className="text-lg font-semibold text-gray-900">Quote Items</h2>
                   <button
                     type="button"
                     onClick={addCustomProduct}
@@ -325,7 +325,7 @@ export default function EditQuote({ quote, products }) {
                     {/* Quote Total */}
                     <div className="pt-4 border-t border-gray-200">
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold text-gray-900">Total quota amount</span>
+                        <span className="font-semibold text-gray-900">Total Quote Amount</span>
                         <span className="text-2xl font-bold text-indigo-600">
                           {formatCurrency(data.total_amount)}
                         </span>
@@ -374,7 +374,7 @@ export default function EditQuote({ quote, products }) {
             <div className="space-y-6">
               {/* Quote Settings */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quota details</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quote Details</h2>
 
                 <div className="space-y-4">
                   {/* Valid Until */}
@@ -402,9 +402,9 @@ export default function EditQuote({ quote, products }) {
                       <div>
                         <p className="text-xs text-gray-600 font-medium">Note:</p>
                         <p className="text-xs text-gray-500">
-                          Only product details, total amount and expiry date will be stored।
+                          Only product details, total amount, and expiry date will be stored.
                           Additional details like delivery time and payment terms via message
-                          Should contact।
+                          Please contact support.
                         </p>
                       </div>
                     </div>
@@ -414,10 +414,10 @@ export default function EditQuote({ quote, products }) {
 
               {/* Original Quote Info */}
               <div className="bg-gray-50 rounded-xl p-4">
-                <h3 className="text-sm font-medium text-gray-700 mb-3">Basic Quota Information</h3>
+                <h3 className="text-sm font-medium text-gray-700 mb-3">Basic Quote Information</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Quota Number</span>
+                    <span className="text-gray-500">Quote Number</span>
                     <span className="font-medium text-gray-900">{quote.quote_number}</span>
                   </div>
                   <div className="flex justify-between">
@@ -449,7 +449,7 @@ export default function EditQuote({ quote, products }) {
                     <p className="text-sm text-blue-700 font-medium">Editing tips</p>
                     <ul className="mt-2 text-xs text-blue-600 list-disc list-inside space-y-1">
                       <li>You can add custom items not in your catalog</li>
-                      <li>The updated quota will be re-sent to the buyer</li>
+                      <li>The updated quote will be re-sent to the buyer</li>
                       <li>Keep prices competitive</li>
                       <li>The expiration date must be in the future</li>
                       <li>For additional terms use the messaging system</li>

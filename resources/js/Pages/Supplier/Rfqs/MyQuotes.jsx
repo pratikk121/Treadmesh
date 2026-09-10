@@ -129,15 +129,15 @@ export default function MyQuotes({ quotes, stats }) {
 
   return (
     <DashboardLayout>
-      <Head title="My Quotas" />
+      <Head title="My Quotes" />
 
       <div className="space-y-6">
         {/* Header - Page title */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">My quota is</h1>
+            <h1 className="text-2xl font-bold text-gray-900">My Quotes</h1>
             <p className="text-sm text-gray-600 mt-1">
-              Track and manage all your quota submissions
+              Track and manage all your quote submissions
             </p>
           </div>
         </div>
@@ -145,7 +145,7 @@ export default function MyQuotes({ quotes, stats }) {
         {/* Stats Cards - Key metrics */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <p className="text-sm text-gray-500">Total Quota</p>
+            <p className="text-sm text-gray-500">Total Quotes</p>
             <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
           </div>
           <div className="bg-yellow-50 rounded-xl shadow-sm border border-yellow-100 p-4">
@@ -187,7 +187,7 @@ export default function MyQuotes({ quotes, stats }) {
                   <form onSubmit={handleSearch} className="flex">
                     <input
                       type="text"
-                      placeholder="Search by Quota or RFQ Number..."
+                      placeholder="Search by Quote or RFQ Number...."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
@@ -370,7 +370,7 @@ export default function MyQuotes({ quotes, stats }) {
                             <Link
                               href={route('supplier.rfqs.edit-quote', quote.id)}
                               className="p-2 text-gray-400 hover:text-indigo-600"
-                              title="Edit Quota"
+                              title="Edit Quote"
                             >
                               <FiEdit2 className="w-4 h-4" />
                             </Link>
@@ -396,11 +396,11 @@ export default function MyQuotes({ quotes, stats }) {
                   <tr>
                     <td colSpan="8" className="px-6 py-12 text-center">
                       <FiFileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                      <p className="text-gray-500 text-lg mb-2">No Quota Found</p>
+                      <p className="text-gray-500 text-lg mb-2">No Quotes Found</p>
                       <p className="text-gray-400">
                         {searchTerm || statusFilter || dateFrom || dateTo
                           ? 'Adjust your filter'
-                          : 'You have not submitted any quota yet'}
+                          : 'You have not submitted any quotes yet'}
                       </p>
                       {!searchTerm && !statusFilter && !dateFrom && !dateTo && (
                         <Link

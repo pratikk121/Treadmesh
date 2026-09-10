@@ -96,7 +96,7 @@ export default function Conversation() {
             ))
           ) : (
             // Empty state - No messages yet
-            <div className="text-gray-500 text-sm">No message।</div>
+            <div className="text-gray-500 text-sm">No messages.</div>
           )}
         </div>
       </div>

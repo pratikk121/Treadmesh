@@ -111,7 +111,7 @@ export default function QuoteShow({
 
     Swal.fire({
       title: "Are you sure?",
-      text: "This quota will be withdrawn",
+      text: "This quote will be withdrawn",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, withdraw",
@@ -128,8 +128,8 @@ export default function QuoteShow({
 
             Swal.fire({
               icon: "success",
-              title: "successful",
-              text: "Quota successfully revoked"
+              title: 'Success',
+              text: "Quote successfully withdrawn"
             });
           }
         });
@@ -149,7 +149,7 @@ export default function QuoteShow({
     }
 
     Swal.fire({
-      title: "Want to extend?",
+      title: "Extend Quote Validity?",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes, increase",
@@ -168,8 +168,8 @@ export default function QuoteShow({
 
             Swal.fire({
               icon: "success",
-              title: "successful",
-              text: "Quota has been extended to"
+              title: 'Success',
+              text: "Quote validity has been extended"
             });
           }
         });
@@ -179,8 +179,8 @@ export default function QuoteShow({
   // Handle quote duplication
   const handleDuplicate = () => {
     Swal.fire({
-      title: "Make a new copy?",
-      text: "A duplicate of this quota will be created",
+      title: "Create a Copy?",
+      text: "A duplicate of this quote will be created",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes, make it",
@@ -192,8 +192,8 @@ export default function QuoteShow({
           onSuccess: () => {
             Swal.fire({
               icon: "success",
-              title: "successful",
-              text: "A new copy of quota has been created"
+              title: 'Success',
+              text: "A duplicate of the quote has been created"
             });
           }
         });
@@ -258,7 +258,7 @@ export default function QuoteShow({
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
                   <FiEdit2 className="w-4 h-4" />
-                  <span>Edit Quota</span>
+                  <span>Edit Quote</span>
                 </Link>
                 <button
                   onClick={() => setShowWithdrawConfirm(true)}
@@ -286,10 +286,10 @@ export default function QuoteShow({
               <FiAlertCircle className="w-5 h-5 text-red-400 mr-3 mt-0.5" />
               <div className="flex-1">
                 <p className="text-sm text-red-700 font-medium">
-                  This quota has expired
+                  This quote has expired
                 </p>
                 <p className="text-sm text-red-600 mt-1">
-                  Expired {formatDate(quote.valid_until)} On date।
+                  Expired on {formatDate(quote.valid_until)}.
                   {isPending && (
                     <button
                       onClick={() => setShowExtendValidity(true)}
@@ -311,10 +311,10 @@ export default function QuoteShow({
               <FiCheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5" />
               <div>
                 <p className="text-sm text-green-700 font-medium">
-                  This Quota Accepted!
+                  Quote Accepted!
                 </p>
                 <p className="text-sm text-green-600 mt-1">
-                  An Order Created।
+                  An order has been created.
                   <Link href={route('supplier.orders.show', quote.order.id)} className="ml-2 font-medium underline">
                     Order #{quote.order.order_number} See →
                   </Link>
@@ -331,7 +331,7 @@ export default function QuoteShow({
             {/* Quote Items */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6 border-b border-gray-100">
-                <h2 className="text-lg font-semibold text-gray-900">Quota item</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Quote Items</h2>
               </div>
               <div className="divide-y divide-gray-100">
                 {quote.product_breakdown.map((item, index) => (
@@ -363,7 +363,7 @@ export default function QuoteShow({
               </div>
               <div className="p-4 bg-gray-50 border-t border-gray-100">
                 <div className="flex justify-between items-center">
-                  <span className="font-semibold text-gray-900">Total quota amount</span>
+                  <span className="font-semibold text-gray-900">Total Quote Amount</span>
                   <span className="text-2xl font-bold text-indigo-600">
                     {formatCurrency(quote.total_amount)}
                   </span>
@@ -437,7 +437,7 @@ export default function QuoteShow({
 
                   {messages.length === 0 && (
                     <div className="text-center py-8 text-gray-500">
-                      No messages yet. Start a conversation with the buyer।
+                      No messages yet. Start a conversation with the buyer.
                     </div>
                   )}
                 </div>
@@ -524,7 +524,7 @@ export default function QuoteShow({
 
             {/* Quote Validity */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Quota period</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Quote Validity Period</h2>
               <div className="space-y-4">
                 <div>
                   <p className="text-sm text-gray-500">Expires</p>
@@ -550,9 +550,9 @@ export default function QuoteShow({
             {/* Other Quotes Comparison */}
             {otherQuotes.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Other Quota</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Other Quotes</h2>
                 <p className="text-sm text-gray-500 mb-3">
-                   {otherQuotes.length} t other quota
+                   {otherQuotes.length} other quotes
                 </p>
                 <div className="space-y-3">
                   {otherQuotes.map((otherQuote) => (
@@ -590,9 +590,9 @@ export default function QuoteShow({
         {showWithdrawConfirm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-xl max-w-md w-full mx-4 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Withdrawal of Quota</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Withdraw Quote</h3>
               <p className="text-sm text-gray-600 mb-4">
-                Do you want to revoke this quota? This action cannot be undone।
+                Are you sure you want to withdraw this quote? This action cannot be undone.
               </p>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -603,7 +603,7 @@ export default function QuoteShow({
                   onChange={(e) => setWithdrawReason(e.target.value)}
                   rows="3"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                  placeholder="Explain why you are withdrawing this quota..."
+                  placeholder="Explain why you are withdrawing this quote..."
                   required
                 />
               </div>
@@ -633,7 +633,7 @@ export default function QuoteShow({
         {showExtendValidity && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-xl max-w-md w-full mx-4 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Extend the quota period</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Extend the quote period</h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">

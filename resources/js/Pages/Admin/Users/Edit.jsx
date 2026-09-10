@@ -57,7 +57,7 @@ export default function Edit({ user }) {
       onSuccess: () => {
         Swal.fire({
           title: 'successful!',
-          text: 'User successfully updated।',
+          text: 'User successfully updated.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -67,7 +67,7 @@ export default function Edit({ user }) {
         setErrors(errors);
         Swal.fire({
           title: 'Error!',
-          text: 'There is an error in the form. Please check।',
+          text: 'There is an error in the form. Please check your inputs.',
           icon: 'error',
           confirmButtonColor: '#4F46E5'
         });
@@ -294,7 +294,7 @@ export default function Edit({ user }) {
             <FiAlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-yellow-700">
               <p className="font-medium mb-1">User Role Change:</p>
-              <p>If you change a user's role from/to supplier, their supplier profile will be affected accordingly।</p>
+              <p>If you change a user's role from/to supplier, their supplier profile will be affected accordingly.</p>
             </div>
           </div>
         </div>

@@ -46,20 +46,20 @@ export default function Show({ user, activity }) {
     const action = user.is_active ? 'Inactive' : 'Active';
     Swal.fire({
       title: `${user.is_active ? 'Inactive' : 'Active'} Do`,
-      text: `Are you ${user.name} who ${action} want to?`,
+      text: `Are you sure you want to ${action} user "${user.name}"?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: user.is_active ? '#EF4444' : '#10B981',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: `according to income yes, ${action} Do`,
-      cancelButtonText: 'cancel'
+      confirmButtonText: `Yes, confirm, ${action} Do`,
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.users.toggle-status', user.id), {}, {
           onSuccess: () => {
             Swal.fire({
               title: 'successful!',
-              text: `User ${action} Done।`,
+              text: `User ${action} completed.`,
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -80,7 +80,7 @@ export default function Show({ user, activity }) {
         setPasswordData({ password: '', password_confirmation: '' });
         Swal.fire({
           title: 'successful!',
-          text: 'Password successfully reset।',
+          text: 'Password successfully reset.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -96,13 +96,13 @@ export default function Show({ user, activity }) {
   const handleDelete = () => {
     Swal.fire({
       title: 'Delete user',
-      text: `Are you ${user.name} Want to delete? This action cannot be undone।`,
+      text: `Are you sure you want to delete user "${user.name}"? This action cannot be undone.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, delete',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.users.destroy', user.id), {
@@ -337,7 +337,7 @@ export default function Show({ user, activity }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Submitted Quota</p>
+                <p className="text-sm text-gray-500">Quotes Submitted</p>
                 <p className="text-2xl font-bold text-blue-600 mt-1">{activity.quotes_count}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">

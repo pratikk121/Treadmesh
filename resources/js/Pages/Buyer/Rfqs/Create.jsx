@@ -182,7 +182,7 @@ export default function RfqCreate({ recentProducts, categories }) {
           </Link>
           <div>
             <h2 className="text-2xl font-bold text-gray-800">Create new RFQ</h2>
-            <p className="text-gray-600 mt-1">Request Quota from Verified Suppliers</p>
+            <p className="text-gray-600 mt-1">Request Quotes from Verified Suppliers</p>
           </div>
         </div>
 
@@ -454,7 +454,7 @@ export default function RfqCreate({ recentProducts, categories }) {
                   Creating...
                 </>
               ) : (
-                'RFQ Create'
+                'Submit RFQ'
               )}
             </button>
           </div>

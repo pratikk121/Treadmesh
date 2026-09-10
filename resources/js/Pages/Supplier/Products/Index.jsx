@@ -112,7 +112,7 @@ export default function ProductsIndex({ products, stats, categories }) {
 
   // Bulk delete products
   const handleBulkDelete = () => {
-    if (confirm(`Are you ${selectedProducts.length} t want to delete the product?`)) {
+    if (confirm(`Are you sure you want to delete ${selectedProducts.length} products?`)) {
       router.post(route('supplier.products.bulk-delete'), {
         product_ids: selectedProducts
       }, {
@@ -463,7 +463,7 @@ export default function ProductsIndex({ products, stats, categories }) {
                         </button>
                         <button
                           onClick={() => {
-                            if (confirm('Do you want to delete this product?')) {
+                            if (confirm('Are you sure you want to delete this product?')) {
                               router.delete(route('supplier.products.destroy', product.id));
                             }
                           }}

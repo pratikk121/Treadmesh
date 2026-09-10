@@ -56,7 +56,7 @@ export default function CreateSupplier({ user }) {
       onSuccess: () => {
         Swal.fire({
           title: 'successful!',
-          text: 'Supplier profile created successfully।',
+          text: 'Supplier profile created successfully.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -66,7 +66,7 @@ export default function CreateSupplier({ user }) {
         setErrors(errors);
         Swal.fire({
           title: 'Error!',
-          text: 'There is an error in the form. Please check।',
+          text: 'There is an error in the form. Please check your inputs.',
           icon: 'error',
           confirmButtonColor: '#4F46E5'
         });
@@ -107,7 +107,7 @@ export default function CreateSupplier({ user }) {
                 <span className="font-medium">User:</span> {user.name} ({user.email})
               </p>
               <p className="text-xs text-blue-600 mt-1">
-                This profile will be automatically verified as you are created as an admin।
+                This profile will be automatically verified as you are created as an admin.
               </p>
             </div>
           </div>
@@ -289,7 +289,7 @@ export default function CreateSupplier({ user }) {
             <FiCheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-green-700">
               <p className="font-medium mb-1">Auto-Verification:</p>
-              <p>Supplier profile created by admin is automatically verified. No additional authorization required।</p>
+              <p>Supplier profile created by admin is automatically verified. No additional authorization required.</p>
             </div>
           </div>
         </div>

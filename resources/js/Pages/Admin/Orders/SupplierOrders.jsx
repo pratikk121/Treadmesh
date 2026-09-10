@@ -40,7 +40,7 @@ export default function SupplierOrders({ supplier, orders }) {
       pending_confirmation: { color: 'bg-yellow-100 text-yellow-800', label: 'Awaiting' },
       confirmed: { color: 'bg-blue-100 text-blue-800', label: 'sure' },
       processing: { color: 'bg-indigo-100 text-indigo-800', label: 'In process' },
-      shipped: { color: 'bg-purple-100 text-purple-800', label: 'has been sent' },
+      shipped: { color: 'bg-purple-100 text-purple-800', label: 'Sent' },
       delivered: { color: 'bg-green-100 text-green-800', label: 'Delivered' },
       cancelled: { color: 'bg-red-100 text-red-800', label: 'cancel' },
     };
@@ -88,7 +88,7 @@ export default function SupplierOrders({ supplier, orders }) {
             // Empty state - No orders found
             <div className="p-12 text-center">
               <FiPackage className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No orders found for this supplier।</p>
+              <p className="text-gray-500">No orders found for this supplier.</p>
             </div>
           ) : (
             // Orders table
@@ -139,7 +139,7 @@ export default function SupplierOrders({ supplier, orders }) {
                         {getOrderStatusBadge(order.order_status)}
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-sm text-gray-600">{order.items?.length || 0} t item</span>
+                        <span className="text-sm text-gray-600">{order.items?.length || 0} items</span>
                       </td>
                       <td className="px-6 py-4">
                         <span className="text-sm text-gray-500">{formatDate(order.created_at)}</span>

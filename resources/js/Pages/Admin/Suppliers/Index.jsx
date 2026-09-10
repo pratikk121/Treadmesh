@@ -111,7 +111,7 @@ export default function Index({ suppliers, stats, cities, filters }) {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, continue!',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.suppliers.bulk-update'), {
@@ -124,8 +124,8 @@ export default function Index({ suppliers, stats, cities, filters }) {
 
             Swal.fire({
               icon: 'success',
-              title: 'successful',
-              text: 'Multiple activities completed'
+              title: 'Success',
+              text: 'Bulk Actions completed'
             });
           }
         });
@@ -137,18 +137,18 @@ export default function Index({ suppliers, stats, cities, filters }) {
   const handleDelete = (id, companyName) => {
     Swal.fire({
       title: 'Delete supplier?',
-      text: `${companyName} Delete? It cannot be undone।`,
+      text: `${companyName} Delete? It cannot be undone.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete!',
-      cancelButtonText: 'cancel'
+      confirmButtonText: 'Yes, delete',
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.suppliers.destroy', id), {
           onSuccess: () => {
-            Swal.fire('Deleted!', 'Supplier deleted।', 'success');
+            Swal.fire('Deleted!', 'Supplier deleted.', 'success');
           }
         });
       }
@@ -157,20 +157,20 @@ export default function Index({ suppliers, stats, cities, filters }) {
 
   // Handle toggle supplier status (activate/deactivate)
   const handleToggleStatus = (id, currentStatus) => {
-    const banglaAction = currentStatus ? 'Inactive' : 'Active';
+    const actionText = currentStatus ? 'deactivate' : 'activate';
 
     Swal.fire({
       title: 'Confirm',
-      text: `Are you this supplier? ${banglaAction} want to?`,
+      text: `Are you sure you want to change this supplier's status?`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'according to income yes',
-      cancelButtonText: 'cancel'
+      confirmButtonText: 'Yes, confirm',
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.patch(route('admin.suppliers.toggle-status', id), {
           onSuccess: () => {
-            Swal.fire('Update!', 'Supplier status updated।', 'success');
+            Swal.fire('Update!', 'Supplier status updated.', 'success');
           }
         });
       }
@@ -334,14 +334,14 @@ export default function Index({ suppliers, stats, cities, filters }) {
           {selectedSuppliers.length > 0 && (
             <div className="mt-4 flex items-center gap-4 p-3 bg-indigo-50 rounded-lg">
               <span className="text-sm font-medium text-indigo-700">
-                {selectedSuppliers.length} t supplier selected
+                {selectedSuppliers.length} suppliers selected
               </span>
               <select
                 value={bulkAction}
                 onChange={(e) => setBulkAction(e.target.value)}
                 className="px-3 py-1 bg-white border border-gray-300 rounded-lg text-sm"
               >
-                <option value="">Multiple activities</option>
+                <option value="">Bulk Actions</option>
                 <option value="verify">Selected Verify</option>
                 <option value="reject">Selected Reject</option>
                 <option value="activate">Selected Active</option>

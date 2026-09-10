@@ -126,20 +126,20 @@ export default function Index({ users, stats, filters }) {
     const action = user.is_active ? 'Inactive' : 'Active';
     Swal.fire({
       title: `${user.is_active ? 'Inactive' : 'Active'} Do`,
-      text: `Are you ${user.name} who ${action} want to?`,
+      text: `Are you sure you want to ${action} user "${user.name}"?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: user.is_active ? '#EF4444' : '#10B981',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: `according to income yes, ${action} Do`,
-      cancelButtonText: 'cancel'
+      confirmButtonText: `Yes, confirm, ${action} Do`,
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.patch(route('admin.users.toggle-status', user.id), {}, {
           onSuccess: () => {
             Swal.fire({
               title: 'successful!',
-              text: `User ${action} Done।`,
+              text: `User ${action} completed.`,
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -154,20 +154,20 @@ export default function Index({ users, stats, filters }) {
   const handleDelete = (user) => {
     Swal.fire({
       title: 'Delete user',
-      text: `Are you ${user.name} Want to delete? This action cannot be undone।`,
+      text: `Are you sure you want to delete user "${user.name}"? This action cannot be undone.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, delete',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.users.destroy', user.id), {
           onSuccess: () => {
             Swal.fire({
               title: 'Deleted!',
-              text: 'User Deleted।',
+              text: 'User Deleted.',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -383,7 +383,7 @@ export default function Index({ users, stats, filters }) {
           {selectedUsers.length > 0 && (
             <div className="mt-4 flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
               <span className="text-sm font-medium text-indigo-700">
-                {selectedUsers.length} T user selected
+                {selectedUsers.length} users selected
               </span>
               <div className="relative">
                 <button
@@ -391,7 +391,7 @@ export default function Index({ users, stats, filters }) {
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
                   <FiMoreVertical className="w-4 h-4" />
-                  Multiple activities
+                  Bulk Actions
                 </button>
                 {bulkActionMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border z-10">
@@ -402,7 +402,7 @@ export default function Index({ users, stats, filters }) {
                       }}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      Selected export
+                      Export Selected
                     </button>
                   </div>
                 )}

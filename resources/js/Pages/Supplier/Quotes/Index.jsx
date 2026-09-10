@@ -131,7 +131,7 @@ export default function QuotesIndex({ quotes, stats, statusCounts }) {
   const handleDuplicate = (id) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "A new copy will be created from this quota",
+      text: "A new copy will be created from this quote",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes, make copy",
@@ -143,15 +143,15 @@ export default function QuotesIndex({ quotes, stats, statusCounts }) {
           onSuccess: () => {
             Swal.fire({
               icon: "success",
-              title: "successful",
-              text: "Quota copy created successfully"
+              title: 'Success',
+              text: "Quote duplicate created successfully"
             });
           },
           onError: () => {
             Swal.fire({
               icon: "error",
               title: "Error",
-              text: "Quota copy could not be created"
+              text: "Quote duplicate could not be created"
             });
           }
         });
@@ -169,15 +169,15 @@ export default function QuotesIndex({ quotes, stats, statusCounts }) {
 
   return (
     <DashboardLayout>
-      <Head title="My Quotas" />
+      <Head title="My Quotes" />
 
       <div className="space-y-6">
         {/* Header - Page title */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">My quota is</h1>
+            <h1 className="text-2xl font-bold text-gray-900">My Quotes</h1>
             <p className="text-sm text-gray-600 mt-1">
-              Track and manage all your quota submissions
+              Track and manage all your quote submissions
             </p>
           </div>
         </div>
@@ -185,7 +185,7 @@ export default function QuotesIndex({ quotes, stats, statusCounts }) {
         {/* Stats Cards - Key metrics */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <p className="text-sm text-gray-500">Total Quota</p>
+            <p className="text-sm text-gray-500">Total Quotes</p>
             <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
           </div>
           <div className="bg-yellow-50 rounded-xl shadow-sm border border-yellow-100 p-4">
@@ -231,7 +231,7 @@ export default function QuotesIndex({ quotes, stats, statusCounts }) {
                   <form onSubmit={handleSearch} className="flex">
                     <input
                       type="text"
-                      placeholder="Search by Quota, RFQ Number or Buyer Name..."
+                      placeholder="Search by Quote, RFQ Number or Buyer Name...."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
@@ -266,7 +266,7 @@ export default function QuotesIndex({ quotes, stats, statusCounts }) {
                     onChange={(e) => setValidityFilter(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   >
-                    <option value="">All quotas are</option>
+                    <option value="">All quotes are</option>
                     <option value="valid">Valid</option>
                     <option value="expired">Expired</option>
                   </select>
@@ -425,14 +425,14 @@ export default function QuotesIndex({ quotes, stats, statusCounts }) {
                               <Link
                                 href={route('supplier.quotes.edit', quote.id)}
                                 className="p-2 text-gray-400 hover:text-indigo-600"
-                                title="Edit Quota"
+                                title="Edit Quote"
                               >
                                 <FiEdit2 className="w-4 h-4" />
                               </Link>
                               <button
                                 onClick={() => handleDuplicate(quote.id)}
                                 className="p-2 text-gray-400 hover:text-indigo-600"
-                                title="Quota Duplicate"
+                                title="Duplicate Quote"
                               >
                                 <FiCopy className="w-4 h-4" />
                               </button>
@@ -459,11 +459,11 @@ export default function QuotesIndex({ quotes, stats, statusCounts }) {
                   <tr>
                     <td colSpan="7" className="px-6 py-12 text-center">
                       <FiFileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                      <p className="text-gray-500 text-lg mb-2">No Quota Found</p>
+                      <p className="text-gray-500 text-lg mb-2">No Quotes Found</p>
                       <p className="text-gray-400">
                         {searchTerm || statusFilter || dateFrom || dateTo
                           ? 'Adjust your filter'
-                          : 'You have not submitted any quota yet'}
+                          : 'You have not submitted any quotes yet'}
                       </p>
                       {!searchTerm && !statusFilter && !dateFrom && !dateTo && (
                         <Link

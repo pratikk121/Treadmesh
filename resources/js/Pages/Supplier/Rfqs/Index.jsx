@@ -130,7 +130,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
         {/* Header - Page title */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Quota request (RFQ)</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Quote request (RFQ)</h1>
             <p className="text-sm text-gray-600 mt-1">
               Browse open RFQs that match your product and quote
             </p>
@@ -148,7 +148,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
             <p className="text-2xl font-bold text-indigo-700">{stats.matching_categories}</p>
           </div>
           <div className="bg-blue-50 rounded-xl shadow-sm border border-blue-100 p-4">
-            <p className="text-sm text-blue-600">My quota is</p>
+            <p className="text-sm text-blue-600">My Quotes</p>
             <p className="text-2xl font-bold text-blue-700">{stats.my_quotes}</p>
           </div>
           <div className="bg-yellow-50 rounded-xl shadow-sm border border-yellow-100 p-4">
@@ -171,7 +171,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                   No product categories found
                 </p>
                 <p className="text-sm text-yellow-600 mt-1">
-                  Add Products with Categories to View Matching RFQs।
+                  Add products with matching categories to view relevant RFQs.
                   <Link href={route('supplier.products.create')} className="ml-1 font-medium underline">
                     .Add your first product →
                   </Link>
@@ -362,7 +362,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                       {hasQuoted(rfq) ? (
                         <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
                           <FiCheckCircle className="w-3 h-3" />
-                          Quota is given
+                          Quote Submitted
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
@@ -385,7 +385,7 @@ export default function RfqsIndex({ rfqs, stats, supplierCategories }) {
                             href={route('supplier.rfqs.create-quote', rfq.id)}
                             className="px-3 py-1 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700"
                           >
-                            Give Quota
+                            Submit Quote
                           </Link>
                         )}
                       </div>

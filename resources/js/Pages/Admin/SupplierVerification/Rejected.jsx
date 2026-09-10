@@ -46,7 +46,7 @@ export default function Rejected({ rejectedSuppliers }) {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Rejected supplier</h1>
             <p className="text-sm text-gray-600 mt-1">
-              to pay quota List of Rejected Supplier Applications
+              List of Rejected Supplier Applications
             </p>
           </div>
         </div>

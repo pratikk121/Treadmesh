@@ -502,7 +502,7 @@ export default function SalesAnalytics({
                       style={{ width: `${(method.total / paymentMethods.reduce((sum, m) => sum + m.total, 0)) * 100}%` }}
                     />
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">{method.count} t transaction</p>
+                  <p className="text-xs text-gray-500 mt-1">{method.count} transactions</p>
                 </div>
               ))}
             </div>

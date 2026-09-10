@@ -84,7 +84,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">RFQ Report</h1>
             <p className="text-sm text-gray-600 mt-1">
-              Analyze quota request activity
+              Analyze quote request activity
             </p>
           </div>
           <div className="flex gap-2">
@@ -144,7 +144,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Quota received</p>
+                <p className="text-sm text-gray-500">Quotes Received</p>
                 <p className="text-2xl font-bold text-blue-600 mt-1">{formatNumber(overview.quoted)}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
@@ -184,7 +184,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
                     labelLine={true}
                     label={({ status, percent }) =>
                       `${status === 'open' ? 'open' :
-                        status === 'quoted' ? 'Quota received' :
+                        status === 'quoted' ? 'Quotes Received' :
                           status === 'closed' ? 'off' : status}: ${(percent * 100).toFixed(1)}%`
                     }
                     outerRadius={80}
@@ -265,7 +265,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
                   {response_time ? Math.round(response_time) : 0}
                 </div>
                 <p className="text-lg text-gray-500 mt-2">hours</p>
-                <p className="text-sm text-gray-400 mt-1">RFQ Average time from creation to first quota is</p>
+                <p className="text-sm text-gray-400 mt-1">Average time from RFQ creation to first quote</p>
               </div>
             </div>
           </div>
@@ -293,7 +293,7 @@ export default function Rfqs({ rfqData, period, dateRange }) {
                       <td className="px-6 py-4">
                         <span className="capitalize font-medium text-gray-900">
                           {item.status === 'open' ? 'open' :
-                            item.status === 'quoted' ? 'Quota received' :
+                            item.status === 'quoted' ? 'Quotes Received' :
                               item.status === 'closed' ? 'off' : item.status}
                         </span>
                       </td>

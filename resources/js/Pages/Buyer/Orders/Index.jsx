@@ -150,7 +150,7 @@ export default function OrdersIndex({ orders, counts }) {
             <p className="text-2xl font-bold text-purple-600">{counts.processing}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">has been sent</p>
+            <p className="text-sm text-gray-500">Sent</p>
             <p className="text-2xl font-bold text-indigo-600">{counts.shipped}</p>
           </div>
           <div className="bg-white rounded-xl p-4 border">
@@ -194,7 +194,7 @@ export default function OrdersIndex({ orders, counts }) {
                   <option value="pending_confirmation">Awaiting</option>
                   <option value="confirmed">sure</option>
                   <option value="processing">In process</option>
-                  <option value="shipped">has been sent</option>
+                  <option value="shipped">Sent</option>
                   <option value="delivered">Delivered</option>
                   <option value="cancelled">cancel</option>
                 </select>
@@ -302,7 +302,7 @@ export default function OrdersIndex({ orders, counts }) {
                             {order.order_status === 'pending_confirmation' ? 'Awaiting' :
                               order.order_status === 'confirmed' ? 'sure' :
                                 order.order_status === 'processing' ? 'In process' :
-                                  order.order_status === 'shipped' ? 'has been sent' :
+                                  order.order_status === 'shipped' ? 'Sent' :
                                     order.order_status === 'delivered' ? 'Delivered' :
                                       order.order_status === 'cancelled' ? 'cancel' : order.order_status.replace('_', ' ')}
                           </span>

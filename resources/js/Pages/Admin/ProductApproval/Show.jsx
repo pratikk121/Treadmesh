@@ -40,13 +40,13 @@ export default function Show({ product, similarProducts, supplierProducts }) {
   const handleApprove = () => {
     Swal.fire({
       title: 'Product approval',
-      text: `Are you ${product.name} Want to approve?`,
+      text: `Are you sure you want to approve "${product.name}"?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#10B981',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, approve',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.product-approval.approve', product.id), {
@@ -57,7 +57,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
           onSuccess: () => {
             Swal.fire({
               title: 'Approved!',
-              text: 'The product has been successfully approved।',
+              text: 'The product has been successfully approved.',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -73,7 +73,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
     if (!rejectionReason) {
       Swal.fire({
         title: 'Error!',
-        text: 'Please specify the reason for rejection।',
+        text: 'Please specify the reason for rejection.',
         icon: 'error',
         confirmButtonColor: '#4F46E5'
       });
@@ -82,13 +82,13 @@ export default function Show({ product, similarProducts, supplierProducts }) {
 
     Swal.fire({
       title: 'Product rejection',
-      text: `Are you ${product.name} want to reject?`,
+      text: `Are you sure you want to reject "${product.name}"?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, reject',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.product-approval.reject', product.id), {
@@ -99,7 +99,7 @@ export default function Show({ product, similarProducts, supplierProducts }) {
           onSuccess: () => {
             Swal.fire({
               title: 'Rejected!',
-              text: 'The product has been rejected।',
+              text: 'The product has been rejected.',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false

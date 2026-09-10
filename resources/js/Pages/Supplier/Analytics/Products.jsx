@@ -248,7 +248,7 @@ export default function ProductsAnalytics({
                   <div className="flex items-center gap-4 text-sm text-gray-500">
                     <span>{formatNumber(item.quantity)} Units sold</span>
                     <span>•</span>
-                    <span>{item.products} t product</span>
+                    <span>{item.products} products</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                     <div

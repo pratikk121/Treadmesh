@@ -208,7 +208,7 @@ export default function OrderInvoice({ order }) {
           {/* Footer */}
           <div className="mt-8 text-center text-sm text-gray-500">
             <p>Thank you for your business!</p>
-            <p className="mt-1">Contact us if you have any questions about this invoice।</p>
+            <p className="mt-1">Contact us if you have any questions about this invoice.</p>
           </div>
         </div>
       </div>

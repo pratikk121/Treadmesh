@@ -89,7 +89,7 @@ export default function AdminDashboard({
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
             <p className="text-sm text-gray-600 mt-1">
-              Welcome! Here's what's happening in your marketplace today।
+              Welcome! Here's what's happening in your marketplace today.
             </p>
           </div>
           <div className="flex gap-2">
@@ -461,7 +461,7 @@ export default function AdminDashboard({
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
                           {order.status === 'pending' ? 'Pending' :
                             order.status === 'processing' ? 'In process' :
-                              order.status === 'shipped' ? 'has been sent' :
+                              order.status === 'shipped' ? 'Sent' :
                                 order.status === 'delivered' ? 'Delivered' :
                                   order.status === 'cancelled' ? 'cancel' : order.status}
                         </span>
@@ -490,7 +490,7 @@ export default function AdminDashboard({
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Recent RFQ</h3>
-                    <p className="text-sm text-gray-500">Last 10 quota requests</p>
+                    <p className="text-sm text-gray-500">Last 10 quote requests</p>
                   </div>
                 </div>
                 <Link
@@ -535,7 +535,7 @@ export default function AdminDashboard({
                       <td className="px-6 py-4">
                         <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(rfq.status)}`}>
                           {rfq.status === 'open' ? 'open' :
-                            rfq.status === 'quoted' ? 'Quota received' :
+                            rfq.status === 'quoted' ? 'Quotes Received' :
                               rfq.status === 'closed' ? 'off' : rfq.status}
                         </span>
                       </td>

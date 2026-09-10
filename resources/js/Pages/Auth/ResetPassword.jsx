@@ -237,7 +237,7 @@ export default function ResetPassword({ token, email }) {
                         <div className="bg-indigo-50 rounded-lg p-3 flex items-start space-x-3">
                             <BsShieldCheck className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                             <p className="text-xs text-indigo-700">
-                                Your new password will be encrypted and stored securely. Choose a strong password that you haven't used elsewhere।
+                                Your new password will be encrypted and stored securely. Choose a strong password that you have not used elsewhere.
                             </p>
                         </div>
 

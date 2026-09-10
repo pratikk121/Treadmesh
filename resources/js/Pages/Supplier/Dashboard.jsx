@@ -101,7 +101,7 @@ export default function SupplierDashboard({
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Supplier Dashboard</h1>
             <p className="text-sm text-gray-600 mt-1">
-              Welcome! Here is a summary of your business performance।
+              Welcome! Here is a summary of your business performance.
             </p>
           </div>
           <div className="flex gap-2">
@@ -131,7 +131,7 @@ export default function SupplierDashboard({
               </div>
               <div className="ml-3 flex-1">
                 <p className="text-sm text-blue-700">
-                  Your <span className="font-bold">{counts.unreadMessages}</span> There are t unread messages।
+                  You have <span className="font-bold">{counts.unreadMessages}</span> unread messages.
                   <Link href={route('supplier.messages.index')} className="ml-2 font-medium underline text-blue-700 hover:text-blue-600">
                     See message →
                   </Link>
@@ -237,7 +237,7 @@ export default function SupplierDashboard({
           <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-xl p-6 text-white">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm opacity-90">Quota Performance</p>
+                <p className="text-sm opacity-90">Quote Performance</p>
                 <p className="text-2xl font-bold mt-1">{Math.round(quote_performance?.acceptanceRate || 0)}%</p>
               </div>
               <div className="p-3 bg-white/20 rounded-lg">
@@ -373,7 +373,7 @@ export default function SupplierDashboard({
                       name: name === 'pending_confirmation' ? 'Awaiting' :
                         name === 'confirmed' ? 'sure' :
                           name === 'processing' ? 'In process' :
-                            name === 'shipped' ? 'has been sent' :
+                            name === 'shipped' ? 'Sent' :
                               name === 'delivered' ? 'Delivered' :
                                 name === 'cancelled' ? 'cancel' : name.replace('_', ' ').toUpperCase(),
                       value
@@ -450,7 +450,7 @@ export default function SupplierDashboard({
                       <td className="px-6 py-4">
                         <div>
                           <p className="text-sm font-medium text-gray-900">{order.buyer?.name}</p>
-                          <p className="text-xs text-gray-500">{order.items?.length} t item</p>
+                          <p className="text-xs text-gray-500">{order.items?.length} items</p>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
@@ -461,7 +461,7 @@ export default function SupplierDashboard({
                           {order.order_status === 'pending_confirmation' ? 'Awaiting' :
                             order.order_status === 'confirmed' ? 'sure' :
                               order.order_status === 'processing' ? 'In process' :
-                                order.order_status === 'shipped' ? 'has been sent' :
+                                order.order_status === 'shipped' ? 'Sent' :
                                   order.order_status === 'delivered' ? 'Delivered' :
                                     order.order_status === 'cancelled' ? 'cancel' : order.order_status?.replace('_', ' ')}
                         </span>
@@ -542,7 +542,7 @@ export default function SupplierDashboard({
                           href={route('supplier.rfqs.create-quote', rfq.id)}
                           className="px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-medium rounded-lg hover:bg-indigo-100 transition"
                         >
-                          Submit Quota
+                          Submit Quote
                         </Link>
                       </td>
                     </tr>
@@ -646,7 +646,7 @@ export default function SupplierDashboard({
                       {order.order_status === 'pending_confirmation' ? 'Awaiting' :
                         order.order_status === 'confirmed' ? 'sure' :
                           order.order_status === 'processing' ? 'In process' :
-                            order.order_status === 'shipped' ? 'has been sent' :
+                            order.order_status === 'shipped' ? 'Sent' :
                               order.order_status === 'delivered' ? 'Delivered' :
                                 order.order_status === 'cancelled' ? 'cancel' : order.order_status?.replace('_', ' ')}
                     </span>
@@ -723,7 +723,7 @@ export default function SupplierDashboard({
 
           {/* Quote Performance Stats */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Quota Performance</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">Quote Performance</h3>
             <div className="space-y-4">
               {/* Acceptance Rate */}
               <div>
@@ -742,7 +742,7 @@ export default function SupplierDashboard({
               {/* Quote Stats Grid */}
               <div className="grid grid-cols-2 gap-4 pt-2">
                 <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500">Total Quota</p>
+                  <p className="text-xs text-gray-500">Total Quotes</p>
                   <p className="text-xl font-bold text-gray-900">{formatNumber(quote_performance?.totalQuotes || 0)}</p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
@@ -817,7 +817,7 @@ export default function SupplierDashboard({
               </div>
               <div>
                 <p className="font-medium text-gray-900">RFQ</p>
-                <p className="text-sm text-gray-500">Submit Quota</p>
+                <p className="text-sm text-gray-500">Submit Quote</p>
               </div>
             </div>
           </Link>

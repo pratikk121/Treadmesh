@@ -486,8 +486,8 @@ export default function CreateProduct({ categories, units }) {
                   <div>
                     <p className="text-sm text-blue-700 font-medium">Product approval</p>
                     <p className="text-xs text-blue-600 mt-1">
-                      New product will be reviewed by admin and then visible to buyers।
-                      It usually takes 1-2 working days।
+                      New products will be reviewed by an administrator before becoming visible to buyers.
+                      Review typically takes 1-2 business days.
                     </p>
                   </div>
                 </div>

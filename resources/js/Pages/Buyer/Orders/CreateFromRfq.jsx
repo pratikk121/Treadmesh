@@ -80,7 +80,7 @@ export default function CreateFromRfq({ rfq, quote }) {
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-3">RFQ </h2>
             <p className="text-gray-600 mb-6">
-              This RFQ is not open for orders. It has been closed or an order has already been created।
+              This RFQ is not open for orders. It has been closed or an order has already been created.
             </p>
             <Link
               href={route('buyer.rfqs.show', rfq.id)}
@@ -107,7 +107,7 @@ export default function CreateFromRfq({ rfq, quote }) {
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-3">Order Already Placed</h2>
             <p className="text-gray-600 mb-6">
-              An Order Already Created for This RFQ।
+              An Order Has Already Been Created for This RFQ.
             </p>
             <Link
               href={route('buyer.orders.show', rfq.order.id)}
@@ -134,7 +134,7 @@ export default function CreateFromRfq({ rfq, quote }) {
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-3">Order successfully created!</h2>
             <p className="text-gray-600 mb-4">
-              Your order has been successfully created. Supplier will confirm your order within 24-48 hours।
+              Your order has been successfully created. The supplier will confirm your order within 24-48 hours.
             </p>
             {orderNumber && (
               <p className="text-sm bg-gray-50 p-3 rounded-lg mb-6">
@@ -195,7 +195,7 @@ export default function CreateFromRfq({ rfq, quote }) {
                   <div className="flex justify-between items-start mb-2">
                     <p className="font-medium">RFQ: {rfq.rfq_number}</p>
                     <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
-                      Accepted Quota
+                      Accepted Quote
                     </span>
                   </div>
                   <p className="text-sm text-gray-600 mb-3">{rfq.title}</p>
@@ -228,7 +228,7 @@ export default function CreateFromRfq({ rfq, quote }) {
                     <p className="font-medium">{quote.supplier?.supplier?.company_name}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Quota Number</p>
+                    <p className="text-gray-500">Quote Number</p>
                     <p className="font-medium">{quote.quote_number}</p>
                   </div>
                   <div>

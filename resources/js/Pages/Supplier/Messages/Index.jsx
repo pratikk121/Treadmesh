@@ -362,7 +362,7 @@ export default function MessagesIndex({
                             message.is_read ? (
                               <FiCheckCircle className="w-3 h-3 text-indigo-200" title="has been read" />
                             ) : (
-                              <FiCheck className="w-3 h-3 text-indigo-200" title="has been sent" />
+                              <FiCheck className="w-3 h-3 text-indigo-200" title="Sent" />
                             )
                           )}
                         </div>

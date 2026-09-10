@@ -181,7 +181,7 @@ export default function BulkPrices({ product }) {
               </button>
             </div>
             <p className="text-sm text-gray-500 mt-2">
-              Set different prices based on order quantity to encourage bulk purchasing।
+              Set different prices based on order quantity to encourage bulk purchasing.
             </p>
           </div>
 
@@ -279,7 +279,7 @@ export default function BulkPrices({ product }) {
 
               {bulkPrices.length === 0 && (
                 <div className="text-center py-8 text-gray-500">
-                  No bulk price levels have been added yet. "Add layers" Click the button।
+                  No bulk pricing tiers have been added yet. Click "Add Tier" to create one.
                 </div>
               )}
             </div>

@@ -109,10 +109,10 @@ export default function RfqShow({
               <FiXCircle className="w-5 h-5 text-red-400 mr-3 mt-0.5" />
               <div>
                 <p className="text-sm text-red-700 font-medium">
-                  This RFQ is no longer open for quota acceptance
+                  This RFQ is no longer open for quote submission
                 </p>
                 <p className="text-sm text-red-600 mt-1">
-                  The deadline has expired or the RFQ has been closed।
+                  The deadline has passed or the RFQ has been closed.
                 </p>
               </div>
             </div>
@@ -126,10 +126,10 @@ export default function RfqShow({
               <FiCheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5" />
               <div>
                 <p className="text-sm text-green-700 font-medium">
-                  You have already submitted a quota for this RFQ
+                  You have already submitted a quote for this RFQ
                 </p>
                 <p className="text-sm text-green-600 mt-1">
-                  Quota Number: {existingQuote.quote_number} | Status: {existingQuote.status === 'pending' ? 'Awaiting' :
+                  Quote Number: {existingQuote.quote_number} | Status: {existingQuote.status === 'pending' ? 'Awaiting' :
                     existingQuote.status === 'accepted' ? 'accepted' : 'Rejected'}
                 </p>
               </div>
@@ -232,9 +232,9 @@ export default function RfqShow({
             {/* Other Quotes (if any) */}
             {otherQuotes.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Other Quota</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Other Quotes</h2>
                 <p className="text-sm text-gray-500 mb-4">
-                   {otherQuotes.length} John gave other supplier quota
+                   {otherQuotes.length} other suppliers submitted quotes
                 </p>
                 <div className="space-y-3">
                   {otherQuotes.map((quote) => (
@@ -282,10 +282,10 @@ export default function RfqShow({
             {/* Your Quote (if exists) */}
             {existingQuote && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Your quota is</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Quote</h2>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-500">Quota Number</p>
+                    <p className="text-sm text-gray-500">Quote Number</p>
                     <p className="font-medium text-gray-900">{existingQuote.quote_number}</p>
                   </div>
                   <div>
@@ -308,7 +308,7 @@ export default function RfqShow({
                       href={route('supplier.rfqs.edit-quote', existingQuote.id)}
                       className="block w-full text-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                     >
-                      Edit Quota
+                      Edit Quote
                     </Link>
                   )}
                 </div>
@@ -318,18 +318,18 @@ export default function RfqShow({
             {/* Action Buttons - Submit Quote */}
             {!existingQuote && isOpen && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Submit Quota</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Submit Quote</h2>
 
                 {canQuote ? (
                   <>
                     <p className="text-sm text-gray-500 mb-4">
-                      You can submit a quota for this RFQ based on your product।
+                      You can submit a quote for this RFQ based on your product.
                     </p>
                     <Link
                       href={route('supplier.rfqs.create-quote', rfq.id)}
                       className="block w-full text-center px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
                     >
-                      Create Quota
+                      Create Quote
                     </Link>
                   </>
                 ) : (
@@ -338,10 +338,10 @@ export default function RfqShow({
                       <FiAlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
                       <div>
                         <p className="text-sm text-yellow-700 font-medium">
-                          Cannot assign quota for this RFQ
+                          Cannot submit quote for this RFQ
                         </p>
                         <p className="text-xs text-yellow-600 mt-1">
-                          You need active product।
+                          You need active products in your catalog to quote on this RFQ.
                           <Link href={route('supplier.products.create')} className="ml-1 underline">
                             Add product →
                           </Link>

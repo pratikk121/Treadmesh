@@ -41,7 +41,7 @@ export default function ProductsIndex({ products, categories, filters }) {
     setSelectedFilters(newFilters);
   };
 
-  // Apply filters to product listing
+  // Apply Filterss to product listing
   const applyFilters = () => {
     router.get(route('buyer.products.index'), selectedFilters, {
       preserveState: true,
@@ -96,7 +96,7 @@ export default function ProductsIndex({ products, categories, filters }) {
             href={route('buyer.rfqs.create')}
             className="mt-3 md:mt-0 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all flex items-center"
           >
-            <FiPackage className="mr-2" /> RFQ Create
+            <FiPackage className="mr-2" /> Submit RFQ
           </Link>
         </div>
 
@@ -256,7 +256,7 @@ export default function ProductsIndex({ products, categories, filters }) {
             {/* Results count and view toggle - Desktop */}
             <div className="hidden lg:flex items-center justify-between mb-4">
               <p className="text-gray-600">
-                total <span className="font-medium">{products.total}</span> Showing t product
+                Showing <span className="font-medium">{products.total}</span> products
               </p>
               <div className="flex items-center space-x-2">
                 <button
@@ -513,7 +513,7 @@ function ProductListItem({ product, formatCurrency }) {
                   href={route('buyer.rfqs.create', { product: product.id })}
                   className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200 transition-colors inline-block text-center"
                 >
-                  RFQ Create
+                  Submit RFQ
                 </Link>
               </div>
             </div>
@@ -595,7 +595,7 @@ function QuickViewModal({ product, onClose, formatCurrency }) {
               href={route('buyer.rfqs.create', { product: product.id })}
               className="mt-3 w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
             >
-              RFQ Create
+              Submit RFQ
             </Link>
             <button
               type="button"

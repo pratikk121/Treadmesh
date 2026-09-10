@@ -75,7 +75,7 @@ export default function QuoteReject({ quote }) {
 
   return (
     <DashboardLayout>
-      <Head title="Reject quota" />
+      <Head title="Reject Quote" />
 
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Header - Back button and page title */}
@@ -87,18 +87,18 @@ export default function QuoteReject({ quote }) {
             <FiArrowLeft className="text-xl" />
           </Link>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Reject quota</h2>
-            <p className="text-gray-600 mt-1">Mention the reason for rejection of this quota</p>
+            <h2 className="text-2xl font-bold text-gray-800">Reject Quote</h2>
+            <p className="text-gray-600 mt-1">Mention the reason for rejection of this quote</p>
           </div>
         </div>
 
         {/* Quote Summary Section */}
         <div className="bg-white rounded-xl border p-6">
-          <h3 className="font-medium text-gray-700 mb-4">Quota summary</h3>
+          <h3 className="font-medium text-gray-700 mb-4">Quote Summary</h3>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-sm text-gray-500">Quota Number</p>
+              <p className="text-sm text-gray-500">Quote Number</p>
               <p className="font-medium">{quote.quote_number}</p>
             </div>
             <div>
@@ -138,7 +138,7 @@ export default function QuoteReject({ quote }) {
               rows="4"
               className={`w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.rejection_reason ? 'border-red-500' : ''
                 }`}
-              placeholder="Explain why you are rejecting this quota..."
+              placeholder="Explain why you are rejecting this quote..."
             />
             {errors.rejection_reason && (
               <p className="mt-2 text-sm text-red-600 flex items-center">
@@ -151,7 +151,7 @@ export default function QuoteReject({ quote }) {
           <div className="mb-6 p-4 bg-yellow-50 rounded-lg">
             <p className="text-sm text-yellow-700 flex items-center">
               <FiAlertCircle className="mr-2" />
-              Notification will be sent to the supplier if this quota is rejected. This action cannot be undone।
+              Notification will be sent to the supplier if this quote is rejected. This action cannot be undone.
             </p>
           </div>
 

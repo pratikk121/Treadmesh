@@ -60,7 +60,7 @@ export default function Welcome({
         }).format(amount);
     };
 
-    // Apply filters to product listing
+    // Apply Filterss to product listing
     const applyFilters = () => {
         router.get('/', {
             search: searchTerm,
@@ -190,14 +190,14 @@ export default function Welcome({
                                     href={route('register')}
                                     className="bg-white text-indigo-600 px-8 py-4 rounded-lg font-semibold hover:bg-indigo-50 transition-colors inline-flex items-center justify-center group"
                                 >
-                                    Start
+                                    Get Started
                                     <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                                 <Link
                                     href="#how-it-works"
                                     className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-indigo-600 transition-colors inline-flex items-center justify-center"
                                 >
-                                    Check out the demo
+                                    How It Works
                                 </Link>
                             </div>
 
@@ -205,11 +205,11 @@ export default function Welcome({
                             <div className="mt-8 flex flex-wrap items-center gap-6 justify-center lg:justify-start">
                                 <div className="flex items-center">
                                     <FiShield className="mr-2" />
-                                    <span className="text-sm">Verified Supplier</span>
+                                    <span className="text-sm">Verified Suppliers</span>
                                 </div>
                                 <div className="flex items-center">
                                     <FiCheckCircle className="mr-2" />
-                                    <span className="text-sm">Secure payment</span>
+                                    <span className="text-sm">Secure Payments</span>
                                 </div>
                                 <div className="flex items-center">
                                     <FiClock className="mr-2" />
@@ -414,7 +414,7 @@ export default function Welcome({
                                 {/* Min Price */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Minimum Price (Amount))
+                                        Minimum Price ($)
                                     </label>
                                     <input
                                         type="number"
@@ -450,7 +450,7 @@ export default function Welcome({
                                         className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                     >
                                         <option value="created_at">Latest</option>
-                                        <option value="name">name</option>
+                                        <option value="name">Name</option>
                                         <option value="base_price">Price</option>
                                         <option value="minimum_order_quantity">Minimum Order</option>
                                     </select>
@@ -467,13 +467,13 @@ export default function Welcome({
                                         className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                     />
                                     <span className="ml-2 text-sm text-gray-600">
-                                        Verified suppliers only
+                                        Verified Suppliers Only
                                     </span>
                                 </label>
 
                                 {/* Sort Order Toggle */}
                                 <div className="flex items-center space-x-2">
-                                    <span className="text-sm text-gray-600">sequence:</span>
+                                    <span className="text-sm text-gray-600">Order:</span>
                                     <button
                                         onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                                         className={`px-3 py-1 rounded text-sm ${sortOrder === 'asc'
@@ -481,7 +481,7 @@ export default function Welcome({
                                             : 'bg-gray-100 text-gray-700'
                                             }`}
                                     >
-                                        Increasing
+                                        Ascending
                                     </button>
                                     <button
                                         onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
@@ -490,7 +490,7 @@ export default function Welcome({
                                             : 'bg-gray-100 text-gray-700'
                                             }`}
                                     >
-                                        decreasing
+                                        Descending
                                     </button>
                                 </div>
                             </div>
@@ -501,7 +501,7 @@ export default function Welcome({
                                     onClick={applyFilters}
                                     className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors"
                                 >
-                                    Apply filter
+                                    Apply Filters
                                 </button>
                             </div>
                         </div>
@@ -596,7 +596,7 @@ export default function Welcome({
                             href={route('buyer.products.index')}
                             className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium group"
                         >
-                            See all products
+                            View All Products
                             <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                         </Link>
                     </div>
@@ -641,23 +641,23 @@ export default function Welcome({
                         <div className="grid grid-cols-2 gap-4">
                             <div className="bg-indigo-600 text-white p-6 rounded-xl">
                                 <FiAward className="text-3xl mb-3" />
-                                <div className="text-2xl font-bold mb-1">5+ years</div>
-                                <div className="text-indigo-200">good service</div>
+                                <div className="text-2xl font-bold mb-1">5+ Years</div>
+                                <div className="text-indigo-200">Industry Leadership</div>
                             </div>
                             <div className="bg-purple-600 text-white p-6 rounded-xl">
                                 <BsPeople className="text-3xl mb-3" />
-                                <div className="text-2xl font-bold mb-1">50 thousand+</div>
-                                <div className="text-purple-200">Registered user</div>
+                                <div className="text-2xl font-bold mb-1">50,000+</div>
+                                <div className="text-purple-200">Active Businesses</div>
                             </div>
                             <div className="bg-pink-600 text-white p-6 rounded-xl">
                                 <FiGlobe className="text-3xl mb-3" />
-                                <div className="text-2xl font-bold mb-1">64 districts</div>
-                                <div className="text-pink-200">Nationwide service</div>
+                                <div className="text-2xl font-bold mb-1">Nationwide</div>
+                                <div className="text-pink-200">Coast-to-Coast Logistics</div>
                             </div>
                             <div className="bg-green-600 text-white p-6 rounded-xl">
                                 <FiHeadphones className="text-3xl mb-3" />
                                 <div className="text-2xl font-bold mb-1">24/7</div>
-                                <div className="text-green-200">Support available</div>
+                                <div className="text-green-200">Dedicated Support</div>
                             </div>
                         </div>
                     </div>
@@ -669,7 +669,7 @@ export default function Welcome({
                 <section className="py-20 bg-gray-50">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-12">
-                            <h2 className="text-3xl md:text-4xl font-bold mb-4">Success story</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold mb-4">Success Stories</h2>
                             <p className="text-gray-600 max-w-2xl mx-auto">
                                 Real Business, Real Results - See How We've Helped Others
                             </p>
@@ -689,7 +689,7 @@ export default function Welcome({
                                     </div>
 
                                     <p className="text-gray-600 mb-3">
-                                        {story.supplier} Successfully collected product from
+                                        {story.supplier} Successfully purchased from
                                     </p>
 
                                     <div className="flex justify-between items-center text-sm">
@@ -718,23 +718,23 @@ export default function Welcome({
             <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
                 <div className="max-w-4xl mx-auto text-center px-4">
                     <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                        Ready to start product collection?
+                        Ready to Modernize Your B2B Sourcing?
                     </h2>
                     <p className="text-xl text-indigo-100 mb-8">
-                        Join thousands of traders who are already using our platform
+                        Join verified enterprise buyers and suppliers trading efficiently on Treadmesh.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link
                             href={route('register')}
                             className="bg-white text-indigo-600 px-8 py-4 rounded-lg font-semibold hover:bg-indigo-50 transition-colors inline-flex items-center justify-center"
                         >
-                            Open a free account
+                            Create Free Account
                         </Link>
                         <Link
                             href="#contact"
                             className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-indigo-600 transition-colors"
                         >
-                            Talk to the sales team
+                            Contact Sales
                         </Link>
                     </div>
                 </div>
@@ -745,9 +745,9 @@ export default function Welcome({
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-12">
                         <div>
-                            <h2 className="text-3xl font-bold mb-4">Contact</h2>
+                            <h2 className="text-3xl font-bold mb-4">Contact Us</h2>
                             <p className="text-gray-600 mb-8">
-                                Have questions? We are ready to help. Contact us for any query।
+                                Have questions? Our procurement specialists are ready to help. Contact us anytime.
                             </p>
 
                             <div className="space-y-4">
@@ -801,17 +801,17 @@ export default function Welcome({
 
                         {/* Contact form */}
                         <div className="bg-white p-8 rounded-xl border">
-                            <h3 className="text-xl font-bold mb-6">Send us a message at</h3>
+                            <h3 className="text-xl font-bold mb-6">Send Us a Message</h3>
                             <form className="space-y-4">
                                 <div className="grid grid-cols-2 gap-4">
                                     <input
                                         type="text"
-                                        placeholder="The first part of the name"
+                                        placeholder="First Name"
                                         className="border rounded-lg px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500"
                                     />
                                     <input
                                         type="text"
-                                        placeholder="The last part of the name is"
+                                        placeholder="Last Name"
                                         className="border rounded-lg px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500"
                                     />
                                 </div>
@@ -822,12 +822,12 @@ export default function Welcome({
                                 />
                                 <input
                                     type="text"
-                                    placeholder="subject"
+                                    placeholder="Subject"
                                     className="w-full border rounded-lg px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500"
                                 />
                                 <textarea
                                     rows="4"
-                                    placeholder="Your message is"
+                                    placeholder="Your message..."
                                     className="w-full border rounded-lg px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500"
                                 ></textarea>
                                 <button
@@ -859,27 +859,27 @@ export default function Welcome({
                                 <li><Link href="#products" className="hover:text-white">Products</Link></li>
                                 <li><Link href="#categories" className="hover:text-white">Category</Link></li>
                                 <li><Link href="#how-it-works" className="hover:text-white">How it works</Link></li>
-                                <li><Link href="#about" className="hover:text-white">about us</Link></li>
+                                <li><Link href="#about" className="hover:text-white">About Us</Link></li>
                             </ul>
                         </div>
 
                         <div>
-                            <h4 className="font-semibold mb-4">For buyers</h4>
+                            <h4 className="font-semibold mb-4">For Buyers</h4>
                             <ul className="space-y-2 text-sm text-gray-400">
                                 <li><Link href={route('buyer.products.index')}>Browse Products</Link></li>
-                                <li><Link href={route('buyer.rfqs.create')}>RFQ Create</Link></li>
+                                <li><Link href={route('buyer.rfqs.create')}>Submit RFQ</Link></li>
                                 <li><Link href="#">Supplier Directory</Link></li>
                                 <li><Link href="#">Buyer's Guide</Link></li>
                             </ul>
                         </div>
 
                         <div>
-                            <h4 className="font-semibold mb-4"></h4>
+                            <h4 className="font-semibold mb-4">For Suppliers</h4>
                             <ul className="space-y-2 text-sm text-gray-400">
-                                <li><Link href={route('register')}>Be a supplier</Link></li>
-                                <li><Link href="#">Supplier benefits</Link></li>
+                                <li><Link href={route('register')}>Become a Supplier</Link></li>
+                                <li><Link href="#">Supplier Benefits</Link></li>
                                 <li><Link href="#">Vendor Guide</Link></li>
-                                <li><Link href="#">Price list</Link></li>
+                                <li><Link href="#">Pricing Plans</Link></li>
                             </ul>
                         </div>
                     </div>

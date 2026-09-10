@@ -126,8 +126,8 @@ export default function ProfileIndex({
               </div>
               <div className="ml-3 flex-1">
                 <p className="text-sm text-blue-700">
-                  Your profile is <span className="font-bold">{profileCompletion}% Complete</span>।
-                  compared to last time Complete your profile to increase trust and visibility with buyers।
+                  Your profile is <span className="font-bold">{profileCompletion}% Complete</span>.
+                  Complete your profile to increase trust and visibility with enterprise buyers.
                 </p>
                 <div className="mt-2 w-full bg-blue-200 rounded-full h-2">
                   <div
@@ -307,7 +307,7 @@ export default function ProfileIndex({
                     <FiBriefcase className="w-10 h-10 text-gray-400" />
                   </div>
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No profile yet</h3>
-                  <p className="text-gray-500 mb-4">You have not created your company profile yet।</p>
+                  <p className="text-gray-500 mb-4">You have not created your company profile yet.</p>
                   <Link
                     href={route('supplier.profile.edit')}
                     className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
@@ -373,7 +373,7 @@ export default function ProfileIndex({
                     <div className="p-2 bg-purple-100 rounded-lg">
                       <FiFileText className="w-4 h-4 text-purple-600" />
                     </div>
-                    <span className="text-sm text-gray-600">Total Quota</span>
+                    <span className="text-sm text-gray-600">Total Quotes</span>
                   </div>
                   <span className="text-lg font-bold text-gray-900">{stats.total_quotes}</span>
                 </div>
@@ -382,7 +382,7 @@ export default function ProfileIndex({
                     <div className="p-2 bg-yellow-100 rounded-lg">
                       <FiClock className="w-4 h-4 text-yellow-600" />
                     </div>
-                    <span className="text-sm text-gray-600">Pending Quota</span>
+                    <span className="text-sm text-gray-600">Pending Quotes</span>
                   </div>
                   <span className="text-lg font-bold text-gray-900">{stats.pending_quotes}</span>
                 </div>
@@ -391,7 +391,7 @@ export default function ProfileIndex({
                     <div className="p-2 bg-green-100 rounded-lg">
                       <FiCheckCircle className="w-4 h-4 text-green-600" />
                     </div>
-                    <span className="text-sm text-gray-600">Accepted Quota</span>
+                    <span className="text-sm text-gray-600">Accepted Quote</span>
                   </div>
                   <span className="text-lg font-bold text-gray-900">{stats.accepted_quotes}</span>
                 </div>
@@ -546,7 +546,7 @@ export default function ProfileIndex({
                               {order.order_status === 'pending_confirmation' ? 'Awaiting' :
                                 order.order_status === 'confirmed' ? 'sure' :
                                   order.order_status === 'processing' ? 'In process' :
-                                    order.order_status === 'shipped' ? 'has been sent' :
+                                    order.order_status === 'shipped' ? 'Sent' :
                                       order.order_status === 'delivered' ? 'Delivered' :
                                         order.order_status === 'cancelled' ? 'cancel' : order.order_status?.replace('_', ' ')}
                             </span>

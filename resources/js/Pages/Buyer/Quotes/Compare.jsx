@@ -52,7 +52,7 @@ export default function QuoteCompare({ comparisonData }) {
 
   return (
     <DashboardLayout>
-      <Head title="Quota Compare" />
+      <Head title="Compare Quotes" />
 
       <div className="space-y-6">
         {/* Header - Back button and page title */}
@@ -64,8 +64,8 @@ export default function QuoteCompare({ comparisonData }) {
             <FiArrowLeft className="text-xl" />
           </Link>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Quota Compare</h2>
-            <p className="text-gray-600 mt-1">Compare Quotas Side by Side to Make Best Decisions</p>
+            <h2 className="text-2xl font-bold text-gray-800">Compare Quotes</h2>
+            <p className="text-gray-600 mt-1">Compare Quotess Side by Side to Make Best Decisions</p>
           </div>
         </div>
 
@@ -219,8 +219,8 @@ export default function QuoteCompare({ comparisonData }) {
         <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-600">
           <p className="flex items-center">
             <FiPackage className="mr-2" />
-            Compare quota based on total quantity, product price and supplier details।
-            Select the best quota as per your requirement।
+            Compare quotes based on total quantity, product price, and supplier details.
+            Select the best quote for your requirements.
           </p>
         </div>
       </div>

@@ -117,13 +117,13 @@ export default function Index({ pendingSuppliers, stats, cities, filters }) {
 
     Swal.fire({
       title: 'VERIFY MULTIPLE SUPPLIERS',
-      text: `Are you ${selectedSuppliers.length} t want to verify supplier?`,
+      text: `Are you sure you want to verify ${selectedSuppliers.length} suppliers?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#10B981',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, verify',
-      cancelButtonText: 'cancel'
+      cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.supplier-verification.bulk-verify'), {
@@ -133,7 +133,7 @@ export default function Index({ pendingSuppliers, stats, cities, filters }) {
             setSelectedSuppliers([]);
             Swal.fire({
               title: 'successful!',
-              text: `${selectedSuppliers.length} t Supplier successfully verified।`,
+              text: `${selectedSuppliers.length} suppliers successfully verified.`,
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -284,7 +284,7 @@ export default function Index({ pendingSuppliers, stats, cities, filters }) {
           {selectedSuppliers.length > 0 && (
             <div className="mt-4 flex items-center gap-4 p-3 bg-indigo-50 rounded-lg">
               <span className="text-sm font-medium text-indigo-700">
-                {selectedSuppliers.length} t supplier selected
+                {selectedSuppliers.length} suppliers selected
               </span>
               <button
                 onClick={handleBulkVerify}

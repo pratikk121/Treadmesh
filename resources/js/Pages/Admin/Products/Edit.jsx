@@ -88,7 +88,7 @@ export default function Edit({ product }) {
       onSuccess: () => {
         Swal.fire({
           title: 'successful!',
-          text: 'Product updated successfully।',
+          text: 'Product updated successfully.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -98,7 +98,7 @@ export default function Edit({ product }) {
         setErrors(errors);
         Swal.fire({
           title: 'Error!',
-          text: 'There is an error in the form. Please check।',
+          text: 'There is an error in the form. Please check your inputs.',
           icon: 'error',
           confirmButtonColor: '#4F46E5'
         });
@@ -385,7 +385,7 @@ export default function Edit({ product }) {
 
                 {bulkPrices.length === 0 && (
                   <p className="text-sm text-gray-500 text-center py-4">
-                    No bulk price tier added. "Add layers" Click the button।
+                    No bulk price tier added. "Add layers" Click the button.
                   </p>
                 )}
               </div>

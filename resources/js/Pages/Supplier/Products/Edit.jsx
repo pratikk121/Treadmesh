@@ -107,7 +107,7 @@ export default function EditProduct({ product, categories, units }) {
 
   // Remove existing image
   const removeExistingImage = (index) => {
-    if (confirm('Do you want to remove this image??')) {
+    if (confirm('Are you sure you want to remove this image?')) {
       const updatedImages = [...additionalImages];
       updatedImages.splice(index, 1);
       setAdditionalImages(updatedImages);
@@ -210,7 +210,7 @@ export default function EditProduct({ product, categories, units }) {
                   This product is pending approval
                 </p>
                 <p className="text-sm text-yellow-600 mt-1">
-                  Any changes you make will be reviewed by admin again. Product will be hidden until approved।
+                  Any changes will be reviewed by an administrator. The product will remain pending until approved.
                 </p>
               </div>
             </div>

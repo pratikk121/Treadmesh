@@ -164,7 +164,7 @@ export default function Index({
       pending_confirmation: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'Awaiting' },
       confirmed: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'sure' },
       processing: { color: 'bg-indigo-100 text-indigo-800', icon: FiClock, label: 'In process' },
-      shipped: { color: 'bg-purple-100 text-purple-800', icon: MdOutlineLocalShipping, label: 'has been sent' },
+      shipped: { color: 'bg-purple-100 text-purple-800', icon: MdOutlineLocalShipping, label: 'Sent' },
       delivered: { color: 'bg-green-100 text-green-800', icon: FiCheckCircle, label: 'Delivered' },
       cancelled: { color: 'bg-red-100 text-red-800', icon: FiXCircle, label: 'cancel' },
     };
@@ -349,7 +349,7 @@ export default function Index({
                   className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
                   <FiMoreVertical className="w-4 h-4" />
-                  Multiple activities
+                  Bulk Actions
                 </button>
                 {bulkActionMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border z-10">
@@ -369,7 +369,7 @@ export default function Index({
                       }}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      Selected export
+                      Export Selected
                     </button>
                   </div>
                 )}
@@ -441,7 +441,7 @@ export default function Index({
                     <td className="px-6 py-4">
                       <Link href={route('admin.orders.show', order.id)} className="hover:text-indigo-600">
                         <div className="font-mono text-sm font-medium text-gray-900">{order.order_number}</div>
-                        <div className="text-xs text-gray-500">{order.items?.length || 0} t item</div>
+                        <div className="text-xs text-gray-500">{order.items?.length || 0} items</div>
                       </Link>
                     </td>
                     <td className="px-6 py-4">

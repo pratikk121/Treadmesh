@@ -47,16 +47,16 @@ export default function Show({ supplier, stats, recentOrders, recentProducts }) 
 
   // Handle toggle account status (activate/deactivate)
   const handleToggleStatus = () => {
-    const banglaAction = supplier.user.is_active ? 'Inactive' : 'Active';
+    const actionText = supplier.user.is_active ? 'deactivate' : 'activate';
 
-    if (confirm(`Are you this supplier? ${banglaAction} want to?`)) {
+    if (confirm(`Are you sure you want to change this supplier's status?`)) {
       router.patch(route('admin.suppliers.toggle-status', supplier.id));
     }
   };
 
   // Handle delete supplier
   const handleDelete = () => {
-    if (confirm(`Are you ${supplier.company_name} Want to delete? This action cannot be undone।`)) {
+    if (confirm(`Are you sure you want to delete ${supplier.company_name}? This action cannot be undone.`)) {
       router.delete(route('admin.suppliers.destroy', supplier.id));
     }
   };
@@ -190,7 +190,7 @@ export default function Show({ supplier, stats, recentOrders, recentProducts }) 
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Submitted Quota</p>
+                <p className="text-sm text-gray-500">Quotes Submitted</p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">{supplier.quotes_count}</p>
               </div>
               <div className="p-3 bg-orange-100 rounded-lg">

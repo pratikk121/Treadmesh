@@ -319,7 +319,7 @@ export default function Sales({ salesData, period, dateRange }) {
                     </span>
                     <div>
                       <p className="text-sm font-medium text-gray-900">{supplier.supplier_name}</p>
-                      <p className="text-xs text-gray-500">{supplier.order_count} t order</p>
+                      <p className="text-xs text-gray-500">{supplier.order_count} orders</p>
                     </div>
                   </div>
                   <span className="text-sm font-medium text-indigo-600">

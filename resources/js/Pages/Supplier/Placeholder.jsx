@@ -35,7 +35,7 @@ export default function SupplierPlaceholder({ title, description }) {
 
         {/* Description */}
         <p className="text-lg text-gray-600 text-center max-w-2xl mb-8">
-          {description || 'This page is moving to Inertia.js. It will be available soon।'}
+          {description || 'This page is being updated and will be available soon.'}
         </p>
 
         {/* Action Buttons */}
@@ -65,8 +65,8 @@ export default function SupplierPlaceholder({ title, description }) {
               <h3 className="font-semibold text-blue-800 mb-2">Transfer process</h3>
               <p className="text-sm text-blue-700 leading-relaxed">
                 We are migrating our application to Inertia.js for better performance
-                and provide user experience. This page is currently under development।
-                Please try again later।
+                This page is currently under development.
+                Please try again later.
               </p>
             </div>
           </div>
