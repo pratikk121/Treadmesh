@@ -378,11 +378,11 @@ export default function ProductShow({ product, relatedProducts, bulkTiers }) {
               )}
               <div className="flex items-center text-gray-600">
                 <FiAward className="mr-2" />
-                <span className="text-sm">{new Date(product.supplier?.created_at).getFullYear()} Member from</span>
+                <span className="text-sm">Member since {new Date(product.supplier?.created_at).getFullYear()}</span>
               </div>
               <div className="flex items-center text-gray-600">
                 <FiClock className="mr-2" />
-                <span className="text-sm">Response time: < 24 hours</span>
+                <span className="text-sm">Response time: &lt; 24 hours</span>
               </div>
             </div>
           </div>
