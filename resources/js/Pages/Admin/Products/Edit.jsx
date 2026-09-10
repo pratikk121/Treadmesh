@@ -109,9 +109,9 @@ export default function Edit({ product }) {
 
   // Format currency for display
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0
     }).format(value);
   };
@@ -247,7 +247,7 @@ export default function Edit({ product }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Original Price (Rs.)) *
+                      Original Price ($) *
                     </label>
                     <input
                       type="number"

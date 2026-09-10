@@ -226,7 +226,7 @@ export default function Verify({ verificationData }) {
                   <div>
                     <p className="text-sm text-gray-500">Submission Date</p>
                     <p className="font-medium text-gray-900">
-                      {new Date(supplier.created_at).toLocaleDateString('bn-BD', {
+                      {new Date(supplier.created_at).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',

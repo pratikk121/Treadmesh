@@ -35,11 +35,11 @@ export default function OrderConfirm({ rfq, quote }) {
     shipping_address: auth.user.address || '',
   });
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0
     }).format(amount);
   };
@@ -162,7 +162,7 @@ export default function OrderConfirm({ rfq, quote }) {
               </div>
               <div>
                 <p className="text-sm text-gray-500">Expires</p>
-                <p className="font-medium">{new Date(quote.valid_until).toLocaleDateString('bn-BD')}</p>
+                <p className="font-medium">{new Date(quote.valid_until).toLocaleDateString('en-US')}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Supplier</p>

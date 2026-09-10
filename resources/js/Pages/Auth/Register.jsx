@@ -538,7 +538,7 @@ export default function Register() {
                                             onChange={(e) => setData('company_address', e.target.value)}
                                             rows="3"
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="123 Gulshan Avenue, Dhaka"
+                                            placeholder="450 Commercial Blvd, Suite 100"
                                             required
                                         ></textarea>
                                     </div>
@@ -563,7 +563,7 @@ export default function Register() {
                                             value={data.city}
                                             onChange={(e) => setData('city', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="Dhaka"
+                                            placeholder="Chicago"
                                             required
                                         />
                                     </div>

@@ -30,18 +30,18 @@ export default function CreateFromRfq({ rfq, quote }) {
     terms_accepted: false,
   });
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0
     }).format(value);
   };
 
   // Format date - Converts ISO date to readable format
   const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('bn-BD', {
+    return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'

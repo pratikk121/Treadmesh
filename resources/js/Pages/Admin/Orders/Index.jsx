@@ -140,18 +140,18 @@ export default function Index({
     return <span className="ml-1">{sortDirection === 'asc' ? '↑' : '↓'}</span>;
   };
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0
     }).format(amount);
   };
 
   // Format date - Converts ISO date to readable format
   const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('bn-BD', {
+    return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
@@ -603,7 +603,7 @@ export default function Index({
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Amount limit (Rs)
+                    Amount limit ($)
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input

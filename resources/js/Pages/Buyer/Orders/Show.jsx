@@ -35,11 +35,11 @@ export default function OrderShow({ order, tracking }) {
   const [cancellationReason, setCancellationReason] = useState('');
   const [showCancelModal, setShowCancelModal] = useState(false);
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0
     }).format(amount);
   };
@@ -47,7 +47,7 @@ export default function OrderShow({ order, tracking }) {
   // Format date - Converts ISO date to readable format
   const formatDate = (date) => {
     if (!date) return 'N/A';
-    return new Date(date).toLocaleDateString('bn-BD', {
+    return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',

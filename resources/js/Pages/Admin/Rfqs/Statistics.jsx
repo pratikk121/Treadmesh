@@ -47,7 +47,7 @@ export default function Statistics({ stats }) {
   // Format date for chart - Converts month string to readable format
   const formatChartDate = (month) => {
     const [year, monthNum] = month.split('-');
-    return new Date(year, monthNum - 1).toLocaleDateString('bn-BD', {
+    return new Date(year, monthNum - 1).toLocaleDateString('en-US', {
       month: 'short',
       year: 'numeric'
     });

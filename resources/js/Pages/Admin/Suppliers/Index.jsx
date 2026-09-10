@@ -453,7 +453,7 @@ export default function Index({ suppliers, stats, cities, filters }) {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
-                      {new Date(supplier.created_at).toLocaleDateString('bn-BD')}
+                      {new Date(supplier.created_at).toLocaleDateString('en-US')}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">

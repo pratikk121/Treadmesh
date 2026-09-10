@@ -11,11 +11,11 @@ import DashboardLayout from '@/Layouts/DashboardLayout';
 import { FiPackage } from 'react-icons/fi';
 
 export default function SupplierProducts({ products }) {
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0
     }).format(amount);
   };

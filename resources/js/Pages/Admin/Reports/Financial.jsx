@@ -48,11 +48,11 @@ export default function Financial({ financialData, period, dateRange }) {
   // Colors for charts - Color palette for visualizations
   const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444'];
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(amount);
@@ -60,7 +60,7 @@ export default function Financial({ financialData, period, dateRange }) {
 
   // Format number - Adds thousand separators
   const formatNumber = (num) => {
-    return new Intl.NumberFormat('bn-BD').format(num);
+    return new Intl.NumberFormat('en-US').format(num);
   };
 
   // Handle period change - Update report period
@@ -124,7 +124,7 @@ export default function Financial({ financialData, period, dateRange }) {
         <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 flex items-center gap-2 text-indigo-700">
           <FiCalendar className="w-4 h-4" />
           <span className="text-sm font-medium">
-            Report period: {new Date(dateRange.start).toLocaleDateString('bn-BD')} - {new Date(dateRange.end).toLocaleDateString('bn-BD')}
+            Report period: {new Date(dateRange.start).toLocaleDateString('en-US')} - {new Date(dateRange.end).toLocaleDateString('en-US')}
           </span>
         </div>
 

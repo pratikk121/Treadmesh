@@ -52,11 +52,11 @@ export default function Statistics({ stats }) {
     paid: '#10B981'                    // Green for payment paid
   };
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(amount);
@@ -64,7 +64,7 @@ export default function Statistics({ stats }) {
 
   // Format date for chart - Converts ISO date to readable short format
   const formatChartDate = (date) => {
-    return new Date(date).toLocaleDateString('bn-BD', {
+    return new Date(date).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric'
     });
@@ -162,7 +162,7 @@ export default function Statistics({ stats }) {
                       if (name === 'revenue') return formatCurrency(value);
                       return value;
                     }}
-                    labelFormatter={(label) => new Date(label).toLocaleDateString('bn-BD')}
+                    labelFormatter={(label) => new Date(label).toLocaleDateString('en-US')}
                   />
                   <Legend />
                   <Bar yAxisId="left" dataKey="total_orders" fill="#4F46E5" name="Order" />

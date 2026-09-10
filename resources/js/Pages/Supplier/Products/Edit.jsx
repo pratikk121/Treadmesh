@@ -292,7 +292,7 @@ export default function EditProduct({ product, categories, units }) {
                   {/* Base Price */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Original Price (Rs.)) <span className="text-red-500">*</span>
+                      Original Price ($) <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
@@ -601,13 +601,13 @@ export default function EditProduct({ product, categories, units }) {
                   <div className="flex justify-between">
                     <span className="text-gray-500">Creation Date</span>
                     <span className="font-medium text-gray-900">
-                      {new Date(product.created_at).toLocaleDateString('bn-BD')}
+                      {new Date(product.created_at).toLocaleDateString('en-US')}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500">Latest update</span>
                     <span className="font-medium text-gray-900">
-                      {new Date(product.updated_at).toLocaleDateString('bn-BD')}
+                      {new Date(product.updated_at).toLocaleDateString('en-US')}
                     </span>
                   </div>
                 </div>

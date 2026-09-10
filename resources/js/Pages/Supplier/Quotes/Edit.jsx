@@ -40,11 +40,11 @@ export default function EditQuote({ quote }) {
     valid_until: quote.valid_until ? new Date(quote.valid_until).toISOString().split('T')[0] : '',
   });
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(value);
@@ -276,7 +276,7 @@ export default function EditQuote({ quote }) {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">Single price (Rs.)</label>
+                            <label className="block text-xs text-gray-500 mb-1">Single price ($)</label>
                             <input
                               type="number"
                               value={product.unit_price}
@@ -397,7 +397,7 @@ export default function EditQuote({ quote }) {
                   <div className="flex justify-between">
                     <span className="text-gray-500">Submission Date</span>
                     <span className="font-medium text-gray-900">
-                      {new Date(quote.created_at).toLocaleDateString('bn-BD')}
+                      {new Date(quote.created_at).toLocaleDateString('en-US')}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -409,7 +409,7 @@ export default function EditQuote({ quote }) {
                   <div className="flex justify-between">
                     <span className="text-gray-500">Original Expires</span>
                     <span className="font-medium text-gray-900">
-                      {new Date(quote.valid_until).toLocaleDateString('bn-BD')}
+                      {new Date(quote.valid_until).toLocaleDateString('en-US')}
                     </span>
                   </div>
                 </div>

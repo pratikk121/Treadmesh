@@ -35,11 +35,11 @@ export default function Show({ supplier, stats, recentOrders, recentProducts }) 
   // State management for active tab
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(value);
@@ -99,7 +99,7 @@ export default function Show({ supplier, stats, recentOrders, recentProducts }) 
                 {getStatusBadge(supplier.verification_status)}
               </div>
               <p className="text-sm text-gray-600 mt-1">
-                {new Date(supplier.created_at).toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' })} Supplier from
+                {new Date(supplier.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} Supplier from
               </p>
             </div>
           </div>
@@ -376,7 +376,7 @@ export default function Show({ supplier, stats, recentOrders, recentProducts }) 
                               </div>
                               <div className="text-right">
                                 <p className="font-medium text-gray-900">{formatCurrency(order.total_amount)}</p>
-                                <p className="text-sm text-gray-500">{new Date(order.created_at).toLocaleDateString('bn-BD')}</p>
+                                <p className="text-sm text-gray-500">{new Date(order.created_at).toLocaleDateString('en-US')}</p>
                               </div>
                             </div>
                           </Link>

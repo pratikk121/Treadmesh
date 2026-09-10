@@ -16,18 +16,18 @@ import {
 import { BsBuilding } from 'react-icons/bs';
 
 export default function SupplierOrders({ supplier, orders }) {
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0
     }).format(amount);
   };
 
   // Format date - Converts ISO date to readable format
   const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('bn-BD', {
+    return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'

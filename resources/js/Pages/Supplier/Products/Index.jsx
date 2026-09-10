@@ -39,11 +39,11 @@ export default function ProductsIndex({ products, stats, categories }) {
   const [sortDirection, setSortDirection] = useState('desc');
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(value);
@@ -436,7 +436,7 @@ export default function ProductsIndex({ products, stats, categories }) {
                       {getStatusBadge(product.status)}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
-                      {new Date(product.created_at).toLocaleDateString('bn-BD')}
+                      {new Date(product.created_at).toLocaleDateString('en-US')}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">

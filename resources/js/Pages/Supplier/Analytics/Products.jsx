@@ -37,11 +37,11 @@ export default function ProductsAnalytics({
   const [sortDirection, setSortDirection] = useState('desc');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(value);
@@ -49,7 +49,7 @@ export default function ProductsAnalytics({
 
   // Format number - Adds thousand separators
   const formatNumber = (value) => {
-    return new Intl.NumberFormat('bn-BD').format(value);
+    return new Intl.NumberFormat('en-US').format(value);
   };
 
   // Chart colors - Color palette for pie chart segments
@@ -75,7 +75,7 @@ export default function ProductsAnalytics({
   // Format date for display
   const formatDateLabel = (date) => {
     if (!date) return '';
-    return new Date(date).toLocaleDateString('bn-BD', {
+    return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'

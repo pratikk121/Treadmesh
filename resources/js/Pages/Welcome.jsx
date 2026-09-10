@@ -51,11 +51,11 @@ export default function Welcome({
     const [sortBy, setSortBy] = useState(filters.sort_by || 'created_at');
     const [sortOrder, setSortOrder] = useState(filters.sort_order || 'desc');
 
-    // Format currency in BDT
+    // Format currency in USD
     const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('bn-BD', {
+        return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'BDT',
+            currency: 'USD',
             minimumFractionDigits: 0
         }).format(amount);
     };
@@ -118,7 +118,7 @@ export default function Welcome({
                                 <Link href="#products" className="text-gray-700 hover:text-indigo-600">Products</Link>
                                 <Link href="#categories" className="text-gray-700 hover:text-indigo-600">Category</Link>
                                 <Link href="#how-it-works" className="text-gray-700 hover:text-indigo-600">How it works</Link>
-                                <Link href="#about" className="text-gray-700 hover:text-indigo-600">about us</Link>
+                                <Link href="#about" className="text-gray-700 hover:text-indigo-600">About Us</Link>
                                 <Link href="#contact" className="text-gray-700 hover:text-indigo-600">Contact</Link>
                             </div>
                         </div>
@@ -225,22 +225,22 @@ export default function Welcome({
                                     <div className="bg-white/20 rounded-xl p-4">
                                         <FiPackage className="text-3xl mb-2" />
                                         <div className="text-2xl font-bold">{stats.products}+</div>
-                                        <div className="text-sm opacity-80">Product</div>
+                                        <div className="text-sm opacity-80">Products</div>
                                     </div>
                                     <div className="bg-white/20 rounded-xl p-4">
                                         <FiUsers className="text-3xl mb-2" />
                                         <div className="text-2xl font-bold">{stats.suppliers}+</div>
-                                        <div className="text-sm opacity-80">Supplier</div>
+                                        <div className="text-sm opacity-80">Suppliers</div>
                                     </div>
                                     <div className="bg-white/20 rounded-xl p-4">
                                         <FiShoppingBag className="text-3xl mb-2" />
                                         <div className="text-2xl font-bold">{stats.successfulDeals}+</div>
-                                        <div className="text-sm opacity-80">Successful deal</div>
+                                        <div className="text-sm opacity-80">Completed Orders</div>
                                     </div>
                                     <div className="bg-white/20 rounded-xl p-4">
                                         <FiTrendingUp className="text-3xl mb-2" />
-                                        <div className="text-2xl font-bold">500M+ Rs</div>
-                                        <div className="text-sm opacity-80">Transaction</div>
+                                        <div className="text-2xl font-bold">$500M+</div>
+                                        <div className="text-sm opacity-80">Procurement Volume</div>
                                     </div>
                                 </div>
                             </div>
@@ -255,19 +255,19 @@ export default function Welcome({
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                         <div className="text-center">
                             <div className="text-4xl font-bold text-indigo-600 mb-2">{stats.suppliers}+</div>
-                            <div className="text-gray-600">Verified Supplier</div>
+                            <div className="text-gray-600">Verified Suppliers</div>
                         </div>
                         <div className="text-center">
                             <div className="text-4xl font-bold text-indigo-600 mb-2">{stats.products}+</div>
-                            <div className="text-gray-600">Active product</div>
+                            <div className="text-gray-600">Active Products</div>
                         </div>
                         <div className="text-center">
                             <div className="text-4xl font-bold text-indigo-600 mb-2">{stats.successfulDeals}+</div>
-                            <div className="text-gray-600">Successful deal</div>
+                            <div className="text-gray-600">Completed Orders</div>
                         </div>
                         <div className="text-center">
                             <div className="text-4xl font-bold text-indigo-600 mb-2">{stats.buyers}+</div>
-                            <div className="text-gray-600">Satisfied buyer</div>
+                            <div className="text-gray-600">Enterprise Buyers</div>
                         </div>
                     </div>
                 </div>
@@ -288,32 +288,32 @@ export default function Welcome({
                             <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <span className="text-2xl font-bold text-indigo-600">1</span>
                             </div>
-                            <h3 className="font-semibold text-lg mb-2">Open account</h3>
-                            <p className="text-gray-600">Register as a buyer and complete the profile</p>
+                            <h3 className="font-semibold text-lg mb-2">Create Account</h3>
+                            <p className="text-gray-600">Register as an enterprise buyer and set up your procurement profile</p>
                         </div>
 
                         <div className="text-center">
                             <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <span className="text-2xl font-bold text-indigo-600">2</span>
                             </div>
-                            <h3 className="font-semibold text-lg mb-2">RFQ Post</h3>
-                            <p className="text-gray-600">Describe your requirements and post requirements</p>
+                            <h3 className="font-semibold text-lg mb-2">Post RFQs</h3>
+                            <p className="text-gray-600">Publish your specifications and invite competitive supplier bids</p>
                         </div>
 
                         <div className="text-center">
                             <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <span className="text-2xl font-bold text-indigo-600">3</span>
                             </div>
-                            <h3 className="font-semibold text-lg mb-2">Get Quota</h3>
-                            <p className="text-gray-600">Receive competitive quotes from suppliers</p>
+                            <h3 className="font-semibold text-lg mb-2">Compare Quotes</h3>
+                            <p className="text-gray-600">Evaluate transparent volume pricing and negotiate terms directly</p>
                         </div>
 
                         <div className="text-center">
                             <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <span className="text-2xl font-bold text-indigo-600">4</span>
                             </div>
-                            <h3 className="font-semibold text-lg mb-2">Order</h3>
-                            <p className="text-gray-600">Select the best quota and complete the purchase</p>
+                            <h3 className="font-semibold text-lg mb-2">Execute Orders</h3>
+                            <p className="text-gray-600">Select the winning quote and execute seamless procurement</p>
                         </div>
                     </div>
                 </div>
@@ -324,9 +324,9 @@ export default function Welcome({
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Section Header */}
                     <div className="text-center mb-8">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">Promoted products</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Products</h2>
                         <p className="text-gray-600 max-w-2xl mx-auto">
-                            Discover Top Products of Our Verified Suppliers
+                            Discover high-quality commercial inventory from verified suppliers
                         </p>
                     </div>
 
@@ -347,7 +347,7 @@ export default function Welcome({
                                 type="submit"
                                 className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors"
                             >
-                                search
+                                Search
                             </button>
                             <button
                                 type="button"
@@ -428,7 +428,7 @@ export default function Welcome({
                                 {/* Max Price */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Maximum Price (Rs.)
+                                        Maximum Price ($)
                                     </label>
                                     <input
                                         type="number"
@@ -557,7 +557,7 @@ export default function Welcome({
                                         href={route('buyer.products.show', product.slug)}
                                         className="block text-center bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-colors"
                                     >
-                                        for suppliers See details
+                                        View Product Details
                                     </Link>
                                 </div>
                             </div>

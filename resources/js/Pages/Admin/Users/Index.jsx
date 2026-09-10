@@ -195,7 +195,7 @@ export default function Index({ users, stats, filters }) {
 
   // Format date - Converts ISO date to readable format
   const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('bn-BD', {
+    return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'

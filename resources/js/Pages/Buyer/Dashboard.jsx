@@ -37,11 +37,11 @@ export default function BuyerDashboard() {
     pendingActions
   } = usePage().props;
 
-  // Helper function to format currency in BDT
+  // Helper function to format currency in USD
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(amount);
@@ -295,7 +295,7 @@ export default function BuyerDashboard() {
                         <div className="flex items-center text-sm text-gray-500 mt-2">
                           <FiPackage className="mr-1" /> Amount: {rfq.quantity} Unit
                           <span className="mx-2">•</span>
-                          <FiClock className="mr-1" /> Required date: {new Date(rfq.required_by_date).toLocaleDateString('bn-BD')}
+                          <FiClock className="mr-1" /> Required date: {new Date(rfq.required_by_date).toLocaleDateString('en-US')}
                         </div>
                         {rfq.quotes_count > 0 && (
                           <p className="text-sm text-indigo-600 mt-2 font-medium">
@@ -347,7 +347,7 @@ export default function BuyerDashboard() {
                           <span className="font-medium">{formatCurrency(quote.total_amount)}</span>
                           <span className="mx-2 text-gray-300">|</span>
                           <FiClock className="text-gray-500 mr-1" />
-                          <span className="text-gray-600">Expires: {new Date(quote.valid_until).toLocaleDateString('bn-BD')}</span>
+                          <span className="text-gray-600">Expires: {new Date(quote.valid_until).toLocaleDateString('en-US')}</span>
                         </div>
                       </div>
                       <Link
@@ -435,7 +435,7 @@ export default function BuyerDashboard() {
                           </div>
                           <p className="text-sm text-gray-600 truncate mt-1">{message.message}</p>
                           <p className="text-xs text-gray-400 mt-1">
-                            {new Date(message.created_at).toLocaleDateString('bn-BD')}
+                            {new Date(message.created_at).toLocaleDateString('en-US')}
                           </p>
                         </div>
                       </div>
@@ -494,7 +494,7 @@ export default function BuyerDashboard() {
                       <p className="text-sm text-gray-600 mt-1">{formatCurrency(activity.amount)}</p>
                     )}
                     <p className="text-xs text-gray-400 mt-1">
-                      {new Date(activity.time).toLocaleDateString('bn-BD')} {new Date(activity.time).toLocaleTimeString('bn-BD')}
+                      {new Date(activity.time).toLocaleDateString('en-US')} {new Date(activity.time).toLocaleTimeString('en-US')}
                     </p>
                   </div>
                   <Link href={activity.url} className="text-indigo-600 hover:text-indigo-800 text-sm ml-2">

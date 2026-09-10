@@ -33,11 +33,11 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
     payment_terms: ''
   });
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(value);
@@ -191,7 +191,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                   <div>
                     <p className="text-sm text-gray-500">Required date</p>
                     <p className="font-medium text-gray-900">
-                      {new Date(rfq.required_by_date).toLocaleDateString('bn-BD')}
+                      {new Date(rfq.required_by_date).toLocaleDateString('en-US')}
                     </p>
                   </div>
                 </div>
@@ -280,7 +280,7 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">Single price (Rs.)</label>
+                            <label className="block text-xs text-gray-500 mb-1">Single price ($)</label>
                             <input
                               type="number"
                               value={product.unit_price}

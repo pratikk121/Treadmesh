@@ -77,13 +77,13 @@ export default function MessagesIndex({
     } else if (messageDate.toDateString() === yesterday.toDateString()) {
       return 'yesterday';
     } else {
-      return messageDate.toLocaleDateString('bn-BD', { month: 'short', day: 'numeric' });
+      return messageDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
   };
 
   // Format full date time for message timestamps
   const formatDateTime = (date) => {
-    return new Date(date).toLocaleDateString('bn-BD', {
+    return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',

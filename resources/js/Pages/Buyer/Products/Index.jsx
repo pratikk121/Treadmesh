@@ -71,11 +71,11 @@ export default function ProductsIndex({ products, categories, filters }) {
     applyFilters();
   };
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(amount);
@@ -189,7 +189,7 @@ export default function ProductsIndex({ products, categories, filters }) {
               {/* Price Range Filter */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Price range (Rs)
+                  Price range ($)
                 </label>
                 <div className="flex space-x-2">
                   <input

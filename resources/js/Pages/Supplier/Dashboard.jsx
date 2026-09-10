@@ -51,11 +51,11 @@ export default function SupplierDashboard({
   quote_performance,
   upcoming_deliveries,
 }) {
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(value);
@@ -63,7 +63,7 @@ export default function SupplierDashboard({
 
   // Format number - Adds thousand separators
   const formatNumber = (value) => {
-    return new Intl.NumberFormat('bn-BD').format(value);
+    return new Intl.NumberFormat('en-US').format(value);
   };
 
   // Get status color based on status type
@@ -321,7 +321,7 @@ export default function SupplierDashboard({
                     stroke="#6B7280"
                     fontSize={12}
                     tickFormatter={(date) => {
-                      return new Date(date).toLocaleDateString('bn-BD', { month: 'short', day: 'numeric' });
+                      return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
                     }}
                   />
                   <YAxis yAxisId="left" stroke="#6B7280" fontSize={12} />
@@ -467,7 +467,7 @@ export default function SupplierDashboard({
                         </span>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">
-                        {new Date(order.created_at).toLocaleDateString('bn-BD')}
+                        {new Date(order.created_at).toLocaleDateString('en-US')}
                       </td>
                     </tr>
                   ))}
@@ -534,7 +534,7 @@ export default function SupplierDashboard({
                       </td>
                       <td className="px-6 py-4">
                         <span className={`text-sm ${new Date(rfq.required_by_date) < new Date() ? 'text-red-600' : 'text-gray-900'}`}>
-                          {new Date(rfq.required_by_date).toLocaleDateString('bn-BD')}
+                          {new Date(rfq.required_by_date).toLocaleDateString('en-US')}
                         </span>
                       </td>
                       <td className="px-6 py-4">
@@ -638,7 +638,7 @@ export default function SupplierDashboard({
                         <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
                           <span>{order.buyer?.name}</span>
                           <span>•</span>
-                          <span>Anu: {new Date(order.estimated_delivery).toLocaleDateString('bn-BD')}</span>
+                          <span>Anu: {new Date(order.estimated_delivery).toLocaleDateString('en-US')}</span>
                         </div>
                       </div>
                     </div>
@@ -700,7 +700,7 @@ export default function SupplierDashboard({
                           {message.sender?.name}
                         </p>
                         <p className="text-xs text-gray-400">
-                          {new Date(message.created_at).toLocaleDateString('bn-BD')}
+                          {new Date(message.created_at).toLocaleDateString('en-US')}
                         </p>
                       </div>
                       <p className="text-sm text-gray-600 truncate mt-1">{message.content}</p>

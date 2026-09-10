@@ -229,7 +229,7 @@ export default function CreateProduct({ categories, units }) {
                   {/* Base Price */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Original Price (Rs.)) <span className="text-red-500">*</span>
+                      Original Price ($) <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"

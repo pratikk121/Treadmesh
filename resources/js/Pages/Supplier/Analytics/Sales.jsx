@@ -53,11 +53,11 @@ export default function SalesAnalytics({
     dateRange.end ? new Date(dateRange.end).toISOString().split('T')[0] : ''
   );
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(value);
@@ -65,7 +65,7 @@ export default function SalesAnalytics({
 
   // Format number - Adds thousand separators
   const formatNumber = (value) => {
-    return new Intl.NumberFormat('bn-BD').format(value);
+    return new Intl.NumberFormat('en-US').format(value);
   };
 
   // Format percentage with sign
@@ -76,7 +76,7 @@ export default function SalesAnalytics({
   // Format date for display
   const formatDateLabel = (date) => {
     if (!date) return '';
-    return new Date(date).toLocaleDateString('bn-BD', {
+    return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
@@ -321,7 +321,7 @@ export default function SalesAnalytics({
                     dataKey="date"
                     stroke="#6B7280"
                     fontSize={12}
-                    tickFormatter={(date) => new Date(date).toLocaleDateString('bn-BD', { month: 'short', day: 'numeric' })}
+                    tickFormatter={(date) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   />
                   <YAxis
                     stroke="#6B7280"
@@ -330,7 +330,7 @@ export default function SalesAnalytics({
                   />
                   <Tooltip
                     formatter={(value) => formatCurrency(value)}
-                    labelFormatter={(label) => new Date(label).toLocaleDateString('bn-BD', {
+                    labelFormatter={(label) => new Date(label).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
@@ -365,12 +365,12 @@ export default function SalesAnalytics({
                     dataKey="date"
                     stroke="#6B7280"
                     fontSize={12}
-                    tickFormatter={(date) => new Date(date).toLocaleDateString('bn-BD', { month: 'short', day: 'numeric' })}
+                    tickFormatter={(date) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   />
                   <YAxis stroke="#6B7280" fontSize={12} />
                   <Tooltip
                     formatter={(value) => formatNumber(value)}
-                    labelFormatter={(label) => new Date(label).toLocaleDateString('bn-BD', {
+                    labelFormatter={(label) => new Date(label).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'

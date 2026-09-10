@@ -37,11 +37,11 @@ export default function BulkPrices({ product }) {
       : [{ min_quantity: '', max_quantity: '', price: '' }]
   );
 
-  // Format currency - Converts number to BDT currency format
+  // Format currency - Converts number to USD currency format
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('bn-BD', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'BDT',
+      currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(value);
@@ -226,7 +226,7 @@ export default function BulkPrices({ product }) {
               <div className="grid grid-cols-12 gap-4 px-4 py-2 bg-gray-50 rounded-lg text-xs font-medium text-gray-500 uppercase">
                 <div className="col-span-3">The minimum amount is</div>
                 <div className="col-span-3">Maximum amount</div>
-                <div className="col-span-4">Price Per Unit (Rs)</div>
+                <div className="col-span-4">Price Per Unit ($)</div>
                 <div className="col-span-2">Activities</div>
               </div>
 
