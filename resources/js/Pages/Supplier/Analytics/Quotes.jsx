@@ -1,20 +1,20 @@
-// Pages/Supplier/Analytics/Quotes.jsx
+// resources/js/Pages/Supplier/Analytics/Quotes.jsx
 
-// React - Core React imports for component functionality
 import React from 'react';
 import { Head } from '@inertiajs/react';
-
-// Layout - Supplier dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
 import {
   FiCheckCircle,
   FiCalendar,
   FiDownload,
+  FiClock,
+  FiFileText,
+  FiTrendingUp,
+  FiAlertCircle,
+  FiLayers,
+  FiZap
 } from 'react-icons/fi';
-
-// Recharts - Charting library components for data visualization
+import { BsShieldCheck, BsGraphUp } from 'react-icons/bs';
 import {
   BarChart,
   Bar,
@@ -28,156 +28,220 @@ import {
   Cell,
   Legend
 } from 'recharts';
+import {
+  formatCurrency,
+  formatIndianScale,
+  formatIndianDate
+} from '@/Utils/formatters';
 
 export default function QuotesAnalytics({
-  dateRange,
-  totalQuotes,
-  pendingQuotes,
-  expiredQuotes,
-  acceptedValue,
-  quotesByMonth,
-  quotesByBuyer,
-  rejectedQuotes,
-  acceptedQuotes,
-  conversionRate,
-  avgResponseDays,
-  totalQuoteValue,
-  avgResponseHours,
-  valueDistribution,
-  revenueFromQuotes,
-  successByResponseTime,
+  dateRange = {},
+  totalQuotes = 0,
+  pendingQuotes = 0,
+  expiredQuotes = 0,
+  acceptedValue = 0,
+  quotesByMonth = {},
+  quotesByBuyer = {},
+  rejectedQuotes = 0,
+  acceptedQuotes = 0,
+  conversionRate = 0,
+  avgResponseDays = 0,
+  totalQuoteValue = 0,
+  avgResponseHours = 0,
+  valueDistribution = {},
+  revenueFromQuotes = 0,
+  successByResponseTime = {},
 }) {
-
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value);
-  };
-
-  // Format number - Adds thousand separators
   const formatNumber = (value) => {
-    return new Intl.NumberFormat('en-US').format(value);
+    return new Intl.NumberFormat('en-IN').format(value || 0);
   };
 
-  // Format percentage
   const formatPercentage = (value) => {
-    return `${value.toFixed(1)}%`;
+    return `${Number(value || 0).toFixed(1)}%`;
   };
 
-  // Format date for display
-  const formatDateLabel = (date) => {
-    if (!date) return '';
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-
-  // Format date for API parameters
-  const formatDateParam = (date) => {
-    if (!date) return '';
-    return new Date(date).toISOString().split('T')[0];
-  };
-
-  // Handle export functionality
   const handleExport = () => {
     const params = new URLSearchParams({
       type: 'quotes',
       format: 'csv',
-      date_from: formatDateParam(dateRange.start),
-      date_to: formatDateParam(dateRange.end)
+      date_from: dateRange?.start || '',
+      date_to: dateRange?.end || ''
     });
     window.location.href = route('supplier.analytics.export') + '?' + params.toString();
   };
 
-  // Prepare data for status pie chart (filter out zero values)
   const statusData = [
-    { name: 'accepted', value: acceptedQuotes, color: '#10B981' },
-    { name: 'Awaiting', value: pendingQuotes, color: '#F59E0B' },
+    { name: 'Accepted', value: acceptedQuotes, color: '#10B981' },
+    { name: 'Under Review', value: pendingQuotes, color: '#F59E0B' },
     { name: 'Rejected', value: rejectedQuotes, color: '#EF4444' },
-    { name: 'Expired', value: expiredQuotes, color: '#6B7280' }
+    { name: 'Expired', value: expiredQuotes, color: '#64748B' }
   ].filter(item => item.value > 0);
 
   return (
     <DashboardLayout>
-      <Head title="Quote Analytics" />
+      <Head title="Supplier Quotation Analytics & Win Rates | Treadmesh" />
 
-      <div className="space-y-6">
-        {/* Header - Page title and export button */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="max-w-7xl mx-auto space-y-6 pb-12">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Quote Analytics</h1>
-            <p className="text-sm text-gray-600 mt-1">
-              Track your quote performance and conversion metrics
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                Bid Management & Win Rates
+              </span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                <BsShieldCheck className="w-3 h-3 text-emerald-600" />
+                Live Bidding Analytics
+              </span>
+            </div>
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight mt-0.5">
+              RFQ Quotation Performance & Conversion
+            </h1>
+            <p className="text-sm text-slate-500 mt-1">
+              Audit proposal conversion rates, response turnaround SLAs, and realized contract value
             </p>
           </div>
+
           <button
             onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-sm font-medium transition shadow-xs cursor-pointer"
           >
             <FiDownload className="w-4 h-4" />
-            <span>Report Export</span>
+            <span>Export Quotations CSV</span>
           </button>
         </div>
 
-        {/* Period Info - Date range display */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <FiCalendar className="w-4 h-4" />
-            <span>Duration: {formatDateLabel(dateRange.start)} - {formatDateLabel(dateRange.end)}</span>
-          </div>
-        </div>
-
-        {/* Summary Cards - Key quote metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl p-6 text-white">
-            <p className="text-sm opacity-90">Total Quotes</p>
-            <p className="text-2xl font-bold mt-1">{formatNumber(totalQuotes)}</p>
-            <p className="text-sm opacity-75 mt-2">Price: {formatCurrency(totalQuoteValue)}</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">The conversion rate is</p>
-            <p className="text-2xl font-bold text-gray-900">{formatPercentage(conversionRate)}</p>
-            <div className="flex items-center gap-2 mt-2 text-sm">
-              <FiCheckCircle className="w-4 h-4 text-green-500" />
-              <span className="text-gray-600">{acceptedQuotes} accepted</span>
+        {/* Date Window Banner */}
+        <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm">
+              <FiCalendar className="w-5 h-5 text-indigo-300" />
+            </div>
+            <div>
+              <p className="text-xs text-slate-300 font-medium uppercase tracking-wider">Evaluation Window</p>
+              <p className="text-sm font-semibold text-white">
+                {dateRange?.start ? formatIndianDate(dateRange.start) : 'Start'} &mdash; {dateRange?.end ? formatIndianDate(dateRange.end) : 'Current Date'}
+              </p>
             </div>
           </div>
-
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">Average response time is</p>
-            <p className="text-2xl font-bold text-gray-900">{avgResponseHours.toFixed(1)} hours</p>
-            <p className="text-sm text-gray-500 mt-2">({avgResponseDays.toFixed(1)} Give)</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <p className="text-sm text-gray-500">Revenue from Accepted Quotes</p>
-            <p className="text-2xl font-bold text-green-600">{formatCurrency(revenueFromQuotes)}</p>
-            <p className="text-sm text-gray-500 mt-2">Accepted value is: {formatCurrency(acceptedValue)}</p>
+          <div className="flex items-center gap-4 text-xs">
+            <div className="text-right">
+              <span className="text-slate-400">Total Bidding Pipeline:</span>{' '}
+              <span className="font-semibold text-white">{formatCurrency(totalQuoteValue)}</span>
+            </div>
+            <div className="h-4 w-px bg-white/20" />
+            <div className="text-right">
+              <span className="text-slate-400">Win Rate:</span>{' '}
+              <span className="font-semibold text-emerald-400">{formatPercentage(conversionRate)}</span>
+            </div>
           </div>
         </div>
 
-        {/* Charts Grid */}
+        {/* Overview KPI Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Card 1: Total Submitted Quotes */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition group">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                Submitted Quotations
+              </span>
+              <div className="p-2 bg-indigo-50 rounded-xl text-indigo-600 group-hover:bg-indigo-100 transition">
+                <FiFileText className="w-5 h-5" />
+              </div>
+            </div>
+            <div className="mt-3 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-slate-900 tracking-tight">
+                {formatNumber(totalQuotes)}
+              </span>
+              <span className="text-xs text-slate-500">proposals</span>
+            </div>
+            <p className="text-xs text-slate-500 mt-2">
+              Pipeline Value: <span className="font-semibold text-slate-800">{formatCurrency(totalQuoteValue)}</span>
+            </p>
+          </div>
+
+          {/* Card 2: Conversion Rate */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition group">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                Win / Conversion Rate
+              </span>
+              <div className="p-2 bg-emerald-50 rounded-xl text-emerald-600 group-hover:bg-emerald-100 transition">
+                <FiCheckCircle className="w-5 h-5" />
+              </div>
+            </div>
+            <div className="mt-3 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-emerald-600 tracking-tight font-mono">
+                {formatPercentage(conversionRate)}
+              </span>
+              <span className="text-xs text-slate-500 font-medium">bids won</span>
+            </div>
+            <p className="text-xs text-emerald-700 mt-2 flex items-center gap-1 font-medium">
+              <span>{acceptedQuotes} proposals converted to POs</span>
+            </p>
+          </div>
+
+          {/* Card 3: Response Turnaround */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition group">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                Avg Response Speed
+              </span>
+              <div className="p-2 bg-amber-50 rounded-xl text-amber-600 group-hover:bg-amber-100 transition">
+                <FiClock className="w-5 h-5" />
+              </div>
+            </div>
+            <div className="mt-3 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-slate-900 tracking-tight font-mono">
+                {Number(avgResponseHours || 0).toFixed(1)}
+              </span>
+              <span className="text-xs text-slate-500">hours</span>
+            </div>
+            <p className="text-xs text-slate-500 mt-2">
+              Approx. <span className="font-semibold text-slate-700">{Number(avgResponseDays || 0).toFixed(1)} days</span> turnaround
+            </p>
+          </div>
+
+          {/* Card 4: Converted GMV */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:border-slate-300 transition group">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                Converted Contract GMV
+              </span>
+              <div className="p-2 bg-emerald-50 rounded-xl text-emerald-600 group-hover:bg-emerald-100 transition">
+                <BsGraphUp className="w-5 h-5" />
+              </div>
+            </div>
+            <div className="mt-3 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-slate-900 tracking-tight font-mono">
+                {formatCurrency(revenueFromQuotes)}
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 mt-2">
+              Accepted Tender Value: <span className="font-semibold text-emerald-600">{formatCurrency(acceptedValue)}</span>
+            </p>
+          </div>
+        </div>
+
+        {/* Visual Charts Grid 1: Status Breakdown & Monthly Trend */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Status Distribution - Pie chart */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Quote Status Breakdown</h2>
-            <div className="h-80">
+          {/* Status Breakdown - Donut Chart */}
+          <div className="bg-white rounded-2xl shadow-xs border border-slate-200/80 p-6 flex flex-col justify-between">
+            <div className="pb-4 border-b border-slate-100">
+              <h2 className="text-base font-bold text-slate-900">Quotation Status Breakdown</h2>
+              <p className="text-xs text-slate-500 mt-0.5">Distribution across negotiation lifecycle</p>
+            </div>
+
+            <div className="h-64 my-auto">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={statusData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={2}
+                    innerRadius={55}
+                    outerRadius={85}
+                    paddingAngle={3}
                     dataKey="value"
                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                   >
@@ -186,143 +250,226 @@ export default function QuotesAnalytics({
                     ))}
                   </Pie>
                   <Tooltip
-                    formatter={(value) => formatNumber(value)}
                     contentStyle={{
-                      backgroundColor: 'white',
-                      border: '1px solid #E5E7EB',
-                      borderRadius: '8px',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                      backgroundColor: '#090D16',
+                      borderColor: '#1e293b',
+                      borderRadius: '12px',
+                      color: '#fff'
                     }}
+                    formatter={(value) => [`${formatNumber(value)} Quotes`, 'Volume']}
                   />
                 </PieChart>
               </ResponsiveContainer>
             </div>
+
+            <div className="grid grid-cols-4 gap-2 pt-3 border-t border-slate-100 text-center text-xs">
+              <div className="p-2 rounded-lg bg-emerald-50">
+                <span className="text-emerald-700 font-bold block font-mono">{acceptedQuotes}</span>
+                <span className="text-slate-500">Won</span>
+              </div>
+              <div className="p-2 rounded-lg bg-amber-50">
+                <span className="text-amber-700 font-bold block font-mono">{pendingQuotes}</span>
+                <span className="text-slate-500">Review</span>
+              </div>
+              <div className="p-2 rounded-lg bg-rose-50">
+                <span className="text-rose-700 font-bold block font-mono">{rejectedQuotes}</span>
+                <span className="text-slate-500">Rejected</span>
+              </div>
+              <div className="p-2 rounded-lg bg-slate-100">
+                <span className="text-slate-700 font-bold block font-mono">{expiredQuotes}</span>
+                <span className="text-slate-500">Expired</span>
+              </div>
+            </div>
           </div>
 
-          {/* Monthly Trend - Bar chart */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Monthly Quotes Trend</h2>
-            <div className="h-80">
+          {/* Monthly Bidding Trend - Bar Chart */}
+          <div className="bg-white rounded-2xl shadow-xs border border-slate-200/80 p-6 flex flex-col justify-between">
+            <div className="pb-4 border-b border-slate-100">
+              <h2 className="text-base font-bold text-slate-900">Monthly Quotations vs Won POs</h2>
+              <p className="text-xs text-slate-500 mt-0.5">Bid volume velocity vs buyer acceptance</p>
+            </div>
+
+            <div className="h-64 my-auto mt-2">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={Object.entries(quotesByMonth).map(([month, data]) => ({
                   month,
                   total: data.total,
                   accepted: data.accepted
-                }))}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="month" stroke="#6B7280" fontSize={12} />
-                  <YAxis stroke="#6B7280" fontSize={12} />
+                }))} margin={{ top: 15, right: 15, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                  <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={{ stroke: '#e2e8f0' }} />
+                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={{ stroke: '#e2e8f0' }} />
                   <Tooltip
-                    formatter={(value) => formatNumber(value)}
                     contentStyle={{
-                      backgroundColor: 'white',
-                      border: '1px solid #E5E7EB',
-                      borderRadius: '8px',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                      backgroundColor: '#090D16',
+                      borderColor: '#1e293b',
+                      borderRadius: '12px',
+                      color: '#fff'
                     }}
+                    formatter={(value, name) => [value, name === 'accepted' ? 'Accepted POs' : 'Total Quotes']}
                   />
                   <Legend />
                   <Bar dataKey="total" name="Total Quotes" fill="#4F46E5" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="accepted" name="accepted" fill="#10B981" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="accepted" name="Accepted POs" fill="#10B981" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
-          </div>
 
-          {/* Success Rate by Response Time */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Success rate according to response time</h2>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={Object.entries(successByResponseTime).map(([time, rate]) => ({
-                  time,
-                  rate
-                }))}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="time" stroke="#6B7280" fontSize={12} />
-                  <YAxis
-                    stroke="#6B7280"
-                    fontSize={12}
-                    tickFormatter={(value) => `${value}%`}
-                  />
-                  <Tooltip
-                    formatter={(value) => `${value.toFixed(1)}%`}
-                    contentStyle={{
-                      backgroundColor: 'white',
-                      border: '1px solid #E5E7EB',
-                      borderRadius: '8px',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                    }}
-                  />
-                  <Bar dataKey="rate" name="Success rate" fill="#4F46E5" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-            <p className="text-sm text-gray-500 mt-4 text-center">
-              Quotes submitted within 24 hours have the highest acceptance rate
-            </p>
-          </div>
-
-          {/* Value Distribution */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Quote Price Distribution</h2>
-            <div className="space-y-4">
-              {Object.entries(valueDistribution).map(([range, data]) => (
-                <div key={range}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-gray-700">{range}</span>
-                    <div className="text-right">
-                      <span className="text-sm font-medium text-gray-900">{data.count} Quote</span>
-                      <span className="text-xs text-gray-500 ml-2">
-                        ({data.rate.toFixed(1)}% accepted)
-                      </span>
-                    </div>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-indigo-600 h-2 rounded-full"
-                      style={{ width: `${(data.count / totalQuotes) * 100}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
+            <div className="pt-3 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
+              <span>Monthly Win Trajectory</span>
+              <span className="font-medium text-emerald-600 font-mono">{formatPercentage(conversionRate)} conversion</span>
             </div>
           </div>
         </div>
 
-        {/* Top Buyers Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Top Buyers by Quote Activity</h2>
+        {/* Charts Grid 2: Turnaround Win Rate & Price Distribution */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Win Rate by Response Speed */}
+          <div className="bg-white rounded-2xl shadow-xs border border-slate-200/80 p-6 flex flex-col justify-between">
+            <div className="pb-4 border-b border-slate-100">
+              <h2 className="text-base font-bold text-slate-900">Win Rate by Turnaround Speed</h2>
+              <p className="text-xs text-slate-500 mt-0.5">Correlation between fast bid dispatch and buyer acceptance</p>
+            </div>
+
+            <div className="h-64 my-auto mt-2">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={Object.entries(successByResponseTime).map(([time, rate]) => ({
+                  time,
+                  rate: Number(rate || 0)
+                }))} margin={{ top: 15, right: 15, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                  <XAxis dataKey="time" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={{ stroke: '#e2e8f0' }} />
+                  <YAxis
+                    stroke="#94a3b8"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={{ stroke: '#e2e8f0' }}
+                    tickFormatter={(val) => `${val}%`}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#090D16',
+                      borderColor: '#1e293b',
+                      borderRadius: '12px',
+                      color: '#fff'
+                    }}
+                    formatter={(val) => [`${val.toFixed(1)}%`, 'Win Probability']}
+                  />
+                  <Bar dataKey="rate" name="Acceptance Rate %" fill="#4F46E5" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100 text-xs text-emerald-800 flex items-center gap-2">
+              <FiZap className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <span>Quotes submitted within 24 hours exhibit up to 3x higher contract closure</span>
+            </div>
+          </div>
+
+          {/* Quote Price Distribution */}
+          <div className="bg-white rounded-2xl shadow-xs border border-slate-200/80 p-6">
+            <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+              <div>
+                <h2 className="text-base font-bold text-slate-900">Quotation Ticket Size Distribution</h2>
+                <p className="text-xs text-slate-500 mt-0.5">Volume and win rate across price brackets</p>
+              </div>
+              <span className="text-xs font-mono font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-md">
+                INR Scale
+              </span>
+            </div>
+
+            <div className="space-y-3.5 mt-4">
+              {Object.entries(valueDistribution).length === 0 ? (
+                <div className="text-center py-8 text-slate-400 text-sm">
+                  No pricing data available.
+                </div>
+              ) : (
+                Object.entries(valueDistribution).map(([range, data]) => {
+                  const pct = totalQuotes > 0 ? ((data.count / totalQuotes) * 100).toFixed(1) : 0;
+                  return (
+                    <div key={range} className="p-3 rounded-xl border border-slate-100 bg-slate-50/50">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-xs font-semibold text-slate-900 font-mono">{range}</span>
+                        <div className="text-right">
+                          <span className="text-xs font-medium text-slate-700">{data.count} Quotes</span>
+                          <span className="text-xs font-semibold text-emerald-600 ml-2">
+                            ({data.rate.toFixed(1)}% won)
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                        <div
+                          className="bg-indigo-600 h-1.5 rounded-full transition-all"
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Top Buyers by Quotation Activity */}
+        <div className="bg-white rounded-2xl shadow-xs border border-slate-200/80 overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div>
+              <h2 className="text-base font-bold text-slate-900">Top Buyers by Quotation Activity</h2>
+              <p className="text-xs text-slate-500 mt-0.5">Corporate accounts requesting tenders with proposal win-loss ledger</p>
+            </div>
+            <span className="text-xs font-mono font-medium text-slate-500">
+              {Object.keys(quotesByBuyer).length} buyers
+            </span>
+          </div>
+
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Buyer</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Total Quotes</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">accepted</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Rejected</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Awaiting</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Total price is</th>
-                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Accepted value is</th>
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50/80 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
+                  <th className="px-6 py-3.5">Enterprise Buyer</th>
+                  <th className="px-4 py-3.5 text-right">Total Quotes</th>
+                  <th className="px-4 py-3.5 text-right">Accepted</th>
+                  <th className="px-4 py-3.5 text-right">Rejected</th>
+                  <th className="px-4 py-3.5 text-right">Under Review</th>
+                  <th className="px-6 py-3.5 text-right">Floated Value (₹)</th>
+                  <th className="px-6 py-3.5 text-right">Converted Value (₹)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
-                {Object.values(quotesByBuyer).map((buyer) => (
-                  <tr key={buyer.buyer?.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <div>
-                        <p className="font-medium text-gray-900">{buyer.buyer?.name}</p>
-                        <p className="text-xs text-gray-500">{buyer.buyer?.email}</p>
-                      </div>
+              <tbody className="divide-y divide-slate-100 text-sm">
+                {Object.keys(quotesByBuyer).length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-6 py-8 text-center text-slate-400 text-sm">
+                      No quotation history recorded with corporate buyers.
                     </td>
-                    <td className="px-4 py-3 text-right font-medium">{buyer.total_quotes}</td>
-                    <td className="px-4 py-3 text-right text-green-600 font-medium">{buyer.accepted}</td>
-                    <td className="px-4 py-3 text-right text-red-600 font-medium">{buyer.rejected}</td>
-                    <td className="px-4 py-3 text-right text-yellow-600 font-medium">{buyer.pending}</td>
-                    <td className="px-4 py-3 text-right font-bold">{formatCurrency(buyer.total_value)}</td>
-                    <td className="px-4 py-3 text-right font-bold text-green-600">{formatCurrency(buyer.accepted_value)}</td>
                   </tr>
-                ))}
+                ) : (
+                  Object.values(quotesByBuyer).map((buyer) => (
+                    <tr key={buyer.buyer?.id} className="hover:bg-slate-50/60 transition">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-xs">
+                            {buyer.buyer?.name?.charAt(0) || 'B'}
+                          </div>
+                          <div>
+                            <p className="font-semibold text-slate-900">{buyer.buyer?.name || 'Enterprise Buyer'}</p>
+                            <p className="text-xs text-slate-400">{buyer.buyer?.email}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 text-right font-mono font-medium text-slate-700">{buyer.total_quotes}</td>
+                      <td className="px-4 py-4 text-right font-mono font-bold text-emerald-600">{buyer.accepted}</td>
+                      <td className="px-4 py-4 text-right font-mono font-medium text-rose-600">{buyer.rejected}</td>
+                      <td className="px-4 py-4 text-right font-mono font-medium text-amber-600">{buyer.pending}</td>
+                      <td className="px-6 py-4 text-right font-mono font-medium text-slate-900">
+                        {formatCurrency(buyer.total_value)}
+                      </td>
+                      <td className="px-6 py-4 text-right font-mono font-bold text-emerald-600">
+                        {formatCurrency(buyer.accepted_value)}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
