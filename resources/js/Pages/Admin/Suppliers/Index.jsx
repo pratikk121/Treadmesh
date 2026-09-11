@@ -1,13 +1,8 @@
-// Pages/Admin/Suppliers/Index.jsx
+// resources/js/Pages/Admin/Suppliers/Index.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-
-// Layout - Admin dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
 import {
   FiUsers,
   FiSearch,
@@ -19,18 +14,21 @@ import {
   FiPackage,
   FiEdit,
   FiTrash2,
-  FiEye
+  FiEye,
+  FiRefreshCw,
+  FiShield,
+  FiChevronUp,
+  FiChevronDown
 } from 'react-icons/fi';
 import {
   MdVerified,
   MdPending,
   MdWarning
 } from 'react-icons/md';
-
-// sweetalert - For beautiful alert messages
 import Swal from 'sweetalert2';
+import { formatIndianDate } from '@/Utils/formatters';
 
-export default function Index({ suppliers, stats, cities, filters }) {
+export default function Index({ suppliers = {}, stats = {}, cities = [], filters = {} }) {
   // State management for filters and UI controls
   const [bulkAction, setBulkAction] = useState('');
   const [showFilterModal, setShowFilterModal] = useState(false);
@@ -82,7 +80,7 @@ export default function Index({ suppliers, stats, cities, filters }) {
 
   // Handle bulk selection of suppliers
   const handleSelectAll = (e) => {
-    if (e.target.checked) {
+    if (e.target.checked && suppliers?.data) {
       setSelectedSuppliers(suppliers.data.map(s => s.id));
     } else {
       setSelectedSuppliers([]);
@@ -101,16 +99,21 @@ export default function Index({ suppliers, stats, cities, filters }) {
   const handleBulkAction = () => {
     if (!bulkAction || selectedSuppliers.length === 0) return;
 
+    const actionLabels = {
+      verify: 'verify and approve',
+      reject: 'reject',
+      activate: 'activate',
+      deactivate: 'deactivate'
+    };
+
     Swal.fire({
-      title: 'Are you sure?',
-      text: `You are ${selectedSuppliers.length} T Supplier ${bulkAction === 'verify' ? 'Verify' :
-        bulkAction === 'reject' ? 'Rejection' :
-          bulkAction === 'activate' ? 'Active' : 'Inactive'} want to?`,
+      title: 'Confirm Bulk Action',
+      text: `Are you sure you want to ${actionLabels[bulkAction] || bulkAction} ${selectedSuppliers.length} selected supplier(s)?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, continue!',
+      confirmButtonText: 'Yes, proceed',
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -125,7 +128,7 @@ export default function Index({ suppliers, stats, cities, filters }) {
             Swal.fire({
               icon: 'success',
               title: 'Success',
-              text: 'Bulk Actions completed'
+              text: 'Batch supplier update executed successfully.'
             });
           }
         });
@@ -136,8 +139,8 @@ export default function Index({ suppliers, stats, cities, filters }) {
   // Handle delete single supplier
   const handleDelete = (id, companyName) => {
     Swal.fire({
-      title: 'Delete supplier?',
-      text: `${companyName} Delete? It cannot be undone.`,
+      title: 'Delete Supplier?',
+      text: `Are you sure you want to delete ${companyName}? This action cannot be reversed.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
@@ -148,7 +151,7 @@ export default function Index({ suppliers, stats, cities, filters }) {
       if (result.isConfirmed) {
         router.delete(route('admin.suppliers.destroy', id), {
           onSuccess: () => {
-            Swal.fire('Deleted!', 'Supplier deleted.', 'success');
+            Swal.fire('Deleted', 'Supplier record has been deleted.', 'success');
           }
         });
       }
@@ -157,20 +160,18 @@ export default function Index({ suppliers, stats, cities, filters }) {
 
   // Handle toggle supplier status (activate/deactivate)
   const handleToggleStatus = (id, currentStatus) => {
-    const actionText = currentStatus ? 'deactivate' : 'activate';
-
     Swal.fire({
-      title: 'Confirm',
-      text: `Are you sure you want to change this supplier's status?`,
+      title: currentStatus ? 'Deactivate Supplier?' : 'Activate Supplier?',
+      text: `Are you sure you want to ${currentStatus ? 'suspend' : 'reinstate'} trading permissions for this vendor?`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Yes, confirm',
+      confirmButtonText: currentStatus ? 'Yes, deactivate' : 'Yes, activate',
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.patch(route('admin.suppliers.toggle-status', id), {
           onSuccess: () => {
-            Swal.fire('Update!', 'Supplier status updated.', 'success');
+            Swal.fire('Updated', 'Supplier status updated.', 'success');
           }
         });
       }
@@ -180,16 +181,16 @@ export default function Index({ suppliers, stats, cities, filters }) {
   // Get verification status badge
   const getStatusBadge = (status) => {
     const badges = {
-      verified: { bg: 'bg-green-100', text: 'text-green-800', icon: MdVerified, label: 'Verified' },
-      pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: MdPending, label: 'Pending' },
-      rejected: { bg: 'bg-red-100', text: 'text-red-800', icon: MdWarning, label: 'Rejected' }
+      verified: { bg: 'bg-emerald-50 text-emerald-700 border-emerald-200/80', icon: MdVerified, label: 'Verified & KYC OK' },
+      pending: { bg: 'bg-amber-50 text-amber-700 border-amber-200/80', icon: MdPending, label: 'Pending Review' },
+      rejected: { bg: 'bg-rose-50 text-rose-700 border-rose-200/80', icon: MdWarning, label: 'Rejected / Disqualified' }
     };
     const badge = badges[status] || badges.pending;
     const Icon = badge.icon;
 
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge.bg} ${badge.text}`}>
-        <Icon className="w-3 h-3 mr-1" />
+      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${badge.bg}`}>
+        <Icon className="w-3.5 h-3.5" />
         {badge.label}
       </span>
     );
@@ -198,14 +199,14 @@ export default function Index({ suppliers, stats, cities, filters }) {
   // Get active status badge
   const getActiveBadge = (isActive) => {
     return isActive ? (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-        <FiCheckCircle className="w-3 h-3 mr-1" />
-        Active
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+        <FiCheckCircle className="w-3 h-3" />
+        Live
       </span>
     ) : (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-        <FiXCircle className="w-3 h-3 mr-1" />
-        Inactive
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+        <FiXCircle className="w-3 h-3" />
+        Suspended
       </span>
     );
   };
@@ -213,376 +214,428 @@ export default function Index({ suppliers, stats, cities, filters }) {
   // Sort indicator component for table headers
   const SortIndicator = ({ field }) => {
     if (filters.sort_field !== field) return null;
-    return <span className="ml-1">{filters.sort_direction === 'asc' ? '↑' : '↓'}</span>;
+    return filters.sort_direction === 'asc' ? (
+      <FiChevronUp className="w-3.5 h-3.5 text-indigo-600 inline ml-1" />
+    ) : (
+      <FiChevronDown className="w-3.5 h-3.5 text-indigo-600 inline ml-1" />
+    );
   };
+
+  const activeFilterCount = [selectedCity, selectedStatus].filter(Boolean).length;
 
   return (
     <DashboardLayout>
-      <Head title="Supplier Management" />
+      <Head title="Supplier Management & OEM Directory" />
 
-      <div className="space-y-6">
-        {/* Header - Page title and export button */}
-        <div className="flex justify-between items-center">
+      <div className="space-y-6 max-w-[1600px] mx-auto pb-12">
+        {/* Header - Executive Navigation Bar */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_10px_20px_-5px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.02]">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Supplier Management</h1>
-            <p className="text-sm text-gray-600 mt-1">
-              Manage and verify all suppliers in the marketplace
-            </p>
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+                <FiUsers className="w-5 h-5" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900">Supplier Management Directory</h1>
+                <p className="text-sm text-slate-500 mt-0.5">
+                  Comprehensive register of verified Make-in-India manufacturers, wholesale vendors, and OEMs.
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="flex gap-2">
+
+          <div className="flex items-center gap-2">
             <button
               onClick={() => router.get(route('admin.suppliers.export', filters))}
-              className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-sm transition"
             >
               <FiDownload className="w-4 h-4" />
-              <span>Export</span>
+              <span>Export Suppliers CSV</span>
             </button>
           </div>
         </div>
 
         {/* Stats Cards - Key metrics overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Total supplier</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{stats.total}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Suppliers</p>
+                <p className="text-2xl font-bold text-slate-900 mt-1.5 font-mono">{stats.total || 0}</p>
               </div>
-              <div className="p-3 bg-indigo-100 rounded-lg">
-                <FiUsers className="w-6 h-6 text-indigo-600" />
+              <div className="p-3 bg-slate-100 rounded-xl text-slate-700">
+                <FiUsers className="w-6 h-6" />
               </div>
             </div>
+            <p className="text-xs text-slate-500 mt-2">All registered vendor accounts</p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-5 rounded-2xl border border-emerald-200/80 bg-gradient-to-b from-emerald-50/40 to-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Verified</p>
-                <p className="text-2xl font-bold text-green-600 mt-1">{stats.verified}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-emerald-800">Verified Vendors</p>
+                <p className="text-2xl font-bold text-emerald-700 mt-1.5 font-mono">{stats.verified || 0}</p>
               </div>
-              <div className="p-3 bg-green-100 rounded-lg">
-                <MdVerified className="w-6 h-6 text-green-600" />
+              <div className="p-3 bg-emerald-100 rounded-xl text-emerald-700">
+                <MdVerified className="w-6 h-6" />
               </div>
             </div>
+            <p className="text-xs text-emerald-700/80 mt-2 font-medium flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              Active GSTIN & MSME verified
+            </p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-5 rounded-2xl border border-amber-200/80 bg-gradient-to-b from-amber-50/40 to-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Pending</p>
-                <p className="text-2xl font-bold text-yellow-600 mt-1">{stats.pending}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-amber-800">Pending Review</p>
+                <p className="text-2xl font-bold text-amber-700 mt-1.5 font-mono">{stats.pending || 0}</p>
               </div>
-              <div className="p-3 bg-yellow-100 rounded-lg">
-                <MdPending className="w-6 h-6 text-yellow-600" />
+              <div className="p-3 bg-amber-100 rounded-xl text-amber-700">
+                <MdPending className="w-6 h-6" />
               </div>
             </div>
+            <p className="text-xs text-amber-700/80 mt-2 font-medium flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+              Awaiting KYC authorization
+            </p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-5 rounded-2xl border border-rose-200/80 bg-gradient-to-b from-rose-50/40 to-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Rejected</p>
-                <p className="text-2xl font-bold text-red-600 mt-1">{stats.rejected}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-rose-800">Rejected / Inactive</p>
+                <p className="text-2xl font-bold text-rose-700 mt-1.5 font-mono">{stats.rejected || 0}</p>
               </div>
-              <div className="p-3 bg-red-100 rounded-lg">
-                <MdWarning className="w-6 h-6 text-red-600" />
+              <div className="p-3 bg-rose-100 rounded-xl text-rose-700">
+                <MdWarning className="w-6 h-6" />
               </div>
             </div>
+            <p className="text-xs text-rose-700/80 mt-2 font-medium flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+              KYC rejected or suspended
+            </p>
           </div>
         </div>
 
-        {/* Search and Filter Bar - Main search and filter controls */}
-        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-          <div className="flex flex-col md:flex-row gap-4">
+        {/* Search and Filter Bar */}
+        <div className="bg-white p-4 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] border border-slate-200/80">
+          <div className="flex flex-col md:flex-row gap-3">
             <form onSubmit={handleSearch} className="flex-1">
               <div className="relative">
-                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
                 <input
                   type="text"
-                  placeholder="Search by company name, email or license number..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Search by company name, official email, or trade license..."
+                  className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
             </form>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowFilterModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                className="flex items-center gap-2 px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-700 hover:bg-slate-50 transition"
               >
-                <FiFilter className="w-4 h-4" />
-                <span>Filter</span>
-                {(selectedCity || selectedStatus) && (
-                  <span className="ml-1 px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-xs">
-                    {Object.values({ selectedCity, selectedStatus }).filter(Boolean).length}
+                <FiFilter className="w-4 h-4 text-slate-500" />
+                <span>Filter Vendors</span>
+                {activeFilterCount > 0 && (
+                  <span className="ml-1 px-1.5 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-semibold">
+                    {activeFilterCount}
                   </span>
                 )}
               </button>
               {(filters.search || filters.city || filters.verification_status) && (
                 <button
                   onClick={handleReset}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-900"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition"
                 >
-                  delete
+                  <FiRefreshCw className="w-3.5 h-3.5" />
+                  <span>Clear Filters</span>
                 </button>
               )}
             </div>
           </div>
 
-          {/* Bulk Actions - Show when suppliers are selected */}
+          {/* Bulk Actions Toolbar */}
           {selectedSuppliers.length > 0 && (
-            <div className="mt-4 flex items-center gap-4 p-3 bg-indigo-50 rounded-lg">
-              <span className="text-sm font-medium text-indigo-700">
-                {selectedSuppliers.length} suppliers selected
+            <div className="mt-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-indigo-50/80 border border-indigo-100 rounded-xl">
+              <span className="text-xs font-semibold text-indigo-900">
+                {selectedSuppliers.length} supplier account(s) selected
               </span>
-              <select
-                value={bulkAction}
-                onChange={(e) => setBulkAction(e.target.value)}
-                className="px-3 py-1 bg-white border border-gray-300 rounded-lg text-sm"
-              >
-                <option value="">Bulk Actions</option>
-                <option value="verify">Selected Verify</option>
-                <option value="reject">Selected Reject</option>
-                <option value="activate">Selected Active</option>
-                <option value="deactivate">Selected disabled</option>
-              </select>
-              <button
-                onClick={handleBulkAction}
-                disabled={!bulkAction}
-                className="px-4 py-1 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                application
-              </button>
-              <button
-                onClick={() => setSelectedSuppliers([])}
-                className="text-sm text-gray-600 hover:text-gray-900"
-              >
-                Delete selection
-              </button>
+              <div className="flex items-center gap-2">
+                <select
+                  value={bulkAction}
+                  onChange={(e) => setBulkAction(e.target.value)}
+                  className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                >
+                  <option value="">Choose Batch Action...</option>
+                  <option value="verify">Verify & Approve Selected</option>
+                  <option value="reject">Reject Selected</option>
+                  <option value="activate">Activate Selected</option>
+                  <option value="deactivate">Suspend / Deactivate Selected</option>
+                </select>
+                <button
+                  onClick={handleBulkAction}
+                  disabled={!bulkAction}
+                  className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Apply Action
+                </button>
+                <button
+                  onClick={() => setSelectedSuppliers([])}
+                  className="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-900 font-medium transition"
+                >
+                  Deselect All
+                </button>
+              </div>
             </div>
           )}
         </div>
 
-        {/* Suppliers Table - Main data table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        {/* Suppliers Directory Table */}
+        <div className="bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] border border-slate-200/80 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
                 <tr>
-                  <th className="px-6 py-3 text-left">
+                  <th scope="col" className="px-6 py-3.5 w-10">
                     <input
                       type="checkbox"
-                      checked={selectedSuppliers.length === suppliers.data.length && suppliers.data.length > 0}
+                      checked={selectedSuppliers.length === suppliers?.data?.length && suppliers?.data?.length > 0}
                       onChange={handleSelectAll}
-                      className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    scope="col"
+                    className="px-6 py-3.5 cursor-pointer hover:text-slate-900 transition"
                     onClick={() => handleSort('company_name')}
                   >
-                    Company Name <SortIndicator field="company_name" />
+                    <span>OEM / Company Name</span>
+                    <SortIndicator field="company_name" />
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Contact Person
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Position
-                  </th>
+                  <th scope="col" className="px-6 py-3.5">Primary Contact / SPOC</th>
+                  <th scope="col" className="px-6 py-3.5">Manufacturing Hub</th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    scope="col"
+                    className="px-6 py-3.5 cursor-pointer hover:text-slate-900 transition"
                     onClick={() => handleSort('verification_status')}
                   >
-                    Status <SortIndicator field="verification_status" />
+                    <span>KYC Status</span>
+                    <SortIndicator field="verification_status" />
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Active
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Product
-                  </th>
+                  <th scope="col" className="px-6 py-3.5">Trading State</th>
+                  <th scope="col" className="px-6 py-3.5">Catalog SKUs</th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    scope="col"
+                    className="px-6 py-3.5 cursor-pointer hover:text-slate-900 transition"
                     onClick={() => handleSort('created_at')}
                   >
-                    Date of Joining <SortIndicator field="created_at" />
+                    <span>Registration Date</span>
+                    <SortIndicator field="created_at" />
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Activities
-                  </th>
+                  <th scope="col" className="px-6 py-3.5 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
-                {suppliers.data.map((supplier) => (
-                  <tr key={supplier.id} className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4">
-                      <input
-                        type="checkbox"
-                        checked={selectedSuppliers.includes(supplier.id)}
-                        onChange={() => handleSelectSupplier(supplier.id)}
-                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      />
-                    </td>
-                    <td className="px-6 py-4">
-                      <Link href={route('admin.suppliers.show', supplier.id)} className="hover:text-indigo-600">
-                        <div className="font-medium text-gray-900">{supplier.company_name}</div>
-                        <div className="text-sm text-gray-500">{supplier.company_email}</div>
-                      </Link>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-gray-900">{supplier.user?.name || 'N/A'}</div>
-                      <div className="text-sm text-gray-500">{supplier.company_phone}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center text-sm text-gray-900">
-                        <FiMapPin className="w-4 h-4 mr-1 text-gray-400" />
-                        {supplier.city}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      {getStatusBadge(supplier.verification_status)}
-                    </td>
-                    <td className="px-6 py-4">
-                      {getActiveBadge(supplier.user?.is_active)}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center text-sm text-gray-900">
-                        <FiPackage className="w-4 h-4 mr-1 text-gray-400" />
-                        {supplier.products_count}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
-                      {new Date(supplier.created_at).toLocaleDateString('en-US')}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
+              <tbody className="divide-y divide-slate-100 text-xs">
+                {suppliers?.data?.length > 0 ? (
+                  suppliers.data.map((supplier) => (
+                    <tr key={supplier.id} className="hover:bg-slate-50/80 transition group">
+                      <td className="px-6 py-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedSuppliers.includes(supplier.id)}
+                          onChange={() => handleSelectSupplier(supplier.id)}
+                          className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                      </td>
+                      <td className="px-6 py-4">
                         <Link
                           href={route('admin.suppliers.show', supplier.id)}
-                          className="p-1 text-gray-400 hover:text-indigo-600 transition"
-                          title="for suppliers See details"
+                          className="font-semibold text-slate-900 group-hover:text-indigo-600 transition block"
                         >
-                          <FiEye className="w-5 h-5" />
+                          {supplier.company_name}
                         </Link>
-                        <Link
-                          href={route('admin.suppliers.edit', supplier.id)}
-                          className="p-1 text-gray-400 hover:text-blue-600 transition"
-                          title="editing"
-                        >
-                          <FiEdit className="w-5 h-5" />
-                        </Link>
-                        <button
-                          onClick={() => handleToggleStatus(supplier.id, supplier.user?.is_active)}
-                          className={`p-1 transition ${supplier.user?.is_active
-                            ? 'text-gray-400 hover:text-red-600'
-                            : 'text-gray-400 hover:text-green-600'
-                            }`}
-                          title={supplier.user?.is_active ? 'Disable' : 'Activate'}
-                        >
-                          {supplier.user?.is_active ? <FiXCircle className="w-5 h-5" /> : <FiCheckCircle className="w-5 h-5" />}
-                        </button>
-                        <button
-                          onClick={() => handleDelete(supplier.id, supplier.company_name)}
-                          className="p-1 text-gray-400 hover:text-red-600 transition"
-                          title="delete"
-                        >
-                          <FiTrash2 className="w-5 h-5" />
-                        </button>
+                        <span className="text-[11px] text-slate-500 font-mono">
+                          {supplier.company_email}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="font-medium text-slate-900">{supplier.user?.name || 'N/A'}</div>
+                        <div className="text-[11px] text-slate-500 font-mono mt-0.5">{supplier.company_phone || 'N/A'}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-[11px] font-medium">
+                          <FiMapPin className="w-3.5 h-3.5 text-slate-400" />
+                          <span>{supplier.city || 'India'}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        {getStatusBadge(supplier.verification_status)}
+                      </td>
+                      <td className="px-6 py-4">
+                        {getActiveBadge(supplier.user?.is_active)}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-1.5 font-mono text-slate-700">
+                          <FiPackage className="w-3.5 h-3.5 text-slate-400" />
+                          <span>{supplier.products_count || 0} SKUs</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-slate-500 font-mono">
+                        {formatIndianDate(supplier.created_at)}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <Link
+                            href={route('admin.suppliers.show', supplier.id)}
+                            className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-100 rounded-lg transition"
+                            title="View Supplier Dossier"
+                          >
+                            <FiEye className="w-4 h-4" />
+                          </Link>
+                          <Link
+                            href={route('admin.suppliers.edit', supplier.id)}
+                            className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-slate-100 rounded-lg transition"
+                            title="Edit Details"
+                          >
+                            <FiEdit className="w-4 h-4" />
+                          </Link>
+                          <button
+                            onClick={() => handleToggleStatus(supplier.id, supplier.user?.is_active)}
+                            className={`p-1.5 rounded-lg transition ${supplier.user?.is_active
+                              ? 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'
+                              : 'text-slate-400 hover:text-emerald-600 hover:bg-emerald-50'
+                              }`}
+                            title={supplier.user?.is_active ? 'Deactivate Account' : 'Activate Account'}
+                          >
+                            {supplier.user?.is_active ? <FiXCircle className="w-4 h-4" /> : <FiCheckCircle className="w-4 h-4" />}
+                          </button>
+                          <button
+                            onClick={() => handleDelete(supplier.id, supplier.company_name)}
+                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                            title="Delete Supplier"
+                          >
+                            <FiTrash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="9" className="px-6 py-12 text-center text-slate-400">
+                      <div className="flex flex-col items-center justify-center gap-2">
+                        <FiUsers className="w-8 h-8 stroke-[1.5] text-slate-300" />
+                        <p className="text-sm font-semibold text-slate-700">No suppliers found</p>
+                        <p className="text-xs text-slate-400 max-w-sm">
+                          Try adjusting your search query or removing filters to view the full directory.
+                        </p>
                       </div>
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
 
-          {/* Pagination - Navigation controls */}
-          {suppliers.links && (
-            <div className="px-6 py-4 border-t border-gray-100">
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-500">
-                  total {suppliers.total} of the {suppliers.from} from {suppliers.to} Showing
-                </p>
-                <div className="flex gap-2">
-                  {suppliers.links.map((link, index) => (
-                    <button
-                      key={index}
-                      onClick={() => router.get(link.url)}
-                      disabled={!link.url || link.active}
-                      className={`px-3 py-1 rounded-lg text-sm ${link.active
-                        ? 'bg-indigo-600 text-white'
-                        : link.url
-                          ? 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
-                          : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        }`}
-                      dangerouslySetInnerHTML={{
-                        __html: link.label
-                          .replace('Previous', 'previous')
-                          .replace('Next', 'next')
-                      }}
-                    />
-                  ))}
-                </div>
+          {/* Pagination Controls */}
+          {suppliers?.links && (
+            <div className="px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+              <p>
+                Showing {suppliers.from || 0} to {suppliers.to || 0} of {suppliers.total || 0} suppliers
+              </p>
+              <div className="flex gap-1.5">
+                {suppliers.links.map((link, index) => (
+                  <button
+                    key={index}
+                    onClick={() => router.get(link.url)}
+                    disabled={!link.url || link.active}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${link.active
+                      ? 'bg-slate-900 text-white font-semibold'
+                      : link.url
+                        ? 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                        : 'bg-slate-50 text-slate-300 cursor-not-allowed border border-slate-100'
+                      }`}
+                    dangerouslySetInnerHTML={{
+                      __html: link.label
+                        .replace('Previous', '&larr; Prev')
+                        .replace('Next', 'Next &rarr;')
+                    }}
+                  />
+                ))}
               </div>
             </div>
           )}
         </div>
 
-        {/* Filter Modal - Advanced filtering options */}
+        {/* Filter Modal */}
         {showFilterModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
-              <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-900">Supplier Filter</h3>
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+              <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+                <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <FiFilter className="w-4 h-4 text-indigo-600" />
+                  Filter Supplier Directory
+                </h3>
+                <button
+                  onClick={() => setShowFilterModal(false)}
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+                >
+                  <FiXCircle className="w-5 h-5" />
+                </button>
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-6 space-y-4 text-xs">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                     Verification Status
                   </label>
                   <select
                     value={selectedStatus}
                     onChange={(e) => setSelectedStatus(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition"
                   >
-                    <option value="">All statuses are</option>
-                    <option value="pending">Pending</option>
-                    <option value="verified">Verified</option>
-                    <option value="rejected">Rejected</option>
+                    <option value="">All Verification Statuses</option>
+                    <option value="pending">Pending Review</option>
+                    <option value="verified">Verified & KYC Approved</option>
+                    <option value="rejected">Rejected / Disqualified</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    City
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                    Manufacturing Hub / Industrial Cluster
                   </label>
                   <select
                     value={selectedCity}
                     onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition"
                   >
-                    <option value="">All cities</option>
+                    <option value="">All Industrial Hubs</option>
                     {cities.map((city) => (
                       <option key={city} value={city}>{city}</option>
                     ))}
                   </select>
                 </div>
               </div>
-              <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
+              <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2 text-xs">
                 <button
                   onClick={() => setShowFilterModal(false)}
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900"
+                  className="px-4 py-2 text-slate-600 hover:text-slate-900 font-medium rounded-xl hover:bg-slate-100 transition"
                 >
-                  cancel
+                  Cancel
                 </button>
                 <button
                   onClick={handleReset}
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg"
+                  className="px-4 py-2 text-slate-700 bg-white border border-slate-200 rounded-xl font-medium hover:bg-slate-50 transition"
                 >
                   Reset
                 </button>
                 <button
                   onClick={handleFilter}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                  className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-semibold shadow-sm transition"
                 >
                   Apply Filter
                 </button>

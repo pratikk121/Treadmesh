@@ -1,13 +1,8 @@
-// Pages/Admin/Suppliers/Show.jsx
+// resources/js/Pages/Admin/Suppliers/Show.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-
-// Layout - Admin dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
 import {
   FiArrowLeft,
   FiEdit,
@@ -23,6 +18,9 @@ import {
   FiDollarSign,
   FiUser,
   FiAward,
+  FiExternalLink,
+  FiTrendingUp,
+  FiShield
 } from 'react-icons/fi';
 import {
   MdVerified,
@@ -30,50 +28,73 @@ import {
   MdWarning,
   MdOutlineStorefront
 } from 'react-icons/md';
+import Swal from 'sweetalert2';
+import {
+  formatCurrency,
+  formatIndianScale,
+  formatIndianDate
+} from '@/Utils/formatters';
 
-export default function Show({ supplier, stats, recentOrders, recentProducts }) {
+export default function Show({ supplier = {}, stats = {}, recentOrders = [], recentProducts = [] }) {
   // State management for active tab
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value);
-  };
-
   // Handle toggle account status (activate/deactivate)
   const handleToggleStatus = () => {
-    const actionText = supplier.user.is_active ? 'deactivate' : 'activate';
-
-    if (confirm(`Are you sure you want to change this supplier's status?`)) {
-      router.patch(route('admin.suppliers.toggle-status', supplier.id));
-    }
+    const isCurrentlyActive = supplier?.user?.is_active;
+    Swal.fire({
+      title: isCurrentlyActive ? 'Deactivate Supplier Account?' : 'Activate Supplier Account?',
+      text: `Are you sure you want to ${isCurrentlyActive ? 'suspend marketplace trading for' : 're-activate'} ${supplier.company_name}?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: isCurrentlyActive ? 'Yes, deactivate' : 'Yes, activate',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.patch(route('admin.suppliers.toggle-status', supplier.id), {}, {
+          onSuccess: () => {
+            Swal.fire('Updated', 'Supplier status updated.', 'success');
+          }
+        });
+      }
+    });
   };
 
   // Handle delete supplier
   const handleDelete = () => {
-    if (confirm(`Are you sure you want to delete ${supplier.company_name}? This action cannot be undone.`)) {
-      router.delete(route('admin.suppliers.destroy', supplier.id));
-    }
+    Swal.fire({
+      title: 'Delete Supplier?',
+      text: `Are you sure you want to permanently delete ${supplier.company_name}? This will purge associated records.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete permanently',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.delete(route('admin.suppliers.destroy', supplier.id), {
+          onSuccess: () => {
+            Swal.fire('Deleted', 'Supplier record deleted.', 'success');
+          }
+        });
+      }
+    });
   };
 
   // Get verification status badge
   const getStatusBadge = (status) => {
     const badges = {
-      verified: { bg: 'bg-green-100', text: 'text-green-800', icon: MdVerified, label: 'Verified' },
-      pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: MdPending, label: 'Pending' },
-      rejected: { bg: 'bg-red-100', text: 'text-red-800', icon: MdWarning, label: 'Rejected' }
+      verified: { bg: 'bg-emerald-50 text-emerald-700 border-emerald-200/80', icon: MdVerified, label: 'Verified & KYC Approved' },
+      pending: { bg: 'bg-amber-50 text-amber-700 border-amber-200/80', icon: MdPending, label: 'KYC Pending' },
+      rejected: { bg: 'bg-rose-50 text-rose-700 border-rose-200/80', icon: MdWarning, label: 'KYC Rejected' }
     };
     const badge = badges[status] || badges.pending;
     const Icon = badge.icon;
 
     return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${badge.bg} ${badge.text}`}>
-        <Icon className="w-4 h-4 mr-1" />
+      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${badge.bg}`}>
+        <Icon className="w-4 h-4" />
         {badge.label}
       </span>
     );
@@ -81,195 +102,206 @@ export default function Show({ supplier, stats, recentOrders, recentProducts }) 
 
   return (
     <DashboardLayout>
-      <Head title={`${supplier.company_name} - Details`} />
+      <Head title={`${supplier.company_name || 'Supplier'} — Details & Dossier`} />
 
-      <div className="space-y-6">
-        {/* Header - Back button, title and action buttons */}
-        <div className="flex items-center justify-between">
+      <div className="space-y-6 max-w-[1600px] mx-auto pb-12">
+        {/* Header - Back button, title, and action buttons */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_10px_20px_-5px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.02]">
           <div className="flex items-center gap-4">
             <Link
               href={route('admin.suppliers.index')}
-              className="p-2 hover:bg-gray-100 rounded-lg transition"
+              className="p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 rounded-xl transition"
             >
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-bold text-gray-900">{supplier.company_name}</h1>
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900">{supplier.company_name}</h1>
                 {getStatusBadge(supplier.verification_status)}
               </div>
-              <p className="text-sm text-gray-600 mt-1">
-                {new Date(supplier.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} Supplier from
+              <p className="text-xs text-slate-500 mt-1">
+                Registered Make-in-India Manufacturer / Supplier since {formatIndianDate(supplier.created_at)}
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
+
+          <div className="flex flex-wrap items-center gap-2">
             <Link
               href={route('admin.suppliers.edit', supplier.id)}
-              className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
+              className="inline-flex items-center gap-2 px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 shadow-sm transition"
             >
               <FiEdit className="w-4 h-4" />
-              <span>editing</span>
+              <span>Edit Details</span>
             </Link>
             <button
               onClick={handleToggleStatus}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${supplier.user.is_active
-                ? 'bg-red-50 text-red-600 hover:bg-red-100'
-                : 'bg-green-50 text-green-600 hover:bg-green-100'
+              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${supplier?.user?.is_active
+                ? 'bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200/70'
+                : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200/70'
                 }`}
             >
-              {supplier.user.is_active ? (
+              {supplier?.user?.is_active ? (
                 <>
                   <FiXCircle className="w-4 h-4" />
-                  <span>Disable</span>
+                  <span>Suspend Account</span>
                 </>
               ) : (
                 <>
                   <FiCheckCircle className="w-4 h-4" />
-                  <span>Activate</span>
+                  <span>Activate Account</span>
                 </>
               )}
             </button>
             <button
               onClick={handleDelete}
-              className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
+              className="inline-flex items-center gap-2 px-3.5 py-2 bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200/70 rounded-xl text-xs font-semibold transition"
             >
               <FiTrash2 className="w-4 h-4" />
-              <span>delete</span>
+              <span>Delete</span>
             </button>
           </div>
         </div>
 
-        {/* Stats Cards - Key performance metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Total Products Card */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        {/* 4-Column KPI Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Total Catalog SKUs */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Total Products</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{stats.total_products}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Catalog SKUs</p>
+                <p className="text-2xl font-bold text-slate-900 mt-1.5 font-mono">{stats.total_products || 0}</p>
               </div>
-              <div className="p-3 bg-indigo-100 rounded-lg">
-                <FiPackage className="w-6 h-6 text-indigo-600" />
+              <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
+                <FiPackage className="w-6 h-6" />
               </div>
             </div>
-            <div className="mt-2 flex gap-2 text-xs">
-              <span className="text-green-600">{stats.approved_products} Approved</span>
-              <span className="text-yellow-600">{stats.pending_products} Pending</span>
+            <div className="mt-2.5 flex items-center gap-2 text-xs font-mono">
+              <span className="text-emerald-700 font-medium">{stats.approved_products || 0} Approved</span>
+              <span>•</span>
+              <span className="text-amber-700 font-medium">{stats.pending_products || 0} Pending</span>
             </div>
           </div>
 
-          {/* Total Orders Card */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          {/* Total Purchase Orders */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Total order</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{stats.total_orders}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Purchase Orders</p>
+                <p className="text-2xl font-bold text-slate-900 mt-1.5 font-mono">{stats.total_orders || 0}</p>
               </div>
-              <div className="p-3 bg-green-100 rounded-lg">
-                <FiShoppingCart className="w-6 h-6 text-green-600" />
+              <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+                <FiShoppingCart className="w-6 h-6" />
               </div>
             </div>
-            <p className="mt-2 text-xs text-green-600">{stats.completed_orders} Done</p>
+            <p className="mt-2.5 text-xs text-emerald-700 font-medium flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              {stats.completed_orders || 0} Orders Fulfilled
+            </p>
           </div>
 
-          {/* Total Revenue Card */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          {/* Gross Realized GMV */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Total income is</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{formatCurrency(stats.total_revenue)}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Gross Realized GMV</p>
+                <p className="text-2xl font-bold text-slate-900 mt-1.5 font-mono">
+                  {formatIndianScale(stats.total_revenue || 0)}
+                </p>
               </div>
-              <div className="p-3 bg-purple-100 rounded-lg">
-                <FiDollarSign className="w-6 h-6 text-purple-600" />
+              <div className="p-3 bg-violet-50 text-violet-600 rounded-xl">
+                <FiTrendingUp className="w-6 h-6" />
               </div>
             </div>
+            <p className="mt-2.5 text-xs text-slate-500 font-mono">
+              {formatCurrency(stats.total_revenue || 0)}
+            </p>
           </div>
 
-          {/* Quotes Submitted Card */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          {/* RFQ Quotes Submitted */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Quotes Submitted</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{supplier.quotes_count}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Bids / Quotes Submitted</p>
+                <p className="text-2xl font-bold text-slate-900 mt-1.5 font-mono">{supplier.quotes_count || 0}</p>
               </div>
-              <div className="p-3 bg-orange-100 rounded-lg">
-                <FiFileText className="w-6 h-6 text-orange-600" />
+              <div className="p-3 bg-amber-50 text-amber-600 rounded-xl">
+                <FiFileText className="w-6 h-6" />
               </div>
             </div>
+            <p className="mt-2.5 text-xs text-slate-500">Commercial tenders quoted</p>
           </div>
         </div>
 
-        {/* Main Content */}
+        {/* Main Content: Left Column Info + Right Column Tabs */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Company Information */}
+          {/* Left Column: Company Profile & Verification */}
           <div className="lg:col-span-1 space-y-6">
             {/* Company Details */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+              <h2 className="text-base font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <MdOutlineStorefront className="w-5 h-5 text-indigo-600" />
-                Company Details
-              </h3>
-              <div className="space-y-4">
+                Company Overview
+              </h2>
+              <div className="space-y-4 text-xs">
                 <div className="flex items-start gap-3">
-                  <FiUser className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <FiUser className="w-4 h-4 text-slate-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">Contact Person</p>
-                    <p className="font-medium text-gray-900">{supplier.user.name}</p>
+                    <p className="text-slate-400 font-medium">Primary Contact / SPOC</p>
+                    <p className="font-semibold text-slate-900 mt-0.5">{supplier.user?.name || 'N/A'}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <FiMail className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <FiMail className="w-4 h-4 text-slate-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">Email</p>
-                    <a href={`mailto:${supplier.company_email}`} className="font-medium text-indigo-600 hover:text-indigo-700">
+                    <p className="text-slate-400 font-medium">Official Email</p>
+                    <a href={`mailto:${supplier.company_email}`} className="font-mono text-indigo-600 hover:underline mt-0.5 block">
                       {supplier.company_email}
                     </a>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <FiPhone className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <FiPhone className="w-4 h-4 text-slate-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">Phone</p>
-                    <a href={`tel:${supplier.company_phone}`} className="font-medium text-gray-900 hover:text-indigo-600">
-                      {supplier.company_phone}
+                    <p className="text-slate-400 font-medium">Phone Number</p>
+                    <a href={`tel:${supplier.company_phone}`} className="font-mono text-slate-800 hover:text-indigo-600 mt-0.5 block">
+                      {supplier.company_phone || 'N/A'}
                     </a>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <FiMapPin className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <FiMapPin className="w-4 h-4 text-slate-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">Address</p>
-                    <p className="font-medium text-gray-900">{supplier.company_address}</p>
-                    <p className="text-sm text-gray-500">{supplier.city}</p>
+                    <p className="text-slate-400 font-medium">Manufacturing Hub Address</p>
+                    <p className="font-medium text-slate-900 mt-0.5">{supplier.company_address || 'N/A'}</p>
+                    <p className="text-slate-500 font-medium">{supplier.city || 'India'}</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* License Information */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            {/* License & Statutory Information */}
+            <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+              <h2 className="text-base font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <FiAward className="w-5 h-5 text-indigo-600" />
-                License Information
-              </h3>
-              <div className="space-y-3">
+                Statutory & KYC Credentials
+              </h2>
+              <div className="space-y-4 text-xs">
                 <div>
-                  <p className="text-sm text-gray-500">Trade License No.</p>
-                  <p className="font-medium text-gray-900">{supplier.trade_license_number}</p>
+                  <p className="text-slate-400 font-medium">GSTIN / Trade License Number</p>
+                  <p className="font-mono font-bold text-slate-900 mt-1">{supplier.trade_license_number || 'Pending Submission'}</p>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-500">Account Status</p>
-                  <div className="mt-1">
-                    {supplier.user.is_active ? (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        <FiCheckCircle className="w-3 h-3 mr-1" />
-                        Active account
+                <div className="pt-2 border-t border-slate-100">
+                  <p className="text-slate-400 font-medium mb-1.5">Marketplace Account State</p>
+                  <div>
+                    {supplier?.user?.is_active ? (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+                        <FiCheckCircle className="w-3 h-3" />
+                        Active & Trading
                       </span>
                     ) : (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                        <FiXCircle className="w-3 h-3 mr-1" />
-                        Inactive account
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200/70">
+                        <FiXCircle className="w-3 h-3" />
+                        Suspended Account
                       </span>
                     )}
                   </div>
@@ -278,38 +310,38 @@ export default function Show({ supplier, stats, recentOrders, recentProducts }) 
             </div>
           </div>
 
-          {/* Right Column - Tabs Content */}
+          {/* Right Column: Tabbed Activity Ledgers */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] border border-slate-200/80 overflow-hidden">
               {/* Tab Navigation */}
-              <div className="border-b border-gray-100">
-                <nav className="flex gap-4 px-6">
+              <div className="border-b border-slate-100 px-6">
+                <nav className="flex gap-6">
                   <button
                     onClick={() => setActiveTab('overview')}
-                    className={`py-4 text-sm font-medium border-b-2 transition ${activeTab === 'overview'
+                    className={`py-4 text-xs font-bold border-b-2 transition ${activeTab === 'overview'
                       ? 'border-indigo-600 text-indigo-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                      : 'border-transparent text-slate-500 hover:text-slate-800'
                       }`}
                   >
-                    Overview
+                    Overview & Activity
                   </button>
                   <button
                     onClick={() => setActiveTab('products')}
-                    className={`py-4 text-sm font-medium border-b-2 transition ${activeTab === 'products'
+                    className={`py-4 text-xs font-bold border-b-2 transition ${activeTab === 'products'
                       ? 'border-indigo-600 text-indigo-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                      : 'border-transparent text-slate-500 hover:text-slate-800'
                       }`}
                   >
-                    Product
+                    Listed SKUs ({stats.total_products || 0})
                   </button>
                   <button
                     onClick={() => setActiveTab('orders')}
-                    className={`py-4 text-sm font-medium border-b-2 transition ${activeTab === 'orders'
+                    className={`py-4 text-xs font-bold border-b-2 transition ${activeTab === 'orders'
                       ? 'border-indigo-600 text-indigo-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                      : 'border-transparent text-slate-500 hover:text-slate-800'
                       }`}
                   >
-                    Order
+                    Purchase Orders ({stats.total_orders || 0})
                   </button>
                 </nav>
               </div>
@@ -317,84 +349,114 @@ export default function Show({ supplier, stats, recentOrders, recentProducts }) 
               {/* Tab Content */}
               <div className="p-6">
                 {activeTab === 'overview' && (
-                  <div className="space-y-6">
+                  <div className="space-y-6 text-xs">
                     {/* Recent Products */}
                     <div>
-                      <div className="flex items-center justify-between mb-4">
-                        <h4 className="font-medium text-gray-900">Latest products</h4>
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="font-semibold text-slate-900 text-sm">Recently Listed SKUs</h4>
                         <Link
                           href={route('admin.products.index', { supplier_id: supplier.id })}
-                          className="text-sm text-indigo-600 hover:text-indigo-700"
+                          className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1"
                         >
-                          View All →
+                          <span>View Full Catalog</span>
+                          <FiExternalLink className="w-3 h-3" />
                         </Link>
                       </div>
-                      <div className="space-y-3">
-                        {recentProducts.map((product) => (
-                          <Link
-                            key={product.id}
-                            href={route('admin.products.show', product.id)}
-                            className="block p-3 hover:bg-gray-50 rounded-lg transition"
-                          >
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <p className="font-medium text-gray-900">{product.name}</p>
-                                <p className="text-sm text-gray-500">Category: {product.category}</p>
+                      <div className="space-y-2.5">
+                        {recentProducts.length > 0 ? (
+                          recentProducts.map((product) => (
+                            <Link
+                              key={product.id}
+                              href={route('admin.products.show', product.id)}
+                              className="block p-3.5 bg-slate-50/70 hover:bg-slate-50 rounded-xl border border-slate-100 transition group"
+                            >
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <p className="font-semibold text-slate-900 group-hover:text-indigo-600 transition">{product.name}</p>
+                                  <p className="text-[11px] text-slate-500 mt-0.5">Category: {product.category || 'General'}</p>
+                                </div>
+                                <div className="text-right">
+                                  <p className="font-mono font-bold text-slate-900">{formatCurrency(product.base_price)}</p>
+                                  <p className="text-[11px] text-slate-500 font-mono mt-0.5">Available Stock: {product.stock_quantity || 0}</p>
+                                </div>
                               </div>
-                              <div className="text-right">
-                                <p className="font-medium text-gray-900">{formatCurrency(product.base_price)}</p>
-                                <p className="text-sm text-gray-500">stock: {product.stock_quantity}</p>
-                              </div>
-                            </div>
-                          </Link>
-                        ))}
+                            </Link>
+                          ))
+                        ) : (
+                          <div className="py-6 text-center text-slate-400">
+                            No products registered yet.
+                          </div>
+                        )}
                       </div>
                     </div>
 
                     {/* Recent Orders */}
-                    <div>
-                      <div className="flex items-center justify-between mb-4">
-                        <h4 className="font-medium text-gray-900">Recent Orders</h4>
+                    <div className="pt-4 border-t border-slate-100">
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="font-semibold text-slate-900 text-sm">Recent Purchase Orders</h4>
                         <Link
                           href={route('admin.orders.index', { supplier_id: supplier.user_id })}
-                          className="text-sm text-indigo-600 hover:text-indigo-700"
+                          className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1"
                         >
-                          View All →
+                          <span>View All Orders</span>
+                          <FiExternalLink className="w-3 h-3" />
                         </Link>
                       </div>
-                      <div className="space-y-3">
-                        {recentOrders.map((order) => (
-                          <Link
-                            key={order.id}
-                            href={route('admin.orders.show', order.id)}
-                            className="block p-3 hover:bg-gray-50 rounded-lg transition"
-                          >
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <p className="font-medium text-gray-900">Order #{order.order_number}</p>
-                                <p className="text-sm text-gray-500">Buyer: {order.buyer.name}</p>
+                      <div className="space-y-2.5">
+                        {recentOrders.length > 0 ? (
+                          recentOrders.map((order) => (
+                            <Link
+                              key={order.id}
+                              href={route('admin.orders.show', order.id)}
+                              className="block p-3.5 bg-slate-50/70 hover:bg-slate-50 rounded-xl border border-slate-100 transition group"
+                            >
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <p className="font-semibold text-slate-900 group-hover:text-indigo-600 transition">
+                                    PO #{order.order_number}
+                                  </p>
+                                  <p className="text-[11px] text-slate-500 mt-0.5">Buyer: {order.buyer?.name || 'Corporate Buyer'}</p>
+                                </div>
+                                <div className="text-right">
+                                  <p className="font-mono font-bold text-slate-900">{formatCurrency(order.total_amount)}</p>
+                                  <p className="text-[11px] text-slate-500 font-mono mt-0.5">{formatIndianDate(order.created_at)}</p>
+                                </div>
                               </div>
-                              <div className="text-right">
-                                <p className="font-medium text-gray-900">{formatCurrency(order.total_amount)}</p>
-                                <p className="text-sm text-gray-500">{new Date(order.created_at).toLocaleDateString('en-US')}</p>
-                              </div>
-                            </div>
-                          </Link>
-                        ))}
+                            </Link>
+                          ))
+                        ) : (
+                          <div className="py-6 text-center text-slate-400">
+                            No purchase orders recorded yet.
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
                 )}
 
                 {activeTab === 'products' && (
-                  <div>
-                    <p className="text-gray-500">Products tab - will show the complete product list</p>
+                  <div className="py-8 text-center text-slate-500 text-xs">
+                    <p className="mb-3">Direct link to all {stats.total_products || 0} registered SKUs for {supplier.company_name}.</p>
+                    <Link
+                      href={route('admin.products.index', { supplier_id: supplier.id })}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-semibold shadow-sm transition"
+                    >
+                      <span>Open Product Catalog Filter</span>
+                      <FiExternalLink className="w-3.5 h-3.5" />
+                    </Link>
                   </div>
                 )}
 
                 {activeTab === 'orders' && (
-                  <div>
-                    <p className="text-gray-500">Orders tab - will show the complete order list</p>
+                  <div className="py-8 text-center text-slate-500 text-xs">
+                    <p className="mb-3">Direct link to all {stats.total_orders || 0} purchase orders for this supplier.</p>
+                    <Link
+                      href={route('admin.orders.index', { supplier_id: supplier.user_id })}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-semibold shadow-sm transition"
+                    >
+                      <span>Open Purchase Order Filter</span>
+                      <FiExternalLink className="w-3.5 h-3.5" />
+                    </Link>
                   </div>
                 )}
               </div>

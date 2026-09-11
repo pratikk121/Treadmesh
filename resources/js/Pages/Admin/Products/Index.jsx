@@ -6,6 +6,7 @@ import { Head, Link, router } from '@inertiajs/react';
 
 // Layout - Admin dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
+import { formatCurrency, formatIndianDate } from '@/Utils/formatters';
 
 // sweetalert - For beautiful alert messages
 import Swal from 'sweetalert2';
@@ -20,15 +21,17 @@ import {
   FiTrash2,
   FiEye,
   FiStar,
-  FiStar as FiStarFilled,
   FiMoreVertical,
-  FiAlertCircle
+  FiAlertCircle,
+  FiX,
+  FiCheckCircle,
+  FiXCircle,
 } from 'react-icons/fi';
 import {
   MdVerified,
   MdPending,
   MdWarning,
-  MdOutlineAttachMoney
+  MdOutlineCategory
 } from 'react-icons/md';
 import { BsBoxSeam, BsBuilding, BsGraphUp } from 'react-icons/bs';
 
@@ -54,17 +57,17 @@ export default function Index({ products, stats, categories, suppliers, filters 
 
   // Status options for dropdown
   const statusOptions = [
-    { value: '', label: 'All statuses are' },
+    { value: '', label: 'All Statuses' },
     { value: 'approved', label: 'Approved', color: 'green' },
-    { value: 'pending', label: 'Pending', color: 'yellow' },
+    { value: 'pending', label: 'Pending Review', color: 'yellow' },
     { value: 'rejected', label: 'Rejected', color: 'red' },
   ];
 
   // Stock status options for dropdown
   const stockStatusOptions = [
-    { value: '', label: 'All stock' },
-    { value: 'in_stock', label: '' },
-    { value: 'low_stock', label: 'Stock low (<10)' },
+    { value: '', label: 'All Inventory Levels' },
+    { value: 'in_stock', label: 'In Stock' },
+    { value: 'low_stock', label: 'Low Stock (< 10 units)' },
     { value: 'out_of_stock', label: 'Out of Stock' },
   ];
 
@@ -145,35 +148,35 @@ export default function Index({ products, stats, categories, suppliers, filters 
 
     const actionConfig = {
       approve: {
-        title: 'Multiple product approval',
-        text: `Are you sure you want to approve ${selectedProducts.length} products?`,
+        title: 'Bulk Approve Products',
+        text: `Are you sure you want to approve ${selectedProducts.length} selected products for public listing?`,
         icon: 'question',
         confirmColor: '#10B981',
         action: 'approve'
       },
       reject: {
-        title: 'Rejection of multiple products',
-        text: `Are you sure you want to reject ${selectedProducts.length} products?`,
+        title: 'Bulk Reject Products',
+        text: `Are you sure you want to reject ${selectedProducts.length} selected products?`,
         icon: 'warning',
         confirmColor: '#EF4444',
         action: 'reject'
       },
       feature: {
-        title: 'Multiple product promotions',
-        text: `Are you sure you want to promote ${selectedProducts.length} products?`,
+        title: 'Feature Selected Products',
+        text: `Are you sure you want to feature ${selectedProducts.length} products in the B2B spotlight?`,
         icon: 'question',
         confirmColor: '#8B5CF6',
         action: 'feature'
       },
       unfeature: {
-        title: 'Cancel multiple product promotions',
-        text: `Are you sure you want to unpromote ${selectedProducts.length} products?`,
+        title: 'Unfeature Selected Products',
+        text: `Are you sure you want to remove ${selectedProducts.length} products from the spotlight?`,
         icon: 'question',
         confirmColor: '#6B7280',
         action: 'unfeature'
       },
       delete: {
-        title: 'Delete multiple products',
+        title: 'Bulk Delete Products',
         text: `Are you sure you want to remove ${selectedProducts.length} products? This action cannot be undone.`,
         icon: 'warning',
         confirmColor: '#EF4444',
@@ -190,7 +193,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
       showCancelButton: true,
       confirmButtonColor: config.confirmColor,
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'Yes, continue',
+      confirmButtonText: 'Yes, proceed',
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -202,8 +205,8 @@ export default function Index({ products, stats, categories, suppliers, filters 
             setSelectedProducts([]);
             setBulkActionMenu(false);
             Swal.fire({
-              title: 'successful!',
-              text: `to start sending messages Multiple operations completed successfully.`,
+              title: 'Success!',
+              text: 'The selected products have been updated successfully.',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -217,13 +220,13 @@ export default function Index({ products, stats, categories, suppliers, filters 
   // Handle delete single product
   const handleDelete = (product) => {
     Swal.fire({
-      title: 'Delete product',
+      title: 'Delete Product Listing',
       text: `Are you sure you want to delete "${product.name}"? This action cannot be undone.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'Yes, delete',
+      confirmButtonText: 'Yes, Delete',
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -231,7 +234,7 @@ export default function Index({ products, stats, categories, suppliers, filters 
           onSuccess: () => {
             Swal.fire({
               title: 'Deleted!',
-              text: 'The product has been deleted.',
+              text: 'The product listing has been deleted from catalog.',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -247,8 +250,8 @@ export default function Index({ products, stats, categories, suppliers, filters 
     router.patch(route('admin.products.toggle-featured', product.id), {}, {
       onSuccess: () => {
         Swal.fire({
-          title: 'successful!',
-          text: `The product is ${product.is_featured ? 'Unpublished' : 'Promoted'} marked as.`,
+          title: 'Success!',
+          text: `Product ${product.is_featured ? 'removed from spotlight' : 'marked as featured'}.`,
           icon: 'success',
           timer: 1500,
           showConfirmButton: false
@@ -269,38 +272,20 @@ export default function Index({ products, stats, categories, suppliers, filters 
   // Sort indicator component for table headers
   const SortIndicator = ({ field }) => {
     if (sortField !== field) return null;
-    return <span className="ml-1">{sortDirection === 'asc' ? '↑' : '↓'}</span>;
-  };
-
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
-
-  // Format date - Converts ISO date to readable format
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    return <span className="ml-1 text-indigo-600 font-bold">{sortDirection === 'asc' ? '↑' : '↓'}</span>;
   };
 
   // Get status badge with appropriate styling
   const getStatusBadge = (status) => {
     const badges = {
-      approved: { color: 'bg-green-100 text-green-800', icon: MdVerified, label: 'Approved' },
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'Pending' },
-      rejected: { color: 'bg-red-100 text-red-800', icon: MdWarning, label: 'Rejected' },
+      approved: { color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: MdVerified, label: 'Approved' },
+      pending: { color: 'bg-amber-50 text-amber-700 border-amber-200', icon: MdPending, label: 'Pending Review' },
+      rejected: { color: 'bg-rose-50 text-rose-700 border-rose-200', icon: MdWarning, label: 'Rejected' },
     };
     const badge = badges[status] || badges.pending;
     const Icon = badge.icon;
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge.color}`}>
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${badge.color}`}>
         <Icon className="w-3 h-3 mr-1" />
         {badge.label}
       </span>
@@ -321,106 +306,117 @@ export default function Index({ products, stats, categories, suppliers, filters 
 
   return (
     <DashboardLayout>
-      <Head title="Product Management" />
+      <Head title="Product Catalog Management - Treadmesh Admin" />
 
       <div className="space-y-6">
         {/* Header - Page title and action buttons */}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Product Management</h1>
-            <p className="text-sm text-gray-600 mt-1">
-              Manage and monitor all products in the marketplace
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                Master Catalog
+              </span>
+              <span className="text-xs text-gray-400">•</span>
+              <span className="text-xs text-gray-500 font-medium">B2B Wholesale SKUs</span>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mt-1">Product Catalog Management</h1>
+            <p className="text-sm text-gray-500 mt-0.5">
+              Supervise all catalog items, vendor pricing tiers, and real-time inventory counts across India.
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <button
               onClick={handleExport}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-xl border border-gray-200 transition shadow-sm"
             >
-              <FiDownload className="w-4 h-4" />
-              <span>Export</span>
+              <FiDownload className="w-4 h-4 text-gray-500" />
+              <span>Export CSV</span>
             </button>
             <Link
               href={route('admin.products.statistics')}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-900 hover:bg-black text-white text-sm font-semibold rounded-xl transition shadow-sm"
             >
-              <BsGraphUp className="w-4 h-4" />
-              <span>Statistics</span>
+              <BsGraphUp className="w-4 h-4 text-emerald-400" />
+              <span>Catalog Analytics</span>
             </Link>
           </div>
         </div>
 
         {/* Stats Cards - Key metrics overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:border-gray-200 transition">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Total Products</p>
-                <p className="text-2xl font-bold text-indigo-600 mt-1">{stats.total}</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Products</p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">{Number(stats.total || 0).toLocaleString('en-IN')}</p>
+                <p className="text-xs text-gray-400 mt-1">Total catalog SKUs</p>
               </div>
-              <div className="p-3 bg-indigo-100 rounded-lg">
+              <div className="p-3 bg-indigo-50 rounded-xl border border-indigo-100">
                 <FiPackage className="w-6 h-6 text-indigo-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:border-gray-200 transition">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Total stock value is</p>
-                <p className="text-2xl font-bold text-green-600 mt-1">{formatCurrency(stats.total_value)}</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Inventory Value</p>
+                <p className="text-2xl font-bold text-emerald-600 mt-1">{formatCurrency(stats.total_value || 0)}</p>
+                <p className="text-xs text-gray-400 mt-1">Cumulative wholesale valuation</p>
               </div>
-              <div className="p-3 bg-green-100 rounded-lg">
-                <MdOutlineAttachMoney className="w-6 h-6 text-green-600" />
+              <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                <span className="text-xl font-bold text-emerald-600">₹</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:border-gray-200 transition">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Approved</p>
-                <p className="text-2xl font-bold text-green-600 mt-1">{stats.approved}</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Live & Approved</p>
+                <p className="text-2xl font-bold text-indigo-600 mt-1">{Number(stats.approved || 0).toLocaleString('en-IN')}</p>
+                <p className="text-xs text-gray-400 mt-1">Active on marketplace</p>
               </div>
-              <div className="p-3 bg-green-100 rounded-lg">
-                <MdVerified className="w-6 h-6 text-green-600" />
+              <div className="p-3 bg-indigo-50 rounded-xl border border-indigo-100">
+                <MdVerified className="w-6 h-6 text-indigo-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:border-gray-200 transition">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Out of Stock</p>
-                <p className="text-2xl font-bold text-red-600 mt-1">{stats.out_of_stock}</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Out of Stock</p>
+                <p className="text-2xl font-bold text-rose-600 mt-1">{Number(stats.out_of_stock || 0).toLocaleString('en-IN')}</p>
+                <p className="text-xs text-gray-400 mt-1">Requires vendor restock</p>
               </div>
-              <div className="p-3 bg-red-100 rounded-lg">
-                <FiAlertCircle className="w-6 h-6 text-red-600" />
+              <div className="p-3 bg-rose-50 rounded-xl border border-rose-100">
+                <FiAlertCircle className="w-6 h-6 text-rose-600" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Search and Filter Bar - Main search and filter controls */}
+        {/* Search and Filter Bar */}
         <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3">
             <form onSubmit={handleSearch} className="flex-1">
               <div className="relative">
-                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <FiSearch className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search by product name, description or supplier..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Search by product name, SKU, category, or vendor..."
+                  className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
             </form>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
               >
                 {statusOptions.map(option => (
                   <option key={option.value} value={option.value}>{option.label}</option>
@@ -428,12 +424,12 @@ export default function Index({ products, stats, categories, suppliers, filters 
               </select>
               <button
                 onClick={() => setShowFilterModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm font-medium rounded-lg border border-gray-200 transition"
               >
-                <FiFilter className="w-4 h-4" />
+                <FiFilter className="w-4 h-4 text-gray-500" />
                 <span>Filter</span>
                 {activeFilterCount > 0 && (
-                  <span className="ml-1 px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-xs">
+                  <span className="ml-1 px-2 py-0.5 bg-indigo-600 text-white rounded-full text-xs font-semibold">
                     {activeFilterCount}
                   </span>
                 )}
@@ -441,61 +437,67 @@ export default function Index({ products, stats, categories, suppliers, filters 
               {activeFilterCount > 0 && (
                 <button
                   onClick={handleReset}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-900"
+                  className="inline-flex items-center gap-1 px-3 py-2 text-sm text-gray-500 hover:text-gray-700 transition"
                 >
-                  delete
+                  <FiX className="w-4 h-4" />
+                  <span>Clear Filters</span>
                 </button>
               )}
             </div>
           </div>
 
-          {/* Bulk Actions - Show when products are selected */}
+          {/* Bulk Actions Menu */}
           {selectedProducts.length > 0 && (
-            <div className="mt-4 flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
-              <span className="text-sm font-medium text-indigo-700">
-                {selectedProducts.length} products selected
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 p-3 bg-indigo-50/70 border border-indigo-100 rounded-xl">
+              <span className="text-sm font-semibold text-indigo-900">
+                {selectedProducts.length} product(s) selected
               </span>
               <div className="relative">
                 <button
                   onClick={() => setBulkActionMenu(!bulkActionMenu)}
-                  className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-sm transition"
                 >
                   <FiMoreVertical className="w-4 h-4" />
-                  Bulk Actions
+                  <span>Bulk Actions</span>
                 </button>
                 {bulkActionMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border z-10">
+                  <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl py-1.5 border border-gray-100 z-20">
                     <button
                       onClick={() => handleBulkAction('approve')}
-                      className="block w-full text-left px-4 py-2 text-sm text-green-600 hover:bg-gray-100"
+                      className="flex items-center gap-2 w-full text-left px-4 py-2 text-xs font-medium text-emerald-700 hover:bg-emerald-50 transition"
                     >
-                      Selected authorization
+                      <FiCheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Approve Selected</span>
                     </button>
                     <button
                       onClick={() => handleBulkAction('reject')}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                      className="flex items-center gap-2 w-full text-left px-4 py-2 text-xs font-medium text-rose-700 hover:bg-rose-50 transition"
                     >
-                      Selected Reject
+                      <FiXCircle className="w-3.5 h-3.5 text-rose-600" />
+                      <span>Reject Selected</span>
                     </button>
-                    <div className="border-t my-1"></div>
+                    <div className="border-t border-gray-100 my-1"></div>
                     <button
                       onClick={() => handleBulkAction('feature')}
-                      className="block w-full text-left px-4 py-2 text-sm text-purple-600 hover:bg-gray-100"
+                      className="flex items-center gap-2 w-full text-left px-4 py-2 text-xs font-medium text-purple-700 hover:bg-purple-50 transition"
                     >
-                      Marked as promoted
+                      <FiStar className="w-3.5 h-3.5 text-purple-600" />
+                      <span>Feature in Spotlight</span>
                     </button>
                     <button
                       onClick={() => handleBulkAction('unfeature')}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-100"
+                      className="flex items-center gap-2 w-full text-left px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 transition"
                     >
-                      Remove the promoted symbol
+                      <FiStar className="w-3.5 h-3.5 text-gray-400" />
+                      <span>Remove from Spotlight</span>
                     </button>
-                    <div className="border-t my-1"></div>
+                    <div className="border-t border-gray-100 my-1"></div>
                     <button
                       onClick={() => handleBulkAction('delete')}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                      className="flex items-center gap-2 w-full text-left px-4 py-2 text-xs font-medium text-rose-700 hover:bg-rose-50 transition"
                     >
-                      Delete selected
+                      <FiTrash2 className="w-3.5 h-3.5 text-rose-600" />
+                      <span>Delete Selected</span>
                     </button>
                   </div>
                 )}
@@ -504,13 +506,13 @@ export default function Index({ products, stats, categories, suppliers, filters 
           )}
         </div>
 
-        {/* Products Table - Main data table */}
+        {/* Products Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
+            <table className="w-full text-left border-collapse">
+              <thead className="bg-gray-50/75 border-b border-gray-100">
                 <tr>
-                  <th className="px-6 py-3 text-left">
+                  <th className="px-5 py-3.5 w-10">
                     <input
                       type="checkbox"
                       checked={selectedProducts.length === products.data.length && products.data.length > 0}
@@ -519,182 +521,198 @@ export default function Index({ products, stats, categories, suppliers, filters 
                     />
                   </th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    className="px-5 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-900 transition"
                     onClick={() => handleSort('name')}
                   >
                     Product <SortIndicator field="name" />
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Supplier
+                  <th className="px-5 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Supplier / Hub
                   </th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    className="px-5 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-900 transition"
                     onClick={() => handleSort('category')}
                   >
                     Category <SortIndicator field="category" />
                   </th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    className="px-5 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-900 transition"
                     onClick={() => handleSort('base_price')}
                   >
-                    Price <SortIndicator field="base_price" />
+                    Base Price <SortIndicator field="base_price" />
                   </th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    className="px-5 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-900 transition"
                     onClick={() => handleSort('stock_quantity')}
                   >
                     Stock <SortIndicator field="stock_quantity" />
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-5 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Promoted
+                  <th className="px-5 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Featured
                   </th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    className="px-5 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-900 transition"
                     onClick={() => handleSort('created_at')}
                   >
-                    Creation Date <SortIndicator field="created_at" />
+                    Listing Date <SortIndicator field="created_at" />
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Activities
+                  <th className="px-5 py-3.5 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
-                {products.data.map((product) => (
-                  <tr key={product.id} className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4">
-                      <input
-                        type="checkbox"
-                        checked={selectedProducts.includes(product.id)}
-                        onChange={() => handleSelectProduct(product.id)}
-                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      />
-                    </td>
-                    <td className="px-6 py-4">
-                      <Link href={route('admin.products.show', product.id)} className="hover:text-indigo-600">
-                        <div className="flex items-center gap-3">
+              <tbody className="divide-y divide-gray-100 text-sm">
+                {products.data && products.data.length > 0 ? (
+                  products.data.map((product) => (
+                    <tr key={product.id} className="hover:bg-gray-50/70 transition">
+                      <td className="px-5 py-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedProducts.includes(product.id)}
+                          onChange={() => handleSelectProduct(product.id)}
+                          className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                      </td>
+                      <td className="px-5 py-4">
+                        <Link href={route('admin.products.show', product.id)} className="group flex items-center gap-3">
                           {product.main_image ? (
                             <img
-                              src={product.main_image ? `/storage/${product.main_image}` : NoImg}
+                              src={product.main_image.startsWith('http') || product.main_image.startsWith('/') ? product.main_image : `/storage/${product.main_image}`}
                               alt={product.name}
-                              className="w-10 h-10 rounded-lg object-cover"
+                              className="w-10 h-10 rounded-lg object-cover border border-gray-200"
                               onError={(e) => {
                                 e.target.onerror = null;
                                 e.target.src = NoImg;
                               }}
                             />
                           ) : (
-                            <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center border border-gray-200">
                               <BsBoxSeam className="w-5 h-5 text-gray-400" />
                             </div>
                           )}
                           <div>
-                            <div className="font-medium text-gray-900">{product.name}</div>
-                            <div className="text-xs text-gray-500">Minimum Order: {product.minimum_order_quantity} {product.unit}</div>
+                            <div className="font-semibold text-gray-900 group-hover:text-indigo-600 transition">
+                              {product.name}
+                            </div>
+                            <div className="text-xs text-gray-500 mt-0.5">
+                              MOQ: {product.minimum_order_quantity} {product.unit}
+                            </div>
+                          </div>
+                        </Link>
+                      </td>
+                      <td className="px-5 py-4">
+                        <div className="flex items-start gap-2">
+                          <BsBuilding className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                          <div>
+                            <div className="font-medium text-gray-900">{product.supplier?.company_name || 'N/A'}</div>
+                            <div className="text-xs text-gray-500">{product.supplier?.city || product.supplier?.user?.email}</div>
                           </div>
                         </div>
-                      </Link>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <BsBuilding className="w-4 h-4 text-gray-400" />
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">{product.supplier?.company_name}</div>
-                          <div className="text-xs text-gray-500">{product.supplier?.user?.email}</div>
+                      </td>
+                      <td className="px-5 py-4">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
+                          {product.category}
+                        </span>
+                      </td>
+                      <td className="px-5 py-4">
+                        <div className="font-semibold text-gray-900">{formatCurrency(product.base_price)}</div>
+                        <span className="text-[11px] text-gray-400">/ {product.unit}</span>
+                      </td>
+                      <td className="px-5 py-4">
+                        <div className="flex items-center">
+                          <div className={`w-2 h-2 rounded-full mr-2 ${product.stock_quantity > 0
+                            ? product.stock_quantity < 10
+                              ? 'bg-amber-500'
+                              : 'bg-emerald-500'
+                            : 'bg-rose-500'
+                            }`} />
+                          <span className="font-medium text-gray-900">
+                            {Number(product.stock_quantity || 0).toLocaleString('en-IN')}
+                          </span>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {product.category}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-gray-900">{formatCurrency(product.base_price)}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center">
-                        <div className={`w-2 h-2 rounded-full mr-2 ${product.stock_quantity > 0
-                          ? product.stock_quantity < 10
-                            ? 'bg-yellow-500'
-                            : 'bg-green-500'
-                          : 'bg-red-500'
-                          }`} />
-                        <span className="text-sm text-gray-900">{product.stock_quantity || 0}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      {getStatusBadge(product.status)}
-                    </td>
-                    <td className="px-6 py-4">
-                      <button
-                        onClick={() => handleToggleFeatured(product)}
-                        className={`p-1 rounded-full hover:bg-gray-100 transition ${product.is_featured ? 'text-yellow-500' : 'text-gray-400'
-                          }`}
-                      >
-                        {product.is_featured ? <FiStarFilled className="w-5 h-5" /> : <FiStar className="w-5 h-5" />}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-gray-500">{formatDate(product.created_at)}</div>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link
-                          href={route('admin.products.edit', product.id)}
-                          className="p-1 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                          title="editing"
-                        >
-                          <FiEdit2 className="w-4 h-4" />
-                        </Link>
-                        <Link
-                          href={route('admin.products.show', product.id)}
-                          className="p-1 text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
-                          title="See"
-                        >
-                          <FiEye className="w-4 h-4" />
-                        </Link>
+                      </td>
+                      <td className="px-5 py-4">
+                        {getStatusBadge(product.status)}
+                      </td>
+                      <td className="px-5 py-4">
                         <button
-                          onClick={() => handleDelete(product)}
-                          className="p-1 text-red-600 hover:bg-red-50 rounded-lg transition"
-                          title="delete"
+                          onClick={() => handleToggleFeatured(product)}
+                          className={`p-1.5 rounded-lg transition ${product.is_featured ? 'text-amber-500 bg-amber-50' : 'text-gray-400 hover:bg-gray-100'
+                            }`}
+                          title={product.is_featured ? 'Remove from spotlight' : 'Feature in spotlight'}
                         >
-                          <FiTrash2 className="w-4 h-4" />
+                          <FiStar className={`w-4 h-4 ${product.is_featured ? 'fill-current' : ''}`} />
                         </button>
+                      </td>
+                      <td className="px-5 py-4 text-xs text-gray-500">
+                        {formatIndianDate(product.created_at)}
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <Link
+                            href={route('admin.products.edit', product.id)}
+                            className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
+                            title="Edit Product"
+                          >
+                            <FiEdit2 className="w-4 h-4" />
+                          </Link>
+                          <Link
+                            href={route('admin.products.show', product.id)}
+                            className="p-1.5 text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                            title="View Details"
+                          >
+                            <FiEye className="w-4 h-4" />
+                          </Link>
+                          <button
+                            onClick={() => handleDelete(product)}
+                            className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                            title="Delete Product"
+                          >
+                            <FiTrash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="10" className="px-6 py-12 text-center text-gray-500">
+                      <div className="flex flex-col items-center justify-center">
+                        <BsBoxSeam className="w-12 h-12 text-gray-300 mb-3" />
+                        <p className="text-base font-medium text-gray-900">No products found</p>
+                        <p className="text-xs text-gray-500 mt-1">Try refining your search terms or filter criteria.</p>
                       </div>
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
 
-          {/* Pagination - Navigation controls */}
-          {products.links && (
-            <div className="px-6 py-4 border-t border-gray-100">
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-500">
-                  total {products.total} of the {products.from} from {products.to} Showing
+          {/* Pagination */}
+          {products.links && products.links.length > 3 && (
+            <div className="px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p className="text-xs text-gray-500">
+                  Showing <span className="font-semibold text-gray-900">{products.from || 0}</span> to <span className="font-semibold text-gray-900">{products.to || 0}</span> of <span className="font-semibold text-gray-900">{products.total || 0}</span> products
                 </p>
-                <div className="flex gap-2">
+                <div className="flex gap-1">
                   {products.links.map((link, index) => (
                     <button
                       key={index}
-                      onClick={() => router.get(link.url)}
+                      onClick={() => link.url && router.get(link.url)}
                       disabled={!link.url || link.active}
-                      className={`px-3 py-1 rounded-lg text-sm ${link.active
-                        ? 'bg-indigo-600 text-white'
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${link.active
+                        ? 'bg-gray-900 text-white'
                         : link.url
-                          ? 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
+                          ? 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
                           : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                         }`}
                       dangerouslySetInnerHTML={{
                         __html: link.label
-                          .replace('Previous', 'previous')
-                          .replace('Next', 'next')
                       }}
                     />
                   ))}
@@ -704,23 +722,32 @@ export default function Index({ products, stats, categories, suppliers, filters 
           )}
         </div>
 
-        {/* Filter Modal - Advanced filtering options */}
+        {/* Filter Modal */}
         {showFilterModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-900">Advanced filter</h3>
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl max-h-[90vh] overflow-y-auto border border-gray-100">
+              <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">Filter Catalog</h3>
+                  <p className="text-xs text-gray-500 mt-0.5">Filter items by category, vendor, inventory status, and price.</p>
+                </div>
+                <button
+                  onClick={() => setShowFilterModal(false)}
+                  className="p-2 text-gray-400 hover:text-gray-600 rounded-lg transition"
+                >
+                  <FiX className="w-5 h-5" />
+                </button>
               </div>
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
                       Category
                     </label>
                     <select
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
                       <option value="">All Categories</option>
                       {categories.map((category) => (
@@ -729,15 +756,15 @@ export default function Index({ products, stats, categories, suppliers, filters 
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Supplier
+                    <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                      Supplier / Manufacturer
                     </label>
                     <select
                       value={selectedSupplier}
                       onChange={(e) => setSelectedSupplier(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
-                      <option value="">All suppliers</option>
+                      <option value="">All Suppliers</option>
                       {suppliers.map((supplier) => (
                         <option key={supplier.id} value={supplier.id}>{supplier.company_name}</option>
                       ))}
@@ -746,13 +773,13 @@ export default function Index({ products, stats, categories, suppliers, filters 
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Stock status
+                  <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                    Inventory Status
                   </label>
                   <select
                     value={selectedStockStatus}
                     onChange={(e) => setSelectedStockStatus(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     {stockStatusOptions.map(option => (
                       <option key={option.value} value={option.value}>{option.label}</option>
@@ -761,69 +788,73 @@ export default function Index({ products, stats, categories, suppliers, filters 
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Date range
+                  <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                    Listing Date Range
                   </label>
                   <div className="grid grid-cols-2 gap-2">
-                    <input
-                      type="date"
-                      value={dateFrom}
-                      onChange={(e) => setDateFrom(e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="from"
-                    />
-                    <input
-                      type="date"
-                      value={dateTo}
-                      onChange={(e) => setDateTo(e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="up to"
-                    />
+                    <div>
+                      <input
+                        type="date"
+                        value={dateFrom}
+                        onChange={(e) => setDateFrom(e.target.value)}
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                      <span className="text-[11px] text-gray-400 mt-1 block">From Date</span>
+                    </div>
+                    <div>
+                      <input
+                        type="date"
+                        value={dateTo}
+                        onChange={(e) => setDateTo(e.target.value)}
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                      <span className="text-[11px] text-gray-400 mt-1 block">To Date</span>
+                    </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Price range ($)
+                  <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                    Price Range (₹)
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
                       value={minPrice}
                       onChange={(e) => setMinPrice(e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="Lowest Price"
+                      className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      placeholder="Min Price (₹)"
                       min="0"
                     />
                     <input
                       type="number"
                       value={maxPrice}
                       onChange={(e) => setMaxPrice(e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="Maximum price"
+                      className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      placeholder="Max Price (₹)"
                       min="0"
                     />
                   </div>
                 </div>
               </div>
-              <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
-                <button
-                  onClick={() => setShowFilterModal(false)}
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900"
-                >
-                  cancel
-                </button>
+              <div className="p-6 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50/50">
                 <button
                   onClick={handleReset}
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg"
+                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 bg-white rounded-lg transition"
                 >
                   Reset
                 </button>
                 <button
-                  onClick={handleFilter}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                  onClick={() => setShowFilterModal(false)}
+                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 transition"
                 >
-                  Apply Filter
+                  Cancel
+                </button>
+                <button
+                  onClick={handleFilter}
+                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-sm transition"
+                >
+                  Apply Filters
                 </button>
               </div>
             </div>
