@@ -1,13 +1,12 @@
-// Pages/Supplier/Rfqs/CreateQuote.jsx
+// resources/js/Pages/Supplier/Rfqs/CreateQuote.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-
-// Layout - Supplier dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
+import {
+  formatCurrency,
+  formatIndianDate
+} from '@/Utils/formatters';
 import {
   FiArrowLeft,
   FiSave,
@@ -15,15 +14,18 @@ import {
   FiPlus,
   FiTrash2,
   FiPackage,
-  FiAlertCircle
+  FiAlertCircle,
+  FiClock,
+  FiDollarSign,
+  FiLayers,
+  FiShield,
+  FiSend
 } from 'react-icons/fi';
 import Swal from 'sweetalert2';
 
 export default function CreateQuote({ rfq, products, requestedProducts }) {
-  // State management for selected products
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-  // Inertia form handling
   const { data, setData, post, processing, errors } = useForm({
     total_amount: 0,
     valid_until: '',
@@ -33,17 +35,6 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
     payment_terms: ''
   });
 
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value);
-  };
-
-  // Add product to breakdown
   const addProduct = (product) => {
     const exists = selectedProducts.find(p => p.id === product.id);
     if (exists) return;
@@ -61,53 +52,57 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
     updateTotal(newSelected);
   };
 
-  // Update product in breakdown
   const updateProduct = (index, field, value) => {
     const updated = [...selectedProducts];
     updated[index][field] = value;
-
-    // Recalculate total price
-    updated[index].total_price = updated[index].quantity * updated[index].unit_price;
+    updated[index].total_price = (updated[index].quantity || 0) * (updated[index].unit_price || 0);
 
     setSelectedProducts(updated);
     updateTotal(updated);
   };
 
-  // Remove product from breakdown
   const removeProduct = (index) => {
     const updated = selectedProducts.filter((_, i) => i !== index);
     setSelectedProducts(updated);
     updateTotal(updated);
   };
 
-  // Update total amount
   const updateTotal = (products) => {
-    const total = products.reduce((sum, p) => sum + p.total_price, 0);
+    const total = products.reduce((sum, p) => sum + (Number(p.total_price) || 0), 0);
     setData('total_amount', total);
     setData('product_breakdown', products);
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (selectedProducts.length === 0) {
       Swal.fire({
         icon: "warning",
-        title: "Add product",
-        text: "Please add at least one product to your quote",
+        title: "Product Required",
+        text: "Please add at least one line item to your quotation.",
+        confirmButtonText: "OK"
+      });
+      return;
+    }
+
+    if (!data.valid_until) {
+      Swal.fire({
+        icon: "warning",
+        title: "Validity Required",
+        text: "Please set the validity expiration date for this quotation.",
         confirmButtonText: "OK"
       });
       return;
     }
 
     Swal.fire({
-      title: "Are you sure?",
-      text: "Are you sure you want to submit this quote?",
+      title: "Submit Commercial Quotation?",
+      text: `Are you sure you want to submit this quotation for ${formatCurrency(data.total_amount)} to the buyer?`,
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "Yes, submit",
-      cancelButtonText: "No",
+      confirmButtonText: "Yes, Submit Quotation",
+      cancelButtonText: "Cancel",
       confirmButtonColor: "#16a34a"
     }).then((result) => {
       if (result.isConfirmed) {
@@ -115,15 +110,17 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
           onSuccess: () => {
             Swal.fire({
               icon: "success",
-              title: 'Success',
-              text: "Quote successfully submitted"
+              title: "Quotation Submitted",
+              text: "Your formal bid has been transmitted to the buyer.",
+              timer: 2000,
+              showConfirmButton: false
             });
           },
           onError: () => {
             Swal.fire({
               icon: "error",
-              title: "Error",
-              text: "Quote could not be submitted"
+              title: "Submission Error",
+              text: "Could not submit quotation. Please check highlighted fields."
             });
           }
         });
@@ -131,278 +128,294 @@ export default function CreateQuote({ rfq, products, requestedProducts }) {
     });
   };
 
-  // Set minimum valid until date (tomorrow)
   const minValidUntil = new Date();
   minValidUntil.setDate(minValidUntil.getDate() + 1);
   const minValidUntilStr = minValidUntil.toISOString().split('T')[0];
 
   return (
     <DashboardLayout>
-      <Head title={`RFQ #${rfq.rfq_number} - Create Quote`} />
+      <Head title={`Submit Quotation - RFQ #${rfq.rfq_number}`} />
 
       <div className="space-y-6">
-        {/* Header - Back button, title and action buttons */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
           <div className="flex items-center gap-4">
             <Link
               href={route('supplier.rfqs.show', rfq.id)}
-              className="p-2 hover:bg-gray-100 rounded-lg"
+              className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-colors"
+              title="Back to Tender"
             >
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Create Quote</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                RFQ: {rfq.rfq_number} - {rfq.title} -for
-              </p>
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                  Tender #{rfq.rfq_number}
+                </span>
+                <span className="text-xs text-slate-400">· {rfq.title}</span>
+              </div>
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                Prepare Commercial Quotation
+              </h1>
             </div>
           </div>
-          <div className="flex gap-2">
+
+          <div className="flex items-center gap-2.5">
             <Link
               href={route('supplier.rfqs.show', rfq.id)}
-              className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
+              className="px-4 py-2 border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
             >
-              <FiX className="w-4 h-4" />
-              <span>cancel</span>
+              Cancel
             </Link>
             <button
               onClick={handleSubmit}
               disabled={processing || selectedProducts.length === 0}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow-xs transition-colors disabled:opacity-50"
             >
-              <FiSave className="w-4 h-4" />
-              <span>{processing ? 'Submitting...' : 'Submit Quote'}</span>
+              <FiSend className="w-3.5 h-3.5" />
+              <span>{processing ? 'Submitting Quotation...' : 'Submit Quotation'}</span>
             </button>
           </div>
         </div>
 
+        {/* Main Layout */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Main Content - Product Selection */}
+            {/* Left 2 Cols: Products & Itemization */}
             <div className="lg:col-span-2 space-y-6">
-              {/* RFQ Info Summary */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">RFQ Summary</h2>
-                <div className="grid grid-cols-2 gap-4">
+              {/* Tender Scope Summary */}
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-3">
+                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+                  Buyer Scope of Work & Deliverables
+                </h2>
+                <div className="grid grid-cols-2 gap-4 text-xs">
                   <div>
-                    <p className="text-sm text-gray-500">Estimated RFQ Total:</p>
-                    <p className="font-bold text-gray-900">{rfq.quantity}</p>
+                    <span className="text-slate-500 block">Required Delivery Date</span>
+                    <span className="font-bold text-slate-800 font-mono mt-0.5 block">
+                      {formatIndianDate(rfq.required_by_date)}
+                    </span>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Required date</p>
-                    <p className="font-medium text-gray-900">
-                      {new Date(rfq.required_by_date).toLocaleDateString('en-US')}
-                    </p>
+                    <span className="text-slate-500 block">Requested Total Volume</span>
+                    <span className="font-bold text-slate-800 font-mono mt-0.5 block">
+                      {rfq.quantity || 'Specified in Line Items'}
+                    </span>
                   </div>
                 </div>
-              </div>
 
-              {/* Product Selection */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Product Selection</h2>
-
-                {/* Requested Products Suggestions */}
                 {requestedProducts.length > 0 && (
-                  <div className="mb-4">
-                    <p className="text-sm font-medium text-gray-700 mb-2">Buyer request:</p>
-                    <div className="flex flex-wrap gap-2">
+                  <div className="pt-2 border-t border-slate-100">
+                    <span className="text-xs text-slate-500 block mb-1.5 font-medium">Buyer Requested Categories:</span>
+                    <div className="flex flex-wrap gap-1.5">
                       {requestedProducts.map((item, index) => (
-                        <span key={index} className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm">
+                        <span key={index} className="text-xs px-2.5 py-1 bg-indigo-50 text-indigo-700 font-medium rounded-lg">
                           {item.category || item.name}
                         </span>
                       ))}
                     </div>
                   </div>
                 )}
+              </div>
 
-                {/* Available Products */}
-                <div className="space-y-3">
-                  <p className="text-sm font-medium text-gray-700">your product:</p>
-                  {products.map((product) => (
-                    <div
-                      key={product.id}
-                      className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-indigo-200 transition"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-lg flex items-center justify-center">
-                          <FiPackage className="w-5 h-5 text-indigo-600" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">{product.name}</p>
-                          <p className="text-sm text-gray-500">
-                            Original price: {formatCurrency(product.base_price)} | Minimum Order: {product.minimum_order_quantity} {product.unit}
+              {/* Add Products from Catalog */}
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                    <FiPackage className="w-4 h-4 text-indigo-600" />
+                    Select from Your Verified Catalog
+                  </h2>
+                  <span className="text-xs text-slate-400">
+                    {products.length} Products Available
+                  </span>
+                </div>
+
+                <div className="divide-y divide-slate-100 max-h-72 overflow-y-auto pr-1">
+                  {products.map((product) => {
+                    const isAdded = selectedProducts.some(p => p.id === product.id);
+                    return (
+                      <div
+                        key={product.id}
+                        className="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-4"
+                      >
+                        <div className="space-y-0.5">
+                          <p className="font-bold text-slate-900 text-xs">{product.name}</p>
+                          <p className="text-[11px] text-slate-500">
+                            Base: <strong className="text-indigo-600 font-mono">{formatCurrency(product.base_price)}</strong>/{product.unit || 'unit'} · MOQ: {product.minimum_order_quantity || 1}
                           </p>
                         </div>
+                        <button
+                          type="button"
+                          onClick={() => addProduct(product)}
+                          disabled={isAdded}
+                          className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors flex items-center gap-1 ${
+                            isAdded
+                              ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                              : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700'
+                          }`}
+                        >
+                          <FiPlus className="w-3.5 h-3.5" />
+                          {isAdded ? 'Added' : 'Add to Bid'}
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => addProduct(product)}
-                        className="p-2 text-indigo-600 hover:text-indigo-700"
-                      >
-                        <FiPlus className="w-5 h-5" />
-                      </button>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Quote Items */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quote Items</h2>
+              {/* Quotation Line Items Breakdown */}
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                  <FiLayers className="w-4 h-4 text-emerald-600" />
+                  Itemized Quotation Line Items ({selectedProducts.length})
+                </h2>
 
                 {selectedProducts.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
-                    Select the product above to add to your quote
+                  <div className="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200 text-xs text-slate-400">
+                    Add products from the catalog above to populate your quotation proposal.
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {selectedProducts.map((product, index) => (
-                      <div key={index} className="border border-gray-200 rounded-lg p-4">
-                        <div className="flex items-start justify-between mb-3">
-                          <h3 className="font-medium text-gray-900">{product.name}</h3>
+                      <div key={index} className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-slate-900 text-xs">{product.name}</span>
                           <button
                             type="button"
                             onClick={() => removeProduct(index)}
-                            className="p-1 text-red-500 hover:text-red-700"
+                            className="p-1 text-slate-400 hover:text-rose-600 transition-colors"
+                            title="Remove Line Item"
                           >
-                            <FiTrash2 className="w-4 h-4" />
+                            <FiTrash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
-                        <div className="grid grid-cols-3 gap-3">
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">Amount</label>
+                            <label className="block text-[11px] font-semibold text-slate-500 mb-1">
+                              Quantity
+                            </label>
                             <input
                               type="number"
                               value={product.quantity}
                               onChange={(e) => updateProduct(index, 'quantity', parseInt(e.target.value) || 0)}
                               min="1"
-                              className="w-full px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                              className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 bg-white font-mono"
                             />
                           </div>
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">Single price ($)</label>
+                            <label className="block text-[11px] font-semibold text-slate-500 mb-1">
+                              Unit Price (₹)
+                            </label>
                             <input
                               type="number"
                               value={product.unit_price}
                               onChange={(e) => updateProduct(index, 'unit_price', parseFloat(e.target.value) || 0)}
                               min="0"
                               step="0.01"
-                              className="w-full px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                              className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 bg-white font-mono"
                             />
                           </div>
                           <div>
-                            <label className="block text-xs text-gray-500 mb-1">total</label>
-                            <p className="font-medium text-indigo-600 pt-1">
+                            <label className="block text-[11px] font-semibold text-slate-500 mb-1">
+                              Line Total (₹)
+                            </label>
+                            <div className="px-3 py-1.5 text-xs font-mono font-bold text-indigo-600 bg-white rounded-lg border border-slate-200 flex items-center h-[34px]">
                               {formatCurrency(product.total_price)}
-                            </p>
+                            </div>
                           </div>
                         </div>
                       </div>
                     ))}
 
-                    {/* Quote Total */}
-                    <div className="pt-4 border-t border-gray-200">
-                      <div className="flex justify-between items-center">
-                        <span className="font-semibold text-gray-900">Total Quote Amount</span>
-                        <span className="text-2xl font-bold text-indigo-600">
-                          {formatCurrency(data.total_amount)}
-                        </span>
-                      </div>
+                    <div className="pt-4 border-t border-slate-200 flex justify-between items-center">
+                      <span className="font-bold text-slate-700 text-sm">Total Quoted Commercial Value:</span>
+                      <span className="text-2xl font-extrabold text-slate-900 font-mono">
+                        {formatCurrency(data.total_amount)}
+                      </span>
                     </div>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Sidebar - Quote Details */}
+            {/* Right Column: Validity, Delivery, & Terms */}
             <div className="space-y-6">
-              {/* Quote Settings */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quote Details</h2>
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+                  Commercial Terms & Validity
+                </h2>
 
-                <div className="space-y-4">
-                  {/* Valid Until */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Expires <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="date"
-                      value={data.valid_until}
-                      onChange={(e) => setData('valid_until', e.target.value)}
-                      min={minValidUntilStr}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                      required
-                    />
-                    {errors.valid_until && (
-                      <p className="mt-1 text-sm text-red-600">{errors.valid_until}</p>
-                    )}
-                  </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-slate-600 mb-1.5">
+                    Quotation Validity Deadline <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    value={data.valid_until}
+                    onChange={(e) => setData('valid_until', e.target.value)}
+                    min={minValidUntilStr}
+                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white"
+                    required
+                  />
+                  {errors.valid_until && (
+                    <p className="mt-1 text-xs text-rose-600 font-semibold">{errors.valid_until}</p>
+                  )}
+                </div>
 
-                  {/* Delivery Estimate */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Delivery time
-                    </label>
-                    <input
-                      type="text"
-                      value={data.delivery_estimate}
-                      onChange={(e) => setData('delivery_estimate', e.target.value)}
-                      placeholder="Eg: 5-7 working days"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-slate-600 mb-1.5">
+                    Estimated Dispatch Timeline
+                  </label>
+                  <input
+                    type="text"
+                    value={data.delivery_estimate}
+                    onChange={(e) => setData('delivery_estimate', e.target.value)}
+                    placeholder="e.g. 5-7 business days dispatch via E-Way Bill"
+                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white"
+                  />
+                </div>
 
-                  {/* Payment Terms */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Payment Terms
-                    </label>
-                    <select
-                      value={data.payment_terms}
-                      onChange={(e) => setData('payment_terms', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                    >
-                      <option value="">Select payment terms</option>
-                      <option value="advance">100% advance</option>
-                      <option value="partial">50% in advance, 50% on delivery</option>
-                      <option value="delivery">Payment on delivery</option>
-                      <option value="credit_7">7 days credit</option>
-                      <option value="credit_15">15 days credit</option>
-                      <option value="credit_30">30 days credit</option>
-                    </select>
-                  </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-slate-600 mb-1.5">
+                    Agreed Settlement Terms
+                  </label>
+                  <select
+                    value={data.payment_terms}
+                    onChange={(e) => setData('payment_terms', e.target.value)}
+                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white"
+                  >
+                    <option value="">Select settlement rail...</option>
+                    <option value="advance">100% Nodal Escrow Advance</option>
+                    <option value="partial">50% Advance Escrow / 50% on E-Way Bill Delivery</option>
+                    <option value="delivery">100% Escrow Release upon Consignee Acceptance</option>
+                    <option value="credit_15">Net 15 Days Commercial Credit (Verified Buyers)</option>
+                    <option value="credit_30">Net 30 Days Commercial Credit (Corporate / MSME)</option>
+                  </select>
+                </div>
 
-                  {/* Additional Notes */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Additional Notes
-                    </label>
-                    <textarea
-                      value={data.notes}
-                      onChange={(e) => setData('notes', e.target.value)}
-                      rows="4"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                      placeholder="Any additional information for the buyer..."
-                    />
-                  </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-slate-600 mb-1.5">
+                    Commercial Remarks / Exclusions
+                  </label>
+                  <textarea
+                    value={data.notes}
+                    onChange={(e) => setData('notes', e.target.value)}
+                    rows="3"
+                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 bg-white"
+                    placeholder="Provide freight inclusion notes, GST rates applicable, warranty details..."
+                  />
                 </div>
               </div>
 
-              {/* Info Box - Quote Tips */}
-              <div className="bg-blue-50 rounded-xl p-4">
-                <div className="flex items-start gap-3">
-                  <FiAlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-sm text-blue-700 font-medium">Quote Tips</p>
-                    <ul className="mt-2 text-xs text-blue-600 list-disc list-inside space-y-1">
-                      <li>Keep your prices competitive</li>
-                      <li>Set a realistic delivery time</li>
-                      <li>Clear payment terms help build trust</li>
-                      <li>Buyers prefer quotes with detailed price breakdowns</li>
-                    </ul>
-                  </div>
+              {/* Indian Procurement Compliance Badge */}
+              <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 text-xs space-y-2 text-slate-600">
+                <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                  <FiShield className="w-4 h-4 text-indigo-600" />
+                  <span>GST & Commercial Standards</span>
                 </div>
+                <p className="text-[11px] leading-relaxed text-slate-500">
+                  Submitting this quotation constitutes an official commercial offer. Upon buyer acceptance, a Purchase Order subject to E-Way bill generation and Nodal Escrow will be formed.
+                </p>
               </div>
             </div>
           </div>

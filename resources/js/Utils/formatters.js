@@ -104,8 +104,35 @@ export const formatRfqStatus = (status) => {
         case 'closed':
         case 'off':
             return 'Closed Tender';
+        case 'cancelled':
+        case 'cancel':
+            return 'Cancelled';
+        case 'pending':
+            return 'Pending Review';
         default:
             return status || 'Open';
     }
 };
 
+/**
+ * Enterprise B2B Quote Status Label Normalizer
+ */
+export const formatQuoteStatus = (status) => {
+    const s = (status || '').toLowerCase();
+    switch (s) {
+        case 'pending':
+        case 'awaiting':
+            return 'Under Evaluation';
+        case 'accepted':
+            return 'Accepted (PO Ready)';
+        case 'rejected':
+            return 'Bid Declined';
+        case 'expired':
+            return 'Validity Expired';
+        case 'withdrawn':
+        case 'withdraw':
+            return 'Withdrawn by Vendor';
+        default:
+            return status || 'Pending';
+    }
+};

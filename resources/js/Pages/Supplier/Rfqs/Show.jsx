@@ -1,13 +1,14 @@
-// Pages/Supplier/Rfqs/Show.jsx
+// resources/js/Pages/Supplier/Rfqs/Show.jsx
 
-// React - Core React imports for component functionality
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
-
-// Layout - Supplier dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
+import {
+  formatCurrency,
+  formatIndianDate,
+  formatQuoteStatus,
+  formatRfqStatus
+} from '@/Utils/formatters';
 import {
   FiArrowLeft,
   FiCalendar,
@@ -16,9 +17,12 @@ import {
   FiCheckCircle,
   FiXCircle,
   FiAlertCircle,
-  FiMessageSquare
+  FiSend,
+  FiClock,
+  FiLayers,
+  FiShield,
+  FiEdit2
 } from 'react-icons/fi';
-import { MdPending } from 'react-icons/md';
 
 export default function RfqShow({
   rfq,
@@ -28,224 +32,240 @@ export default function RfqShow({
   existingQuote,
   supplierProducts,
 }) {
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value);
-  };
-
-  // Format date - Converts ISO date to readable format
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  // Calculate days remaining until deadline
   const getDaysRemaining = () => {
+    if (!rfq.required_by_date) return { text: 'Active Tender', color: 'text-slate-600' };
     const now = new Date();
     const deadline = new Date(rfq.required_by_date);
     const diffTime = deadline - now;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays < 0) return { text: 'Expired', color: 'text-red-600' };
-    if (diffDays === 0) return { text: 'Today', color: 'text-orange-600' };
-    if (diffDays === 1) return { text: 'tomorrow', color: 'text-yellow-600' };
-    return { text: `${diffDays} Days Remaining`, color: 'text-green-600' };
+    if (diffDays < 0) return { text: 'Bidding Closed', color: 'text-rose-600 font-bold' };
+    if (diffDays === 0) return { text: 'Closing Today', color: 'text-amber-600 font-bold animate-pulse' };
+    if (diffDays === 1) return { text: 'Closing Tomorrow', color: 'text-amber-600 font-semibold' };
+    return { text: `${diffDays} Days Remaining`, color: 'text-emerald-700 font-medium' };
   };
 
-  // Calculate days remaining until deadline
   const daysRemaining = getDaysRemaining();
 
-  // Get quote status badge with appropriate styling
   const getQuoteStatusBadge = (status) => {
-    const badges = {
-      pending: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: MdPending, label: 'Awaiting' },
-      accepted: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'accepted' },
-      rejected: { bg: 'bg-red-100', text: 'text-red-800', icon: FiXCircle, label: 'Rejected' }
-    };
-    const badge = badges[status] || badges.pending;
-    const Icon = badge.icon;
-
-    return (
-      <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${badge.bg} ${badge.text}`}>
-        <Icon className="w-3 h-3" />
-        {badge.label}
-      </span>
-    );
+    switch (status) {
+      case 'accepted':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <FiCheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+            Accepted & Awarded
+          </span>
+        );
+      case 'rejected':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+            <FiXCircle className="w-3.5 h-3.5 text-rose-600" />
+            Bid Declined
+          </span>
+        );
+      case 'pending':
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+            <FiClock className="w-3.5 h-3.5 text-amber-600" />
+            Under Buyer Evaluation
+          </span>
+        );
+    }
   };
 
   return (
     <DashboardLayout>
-      <Head title={`RFQ #${rfq.rfq_number}`} />
+      <Head title={`RFQ #${rfq.rfq_number} - ${rfq.title}`} />
 
       <div className="space-y-6">
-        {/* Header - Back button and page title */}
-        <div className="flex items-center gap-4">
-          <Link
-            href={route('supplier.rfqs.index')}
-            className="p-2 hover:bg-gray-100 rounded-lg"
-          >
-            <FiArrowLeft className="w-5 h-5" />
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">RFQ #{rfq.rfq_number}</h1>
-            <p className="text-sm text-gray-600 mt-1">
-              {formatDate(rfq.created_at)} Posted on
-            </p>
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+          <div className="flex items-center gap-4">
+            <Link
+              href={route('supplier.rfqs.index')}
+              className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-colors"
+              title="Back to Tenders"
+            >
+              <FiArrowLeft className="w-5 h-5" />
+            </Link>
+            <div>
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+                  Tender #{rfq.rfq_number}
+                </span>
+                <span className="text-xs text-slate-400">
+                  Published on {formatIndianDate(rfq.created_at)}
+                </span>
+              </div>
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                {rfq.title}
+              </h1>
+            </div>
           </div>
+
+          {!existingQuote && isOpen && canQuote && (
+            <Link
+              href={route('supplier.rfqs.create-quote', rfq.id)}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors"
+            >
+              <FiSend className="w-3.5 h-3.5" />
+              Submit Commercial Quotation
+            </Link>
+          )}
         </div>
 
-        {/* Status Alert - When RFQ is closed */}
+        {/* Closed or Already Quoted Alerts */}
         {!isOpen && (
-          <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg">
-            <div className="flex items-start">
-              <FiXCircle className="w-5 h-5 text-red-400 mr-3 mt-0.5" />
-              <div>
-                <p className="text-sm text-red-700 font-medium">
-                  This RFQ is no longer open for quote submission
-                </p>
-                <p className="text-sm text-red-600 mt-1">
-                  The deadline has passed or the RFQ has been closed.
-                </p>
-              </div>
+          <div className="bg-rose-50 border border-rose-200 p-4 rounded-2xl flex items-start gap-3 text-xs">
+            <FiXCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold text-rose-900">Bidding Concluded for this Tender</p>
+              <p className="text-rose-700 mt-0.5">
+                The quotation submission deadline has expired or the buyer has concluded the tender evaluation.
+              </p>
             </div>
           </div>
         )}
 
-        {/* Existing Quote Alert */}
         {existingQuote && (
-          <div className="bg-green-50 border-l-4 border-green-400 p-4 rounded-lg">
-            <div className="flex items-start">
-              <FiCheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5" />
+          <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl flex items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-3">
+              <FiCheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
               <div>
-                <p className="text-sm text-green-700 font-medium">
-                  You have already submitted a quote for this RFQ
-                </p>
-                <p className="text-sm text-green-600 mt-1">
-                  Quote Number: {existingQuote.quote_number} | Status: {existingQuote.status === 'pending' ? 'Awaiting' :
-                    existingQuote.status === 'accepted' ? 'accepted' : 'Rejected'}
+                <p className="font-bold text-emerald-900">Quotation Submitted Successfully</p>
+                <p className="text-emerald-700 mt-0.5">
+                  Quote Ref: <strong>#{existingQuote.quote_number}</strong> · Amount: <strong>{formatCurrency(existingQuote.total_amount)}</strong>
                 </p>
               </div>
+            </div>
+            <div>
+              {getQuoteStatusBadge(existingQuote.status)}
             </div>
           </div>
         )}
 
-        {/* Main Content Grid */}
+        {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - RFQ Details */}
+          {/* Left Column: Scope & BOQ */}
           <div className="lg:col-span-2 space-y-6">
-            {/* RFQ Information */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">RFQ Description</h2>
+            {/* Tender Scope */}
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                <FiPackage className="w-4 h-4 text-indigo-600" />
+                Procurement Tender Specifications
+              </h2>
 
-              <div className="space-y-4">
+              {rfq.description ? (
+                <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line bg-slate-50/60 p-4 rounded-xl border border-slate-100">
+                  {rfq.description}
+                </p>
+              ) : (
+                <p className="text-sm italic text-slate-400">No additional scope description provided.</p>
+              )}
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2 border-t border-slate-100 text-xs">
                 <div>
-                  <p className="text-sm text-gray-500">Title</p>
-                  <p className="font-medium text-gray-900">{rfq.title}</p>
+                  <span className="text-slate-500 block">Required Delivery Date</span>
+                  <span className="font-bold text-slate-800 font-mono mt-0.5 block">
+                    {formatIndianDate(rfq.required_by_date)}
+                  </span>
+                  <span className={`text-[11px] block ${daysRemaining.color}`}>
+                    {daysRemaining.text}
+                  </span>
                 </div>
-
                 <div>
-                  <p className="text-sm text-gray-500">Description</p>
-                  <p className="text-gray-700 whitespace-pre-line">{rfq.description}</p>
+                  <span className="text-slate-500 block">Procurement Quantity</span>
+                  <span className="font-bold text-slate-800 font-mono mt-0.5 block">
+                    {rfq.quantity || 'Per BOQ Below'}
+                  </span>
                 </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-gray-500">total amount</p>
-                    <p className="font-bold text-gray-900">{rfq.quantity}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Required date</p>
-                    <div className="flex items-center gap-2">
-                      <FiCalendar className="w-4 h-4 text-gray-400" />
-                      <span className="font-medium text-gray-900">{formatDate(rfq.required_by_date)}</span>
-                    </div>
-                    <p className={`text-sm ${daysRemaining.color}`}>{daysRemaining.text}</p>
-                  </div>
+                <div>
+                  <span className="text-slate-500 block">Tender Status</span>
+                  <span className="font-semibold text-emerald-700 mt-0.5 block">
+                    {formatRfqStatus(rfq.status)}
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Requested Products */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Buyer request</h2>
+            {/* Bill of Quantities Requested */}
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                  <FiLayers className="w-4 h-4 text-indigo-600" />
+                  Bill of Quantities (BOQ) Requested by Buyer
+                </h2>
+                <span className="text-xs text-slate-400 font-mono">
+                  {rfq.products_requested?.length || 0} Line Items
+                </span>
+              </div>
 
               {rfq.products_requested && rfq.products_requested.length > 0 ? (
-                <div className="space-y-4">
+                <div className="divide-y divide-slate-100">
                   {rfq.products_requested.map((product, index) => {
-                    // Find matching supplier product
                     const matchingProduct = supplierProducts?.find(
                       p => p.category?.toLowerCase() === product.category?.toLowerCase()
                     );
 
                     return (
-                      <div key={index} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
-                        <div className="flex items-start gap-3">
-                          <div className="p-2 bg-indigo-100 rounded-lg">
-                            <FiPackage className="w-5 h-5 text-indigo-600" />
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-medium text-gray-900">{product.name || product.category}</p>
+                      <div key={index} className="py-4 first:pt-0 last:pb-0 space-y-2">
+                        <div className="flex justify-between items-start gap-4">
+                          <div className="space-y-1">
+                            <p className="font-bold text-slate-900 text-sm">
+                              {product.name || product.category}
+                            </p>
                             {product.description && (
-                              <p className="text-sm text-gray-500 mt-1">{product.description}</p>
+                              <p className="text-xs text-slate-500">{product.description}</p>
                             )}
-                            <div className="flex gap-4 mt-2">
-                              <p className="text-sm">
-                                <span className="text-gray-500">Amount:</span>{' '}
-                                <span className="font-medium">{product.quantity || 'N/A'}</span>
-                              </p>
-                              {product.unit && (
-                                <p className="text-sm">
-                                  <span className="text-gray-500">Unit:</span>{' '}
-                                  <span className="font-medium">{product.unit}</span>
-                                </p>
-                              )}
-                            </div>
-
-                            {/* Show matching product info */}
-                            {matchingProduct && (
-                              <div className="mt-2 p-2 bg-green-50 rounded-lg">
-                                <p className="text-xs text-green-700">
-                                  ✓ You have matching products: <span className="font-medium">{matchingProduct.name}</span>
-                                  ({formatCurrency(matchingProduct.base_price)}/{matchingProduct.unit})
-                                </p>
-                              </div>
+                            {product.category && (
+                              <span className="inline-block text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-medium">
+                                Category: {product.category}
+                              </span>
                             )}
+                          </div>
+                          <div className="text-right">
+                            <span className="font-mono text-sm font-extrabold text-slate-900 bg-slate-50 px-3 py-1 rounded-lg border border-slate-200 block">
+                              {product.quantity || 'N/A'} {product.unit || ''}
+                            </span>
                           </div>
                         </div>
+
+                        {matchingProduct && (
+                          <div className="p-2.5 bg-emerald-50/70 border border-emerald-100 rounded-xl text-xs flex items-center justify-between">
+                            <span className="text-emerald-800 font-medium">
+                              ✓ You have matching catalog inventory: <strong>{matchingProduct.name}</strong>
+                            </span>
+                            <span className="font-mono font-bold text-emerald-900">
+                              Base: {formatCurrency(matchingProduct.base_price)}/{matchingProduct.unit}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
                 </div>
               ) : (
-                <p className="text-gray-500">No specific product requested</p>
+                <p className="text-xs text-slate-400 italic">No specific line item breakdown specified.</p>
               )}
             </div>
 
-            {/* Other Quotes (if any) */}
+            {/* Other Competing Quotes Benchmark (Blind Market Info) */}
             {otherQuotes.length > 0 && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Other Quotes</h2>
-                <p className="text-sm text-gray-500 mb-4">
-                   {otherQuotes.length} other suppliers submitted quotes
-                </p>
-                <div className="space-y-3">
-                  {otherQuotes.map((quote) => (
-                    <div key={quote.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+                  Market Bidding Activity ({otherQuotes.length} Competing Bids)
+                </h2>
+                <div className="space-y-2.5">
+                  {otherQuotes.map((q) => (
+                    <div key={q.id} className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between text-xs">
                       <div>
-                        <p className="font-medium text-gray-900">{quote.supplier?.supplier?.company_name || 'Supplier'}</p>
-                        <p className="text-sm text-gray-500">Quote #{quote.quote_number}</p>
+                        <p className="font-bold text-slate-800">Verified Supplier Bid</p>
+                        <p className="text-[11px] text-slate-400 font-mono">Ref #{q.quote_number}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-indigo-600">{formatCurrency(quote.total_amount)}</p>
-                        <p className="text-xs text-gray-400">{formatDate(quote.valid_until)} Valid up to</p>
+                        <p className="font-mono font-bold text-indigo-600">{formatCurrency(q.total_amount)}</p>
+                        <p className="text-[10px] text-slate-400">Valid until {formatIndianDate(q.valid_until)}</p>
                       </div>
                     </div>
                   ))}
@@ -254,157 +274,128 @@ export default function RfqShow({
             )}
           </div>
 
-          {/* Right Column - Buyer Info & Actions */}
+          {/* Right Column: Buyer Info & Quotation Action */}
           <div className="space-y-6">
-            {/* Buyer Information */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Buyer information</h2>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <FiUser className="w-5 h-5 text-gray-400 mt-0.5" />
-                  <div>
-                    <p className="text-sm text-gray-500">name</p>
-                    <p className="font-medium text-gray-900">{rfq.buyer?.name}</p>
-                  </div>
+            {/* Buyer Profile Card */}
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                <FiUser className="w-4 h-4 text-slate-500" />
+                Buyer Procurement Entity
+              </h2>
+
+              <div className="space-y-2 text-xs text-slate-600">
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Organization / Buyer</span>
+                  <p className="font-bold text-slate-900 text-sm mt-0.5">{rfq.buyer?.name}</p>
                 </div>
-                <div className="flex items-start gap-3">
-                  <FiMessageSquare className="w-5 h-5 text-gray-400 mt-0.5" />
-                  <div>
-                    <p className="text-sm text-gray-500">become a member</p>
-                    <p className="font-medium text-gray-900">
-                      {rfq.buyer?.created_at ? formatDate(rfq.buyer.created_at) : 'N/A'}
-                    </p>
-                  </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Member On Network</span>
+                  <p className="font-medium text-slate-700 mt-0.5">
+                    {rfq.buyer?.created_at ? formatIndianDate(rfq.buyer.created_at) : 'Active Corporate Member'}
+                  </p>
                 </div>
+              </div>
+
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-[11px] text-slate-500 flex items-center gap-2">
+                <FiShield className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>GST-verified procurement account. Escrow settlement protected.</span>
               </div>
             </div>
 
-            {/* Your Quote (if exists) */}
+            {/* Existing Quote Card */}
             {existingQuote && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Quote</h2>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm text-gray-500">Quote Number</p>
-                    <p className="font-medium text-gray-900">{existingQuote.quote_number}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">total amount</p>
-                    <p className="text-2xl font-bold text-indigo-600">
-                      {formatCurrency(existingQuote.total_amount)}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Status</p>
-                    {getQuoteStatusBadge(existingQuote.status)}
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Expires</p>
-                    <p className="font-medium text-gray-900">{formatDate(existingQuote.valid_until)}</p>
-                  </div>
-
-                  {existingQuote.status === 'pending' && (
-                    <Link
-                      href={route('supplier.rfqs.edit-quote', existingQuote.id)}
-                      className="block w-full text-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
-                    >
-                      Edit Quote
-                    </Link>
-                  )}
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+                    Your Active Quotation
+                  </h2>
+                  {getQuoteStatusBadge(existingQuote.status)}
                 </div>
+
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-2 text-xs">
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Quote Reference:</span>
+                    <span className="font-mono font-bold text-slate-800">#{existingQuote.quote_number}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Quoted Total:</span>
+                    <span className="font-mono text-base font-extrabold text-indigo-600">
+                      {formatCurrency(existingQuote.total_amount)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Offer Validity:</span>
+                    <span className="font-mono text-slate-700">Until {formatIndianDate(existingQuote.valid_until)}</span>
+                  </div>
+                </div>
+
+                {existingQuote.status === 'pending' && (
+                  <Link
+                    href={route('supplier.rfqs.edit-quote', existingQuote.id)}
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-xl transition-colors"
+                  >
+                    <FiEdit2 className="w-3.5 h-3.5" />
+                    Revise Quotation Terms
+                  </Link>
+                )}
               </div>
             )}
 
-            {/* Action Buttons - Submit Quote */}
+            {/* Submit Quote CTA */}
             {!existingQuote && isOpen && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Submit Quote</h2>
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+                  Participate in Tender
+                </h2>
 
                 {canQuote ? (
                   <>
-                    <p className="text-sm text-gray-500 mb-4">
-                      You can submit a quote for this RFQ based on your product.
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Submit an itemized commercial proposal with unit pricing, delivery lead times, and GST tax calculations.
                     </p>
                     <Link
                       href={route('supplier.rfqs.create-quote', rfq.id)}
-                      className="block w-full text-center px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
+                      className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors"
                     >
-                      Create Quote
+                      <FiSend className="w-4 h-4" />
+                      Submit Commercial Quotation
                     </Link>
                   </>
                 ) : (
-                  <div className="bg-yellow-50 rounded-lg p-4">
-                    <div className="flex items-start gap-2">
-                      <FiAlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-sm text-yellow-700 font-medium">
-                          Cannot submit quote for this RFQ
-                        </p>
-                        <p className="text-xs text-yellow-600 mt-1">
-                          You need active products in your catalog to quote on this RFQ.
-                          <Link href={route('supplier.products.create')} className="ml-1 underline">
-                            Add product →
-                          </Link>
-                        </p>
-                      </div>
-                    </div>
+                  <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-800 space-y-2">
+                    <p className="font-bold">Catalog Inventory Needed</p>
+                    <p className="text-[11px] leading-relaxed">
+                      You need active products matching this tender's category to submit a commercial bid.
+                    </p>
+                    <Link
+                      href={route('supplier.products.create')}
+                      className="inline-block text-indigo-600 font-bold hover:underline"
+                    >
+                      Add Products to Catalog →
+                    </Link>
                   </div>
                 )}
               </div>
             )}
 
-            {/* Matching Products */}
-            {supplierProducts && supplierProducts.length > 0 ? (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">your product</h2>
-                <div className="space-y-3">
-                  {supplierProducts.map((product) => {
-                    // Check if this product matches any requested product category
-                    const isMatching = rfq.products_requested?.some(
-                      requested => requested.category?.toLowerCase() === product.category?.toLowerCase()
-                    );
-
-                    return (
-                      <div key={product.id} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-2 flex-1">
-                          <FiPackage className={`w-4 h-4 ${isMatching ? 'text-green-500' : 'text-gray-400'}`} />
-                          <div>
-                            <span className="text-sm text-gray-700">{product.name}</span>
-                            {product.category && (
-                              <span className="text-xs text-gray-500 ml-2">({product.category})</span>
-                            )}
-                            {isMatching && (
-                              <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
-                                Match the request
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-sm font-medium text-indigo-600">
-                            {formatCurrency(product.base_price)}
-                          </span>
-                          {product.unit && (
-                            <span className="text-xs text-gray-400 ml-1">/{product.unit}</span>
-                          )}
-                        </div>
+            {/* Matching Products from Vendor Catalog */}
+            {supplierProducts && supplierProducts.length > 0 && (
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-3">
+                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+                  Your Relevant Products
+                </h2>
+                <div className="divide-y divide-slate-100 text-xs">
+                  {supplierProducts.map((prod) => (
+                    <div key={prod.id} className="py-2 first:pt-0 last:pb-0 flex items-center justify-between">
+                      <div>
+                        <p className="font-bold text-slate-800">{prod.name}</p>
+                        <p className="text-[10px] text-slate-400">{prod.category || 'General'}</p>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">your product</h2>
-                <div className="text-center py-4">
-                  <FiPackage className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-                  <p className="text-sm text-gray-500">No products found</p>
-                  <Link
-                    href={route('supplier.products.create')}
-                    className="text-sm text-indigo-600 hover:text-indigo-700 mt-2 inline-block"
-                  >
-                    .Add your first product →
-                  </Link>
+                      <span className="font-mono font-bold text-slate-900">
+                        {formatCurrency(prod.base_price)}/{prod.unit || 'unit'}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

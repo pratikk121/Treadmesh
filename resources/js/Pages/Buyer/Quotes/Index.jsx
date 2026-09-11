@@ -1,13 +1,13 @@
-// Pages/Buyer/Quotes/Index.jsx
+// resources/js/Pages/Buyer/Quotes/Index.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-
-// Layout - Buyer dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
+import {
+  formatCurrency,
+  formatIndianDate,
+  formatQuoteStatus
+} from '@/Utils/formatters';
 import {
   FiFileText,
   FiClock,
@@ -19,12 +19,14 @@ import {
   FiUser,
   FiAlertCircle,
   FiDownload,
-  FiBarChart2
+  FiBarChart2,
+  FiFilter,
+  FiPackage,
+  FiArrowRight,
+  FiShield
 } from 'react-icons/fi';
 
 export default function QuotesIndex({ quotes, counts, rfqs }) {
-
-  // State management for filters and selected quotes
   const [filters, setFilters] = useState({
     status: '',
     rfq_id: '',
@@ -37,7 +39,6 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
   });
   const [selectedQuotes, setSelectedQuotes] = useState([]);
 
-  // Handle filter changes
   const handleFilterChange = (key, value) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
@@ -47,7 +48,6 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
     });
   };
 
-  // Handle search form submission
   const handleSearch = (e) => {
     e.preventDefault();
     router.get(route('buyer.quotes.index'), filters, {
@@ -56,7 +56,6 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
     });
   };
 
-  // Reset all filters to default
   const resetFilters = () => {
     const resetValues = {
       status: '',
@@ -74,7 +73,6 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
     });
   };
 
-  // Handle quote selection for comparison (max 5 quotes)
   const toggleQuoteSelection = (quoteId) => {
     setSelectedQuotes(prev => {
       if (prev.includes(quoteId)) {
@@ -88,59 +86,12 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
     });
   };
 
-  // Compare selected quotes
   const compareQuotes = () => {
     if (selectedQuotes.length >= 2) {
       router.get(route('buyer.quotes.compare'), { quote_ids: selectedQuotes });
     }
   };
 
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
-
-  // Format date - Converts ISO date to readable format
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-
-  // Get status badge color based on quote status
-  const getStatusColor = (status) => {
-    const colors = {
-      'pending': 'bg-yellow-100 text-yellow-700',
-      'accepted': 'bg-green-100 text-green-700',
-      'rejected': 'bg-red-100 text-red-700',
-      'expired': 'bg-gray-100 text-gray-700'
-    };
-    return colors[status] || 'bg-gray-100 text-gray-700';
-  };
-
-  // Get status icon based on quote status
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'pending':
-        return <FiClock className="text-yellow-600" />;
-      case 'accepted':
-        return <FiCheckCircle className="text-green-600" />;
-      case 'rejected':
-        return <FiXCircle className="text-red-600" />;
-      case 'expired':
-        return <FiAlertCircle className="text-gray-600" />;
-      default:
-        return <FiFileText className="text-gray-600" />;
-    }
-  };
-
-  // Check if quote is still valid based on valid_until date
   const isQuoteValid = (quote) => {
     if (!quote?.valid_until) return false;
     const validUntil = new Date(quote.valid_until);
@@ -148,169 +99,216 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
     return validUntil >= new Date();
   };
 
+  const getStatusBadge = (quote) => {
+    if (quote.status === 'pending' && !isQuoteValid(quote)) {
+      return (
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+          <FiAlertCircle className="w-3 h-3 text-slate-500" />
+          Validity Expired
+        </span>
+      );
+    }
+
+    switch (quote.status) {
+      case 'accepted':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <FiCheckCircle className="w-3 h-3 text-emerald-500" />
+            Accepted (PO Ready)
+          </span>
+        );
+      case 'rejected':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+            <FiXCircle className="w-3 h-3 text-rose-500" />
+            Bid Declined
+          </span>
+        );
+      case 'pending':
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+            <FiClock className="w-3 h-3 text-amber-500" />
+            Under Evaluation
+          </span>
+        );
+    }
+  };
+
   return (
     <DashboardLayout>
-      <Head title="Quotes Received" />
+      <Head title="Procurement Quotations Received" />
 
       <div className="space-y-6">
-        {/* Header - Page title and compare button */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+        {/* Top Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Quotes Received</h2>
-            <p className="text-gray-600 mt-1">Review and compare quotes from suppliers</p>
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+                Supplier Quotations
+              </h1>
+              <span className="text-xs font-semibold uppercase px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                Bid Evaluation Desk
+              </span>
+            </div>
+            <p className="text-sm text-slate-500 mt-1">
+              Review, evaluate, and benchmark competitive vendor quotations against your open procurement tenders.
+            </p>
           </div>
 
-          {/* Compare Button - Shows when quotes are selected */}
           {selectedQuotes.length >= 2 && (
             <button
               onClick={compareQuotes}
-              className="mt-3 md:mt-0 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-xs transition-colors"
             >
-              <FiBarChart2 className="mr-2" />
-              Selected comparison ({selectedQuotes.length})
+              <FiBarChart2 className="w-4 h-4" />
+              Compare Selected ({selectedQuotes.length})
             </button>
           )}
         </div>
 
-        {/* Stats Cards - Quote status counts */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">Total Quotes</p>
-            <p className="text-2xl font-bold">{quotes.total}</p>
+        {/* Stats Strip */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
+            <p className="text-xs font-semibold uppercase text-slate-500">Total Bids</p>
+            <p className="text-2xl font-extrabold text-slate-900 font-mono mt-1">{quotes.total || 0}</p>
+            <span className="text-[11px] text-slate-400">All submitted quotes</span>
           </div>
-          <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">Awaiting</p>
-            <p className="text-2xl font-bold text-yellow-600">{counts.pending}</p>
+
+          <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
+            <p className="text-xs font-semibold uppercase text-amber-700">Under Review</p>
+            <p className="text-2xl font-extrabold text-amber-600 font-mono mt-1">{counts.pending || 0}</p>
+            <span className="text-[11px] text-slate-400">Awaiting evaluation</span>
           </div>
-          <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">accepted</p>
-            <p className="text-2xl font-bold text-green-600">{counts.accepted}</p>
+
+          <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
+            <p className="text-xs font-semibold uppercase text-emerald-700">Accepted</p>
+            <p className="text-2xl font-extrabold text-emerald-600 font-mono mt-1">{counts.accepted || 0}</p>
+            <span className="text-[11px] text-slate-400">Converted to orders</span>
           </div>
-          <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">Rejected</p>
-            <p className="text-2xl font-bold text-red-600">{counts.rejected}</p>
+
+          <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
+            <p className="text-xs font-semibold uppercase text-rose-700">Declined</p>
+            <p className="text-2xl font-extrabold text-rose-600 font-mono mt-1">{counts.rejected || 0}</p>
+            <span className="text-[11px] text-slate-400">Not selected</span>
           </div>
-          <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">Expired</p>
-            <p className="text-2xl font-bold text-gray-600">{counts.expired}</p>
+
+          <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
+            <p className="text-xs font-semibold uppercase text-slate-500">Expired</p>
+            <p className="text-2xl font-extrabold text-slate-700 font-mono mt-1">{counts.expired || 0}</p>
+            <span className="text-[11px] text-slate-400">Validity lapsed</span>
           </div>
         </div>
 
-        {/* Filters Section */}
-        <div className="bg-white rounded-xl p-4 border">
+        {/* Filter Drawer */}
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
           <form onSubmit={handleSearch} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {/* Search Filter */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">search</label>
+                <label className="block text-xs font-semibold uppercase text-slate-500 mb-1">Search Quotations</label>
                 <div className="relative">
-                  <FiSearch className="absolute left-3 top-3 text-gray-400" />
+                  <FiSearch className="absolute left-3 top-2.5 text-slate-400 w-4 h-4" />
                   <input
                     type="text"
                     value={filters.search}
                     onChange={(e) => handleFilterChange('search', e.target.value)}
-                    placeholder="Quote #, RFQ #, Title..."
-                    className="w-full pl-10 border rounded-lg px-3 py-2 text-sm"
+                    placeholder="Quote Ref, RFQ #, Vendor..."
+                    className="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
               </div>
 
-              {/* Status Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <label className="block text-xs font-semibold uppercase text-slate-500 mb-1">Status</label>
                 <select
                   value={filters.status}
                   onChange={(e) => handleFilterChange('status', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50"
                 >
-                  <option value="">All statuses are</option>
-                  <option value="pending">Awaiting</option>
-                  <option value="accepted">accepted</option>
-                  <option value="rejected">Rejected</option>
+                  <option value="">All Statuses</option>
+                  <option value="pending">Under Evaluation</option>
+                  <option value="accepted">Accepted (Awarded)</option>
+                  <option value="rejected">Bid Declined</option>
                 </select>
               </div>
 
-              {/* RFQ Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">RFQ</label>
+                <label className="block text-xs font-semibold uppercase text-slate-500 mb-1">Tender / RFQ</label>
                 <select
                   value={filters.rfq_id}
                   onChange={(e) => handleFilterChange('rfq_id', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50"
                 >
-                  <option value="">All RFQ</option>
+                  <option value="">All RFQs</option>
                   {rfqs.map((rfq) => (
                     <option key={rfq.id} value={rfq.id}>
-                      {rfq.title} ({rfq.rfq_number})
+                      {rfq.title} (#{rfq.rfq_number})
                     </option>
                   ))}
                 </select>
               </div>
 
-              {/* Validity Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Term</label>
+                <label className="block text-xs font-semibold uppercase text-slate-500 mb-1">Validity</label>
                 <select
                   value={filters.validity}
                   onChange={(e) => handleFilterChange('validity', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50"
                 >
-                  <option value="">All</option>
-                  <option value="valid">Valid</option>
-                  <option value="expired">Expired</option>
+                  <option value="">All Validity</option>
+                  <option value="valid">Active & Valid</option>
+                  <option value="expired">Validity Expired</option>
                 </select>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {/* Date Range Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3 pt-2 border-t border-slate-100">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Date from</label>
+                <label className="block text-xs font-semibold uppercase text-slate-500 mb-1">Date From</label>
                 <input
                   type="date"
                   value={filters.from_date}
                   onChange={(e) => handleFilterChange('from_date', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Date up to</label>
+                <label className="block text-xs font-semibold uppercase text-slate-500 mb-1">Date Up To</label>
                 <input
                   type="date"
                   value={filters.to_date}
                   onChange={(e) => handleFilterChange('to_date', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
 
-              {/* Sort Options */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Sort</label>
+                <label className="block text-xs font-semibold uppercase text-slate-500 mb-1">Sort By</label>
                 <select
                   value={filters.sort}
                   onChange={(e) => handleFilterChange('sort', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50"
                 >
-                  <option value="latest">Last is first</option>
-                  <option value="oldest">Old first</option>
-                  <option value="amount_high">Amount: More to less</option>
-                  <option value="amount_low">Amount: Low to High</option>
-                  <option value="valid_until">Expires</option>
+                  <option value="latest">Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="amount_high">Commercial Bid: High to Low</option>
+                  <option value="amount_low">Commercial Bid: Low to High</option>
+                  <option value="valid_until">By Expiration Date</option>
                 </select>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-end space-x-2">
+              <div className="flex items-end gap-2">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
+                  className="flex-1 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-colors"
                 >
-                  Apply Filter
+                  Filter
                 </button>
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 text-sm"
+                  className="px-3 py-2 border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
                 >
                   Reset
                 </button>
@@ -321,162 +319,162 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
 
         {/* Quotes List */}
         {quotes.data.length === 0 ? (
-          // Empty State - No quotes
-          <div className="bg-white rounded-xl p-12 text-center border">
-            <FiFileText className="mx-auto text-5xl text-gray-400 mb-4" />
-            <h3 className="text-xl font-medium text-gray-700 mb-2">No Quotes</h3>
-            <p className="text-gray-500 mb-6">When suppliers respond to your RFQ, the quote will show here</p>
+          <div className="bg-white rounded-2xl p-12 text-center border border-slate-200/80 shadow-xs">
+            <div className="w-16 h-16 mx-auto bg-slate-100 rounded-2xl flex items-center justify-center text-slate-400 mb-4">
+              <FiFileText className="w-8 h-8" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-800 mb-1">No Quotations Found</h3>
+            <p className="text-sm text-slate-500 mb-6 max-w-md mx-auto">
+              When suppliers submit commercial bids responding to your RFQs, their proposals will appear here for evaluation.
+            </p>
             <Link
               href={route('buyer.rfqs.create')}
-              className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 inline-flex items-center"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-xs transition-colors"
             >
-              Create new RFQ
+              Publish New RFQ
             </Link>
           </div>
         ) : (
-          // Quote Items List
           <div className="space-y-4">
-            {quotes.data.map((quote) => (
-              <div key={quote.id} className="bg-white rounded-xl border p-6 hover:shadow-lg transition-shadow">
-                <div className="flex flex-col lg:flex-row lg:items-start justify-between">
-                  {/* Selection Checkbox */}
-                  <div className="flex items-start lg:items-center mr-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedQuotes.includes(quote.id)}
-                      onChange={() => toggleQuoteSelection(quote.id)}
-                      disabled={quote.status !== 'pending' || !isQuoteValid(quote)}
-                      className="mt-1 lg:mt-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                    />
-                  </div>
+            {quotes.data.map((quote) => {
+              const valid = isQuoteValid(quote);
+              return (
+                <div
+                  key={quote.id}
+                  className="bg-white rounded-2xl border border-slate-200/80 p-6 hover:shadow-md transition-all group"
+                >
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    {/* Checkbox for compare */}
+                    <div className="flex items-start lg:items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedQuotes.includes(quote.id)}
+                        onChange={() => toggleQuoteSelection(quote.id)}
+                        disabled={quote.status !== 'pending' || !valid}
+                        className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                        title={valid ? 'Select for comparison' : 'Quote expired'}
+                      />
+                    </div>
 
-                  {/* Main Content */}
-                  <div className="flex-1">
-                    <div className="flex items-start mb-3">
-                      {getStatusIcon(quote.status)}
-                      <div className="ml-2 flex-1">
-                        <div className="flex items-center flex-wrap gap-2">
-                          <h3 className="font-semibold text-lg text-gray-800">
-                            Quote #{quote.quote_number}
-                          </h3>
-                          <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(quote.status)}`}>
-                            {quote.status === 'pending' ? 'Awaiting' :
-                              quote.status === 'accepted' ? 'accepted' :
-                                quote.status === 'rejected' ? 'Rejected' :
-                                  quote.status === 'expired' ? 'Expired' : quote.status}
+                    {/* Main Content */}
+                    <div className="flex-1 space-y-3">
+                      <div className="flex items-center flex-wrap gap-2.5">
+                        <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 border border-slate-200">
+                          Quote #{quote.quote_number}
+                        </span>
+                        {getStatusBadge(quote)}
+                        <Link
+                          href={route('buyer.rfqs.show', quote.rfq.id)}
+                          className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 ml-1"
+                        >
+                          RFQ: {quote.rfq.title} (#{quote.rfq.rfq_number})
+                        </Link>
+                      </div>
+
+                      <div className="flex items-center gap-3 text-xs text-slate-600">
+                        <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                          <FiUser className="w-3.5 h-3.5 text-slate-400" />
+                          <span>{quote.supplier?.name}</span>
+                        </div>
+                        {quote.supplier?.supplier?.verification_status === 'verified' && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md border border-emerald-200 text-[10px] font-bold">
+                            <FiShield className="w-3 h-3 text-emerald-500" />
+                            GST Verified Supplier
                           </span>
-                          {!isQuoteValid(quote) && quote.status === 'pending' && (
-                            <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">
-                              Expired
+                        )}
+                        <span className="text-slate-400">·</span>
+                        <span className="text-slate-500">
+                          Received: {formatIndianDate(quote.created_at)}
+                        </span>
+                      </div>
+
+                      {/* Pricing strip */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-3 bg-slate-50/80 rounded-xl border border-slate-100 text-xs">
+                        <div>
+                          <span className="text-slate-500 block">Total Commercial Bid</span>
+                          <span className="text-base font-extrabold text-indigo-600 font-mono mt-0.5 block">
+                            {formatCurrency(quote.total_amount)}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 block">Quote Validity</span>
+                          <span className={`font-semibold font-mono mt-0.5 block ${valid ? 'text-slate-700' : 'text-rose-600'}`}>
+                            {formatIndianDate(quote.valid_until)}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 block">Line Items</span>
+                          <span className="font-semibold text-slate-800 font-mono mt-0.5 block">
+                            {quote.rfq?.products_requested?.length || 0} Materials
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Product Breakdown Snippet */}
+                      {quote.product_breakdown && quote.product_breakdown.length > 0 && (
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {quote.product_breakdown.slice(0, 3).map((item, idx) => (
+                            <span
+                              key={idx}
+                              className="text-xs bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-700 flex items-center gap-1.5"
+                            >
+                              <span className="font-medium">{item.name}</span>
+                              <span className="text-slate-400">×{item.quantity}</span>
+                              <span className="font-bold text-indigo-600 font-mono">
+                                {formatCurrency(item.price)}
+                              </span>
+                            </span>
+                          ))}
+                          {quote.product_breakdown.length > 3 && (
+                            <span className="text-xs text-slate-500 self-center">
+                              +{quote.product_breakdown.length - 3} more items
                             </span>
                           )}
                         </div>
-                      </div>
-                    </div>
-
-                    {/* RFQ Info */}
-                    <div className="mb-3">
-                      <Link
-                        href={route('buyer.rfqs.show', quote.rfq.id)}
-                        className="text-sm text-indigo-600 hover:text-indigo-800"
-                      >
-                        RFQ: {quote.rfq.title} (#{quote.rfq.rfq_number})
-                      </Link>
-                    </div>
-
-                    {/* Supplier Info */}
-                    <div className="flex items-center text-sm text-gray-600 mb-3">
-                      <FiUser className="mr-1" />
-                      <span>Supplier: {quote.supplier?.name}</span>
-                      {quote.supplier?.supplier?.verification_status === 'verified' && (
-                        <span className="ml-2 px-2 py-0.5 bg-green-100 text-green-600 text-xs rounded">
-                          Verified
-                        </span>
                       )}
                     </div>
 
-                    {/* Quote Details Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
-                      <div>
-                        <p className="text-xs text-gray-500">total amount</p>
-                        <p className="font-bold text-indigo-600">{formatCurrency(quote.total_amount)}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500">Expires</p>
-                        <p className="text-sm flex items-center">
-                          <FiCalendar className="mr-1 text-gray-400" />
-                          {formatDate(quote.valid_until)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500">Date of receipt</p>
-                        <p className="text-sm">{formatDate(quote.created_at)}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500">Item</p>
-                        <p className="text-sm">{quote.rfq?.products_requested?.length || 0} products</p>
-                      </div>
+                    {/* Actions Column */}
+                    <div className="flex flex-row lg:flex-col items-center lg:items-stretch gap-2 pt-4 lg:pt-0 border-t lg:border-t-0 border-slate-100">
+                      <Link
+                        href={route('buyer.quotes.show', quote.id)}
+                        className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors"
+                      >
+                        <FiEye className="w-3.5 h-3.5" />
+                        View Quotation
+                      </Link>
+
+                      {quote.status === 'pending' && valid && (
+                        <>
+                          <Link
+                            href={route('buyer.quotes.accept-confirm', quote.id)}
+                            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors"
+                          >
+                            <FiCheckCircle className="w-3.5 h-3.5" />
+                            Accept Bid
+                          </Link>
+                          <Link
+                            href={route('buyer.quotes.reject-confirm', quote.id)}
+                            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-xl transition-colors"
+                          >
+                            <FiXCircle className="w-3.5 h-3.5" />
+                            Decline
+                          </Link>
+                        </>
+                      )}
+
+                      <button
+                        onClick={() => router.get(route('buyer.quotes.download', quote.id))}
+                        className="flex-1 lg:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
+                      >
+                        <FiDownload className="w-3.5 h-3.5" />
+                        Download PDF
+                      </button>
                     </div>
-
-                    {/* Product Breakdown Preview */}
-                    {quote.product_breakdown && (
-                      <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                        <p className="text-xs font-medium text-gray-700 mb-2">Price analysis:</p>
-                        <div className="space-y-1">
-                          {quote.product_breakdown.slice(0, 2).map((item, index) => (
-                            <div key={index} className="flex justify-between text-xs">
-                              <span>{item.name} x {item.quantity}</span>
-                              <span>{formatCurrency(item.price)}</span>
-                            </div>
-                          ))}
-                          {quote.product_breakdown.length > 2 && (
-                            <p className="text-xs text-gray-500">+{quote.product_breakdown.length - 2} more items</p>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex lg:flex-col space-x-2 lg:space-x-0 lg:space-y-2 mt-4 lg:mt-0 lg:ml-6">
-                    <Link
-                      href={route('buyer.quotes.show', quote.id)}
-                      className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors inline-flex items-center justify-center"
-                    >
-                      <FiEye className="mr-2" />
-                      for suppliers See details
-                    </Link>
-
-                    {quote.status === 'pending' && isQuoteValid(quote) && (
-                      <>
-                        <Link
-                          href={route('buyer.quotes.accept-confirm', quote.id)}
-                          className="px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors inline-flex items-center justify-center"
-                        >
-                          <FiCheckCircle className="mr-2" />
-                          accept
-                        </Link>
-                        <Link
-                          href={route('buyer.quotes.reject-confirm', quote.id)}
-                          className="px-4 py-2 bg-red-100 text-red-600 text-sm rounded-lg hover:bg-red-200 transition-colors inline-flex items-center justify-center"
-                        >
-                          <FiXCircle className="mr-2" />
-                          Rejection
-                        </Link>
-                      </>
-                    )}
-
-                    <button
-                      onClick={() => router.get(route('buyer.quotes.download', quote.id))}
-                      className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200 transition-colors inline-flex items-center justify-center"
-                    >
-                      <FiDownload className="mr-2" />
-                      PDF
-                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
             {/* Pagination */}
             {quotes.links && quotes.links.length > 3 && (
@@ -488,14 +486,14 @@ export default function QuotesIndex({ quotes, counts, rfqs }) {
                       onClick={() => router.get(link.url)}
                       dangerouslySetInnerHTML={{
                         __html: link.label
-                          .replace('Previous', 'previous')
-                          .replace('Next', 'next')
+                          .replace('Previous', '« Previous')
+                          .replace('Next', 'Next »')
                       }}
-                      className={`px-4 py-2 rounded-lg ${link.active
-                        ? 'bg-indigo-600 text-white'
+                      className={`px-4 py-2 text-xs font-semibold rounded-xl transition-colors ${link.active
+                        ? 'bg-indigo-600 text-white shadow-xs'
                         : link.url
-                          ? 'bg-white border hover:bg-gray-50'
-                          : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          ? 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
+                          : 'bg-slate-100 text-slate-400 cursor-not-allowed'
                         }`}
                       disabled={!link.url}
                     />

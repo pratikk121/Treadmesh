@@ -1,43 +1,27 @@
-// Pages/Buyer/Quotes/Compare.jsx
+// resources/js/Pages/Buyer/Quotes/Compare.jsx
 
-// React - Core React imports for component functionality
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
-
-// Layout - Buyer dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
+import {
+  formatCurrency,
+  formatIndianDate,
+  formatQuoteStatus
+} from '@/Utils/formatters';
 import {
   FiArrowLeft,
   FiCheckCircle,
   FiXCircle,
   FiClock,
   FiStar,
-  FiPackage
+  FiPackage,
+  FiShield,
+  FiEye,
+  FiCheck,
+  FiX
 } from 'react-icons/fi';
 
 export default function QuoteCompare({ comparisonData }) {
-
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
-
-  // Format date - Converts ISO date to readable format
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-
-  // Get all unique product names across all quotes for comparison
   const getAllProducts = () => {
     const products = new Set();
     comparisonData.forEach(item => {
@@ -52,176 +36,223 @@ export default function QuoteCompare({ comparisonData }) {
 
   return (
     <DashboardLayout>
-      <Head title="Compare Quotes" />
+      <Head title="Compare Vendor Quotations" />
 
       <div className="space-y-6">
-        {/* Header - Back button and page title */}
-        <div className="flex items-center space-x-4">
+        {/* Header */}
+        <div className="flex items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
           <Link
             href={route('buyer.quotes.index')}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-colors"
+            title="Back to Quotations"
           >
-            <FiArrowLeft className="text-xl" />
+            <FiArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Compare Quotes</h2>
-            <p className="text-gray-600 mt-1">Compare Quotess Side by Side to Make Best Decisions</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
+              Side-by-Side Quotation Benchmark
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Compare competing vendor prices, delivery schedules, and line item costs to determine the optimal procurement award.
+            </p>
           </div>
         </div>
 
-        {/* Comparison Table - Responsive with horizontal scroll */}
-        <div className="bg-white rounded-xl border overflow-x-auto">
-          <table className="w-full min-w-[800px]">
-            {/* Table Header - Quote headers */}
-            <thead>
-              <tr className="bg-gray-50 border-b">
-                <th className="p-4 text-left font-medium text-gray-700">Criterion</th>
-                {comparisonData.map((item, index) => (
-                  <th key={index} className="p-4 text-left font-medium text-gray-700">
-                    <div className="space-y-2">
-                      <p className="font-bold">Quote #{item.quote.quote_number}</p>
-                      <p className="text-sm text-gray-500">{item.supplier}</p>
-                      <div className="flex items-center text-sm">
-                        <FiStar className="text-yellow-400 mr-1" />
-                        <span>{item.supplier_rating}</span>
-                      </div>
-                    </div>
+        {/* Comparison Matrix */}
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[800px] border-collapse text-left text-xs">
+              {/* Table Header */}
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200">
+                  <th className="p-4 font-bold text-slate-600 uppercase tracking-wider w-48">
+                    Evaluation Criterion
                   </th>
-                ))}
-              </tr>
-            </thead>
+                  {comparisonData.map((item, index) => (
+                    <th key={index} className="p-4 font-bold text-slate-900 border-l border-slate-200 min-w-[220px]">
+                      <div className="space-y-1">
+                        <span className="font-mono text-xs px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-bold inline-block">
+                          Quote #{item.quote.quote_number}
+                        </span>
+                        <p className="text-sm font-extrabold text-slate-900 mt-1">{item.supplier}</p>
+                        <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
+                          <FiStar className="text-amber-400 w-3.5 h-3.5 fill-amber-400" />
+                          <span>Rating: {item.supplier_rating || '4.8'} / 5.0</span>
+                        </div>
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
 
-            {/* Table Body - Comparison rows */}
-            <tbody>
-              {/* Total Amount Row */}
-              <tr className="border-b">
-                <td className="p-4 font-medium">total amount</td>
-                {comparisonData.map((item, index) => (
-                  <td key={index} className="p-4">
-                    <span className="text-lg font-bold text-indigo-600">
-                      {formatCurrency(item.total)}
-                    </span>
+              <tbody className="divide-y divide-slate-200">
+                {/* Commercial Bid */}
+                <tr className="hover:bg-slate-50/50">
+                  <td className="p-4 font-bold text-slate-700 bg-slate-50/50">
+                    Grand Total Commercial Bid
                   </td>
-                ))}
-              </tr>
+                  {comparisonData.map((item, index) => (
+                    <td key={index} className="p-4 border-l border-slate-200">
+                      <span className="text-base font-extrabold text-indigo-600 font-mono block">
+                        {formatCurrency(item.total)}
+                      </span>
+                      <span className="text-[10px] text-slate-400">All Taxes & Freight terms as quoted</span>
+                    </td>
+                  ))}
+                </tr>
 
-              {/* Status Row */}
-              <tr className="border-b">
-                <td className="p-4 font-medium">Status</td>
-                {comparisonData.map((item, index) => (
-                  <td key={index} className="p-4">
-                    <span className={`px-2 py-1 text-xs rounded-full ${item.quote.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                        item.quote.status === 'accepted' ? 'bg-green-100 text-green-700' :
-                          'bg-red-100 text-red-700'
+                {/* Status Row */}
+                <tr className="hover:bg-slate-50/50">
+                  <td className="p-4 font-bold text-slate-700 bg-slate-50/50">
+                    Bid Status
+                  </td>
+                  {comparisonData.map((item, index) => (
+                    <td key={index} className="p-4 border-l border-slate-200">
+                      <span className={`inline-block px-2.5 py-1 text-xs font-semibold rounded-full ${
+                        item.quote.status === 'accepted' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                        item.quote.status === 'rejected' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                        'bg-amber-50 text-amber-700 border border-amber-200'
                       }`}>
-                      {item.quote.status === 'pending' ? 'Awaiting' :
-                        item.quote.status === 'accepted' ? 'accepted' :
-                          item.quote.status === 'rejected' ? 'Rejected' : item.quote.status}
-                    </span>
-                  </td>
-                ))}
-              </tr>
-
-              {/* Valid Until Row */}
-              <tr className="border-b">
-                <td className="p-4 font-medium">Expires</td>
-                {comparisonData.map((item, index) => (
-                  <td key={index} className="p-4">
-                    <div className="flex items-center">
-                      <FiClock className="mr-2 text-gray-400" />
-                      <span>{formatDate(item.valid_until)}</span>
-                    </div>
-                    {new Date(item.valid_until) < new Date() && (
-                      <span className="text-xs text-red-600 block mt-1">Expired</span>
-                    )}
-                  </td>
-                ))}
-              </tr>
-
-              {/* Supplier Verification Status Row */}
-              <tr className="border-b">
-                <td className="p-4 font-medium">Supplier Status</td>
-                {comparisonData.map((item, index) => (
-                  <td key={index} className="p-4">
-                    {item.quote.supplier?.supplier?.verification_status === 'verified' ? (
-                      <span className="flex items-center text-green-600">
-                        <FiCheckCircle className="mr-2" /> Verified
+                        {formatQuoteStatus(item.quote.status)}
                       </span>
-                    ) : (
-                      <span className="flex items-center text-gray-500">
-                        <FiXCircle className="mr-2" /> Verified
-                      </span>
-                    )}
-                  </td>
-                ))}
-              </tr>
+                    </td>
+                  ))}
+                </tr>
 
-              {/* Product Breakdown Rows - Dynamic per product */}
-              {allProducts.map((productName, productIndex) => (
-                <tr key={productIndex} className="border-b">
-                  <td className="p-4 font-medium">{productName}</td>
-                  {comparisonData.map((item, quoteIndex) => {
-                    const product = item.breakdown?.find(p => p.name === productName);
+                {/* Validity */}
+                <tr className="hover:bg-slate-50/50">
+                  <td className="p-4 font-bold text-slate-700 bg-slate-50/50">
+                    Quotation Validity
+                  </td>
+                  {comparisonData.map((item, index) => {
+                    const isExp = new Date(item.valid_until) < new Date();
                     return (
-                      <td key={quoteIndex} className="p-4">
-                        {product ? (
-                          <div>
-                            <p className="font-medium">{formatCurrency(product.price)}</p>
-                            <p className="text-xs text-gray-500">
-                              {product.quantity} Unit
-                            </p>
-                          </div>
-                        ) : (
-                          <span className="text-gray-400">-</span>
+                      <td key={index} className="p-4 border-l border-slate-200">
+                        <div className="flex items-center gap-1.5 font-mono">
+                          <FiClock className="text-slate-400 w-3.5 h-3.5" />
+                          <span className={isExp ? 'text-rose-600 font-semibold' : 'text-slate-700'}>
+                            {formatIndianDate(item.valid_until)}
+                          </span>
+                        </div>
+                        {isExp && (
+                          <span className="text-[10px] font-bold text-rose-600 uppercase mt-0.5 block">
+                            Expired
+                          </span>
                         )}
                       </td>
                     );
                   })}
                 </tr>
-              ))}
 
-              {/* Action Buttons Row */}
-              <tr>
-                <td className="p-4"></td>
-                {comparisonData.map((item, index) => (
-                  <td key={index} className="p-4">
-                    {item.quote.status === 'pending' && new Date(item.valid_until) >= new Date() ? (
-                      <div className="space-y-2">
-                        <Link
-                          href={route('buyer.quotes.accept-confirm', item.quote.id)}
-                          className="block w-full text-center px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700"
-                        >
-                          accept
-                        </Link>
-                        <Link
-                          href={route('buyer.quotes.reject-confirm', item.quote.id)}
-                          className="block w-full text-center px-3 py-2 bg-red-100 text-red-600 text-sm rounded-lg hover:bg-red-200"
-                        >
-                          Rejection
-                        </Link>
-                      </div>
-                    ) : (
-                      <Link
-                        href={route('buyer.quotes.show', item.quote.id)}
-                        className="block w-full text-center px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200"
-                      >
-                        for suppliers See details
-                      </Link>
-                    )}
+                {/* GST Compliance */}
+                <tr className="hover:bg-slate-50/50">
+                  <td className="p-4 font-bold text-slate-700 bg-slate-50/50">
+                    Vendor Compliance
                   </td>
+                  {comparisonData.map((item, index) => {
+                    const isVerified = item.quote.supplier?.supplier?.verification_status === 'verified';
+                    return (
+                      <td key={index} className="p-4 border-l border-slate-200">
+                        {isVerified ? (
+                          <span className="inline-flex items-center gap-1 text-emerald-700 font-semibold">
+                            <FiShield className="w-3.5 h-3.5 text-emerald-500" />
+                            GST & KYC Verified
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-slate-500">
+                            <FiClock className="w-3.5 h-3.5 text-slate-400" />
+                            Standard Verification
+                          </span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+
+                {/* Line Item Pricing Rows */}
+                {allProducts.map((productName, productIndex) => (
+                  <tr key={productIndex} className="hover:bg-slate-50/50">
+                    <td className="p-4 font-semibold text-slate-800 bg-slate-50/50">
+                      <div className="flex items-center gap-1.5">
+                        <FiPackage className="w-3.5 h-3.5 text-slate-400" />
+                        <span>{productName}</span>
+                      </div>
+                    </td>
+                    {comparisonData.map((item, quoteIndex) => {
+                      const product = item.breakdown?.find(p => p.name === productName);
+                      const unitPrice = product && product.quantity > 0 ? (product.price / product.quantity) : 0;
+                      return (
+                        <td key={quoteIndex} className="p-4 border-l border-slate-200">
+                          {product ? (
+                            <div>
+                              <span className="font-mono font-bold text-slate-900 block">
+                                {formatCurrency(product.price)}
+                              </span>
+                              <span className="text-[11px] text-slate-500 font-mono">
+                                {product.quantity} units · {formatCurrency(unitPrice)}/unit
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-slate-300 font-mono">—</span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
                 ))}
-              </tr>
-            </tbody>
-          </table>
+
+                {/* Action Row */}
+                <tr className="bg-slate-50/70">
+                  <td className="p-4 font-bold text-slate-700">Procurement Action</td>
+                  {comparisonData.map((item, index) => {
+                    const isPending = item.quote.status === 'pending';
+                    const isValid = new Date(item.valid_until) >= new Date();
+                    return (
+                      <td key={index} className="p-4 border-l border-slate-200">
+                        {isPending && isValid ? (
+                          <div className="space-y-1.5">
+                            <Link
+                              href={route('buyer.quotes.accept-confirm', item.quote.id)}
+                              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors"
+                            >
+                              <FiCheck className="w-3.5 h-3.5" />
+                              Accept & Issue PO
+                            </Link>
+                            <Link
+                              href={route('buyer.quotes.reject-confirm', item.quote.id)}
+                              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-xl transition-colors"
+                            >
+                              <FiX className="w-3.5 h-3.5" />
+                              Decline Bid
+                            </Link>
+                          </div>
+                        ) : (
+                          <Link
+                            href={route('buyer.quotes.show', item.quote.id)}
+                            className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
+                          >
+                            <FiEye className="w-3.5 h-3.5" />
+                            View Quote Details
+                          </Link>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        {/* Legend/Notes */}
-        <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-600">
-          <p className="flex items-center">
-            <FiPackage className="mr-2" />
-            Compare quotes based on total quantity, product price, and supplier details.
-            Select the best quote for your requirements.
-          </p>
+        {/* Informational Guidance Footer */}
+        <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 text-xs text-slate-600 flex items-start gap-3">
+          <FiShield className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
+          <div>
+            <p className="font-bold text-slate-800">Commercial Tender Governance Protocol</p>
+            <p className="text-slate-500 mt-0.5 leading-relaxed">
+              Awarding a quotation will formally notify the selected vendor and create an active Purchase Order in the Treadmesh procurement ledger. All competing open bids on this RFQ will be concluded.
+            </p>
+          </div>
         </div>
       </div>
     </DashboardLayout>

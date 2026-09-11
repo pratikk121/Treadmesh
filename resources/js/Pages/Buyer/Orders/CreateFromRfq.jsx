@@ -1,27 +1,28 @@
-// Pages/Buyer/Orders/CreateFromRfq.jsx
+// resources/js/Pages/Buyer/Orders/CreateFromRfq.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-
-// Layout - Buyer dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
+import {
+  formatCurrency,
+  formatIndianDate
+} from '@/Utils/formatters';
 import {
   FiArrowLeft,
   FiPackage,
   FiCheckCircle,
   FiMapPin,
-  FiAlertCircle
+  FiAlertCircle,
+  FiShoppingBag,
+  FiFileText,
+  FiShield,
+  FiCheck
 } from 'react-icons/fi';
 
 export default function CreateFromRfq({ rfq, quote }) {
-  // State management for order placement confirmation
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderNumber, setOrderNumber] = useState(null);
 
-  // Inertia form handling
   const { data, setData, post, processing, errors } = useForm({
     notes: '',
     rfq_id: rfq.id,
@@ -30,25 +31,6 @@ export default function CreateFromRfq({ rfq, quote }) {
     terms_accepted: false,
   });
 
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(value);
-  };
-
-  // Format date - Converts ISO date to readable format
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -56,37 +38,33 @@ export default function CreateFromRfq({ rfq, quote }) {
       preserveScroll: true,
       onSuccess: (response) => {
         setOrderPlaced(true);
-        // Set order number from response if available
         if (response.props?.order?.order_number) {
           setOrderNumber(response.props.order.order_number);
         }
       },
-      onError: () => {
-
-      },
     });
   };
 
-  // Check if RFQ is still open
+  // RFQ Not Open
   if (rfq.status !== 'open') {
     return (
       <DashboardLayout>
-        <Head title="RFQ Close - Order creation" />
+        <Head title="Tender Concluded" />
 
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-center max-w-md mx-auto p-8 bg-white rounded-xl shadow-lg">
-            <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FiAlertCircle className="w-10 h-10 text-yellow-600" />
+          <div className="text-center max-w-md mx-auto p-8 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
+            <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <FiAlertCircle className="w-8 h-8 text-amber-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">RFQ </h2>
-            <p className="text-gray-600 mb-6">
-              This RFQ is not open for orders. It has been closed or an order has already been created.
+            <h2 className="text-xl font-bold text-slate-800 mb-2">Tender Concluded</h2>
+            <p className="text-sm text-slate-600 mb-6">
+              This procurement tender is no longer active for orders. It has either been concluded or an order has already been created.
             </p>
             <Link
               href={route('buyer.rfqs.show', rfq.id)}
-              className="inline-block px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition-colors"
             >
-              RFQ-Back to
+              Return to Tender Overview
             </Link>
           </div>
         </div>
@@ -94,26 +72,26 @@ export default function CreateFromRfq({ rfq, quote }) {
     );
   }
 
-  // Check if order already exists for this RFQ
+  // Order already exists
   if (rfq.order) {
     return (
       <DashboardLayout>
-        <Head title="Order exists" />
+        <Head title="Purchase Order Exists" />
 
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-center max-w-md mx-auto p-8 bg-white rounded-xl shadow-lg">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FiCheckCircle className="w-10 h-10 text-green-600" />
+          <div className="text-center max-w-md mx-auto p-8 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
+            <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <FiCheckCircle className="w-8 h-8 text-emerald-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">Order Already Placed</h2>
-            <p className="text-gray-600 mb-6">
-              An Order Has Already Been Created for This RFQ.
+            <h2 className="text-xl font-bold text-slate-800 mb-2">Purchase Order Already Placed</h2>
+            <p className="text-sm text-slate-600 mb-6">
+              A formal Purchase Order has already been generated for this procurement tender.
             </p>
             <Link
               href={route('buyer.orders.show', rfq.order.id)}
-              className="inline-block px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition-colors"
             >
-              View order
+              View Purchase Order →
             </Link>
           </div>
         </div>
@@ -121,38 +99,38 @@ export default function CreateFromRfq({ rfq, quote }) {
     );
   }
 
-  // Success state after order placement
+  // Order Placed Success View
   if (orderPlaced) {
     return (
       <DashboardLayout>
-        <Head title="Order was successful" />
+        <Head title="Purchase Order Created" />
 
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-center max-w-md mx-auto p-8 bg-white rounded-xl shadow-lg">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FiCheckCircle className="w-10 h-10 text-green-600" />
+          <div className="text-center max-w-md mx-auto p-8 bg-white rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+            <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto">
+              <FiCheckCircle className="w-8 h-8 text-emerald-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">Order successfully created!</h2>
-            <p className="text-gray-600 mb-4">
-              Your order has been successfully created. The supplier will confirm your order within 24-48 hours.
+            <h2 className="text-xl font-bold text-slate-900">Purchase Order Successfully Placed!</h2>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Your Purchase Order has been transmitted to the supplier. Freight dispatch and E-Way bill generation will follow vendor confirmation.
             </p>
             {orderNumber && (
-              <p className="text-sm bg-gray-50 p-3 rounded-lg mb-6">
-                Order number: <span className="font-bold text-indigo-600">{orderNumber}</span>
-              </p>
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono">
+                Order Ref: <strong className="text-indigo-600 text-sm">{orderNumber}</strong>
+              </div>
             )}
-            <div className="space-y-3">
+            <div className="space-y-2 pt-2">
               <Link
                 href={route('buyer.orders.index')}
-                className="block w-full px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                className="block w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-colors"
               >
-                View my order
+                Go to Order Management
               </Link>
               <Link
                 href={route('buyer.rfqs.show', rfq.id)}
-                className="block w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                className="block w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
               >
-                RFQ-Back to
+                Back to RFQ Tender
               </Link>
             </div>
           </div>
@@ -163,197 +141,200 @@ export default function CreateFromRfq({ rfq, quote }) {
 
   return (
     <DashboardLayout>
-      <Head title="Order confirmation" />
+      <Head title="Generate Purchase Order from Quote" />
 
       <div className="space-y-6">
-        {/* Header - Back button and page title */}
-        <div className="flex items-center space-x-4">
+        {/* Header */}
+        <div className="flex items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
           <Link
             href={route('buyer.rfqs.show', rfq.id)}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-colors"
+            title="Back to RFQ"
           >
-            <FiArrowLeft className="text-xl" />
+            <FiArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Confirm order</h2>
-            <p className="text-gray-600 mt-1">Review and confirm your order details</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
+              Generate Purchase Order (PO)
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Award commercial tender #{rfq.rfq_number} and instantiate order contract with {quote.supplier?.name}.
+            </p>
           </div>
         </div>
 
-        {/* Main Content Grid */}
+        {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Main Form Content */}
+          {/* Left Column: Scope & Delivery Details */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Order Summary Section */}
-            <div className="bg-white rounded-xl border p-6">
-              <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiPackage className="mr-2" /> Order Summary
-              </h3>
+            {/* Tender Summary */}
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                  <FiPackage className="w-4 h-4 text-indigo-600" />
+                  Bill of Quantities & Agreed Pricing
+                </h2>
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Winning Bid
+                </span>
+              </div>
 
-              <div className="space-y-4">
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <div className="flex justify-between items-start mb-2">
-                    <p className="font-medium">RFQ: {rfq.rfq_number}</p>
-                    <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">
-                      Accepted Quote
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+                <span className="text-slate-500 block">Tender Subject:</span>
+                <span className="font-bold text-slate-800 text-sm mt-0.5 block">{rfq.title} (#{rfq.rfq_number})</span>
+              </div>
+
+              {/* Line items list */}
+              <div className="divide-y divide-slate-100 text-xs">
+                {rfq.products_requested?.map((product, idx) => (
+                  <div key={idx} className="py-2.5 first:pt-0 last:pb-0 flex justify-between items-center">
+                    <span className="font-medium text-slate-800">
+                      {product.name} <span className="text-slate-400">· {product.quantity} {product.unit}</span>
+                    </span>
+                    <span className="font-mono text-slate-700 font-semibold">
+                      Confirmed in Bid
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">{rfq.title}</p>
+                ))}
+              </div>
 
-                  {/* Product items list */}
-                  <div className="space-y-2">
-                    {rfq.products_requested?.map((product, idx) => (
-                      <div key={idx} className="flex justify-between text-sm">
-                        <span>{product.name} x {product.quantity} {product.unit}</span>
-                        <span className="font-medium">{formatCurrency(product.quantity * (quote.total_amount / rfq.quantity))}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Total amount */}
-                  <div className="mt-3 pt-3 border-t flex justify-between">
-                    <span className="font-medium">total amount</span>
-                    <span className="font-bold text-indigo-600">{formatCurrency(quote.total_amount)}</span>
-                  </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3 border-t border-slate-100 text-xs">
+                <div>
+                  <span className="text-slate-500 block">Vendor Enterprise</span>
+                  <span className="font-bold text-slate-900 mt-0.5 block">{quote.supplier?.name}</span>
                 </div>
-
-                {/* Supplier and quote details */}
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-500">Supplier</p>
-                    <p className="font-medium">{quote.supplier?.name}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">Company</p>
-                    <p className="font-medium">{quote.supplier?.supplier?.company_name}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">Quote Number</p>
-                    <p className="font-medium">{quote.quote_number}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">Expires</p>
-                    <p className="font-medium">{formatDate(quote.valid_until)}</p>
-                  </div>
+                <div>
+                  <span className="text-slate-500 block">Registered Entity</span>
+                  <span className="font-medium text-slate-700 mt-0.5 block">
+                    {quote.supplier?.supplier?.company_name || 'N/A'}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block">Quote Reference</span>
+                  <span className="font-bold text-slate-900 font-mono mt-0.5 block">#{quote.quote_number}</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block">Validity</span>
+                  <span className="font-semibold text-slate-700 font-mono mt-0.5 block">
+                    {formatIndianDate(quote.valid_until)}
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Shipping Address Form */}
-            <div className="bg-white rounded-xl border p-6">
-              <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiMapPin className="mr-2" /> Shipping address is
-              </h3>
+            {/* Delivery Address */}
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                <FiMapPin className="w-4 h-4 text-rose-500" />
+                Consignee Site & Delivery Address <span className="text-rose-500">*</span>
+              </h2>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Shipping address is <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    value={data.shipping_address}
-                    onChange={(e) => setData('shipping_address', e.target.value)}
-                    rows="3"
-                    className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Enter your complete shipping address"
-                    required
-                  />
-                  {errors.shipping_address && (
-                    <p className="mt-1 text-sm text-red-600">{errors.shipping_address}</p>
-                  )}
-                </div>
+              <div>
+                <textarea
+                  value={data.shipping_address}
+                  onChange={(e) => setData('shipping_address', e.target.value)}
+                  rows="3"
+                  className={`w-full text-xs border rounded-xl px-3 py-2 text-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
+                    errors.shipping_address ? 'border-rose-500 bg-rose-50/20' : 'border-slate-300'
+                  }`}
+                  placeholder="Enter complete delivery address with Industrial Estate/Plot #, City, State, and PIN Code..."
+                  required
+                />
+                {errors.shipping_address && (
+                  <p className="mt-1.5 text-xs text-rose-600 font-semibold">{errors.shipping_address}</p>
+                )}
+              </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Additional Notes (Optional)
-                  </label>
-                  <textarea
-                    value={data.notes}
-                    onChange={(e) => setData('notes', e.target.value)}
-                    rows="2"
-                    className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="SPECIAL INSTRUCTIONS FOR SUPPLIERS..."
-                  />
-                </div>
+              <div>
+                <label className="block text-xs font-semibold uppercase text-slate-600 mb-1">
+                  Procurement Memo / Unloading Instructions (Optional)
+                </label>
+                <textarea
+                  value={data.notes}
+                  onChange={(e) => setData('notes', e.target.value)}
+                  rows="2"
+                  className="w-full text-xs border border-slate-300 rounded-xl px-3 py-2 text-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Gate pass instructions, site supervisor contact, loading dock restrictions..."
+                />
               </div>
             </div>
           </div>
 
-          {/* Right Column - Sidebar */}
+          {/* Right Column: Commercial Summary & Order Creation */}
           <div className="space-y-6">
-            {/* Order Total Card */}
-            <div className="bg-white rounded-xl border p-6">
-              <h3 className="font-medium text-gray-700 mb-4">Total order amount is</h3>
-              <p className="text-3xl font-bold text-indigo-600">{formatCurrency(quote.total_amount)}</p>
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+                Commercial Settlement Summary
+              </h2>
 
-              <div className="mt-4 space-y-2 text-sm text-gray-600">
+              <p className="text-3xl font-extrabold text-slate-900 font-mono">
+                {formatCurrency(quote.total_amount)}
+              </p>
+
+              <div className="space-y-2 pt-2 border-t border-slate-100 text-xs text-slate-600">
                 <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <span>{formatCurrency(quote.total_amount)}</span>
+                  <span>Quoted Base Commercials</span>
+                  <span className="font-mono font-bold text-slate-800">{formatCurrency(quote.total_amount)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Shipping</span>
-                  <span>The supplier will calculate</span>
+                  <span>Freight & E-Way Bill</span>
+                  <span className="text-slate-500">As per quote / Vendor dispatch</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Tax</span>
-                  <span>Includes</span>
+                  <span>GST Applicable</span>
+                  <span className="text-slate-500">HSN/SAC compliant</span>
                 </div>
               </div>
             </div>
 
-            {/* Terms and Submit Button */}
-            <div className="bg-white rounded-xl border p-6">
-              <div className="space-y-4">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={data.terms_accepted}
-                    onChange={(e) => setData('terms_accepted', e.target.checked)}
-                    className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                  />
-                  <span className="ml-2 text-sm text-gray-600">
-                    I confirm the order details are correct and accept the terms and conditions
-                  </span>
-                </label>
-                {errors.terms_accepted && (
-                  <p className="text-sm text-red-600">{errors.terms_accepted}</p>
+            {/* Terms and Confirmation */}
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+              <label className="flex items-start gap-2.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={data.terms_accepted}
+                  onChange={(e) => setData('terms_accepted', e.target.checked)}
+                  className="mt-0.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                />
+                <span className="text-xs text-slate-600 leading-relaxed">
+                  I confirm the procurement specifications and agree to the Treadmesh B2B escrow and E-Way bill delivery terms.
+                </span>
+              </label>
+              {errors.terms_accepted && (
+                <p className="text-xs text-rose-600 font-semibold">{errors.terms_accepted}</p>
+              )}
+
+              <button
+                onClick={handleSubmit}
+                disabled={processing || !data.terms_accepted || !data.shipping_address}
+                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {processing ? (
+                  <>
+                    <svg className="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Instantiating Order...
+                  </>
+                ) : (
+                  <>
+                    <FiCheck className="w-4 h-4" />
+                    Confirm & Issue Purchase Order
+                  </>
                 )}
-
-                <button
-                  onClick={handleSubmit}
-                  disabled={processing || !data.terms_accepted || !data.shipping_address}
-                  className="w-full px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                >
-                  {processing ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      processing...
-                    </>
-                  ) : (
-                    'Confirm order'
-                  )}
-                </button>
-              </div>
+              </button>
             </div>
 
-            {/* Information Box - Next steps */}
-            <div className="bg-blue-50 rounded-xl p-4">
-              <div className="flex items-start gap-3">
-                <FiCheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm text-blue-700 font-medium">What's Next?</p>
-                  <ul className="mt-2 text-xs text-blue-600 list-disc list-inside space-y-1">
-                    <li>Supplier will confirm order within 24-48 hours</li>
-                    <li>Get order processing updates</li>
-                    <li>Payment can be completed after the order is confirmed</li>
-                    <li>Track your order status in real-time</li>
-                  </ul>
-                </div>
+            {/* Escrow Guidance */}
+            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 text-xs space-y-2 text-slate-600">
+              <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                <FiShield className="w-4 h-4 text-emerald-600" />
+                <span>Nodal Escrow Guaranteed</span>
               </div>
+              <p className="text-[11px] leading-relaxed text-slate-500">
+                Your funds are held securely in an RBI-compliant nodal account until goods are received and verified against the Bill of Quantities (BOQ).
+              </p>
             </div>
           </div>
         </div>
