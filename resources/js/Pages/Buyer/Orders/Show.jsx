@@ -1,112 +1,72 @@
-// Pages/Buyer/Orders/Show.jsx
+// resources/js/Pages/Buyer/Orders/Show.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-
-// Layout - Buyer dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
 import {
-  FiShoppingBag,
   FiPackage,
   FiTruck,
   FiCheckCircle,
   FiXCircle,
   FiClock,
   FiArrowLeft,
-  FiDollarSign,
   FiUser,
   FiMapPin,
   FiAlertCircle,
   FiCreditCard,
   FiCheck,
-  FiPrinter
+  FiPrinter,
+  FiFileText,
+  FiShield
 } from 'react-icons/fi';
-
-// sweetalert - For beautiful alert messages
 import Swal from 'sweetalert2';
+import {
+  formatCurrency,
+  formatIndianDate,
+  formatOrderStatus,
+  formatPaymentStatus
+} from '@/Utils/formatters';
 
 export default function OrderShow({ order, tracking }) {
-
-  // State management for cancellation modal
   const [cancelling, setCancelling] = useState(false);
   const [cancellationReason, setCancellationReason] = useState('');
   const [showCancelModal, setShowCancelModal] = useState(false);
 
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
-
-  // Format date - Converts ISO date to readable format
-  const formatDate = (date) => {
-    if (!date) return 'N/A';
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  // Get status badge color based on order status
-  const getStatusColor = (status) => {
-    const colors = {
-      'pending_confirmation': 'bg-yellow-100 text-yellow-700',
-      'confirmed': 'bg-blue-100 text-blue-700',
-      'processing': 'bg-purple-100 text-purple-700',
-      'shipped': 'bg-indigo-100 text-indigo-700',
-      'delivered': 'bg-green-100 text-green-700',
-      'cancelled': 'bg-red-100 text-red-700'
-    };
-    return colors[status] || 'bg-gray-100 text-gray-700';
-  };
-
-  // Get status icon based on order status
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'pending_confirmation':
-        return <FiClock className="text-yellow-600" />;
-      case 'confirmed':
-        return <FiCheckCircle className="text-blue-600" />;
-      case 'processing':
-        return <FiPackage className="text-purple-600" />;
-      case 'shipped':
-        return <FiTruck className="text-indigo-600" />;
-      case 'delivered':
-        return <FiCheckCircle className="text-green-600" />;
-      case 'cancelled':
-        return <FiXCircle className="text-red-600" />;
-      default:
-        return <FiShoppingBag className="text-gray-600" />;
+  const getStatusBadge = (status) => {
+    const s = (status || '').toLowerCase();
+    if (['delivered', 'confirmed', 'sure'].includes(s)) {
+      return 'bg-emerald-50 text-emerald-700 border-emerald-200 ring-1 ring-emerald-500/10';
     }
+    if (['processing', 'shipped'].includes(s)) {
+      return 'bg-sky-50 text-sky-700 border-sky-200 ring-1 ring-sky-500/10';
+    }
+    if (['pending_confirmation', 'pending'].includes(s)) {
+      return 'bg-amber-50 text-amber-700 border-amber-200 ring-1 ring-amber-500/10';
+    }
+    if (['cancelled', 'cancel'].includes(s)) {
+      return 'bg-rose-50 text-rose-700 border-rose-200 ring-1 ring-rose-500/10';
+    }
+    return 'bg-slate-50 text-slate-700 border-slate-200';
   };
 
-  // Handle order cancellation
   const handleCancel = () => {
     if (!cancellationReason.trim()) {
       Swal.fire({
         icon: 'warning',
-        title: 'Enter reason',
-        text: 'Please specify the reason for cancellation',
+        title: 'Cancellation Reason Required',
+        text: 'Please specify why this purchase order is being cancelled.',
       });
       return;
     }
 
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'This order will be canceled!',
+      title: 'Cancel Purchase Order?',
+      text: 'This will notify the supplier and cancel this purchase order transaction.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, cancel',
-      cancelButtonText: 'No',
+      confirmButtonText: 'Yes, Cancel Order',
+      cancelButtonText: 'Keep Order',
+      confirmButtonColor: '#dc2626',
     }).then((result) => {
       if (result.isConfirmed) {
         setCancelling(true);
@@ -117,20 +77,18 @@ export default function OrderShow({ order, tracking }) {
           onSuccess: () => {
             setShowCancelModal(false);
             setCancelling(false);
-
             Swal.fire({
               icon: 'success',
-              title: 'Canceled',
-              text: 'Order successfully canceled'
+              title: 'Order Cancelled',
+              text: 'Purchase order cancelled successfully.'
             });
           },
           onError: () => {
             setCancelling(false);
-
             Swal.fire({
               icon: 'error',
-              title: 'Error',
-              text: 'Order could not be canceled'
+              title: 'Cancellation Failed',
+              text: 'Unable to cancel order. Please contact support.'
             });
           }
         });
@@ -138,22 +96,23 @@ export default function OrderShow({ order, tracking }) {
     });
   };
 
-  // Handle mark as received
   const handleMarkReceived = () => {
     Swal.fire({
-      title: 'Have you received the order?',
+      title: 'Confirm Consignment Receipt?',
+      text: 'Confirming receipt will verify physical inspection and authorize releasing held Nodal Escrow funds to the supplier.',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Yes, Got',
-      cancelButtonText: 'No',
+      confirmButtonText: 'Yes, Received & Inspected',
+      cancelButtonText: 'Not Yet',
+      confirmButtonColor: '#059669',
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('buyer.orders.mark-received', order.id), {}, {
           onSuccess: () => {
             Swal.fire({
               icon: 'success',
-              title: 'Thanks',
-              text: 'The order has been accepted'
+              title: 'Delivery Confirmed',
+              text: 'Goods receipt verified. Nodal Escrow release initiated to supplier.'
             });
           }
         });
@@ -161,102 +120,98 @@ export default function OrderShow({ order, tracking }) {
     });
   };
 
-  // Handle payment (demo mode)
   const handlePayment = () => {
     Swal.fire({
-      title: "Complete payment?",
-      text: "This is a demo project. Payment will be simulated.",
-      icon: "question",
+      title: 'Deposit into Nodal Escrow?',
+      text: 'In production, this routes via Axis Bank RBI Nodal Escrow. In this demo, escrow deposit will be simulated instantly.',
+      icon: 'question',
       showCancelButton: true,
-      confirmButtonText: "Yes, pay",
-      cancelButtonText: "cancel",
-      confirmButtonColor: "#6366f1",
-      cancelButtonColor: "#6b7280",
+      confirmButtonText: 'Authorize Escrow Payment',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#0284c7',
     }).then((result) => {
       if (result.isConfirmed) {
-
         router.post(route('buyer.orders.pay', order.id), {}, {
           onSuccess: () => {
             Swal.fire({
-              icon: "success",
-              title: "Payment is successful",
-              text: "Your payment has been completed.",
-              timer: 2000,
+              icon: 'success',
+              title: 'Escrow Funded',
+              text: 'Funds are securely locked in Treadmesh RBI Nodal Escrow until delivery.',
+              timer: 2500,
               showConfirmButton: false,
             });
           },
           onError: (errors) => {
             Swal.fire({
-              icon: "error",
-              title: "Payment failed",
-              text: errors.message || "Please try again",
+              icon: 'error',
+              title: 'Payment Failed',
+              text: errors.message || 'Please try again or select another payment rail.',
             });
           }
         });
-
       }
     });
   };
 
   return (
     <DashboardLayout>
-      <Head title={`Order #${order.order_number}`} />
+      <Head title={`Purchase Order #${order.order_number} — Treadmesh`} />
 
-      <div className="space-y-6">
+      <div className="space-y-6 pb-12 max-w-6xl mx-auto">
         {/* Header - Back button, title and action buttons */}
-        <div className="flex items-center space-x-4">
-          <Link
-            href={route('buyer.orders.index')}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <FiArrowLeft className="text-xl" />
-          </Link>
-          <div className="flex-1">
-            <div className="flex items-center gap-3">
-              <h2 className="text-2xl font-bold text-gray-800">Order Details</h2>
-              <span className={`px-3 py-1 text-sm rounded-full ${getStatusColor(order.order_status)}`}>
-                {order.order_status === 'pending_confirmation' ? 'Awaiting' :
-                  order.order_status === 'confirmed' ? 'sure' :
-                    order.order_status === 'processing' ? 'In process' :
-                      order.order_status === 'shipped' ? 'Sent' :
-                        order.order_status === 'delivered' ? 'Delivered' :
-                          order.order_status === 'cancelled' ? 'cancel' : order.order_status.replace('_', ' ')}
-              </span>
-              <span className={`px-3 py-1 text-sm rounded-full ${order.payment_status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                }`}>
-                Payment: {order.payment_status === 'paid' ? 'Paid' : 'Awaiting'}
-              </span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-6">
+          <div className="flex items-center space-x-3">
+            <Link
+              href={route('buyer.orders.index')}
+              className="p-2 hover:bg-slate-100 rounded-xl text-slate-600 transition"
+            >
+              <FiArrowLeft className="text-xl" />
+            </Link>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-display">
+                  PO #{order.order_number}
+                </h1>
+                <span className={`inline-flex px-2.5 py-0.5 text-xs font-semibold rounded-full border ${getStatusBadge(order.order_status)}`}>
+                  {formatOrderStatus(order.order_status)}
+                </span>
+                <span className="inline-flex px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  {formatPaymentStatus(order.payment_status)}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-1 font-mono">
+                Initiated on {formatIndianDate(order.created_at)} &bull; Vendor: {order.supplier?.name}
+              </p>
             </div>
-            <p className="text-gray-600 mt-1">Order #{order.order_number}</p>
           </div>
 
-          {/* Action Buttons - Context sensitive */}
-          <div className="flex space-x-2">
-            <button
-              onClick={() => router.get(route('buyer.orders.invoice', order.id))}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center"
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              href={route('buyer.orders.invoice', order.id)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 text-xs font-semibold shadow-sm transition"
             >
-              <FiPrinter className="mr-2" />
-              Run
-            </button>
+              <FiFileText className="w-4 h-4 text-slate-500" />
+              <span>Tax Invoice</span>
+            </Link>
 
             {order.order_status === 'pending_confirmation' && (
               <button
                 onClick={() => setShowCancelModal(true)}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-rose-50 text-rose-700 border border-rose-200 rounded-xl hover:bg-rose-100 text-xs font-semibold transition"
               >
-                <FiXCircle className="mr-2" />
-                Cancel Order
+                <FiXCircle className="w-4 h-4" />
+                <span>Cancel PO</span>
               </button>
             )}
 
             {order.order_status === 'shipped' && (
               <button
                 onClick={handleMarkReceived}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 text-xs font-semibold shadow-sm transition"
               >
-                <FiCheckCircle className="mr-2" />
-                Marked as Received
+                <FiCheckCircle className="w-4 h-4" />
+                <span>Confirm Delivery Receipt</span>
               </button>
             )}
           </div>
@@ -264,187 +219,224 @@ export default function OrderShow({ order, tracking }) {
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Order Details */}
+          {/* Left 2 Cols - Items & Milestones */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Order Timeline */}
-            <div className="bg-white rounded-xl border p-6">
-              <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiClock className="mr-2" /> Order timeline
-              </h3>
+            {/* Order Items Table */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <div className="flex items-center gap-2">
+                  <FiPackage className="w-5 h-5 text-brand-600" />
+                  <h2 className="font-bold text-slate-900 text-base">Purchased Line Items</h2>
+                </div>
+                <span className="text-xs font-mono text-slate-500">
+                  {order.items?.length || 0} SKUs
+                </span>
+              </div>
 
-              <div className="relative">
-                {order.timeline?.map((step, index) => (
-                  <div key={index} className="flex items-start mb-4 last:mb-0">
-                    <div className="relative">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step.completed ? 'bg-green-100' : 'bg-gray-100'
-                        }`}>
-                        {step.completed ? (
-                          <FiCheck className="text-green-600" />
-                        ) : (
-                          <FiClock className="text-gray-400" />
-                        )}
+              <div className="divide-y divide-slate-100">
+                {order.items?.map((item, index) => (
+                  <div key={index} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/50 transition">
+                    <div className="flex items-start gap-3.5">
+                      <div className="w-11 h-11 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0 text-slate-600">
+                        <FiPackage className="w-5 h-5" />
                       </div>
-                      {index < order.timeline.length - 1 && (
-                        <div className={`absolute top-8 left-4 w-0.5 h-12 ${step.completed ? 'bg-green-200' : 'bg-gray-200'
-                          }`}></div>
-                      )}
+                      <div>
+                        <p className="font-semibold text-slate-900 text-sm">{item.product_name}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          Order Qty: <span className="font-mono font-semibold text-slate-700">{item.quantity} units</span>
+                          {' '}&bull;{' '}
+                          Rate: <span className="font-mono text-slate-700">{formatCurrency(item.unit_price)}</span>/unit
+                        </p>
+                      </div>
                     </div>
-                    <div className="ml-4 flex-1">
-                      <p className={`font-medium ${step.completed ? 'text-gray-800' : 'text-gray-400'}`}>
-                        {step.status}
-                      </p>
-                      {step.date && (
-                        <p className="text-sm text-gray-500">{formatDate(step.date)}</p>
-                      )}
+                    <div className="text-left sm:text-right">
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Line Total</span>
+                      <span className="font-mono font-bold text-slate-900 text-base">
+                        {formatCurrency(item.total_price)}
+                      </span>
                     </div>
                   </div>
                 ))}
+              </div>
+
+              {/* Order Cost Breakdown */}
+              <div className="p-5 bg-slate-50/80 border-t border-slate-100 space-y-2 text-xs">
+                <div className="flex justify-between text-slate-600">
+                  <span>Subtotal (Excl. Tax):</span>
+                  <span className="font-mono font-semibold text-slate-900">{formatCurrency(order.total_amount)}</span>
+                </div>
+                <div className="flex justify-between text-slate-600">
+                  <span>Freight & Logistics:</span>
+                  <span className="font-mono text-emerald-600 font-semibold">Included</span>
+                </div>
+                <div className="flex justify-between text-slate-600">
+                  <span>Taxes (GST 18% Integrated):</span>
+                  <span className="font-mono text-slate-500">Included in Quote Rate</span>
+                </div>
+                <div className="flex justify-between items-center pt-3 border-t border-slate-200 text-sm font-bold text-slate-900">
+                  <span>Total Purchase Value:</span>
+                  <span className="font-mono text-brand-600 text-base font-bold">{formatCurrency(order.total_amount)}</span>
+                </div>
               </div>
             </div>
 
-            {/* Order Items */}
-            <div className="bg-white rounded-xl border p-6">
-              <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiPackage className="mr-2" /> Order Item
-              </h3>
+            {/* Procurement & Fulfillment Milestones */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <h2 className="font-bold text-slate-900 text-base mb-5 flex items-center gap-2">
+                <FiClock className="w-5 h-5 text-brand-600" />
+                Procurement & Fulfillment Milestones
+              </h2>
 
-              <div className="space-y-4">
-                {order.items.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
-                    <div className="flex-1">
-                      <p className="font-medium">{item.product_name}</p>
-                      <p className="text-sm text-gray-500 mt-1">Amount: {item.quantity}</p>
+              <div className="relative pl-6 space-y-6 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                {order.timeline?.map((step, index) => (
+                  <div key={index} className="relative flex items-start gap-4">
+                    <div className={`absolute -left-6 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                      step.completed
+                        ? 'bg-emerald-600 text-white ring-4 ring-emerald-50'
+                        : 'bg-slate-200 text-slate-500'
+                    }`}>
+                      {step.completed ? <FiCheck className="w-3.5 h-3.5" /> : index + 1}
                     </div>
-                    <div className="text-right">
-                      <p className="font-medium">{formatCurrency(item.unit_price)} per</p>
-                      <p className="text-sm text-gray-600 mt-1">total: {formatCurrency(item.total_price)}</p>
+                    <div className="flex-1">
+                      <p className={`text-sm font-semibold ${step.completed ? 'text-slate-900' : 'text-slate-400'}`}>
+                        {formatOrderStatus(step.status)}
+                      </p>
+                      {step.date && (
+                        <p className="text-xs text-slate-500 font-mono mt-0.5">
+                          {formatIndianDate(step.date)}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
-              </div>
-
-              {/* Order Summary */}
-              <div className="mt-6 pt-4 border-t">
-                <div className="flex justify-between mb-2">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span className="font-medium">{formatCurrency(order.total_amount)}</span>
-                </div>
-                <div className="flex justify-between mb-2">
-                  <span className="text-gray-600">Shipping</span>
-                  <span className="font-medium">Free</span>
-                </div>
-                <div className="flex justify-between text-lg font-bold mt-4">
-                  <span>total</span>
-                  <span className="text-indigo-600">{formatCurrency(order.total_amount)}</span>
-                </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column - Additional Information */}
+          {/* Right Column - Consignee, Escrow & Supplier Details */}
           <div className="space-y-6">
-            {/* Shipping Address */}
-            <div className="bg-white rounded-xl border p-6">
-              <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiMapPin className="mr-2" /> Shipping address is
-              </h3>
-              <p className="text-gray-600 whitespace-pre-line">{order.shipping_address}</p>
+            {/* Nodal Escrow Status */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <FiShield className="w-5 h-5 text-emerald-600" />
+                <h3 className="font-bold text-slate-900 text-sm">Nodal Escrow Rail</h3>
+              </div>
+
+              <div className="space-y-3 text-xs">
+                <div className="flex justify-between py-1.5 border-b border-slate-100">
+                  <span className="text-slate-500">Escrow State</span>
+                  <span className="font-semibold text-emerald-700">
+                    {order.payment_status === 'paid' ? 'Secured in Nodal Account' : 'Awaiting Payment'}
+                  </span>
+                </div>
+                <div className="flex justify-between py-1.5 border-b border-slate-100">
+                  <span className="text-slate-500">Nodal Partner</span>
+                  <span className="font-medium text-slate-800">Axis Bank (RBI Escrow)</span>
+                </div>
+                <div className="flex justify-between py-1.5 border-b border-slate-100">
+                  <span className="text-slate-500">Gross Settlement</span>
+                  <span className="font-mono font-bold text-slate-900">{formatCurrency(order.total_amount)}</span>
+                </div>
+
+                {order.payment_status === 'pending' && (
+                  <div className="pt-2">
+                    <p className="text-[11px] text-amber-700 bg-amber-50 p-2.5 rounded-xl border border-amber-200/80 mb-3 flex items-start gap-1.5">
+                      <FiAlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                      Deposit funds into the nodal account to initiate vendor production.
+                    </p>
+                    <button
+                      onClick={handlePayment}
+                      className="w-full py-2.5 bg-brand-600 text-white rounded-xl hover:bg-brand-700 font-semibold text-xs transition shadow-sm"
+                    >
+                      Authorize Escrow Deposit (Demo)
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
-            {/* Supplier Information */}
-            <div className="bg-white rounded-xl border p-6">
-              <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiUser className="mr-2" /> Supplier Information
-              </h3>
-              <div className="space-y-2">
-                <p className="font-medium">{order.supplier?.name}</p>
+            {/* Consignee & Shipping Destination */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <FiMapPin className="w-5 h-5 text-brand-600" />
+                <h3 className="font-bold text-slate-900 text-sm">Consignee & Delivery Address</h3>
+              </div>
+              <p className="text-xs text-slate-700 whitespace-pre-line leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200/60">
+                {order.shipping_address || 'Delivery Address on File'}
+              </p>
+            </div>
+
+            {/* Manufacturer / Supplier Info */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <FiUser className="w-5 h-5 text-brand-600" />
+                <h3 className="font-bold text-slate-900 text-sm">Verified Vendor</h3>
+              </div>
+              <div className="space-y-1.5 text-xs">
+                <p className="font-bold text-slate-900">{order.supplier?.name}</p>
                 {order.supplier?.supplier && (
                   <>
-                    <p className="text-sm text-gray-600">{order.supplier.supplier.company_name}</p>
-                    <p className="text-sm text-gray-600">{order.supplier.supplier.company_phone}</p>
-                    <p className="text-sm text-gray-600">{order.supplier.supplier.company_email}</p>
+                    <p className="text-slate-600">{order.supplier.supplier.company_name}</p>
+                    <p className="text-slate-500 font-mono">GSTIN: {order.supplier.supplier.gstin || '27AAACG0123M1Z5'}</p>
+                    <p className="text-slate-500">Contact: {order.supplier.supplier.company_phone}</p>
                   </>
                 )}
                 <Link
                   href={route('buyer.suppliers.show', order.supplier_id)}
-                  className="mt-2 inline-block text-sm text-indigo-600 hover:text-indigo-800"
+                  className="mt-2 inline-block text-xs font-semibold text-brand-600 hover:text-brand-700"
                 >
-                  View Supplier Profile →
+                  View Vendor Profile &rarr;
                 </Link>
               </div>
             </div>
 
-            {/* Payment Information */}
-            <div className="bg-white rounded-xl border p-6">
-              <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                <FiCreditCard className="mr-2" /> Payment information
-              </h3>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Status</span>
-                  <span className={`font-medium ${order.payment_status === 'paid' ? 'text-green-600' : 'text-yellow-600'
-                    }`}>
-                    {order.payment_status === 'paid' ? 'Paid' : 'Awaiting'}
-                  </span>
-                </div>
-
-                {/* Demo mode indicator */}
-                {order.payment_status === 'pending' && (
-                  <div className="mt-2 text-xs text-gray-500 bg-gray-50 p-2 rounded">
-                    <span className="flex items-center">
-                      <FiAlertCircle className="mr-1 text-yellow-500" />
-                      Demo mode: No actual payment will be processed
-                    </span>
-                  </div>
-                )}
-
-                {order.payment_status === 'pending' && (
-                  <button
-                    onClick={handlePayment}
-                    className="w-full mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center"
-                  >
-                    <FiDollarSign className="mr-2" />
-                    Pay Now (Demo)
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* RFQ Information */}
+            {/* Linked RFQ */}
             {order.rfq && (
-              <div className="bg-white rounded-xl border p-6">
-                <h3 className="font-medium text-gray-700 mb-4">related to RFQ</h3>
-                <p className="font-medium">{order.rfq.title}</p>
-                <p className="text-sm text-gray-500 mt-1">RFQ #{order.rfq.rfq_number}</p>
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <h3 className="font-bold text-slate-900 text-sm mb-2">Originating Tender</h3>
+                <p className="text-xs font-semibold text-slate-800">{order.rfq.title}</p>
+                <p className="text-[11px] text-slate-500 font-mono mt-0.5">Tender #{order.rfq.rfq_number}</p>
                 <Link
                   href={route('buyer.rfqs.show', order.rfq.id)}
-                  className="mt-2 inline-block text-sm text-indigo-600 hover:text-indigo-800"
+                  className="mt-2 inline-block text-xs font-semibold text-brand-600 hover:text-brand-700"
                 >
-                  RFQ See →
+                  View RFQ Tender &rarr;
                 </Link>
               </div>
             )}
 
-            {/* Tracking Information */}
+            {/* Tracking / E-Way Bill */}
             {tracking && (
-              <div className="bg-white rounded-xl border p-6">
-                <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-                  <FiTruck className="mr-2" /> Tracking information
-                </h3>
-                <div className="space-y-2">
-                  <p className="text-sm">career: {tracking.carrier}</p>
-                  <p className="text-sm">Tracking number: {tracking.tracking_number}</p>
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <FiTruck className="w-5 h-5 text-brand-600" />
+                  <h3 className="font-bold text-slate-900 text-sm">E-Way Bill & Dispatch</h3>
+                </div>
+                <div className="space-y-2 text-xs">
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Carrier:</span>
+                    <span className="font-semibold text-slate-800">{tracking.carrier}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">AWB / E-Way Bill:</span>
+                    <span className="font-mono font-bold text-slate-900">{tracking.tracking_number}</span>
+                  </div>
                   {tracking.estimated_delivery && (
-                    <p className="text-sm">Estimated Delivery: {formatDate(tracking.estimated_delivery)}</p>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Est. Delivery:</span>
+                      <span className="font-semibold text-slate-800">{formatIndianDate(tracking.estimated_delivery)}</span>
+                    </div>
                   )}
-                  <a
-                    href={tracking.tracking_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-block text-sm text-indigo-600 hover:text-indigo-800"
-                  >
-                    Track the package →
-                  </a>
+                  {tracking.tracking_url && (
+                    <a
+                      href={tracking.tracking_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 inline-block text-xs font-semibold text-brand-600 hover:text-brand-700"
+                    >
+                      Track Consignment Live &rarr;
+                    </a>
+                  )}
                 </div>
               </div>
             )}
@@ -453,41 +445,37 @@ export default function OrderShow({ order, tracking }) {
 
         {/* Cancellation Modal */}
         {showCancelModal && (
-          <div className="fixed inset-0 z-50 overflow-y-auto">
-            <div className="flex items-center justify-center min-h-screen px-4">
-              <div className="fixed inset-0 bg-gray-500 bg-opacity-75" onClick={() => setShowCancelModal(false)}></div>
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+              <h3 className="text-lg font-bold text-slate-900 font-display">Cancel Purchase Order</h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Please specify the reason for cancelling PO #{order.order_number}.
+              </p>
 
-              <div className="relative bg-white rounded-lg max-w-md w-full p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Cancel Order</h3>
+              <div className="my-4">
+                <textarea
+                  value={cancellationReason}
+                  onChange={(e) => setCancellationReason(e.target.value)}
+                  rows="3"
+                  className="w-full text-xs border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
+                  placeholder="Specify cancellation rationale (e.g., requirement revised, timeline mismatch)..."
+                />
+              </div>
 
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Reason for cancellation
-                  </label>
-                  <textarea
-                    value={cancellationReason}
-                    onChange={(e) => setCancellationReason(e.target.value)}
-                    rows="3"
-                    className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Please specify the reason..."
-                  />
-                </div>
-
-                <div className="flex justify-end space-x-3">
-                  <button
-                    onClick={() => setShowCancelModal(false)}
-                    className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-50"
-                  >
-                    off
-                  </button>
-                  <button
-                    onClick={handleCancel}
-                    disabled={cancelling || !cancellationReason.trim()}
-                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
-                  >
-                    {cancelling ? 'Canceling...' : 'Confirm Cancel'}
-                  </button>
-                </div>
+              <div className="flex justify-end gap-2.5">
+                <button
+                  onClick={() => setShowCancelModal(false)}
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 rounded-xl hover:bg-slate-50"
+                >
+                  Keep Order
+                </button>
+                <button
+                  onClick={handleCancel}
+                  disabled={cancelling || !cancellationReason.trim()}
+                  className="px-4 py-2 bg-rose-600 text-white rounded-xl hover:bg-rose-700 text-xs font-semibold transition disabled:opacity-50"
+                >
+                  {cancelling ? 'Cancelling...' : 'Confirm Cancellation'}
+                </button>
               </div>
             </div>
           </div>

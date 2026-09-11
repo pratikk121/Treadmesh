@@ -1,13 +1,8 @@
-// Pages/Buyer/Orders/Index.jsx
+// resources/js/Pages/Buyer/Orders/Index.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-
-// Layout - Buyer dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
 import {
   FiShoppingBag,
   FiPackage,
@@ -18,14 +13,20 @@ import {
   FiEye,
   FiSearch,
   FiCalendar,
-  FiDollarSign,
-  FiDownload,
+  FiFileText,
+  FiArrowUpRight,
+  FiFilter,
+  FiRefreshCw
 } from 'react-icons/fi';
+import { MdPending, MdVerified } from 'react-icons/md';
+import {
+  formatCurrency,
+  formatIndianDate,
+  formatOrderStatus,
+  formatPaymentStatus
+} from '@/Utils/formatters';
 
 export default function OrdersIndex({ orders, counts }) {
-
-
-  // State management for filters
   const [filters, setFilters] = useState({
     status: '',
     payment_status: '',
@@ -35,7 +36,6 @@ export default function OrdersIndex({ orders, counts }) {
     sort: 'latest'
   });
 
-  // Handle filter changes
   const handleFilterChange = (key, value) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
@@ -45,7 +45,6 @@ export default function OrdersIndex({ orders, counts }) {
     });
   };
 
-  // Handle search form submission
   const handleSearch = (e) => {
     e.preventDefault();
     router.get(route('buyer.orders.index'), filters, {
@@ -54,7 +53,6 @@ export default function OrdersIndex({ orders, counts }) {
     });
   };
 
-  // Reset all filters to default
   const resetFilters = () => {
     const resetValues = {
       status: '',
@@ -70,335 +68,270 @@ export default function OrdersIndex({ orders, counts }) {
     });
   };
 
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
-
-  // Format date - Converts ISO date to readable format
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-
-  // Get status badge color based on order status
-  const getStatusColor = (status) => {
-    const colors = {
-      'pending_confirmation': 'bg-yellow-100 text-yellow-700',
-      'confirmed': 'bg-blue-100 text-blue-700',
-      'processing': 'bg-purple-100 text-purple-700',
-      'shipped': 'bg-indigo-100 text-indigo-700',
-      'delivered': 'bg-green-100 text-green-700',
-      'cancelled': 'bg-red-100 text-red-700'
-    };
-    return colors[status] || 'bg-gray-100 text-gray-700';
-  };
-
-  // Get status icon based on order status
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'pending_confirmation':
-        return <FiClock className="text-yellow-600" />;
-      case 'confirmed':
-        return <FiCheckCircle className="text-blue-600" />;
-      case 'processing':
-        return <FiPackage className="text-purple-600" />;
-      case 'shipped':
-        return <FiTruck className="text-indigo-600" />;
-      case 'delivered':
-        return <FiCheckCircle className="text-green-600" />;
-      case 'cancelled':
-        return <FiXCircle className="text-red-600" />;
-      default:
-        return <FiShoppingBag className="text-gray-600" />;
+  const getStatusBadge = (status) => {
+    const s = (status || '').toLowerCase();
+    if (['delivered', 'confirmed', 'sure'].includes(s)) {
+      return 'bg-emerald-50 text-emerald-700 border-emerald-200 ring-1 ring-emerald-500/10';
     }
-  };
-
-  // Get payment status badge color
-  const getPaymentStatusColor = (status) => {
-    return status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
+    if (['processing', 'shipped'].includes(s)) {
+      return 'bg-sky-50 text-sky-700 border-sky-200 ring-1 ring-sky-500/10';
+    }
+    if (['pending_confirmation', 'pending'].includes(s)) {
+      return 'bg-amber-50 text-amber-700 border-amber-200 ring-1 ring-amber-500/10';
+    }
+    if (['cancelled', 'cancel'].includes(s)) {
+      return 'bg-rose-50 text-rose-700 border-rose-200 ring-1 ring-rose-500/10';
+    }
+    return 'bg-slate-50 text-slate-700 border-slate-200';
   };
 
   return (
     <DashboardLayout>
-      <Head title="My orders are" />
+      <Head title="Purchase Orders — Treadmesh" />
 
-      <div className="space-y-6">
-        {/* Header - Page title */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+      <div className="space-y-6 pb-12">
+        {/* Header - Title and summary */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">My order is</h2>
-            <p className="text-gray-600 mt-1">Track and Manage Your Order</p>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-display">
+              Purchase Order Ledger
+            </h1>
+            <p className="text-sm text-slate-500 mt-1">
+              Track B2B wholesale procurement, factory dispatches, E-Way bills, and delivery settlements.
+            </p>
+          </div>
+          <Link
+            href={route('buyer.products.index')}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl hover:bg-slate-800 text-xs font-semibold shadow-sm transition active:scale-[0.98] self-start sm:self-auto"
+          >
+            <FiShoppingBag className="w-4 h-4" />
+            <span>Procure New SKUs</span>
+          </Link>
+        </div>
+
+        {/* Status Metrics Bar */}
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              Awaiting Acceptance
+            </span>
+            <p className="text-xl font-bold font-mono text-amber-600 mt-1">{counts?.pending || 0}</p>
+          </div>
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              In Production
+            </span>
+            <p className="text-xl font-bold font-mono text-purple-600 mt-1">{counts?.processing || 0}</p>
+          </div>
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              Dispatched (Transit)
+            </span>
+            <p className="text-xl font-bold font-mono text-sky-600 mt-1">{counts?.shipped || 0}</p>
+          </div>
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              Delivered & Settled
+            </span>
+            <p className="text-xl font-bold font-mono text-emerald-600 mt-1">{counts?.delivered || 0}</p>
+          </div>
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm col-span-2 sm:col-span-1">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+              Total PO Contracts
+            </span>
+            <p className="text-xl font-bold font-mono text-slate-900 mt-1">{orders?.total || 0}</p>
           </div>
         </div>
 
-        {/* Stats Cards - Order status counts */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">Awaiting</p>
-            <p className="text-2xl font-bold text-yellow-600">{counts.pending}</p>
-          </div>
-          <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">In process</p>
-            <p className="text-2xl font-bold text-purple-600">{counts.processing}</p>
-          </div>
-          <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">Sent</p>
-            <p className="text-2xl font-bold text-indigo-600">{counts.shipped}</p>
-          </div>
-          <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">Delivered</p>
-            <p className="text-2xl font-bold text-green-600">{counts.delivered}</p>
-          </div>
-          <div className="bg-white rounded-xl p-4 border">
-            <p className="text-sm text-gray-500">Total order</p>
-            <p className="text-2xl font-bold text-gray-800">{orders.total}</p>
-          </div>
-        </div>
-
-        {/* Filters Section */}
-        <div className="bg-white rounded-xl p-4 border">
-          <form onSubmit={handleSearch} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {/* Search Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">search</label>
-                <div className="relative">
-                  <FiSearch className="absolute left-3 top-3 text-gray-400" />
-                  <input
-                    type="text"
-                    value={filters.search}
-                    onChange={(e) => handleFilterChange('search', e.target.value)}
-                    placeholder="Order number..."
-                    className="w-full pl-10 border rounded-lg px-3 py-2 text-sm"
-                  />
-                </div>
+        {/* Filter Toolbar */}
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+          <form onSubmit={handleSearch} className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* Search */}
+              <div className="relative">
+                <FiSearch className="absolute left-3 top-3 text-slate-400 w-4 h-4" />
+                <input
+                  type="text"
+                  value={filters.search}
+                  onChange={(e) => handleFilterChange('search', e.target.value)}
+                  placeholder="Search by PO number..."
+                  className="w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                />
               </div>
 
-              {/* Order Status Filter */}
+              {/* Order Status */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Order Status</label>
                 <select
                   value={filters.status}
                   onChange={(e) => handleFilterChange('status', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                 >
-                  <option value="">All statuses are</option>
-                  <option value="pending_confirmation">Awaiting</option>
-                  <option value="confirmed">sure</option>
-                  <option value="processing">In process</option>
-                  <option value="shipped">Sent</option>
-                  <option value="delivered">Delivered</option>
-                  <option value="cancelled">cancel</option>
+                  <option value="">All Fulfillment Statuses</option>
+                  <option value="pending_confirmation">Awaiting Acceptance</option>
+                  <option value="confirmed">PO Confirmed</option>
+                  <option value="processing">In Production</option>
+                  <option value="shipped">Dispatched (E-Way Bill)</option>
+                  <option value="delivered">Delivered & Accepted</option>
+                  <option value="cancelled">Cancelled</option>
                 </select>
               </div>
 
-              {/* Payment Status Filter */}
+              {/* Payment Status */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
                 <select
                   value={filters.payment_status}
                   onChange={(e) => handleFilterChange('payment_status', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                 >
-                  <option value="">All</option>
-                  <option value="pending">Awaiting</option>
-                  <option value="paid">Paid</option>
+                  <option value="">All Settlement Statuses</option>
+                  <option value="pending">Awaiting Escrow Deposit</option>
+                  <option value="paid">Paid (Nodal Escrow Held)</option>
                 </select>
               </div>
 
-              {/* Sort Options */}
+              {/* Sort */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Sort</label>
                 <select
                   value={filters.sort}
                   onChange={(e) => handleFilterChange('sort', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full text-xs border border-slate-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                 >
-                  <option value="latest">Last is first</option>
-                  <option value="oldest">Old first</option>
-                  <option value="amount_high">Amount: More to less</option>
-                  <option value="amount_low">Amount: Low to High</option>
+                  <option value="latest">Latest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="amount_high">Value: High to Low</option>
+                  <option value="amount_low">Value: Low to High</option>
                 </select>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Date Range Filters */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Date from</label>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-slate-100">
+              <div className="flex items-center gap-2 w-full sm:w-auto text-xs">
+                <span className="text-slate-500">Date:</span>
                 <input
                   type="date"
                   value={filters.from_date}
                   onChange={(e) => handleFilterChange('from_date', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="text-xs border border-slate-200 rounded-lg px-2 py-1"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Date up to</label>
+                <span className="text-slate-400">&rarr;</span>
                 <input
                   type="date"
                   value={filters.to_date}
                   onChange={(e) => handleFilterChange('to_date', e.target.value)}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="text-xs border border-slate-200 rounded-lg px-2 py-1"
                 />
               </div>
-              <div className="flex items-end space-x-2">
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
-                >
-                  Apply Filter
-                </button>
+
+              <div className="flex items-center gap-2 self-end">
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 text-sm"
+                  className="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-900 border border-slate-200 rounded-lg hover:bg-slate-50 transition"
                 >
                   Reset
+                </button>
+                <button
+                  type="submit"
+                  className="px-3.5 py-1.5 text-xs font-semibold bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition"
+                >
+                  Apply Filters
                 </button>
               </div>
             </div>
           </form>
         </div>
 
-        {/* Orders List */}
-        {orders.data.length === 0 ? (
-          // Empty State - No orders
-          <div className="bg-white rounded-xl p-12 text-center border">
-            <FiShoppingBag className="mx-auto text-5xl text-gray-400 mb-4" />
-            <h3 className="text-xl font-medium text-gray-700 mb-2">No order</h3>
-            <p className="text-gray-500 mb-6">When you place orders, they will show up here</p>
+        {/* Orders Listing */}
+        {orders?.data?.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm">
+            <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 mx-auto mb-3">
+              <FiShoppingBag className="w-7 h-7" />
+            </div>
+            <h3 className="text-base font-bold text-slate-900">No Purchase Orders Placed Yet</h3>
+            <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+              Initiate quotes through RFQ tenders or direct wholesale catalog procurement to generate verified B2B orders.
+            </p>
             <Link
               href={route('buyer.products.index')}
-              className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 inline-flex items-center"
+              className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 text-white text-xs font-semibold rounded-xl hover:bg-slate-800 transition"
             >
-              Browse Products
+              Browse National Wholesale Catalog &rarr;
             </Link>
           </div>
         ) : (
-          // Order Items List
           <div className="space-y-4">
             {orders.data.map((order) => (
-              <div key={order.id} className="bg-white rounded-xl border p-6 hover:shadow-lg transition-shadow">
-                <div className="flex flex-col lg:flex-row lg:items-start justify-between">
-                  {/* Main Content */}
-                  <div className="flex-1">
-                    <div className="flex items-start mb-3">
-                      {getStatusIcon(order.order_status)}
-                      <div className="ml-2 flex-1">
-                        <div className="flex items-center flex-wrap gap-2">
-                          <h3 className="font-semibold text-lg text-gray-800">
-                            Order #{order.order_number}
-                          </h3>
-                          <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(order.order_status)}`}>
-                            {order.order_status === 'pending_confirmation' ? 'Awaiting' :
-                              order.order_status === 'confirmed' ? 'sure' :
-                                order.order_status === 'processing' ? 'In process' :
-                                  order.order_status === 'shipped' ? 'Sent' :
-                                    order.order_status === 'delivered' ? 'Delivered' :
-                                      order.order_status === 'cancelled' ? 'cancel' : order.order_status.replace('_', ' ')}
-                          </span>
-                          <span className={`px-2 py-1 text-xs rounded-full ${getPaymentStatusColor(order.payment_status)}`}>
-                            Payment: {order.payment_status === 'paid' ? 'Paid' : 'Awaiting'}
-                          </span>
-                        </div>
-                      </div>
+              <div
+                key={order.id}
+                className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm hover:shadow-md transition"
+              >
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                  {/* Order Overview */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <Link
+                        href={route('buyer.orders.show', order.id)}
+                        className="text-base font-bold font-mono text-brand-600 hover:text-brand-700"
+                      >
+                        PO-{order.order_number}
+                      </Link>
+                      <span className={`inline-flex px-2.5 py-0.5 text-[11px] font-semibold rounded-full border ${getStatusBadge(order.order_status)}`}>
+                        {formatOrderStatus(order.order_status)}
+                      </span>
+                      <span className="inline-flex px-2 py-0.5 text-[11px] font-semibold rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                        {formatPaymentStatus(order.payment_status)}
+                      </span>
                     </div>
 
-                    {/* Supplier Information */}
-                    <div className="flex items-center text-sm text-gray-600 mb-3">
-                      <FiTruck className="mr-1" />
-                      <span>Supplier: {order.supplier?.name || 'N/A'}</span>
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 mt-2">
+                      <span className="font-medium text-slate-900">
+                        Supplier: {order.supplier?.name || 'Verified Manufacturer'}
+                      </span>
+                      <span>&bull;</span>
+                      <span>Order Date: {formatIndianDate(order.created_at)}</span>
+                      <span>&bull;</span>
+                      <span className="font-mono font-bold text-slate-900">
+                        Total Value: {formatCurrency(order.total_amount)}
+                      </span>
                     </div>
 
-                    {/* Order Items Preview */}
+                    {/* Order Line Items Snippet */}
                     {order.items && order.items.length > 0 && (
-                      <div className="mt-3">
-                        <p className="text-sm font-medium text-gray-700 mb-2">Item:</p>
-                        <div className="space-y-2">
-                          {order.items.slice(0, 2).map((item, index) => (
-                            <div key={index} className="flex items-center text-sm bg-gray-50 p-2 rounded">
-                              <FiPackage className="text-gray-400 mr-2" />
-                              <span className="flex-1">{item.product_name}</span>
-                              <span className="text-gray-600">{item.quantity} x {formatCurrency(item.unit_price)}</span>
-                            </div>
-                          ))}
-                          {order.items.length > 2 && (
-                            <p className="text-xs text-gray-500">+{order.items.length - 2} more items</p>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Order Meta Information */}
-                    <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-gray-500">
-                      <div className="flex items-center">
-                        <FiCalendar className="mr-1" />
-                        Order: {formatDate(order.created_at)}
-                      </div>
-                      <div className="flex items-center">
-                        <FiDollarSign className="mr-1" />
-                        total: <span className="font-medium ml-1">{formatCurrency(order.total_amount)}</span>
-                      </div>
-                      {order.confirmed_at && (
-                        <div className="flex items-center">
-                          <FiCheckCircle className="mr-1 text-green-500" />
-                          sure: {formatDate(order.confirmed_at)}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* RFQ Reference */}
-                    {order.rfq && (
-                      <div className="mt-3 p-2 bg-indigo-50 rounded-lg inline-block">
-                        <p className="text-xs text-indigo-600">
-                          RFQ from: {order.rfq.title} (#{order.rfq.rfq_number})
-                        </p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {order.items.slice(0, 3).map((item, idx) => (
+                          <span
+                            key={idx}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/70 text-xs text-slate-700"
+                          >
+                            <FiPackage className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="font-medium truncate max-w-[200px]">{item.product_name}</span>
+                            <span className="font-mono text-slate-400">({item.quantity} units)</span>
+                          </span>
+                        ))}
+                        {order.items.length > 3 && (
+                          <span className="text-xs text-slate-400 self-center">
+                            +{order.items.length - 3} more items
+                          </span>
+                        )}
                       </div>
                     )}
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex lg:flex-col space-x-2 lg:space-x-0 lg:space-y-2 mt-4 lg:mt-0 lg:ml-6">
+                  {/* Actions */}
+                  <div className="flex items-center gap-2 self-end lg:self-center shrink-0">
                     <Link
                       href={route('buyer.orders.show', order.id)}
-                      className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors inline-flex items-center justify-center"
+                      className="px-3.5 py-2 bg-slate-900 text-white rounded-xl hover:bg-slate-800 text-xs font-semibold transition"
                     >
-                      <FiEye className="mr-2" />
-                      for suppliers See details
+                      View Order Details
                     </Link>
-
-                    {order.order_status === 'delivered' && (
-                      <button
-                        onClick={() => router.get(route('buyer.orders.invoice', order.id))}
-                        className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200 transition-colors inline-flex items-center justify-center"
-                      >
-                        <FiDownload className="mr-2" />
-                        Run
-                      </button>
-                    )}
-
-                    {order.order_status === 'shipped' && (
-                      <button
-                        onClick={() => {
-                          if (confirm('Did You Receive This Order?')) {
-                            router.post(route('buyer.orders.mark-received', order.id));
-                          }
-                        }}
-                        className="px-4 py-2 bg-green-100 text-green-700 text-sm rounded-lg hover:bg-green-200 transition-colors inline-flex items-center justify-center"
-                      >
-                        <FiCheckCircle className="mr-2" />
-                        Marked as Received
-                      </button>
-                    )}
+                    <Link
+                      href={route('buyer.orders.invoice', order.id)}
+                      className="px-3.5 py-2 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 text-xs font-semibold transition inline-flex items-center gap-1"
+                    >
+                      <FiFileText className="w-3.5 h-3.5" />
+                      <span>Tax Invoice</span>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -406,24 +339,24 @@ export default function OrdersIndex({ orders, counts }) {
 
             {/* Pagination */}
             {orders.links && orders.links.length > 3 && (
-              <div className="mt-8 flex justify-center">
-                <div className="flex space-x-2">
+              <div className="pt-4 flex items-center justify-between text-xs text-slate-500">
+                <p>
+                  Showing {orders.from || 0} to {orders.to || 0} of {orders.total || 0} orders
+                </p>
+                <div className="flex gap-1">
                   {orders.links.map((link, index) => (
                     <button
                       key={index}
-                      onClick={() => router.get(link.url)}
-                      dangerouslySetInnerHTML={{
-                        __html: link.label
-                          .replace('Previous', 'previous')
-                          .replace('Next', 'next')
-                      }}
-                      className={`px-4 py-2 rounded-lg ${link.active
-                        ? 'bg-indigo-600 text-white'
-                        : link.url
-                          ? 'bg-white border hover:bg-gray-50'
-                          : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        }`}
-                      disabled={!link.url}
+                      onClick={() => link.url && router.get(link.url)}
+                      disabled={!link.url || link.active}
+                      dangerouslySetInnerHTML={{ __html: link.label }}
+                      className={`px-3 py-1.5 rounded-lg border text-xs font-semibold ${
+                        link.active
+                          ? 'bg-slate-900 text-white border-slate-900'
+                          : link.url
+                          ? 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                          : 'bg-slate-50 text-slate-400 border-slate-100 cursor-not-allowed'
+                      }`}
                     />
                   ))}
                 </div>

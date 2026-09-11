@@ -1,16 +1,9 @@
-// Pages/Admin/Orders/Show.jsx
+// resources/js/Pages/Admin/Orders/Show.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-
-// Layout - Admin dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// sweetalert - For beautiful alert messages
 import Swal from 'sweetalert2';
-
-// Icons - Importing icon sets for UI elements
 import {
   FiArrowLeft,
   FiPackage,
@@ -20,7 +13,10 @@ import {
   FiCheckCircle,
   FiXCircle,
   FiClock,
-  FiPrinter
+  FiPrinter,
+  FiShield,
+  FiDollarSign,
+  FiFileText
 } from 'react-icons/fi';
 import {
   MdVerified,
@@ -30,20 +26,23 @@ import {
   MdOutlineReceipt
 } from 'react-icons/md';
 import { BsBuilding, BsBoxSeam } from 'react-icons/bs';
+import {
+  formatCurrency,
+  formatIndianDate,
+  formatOrderStatus,
+  formatPaymentStatus
+} from '@/Utils/formatters';
 
 export default function Show({ order, timeline, paymentInfo }) {
-  // State management for forms and UI controls
   const [showStatusForm, setShowStatusForm] = useState(false);
   const [showCancelForm, setShowCancelForm] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
 
-  // Status update form state
   const [statusData, setStatusData] = useState({
     order_status: order.order_status,
     notes: ''
   });
 
-  // Payment update form state
   const [paymentData, setPaymentData] = useState({
     payment_status: order.payment_status,
     payment_method: order.payment_method || '',
@@ -51,20 +50,18 @@ export default function Show({ order, timeline, paymentInfo }) {
     payment_notes: ''
   });
 
-  // Cancel order form state
   const [cancelData, setCancelData] = useState({
     cancellation_reason: '',
     refund_required: order.payment_status === 'paid'
   });
 
-  // Handle order status update
   const handleStatusUpdate = () => {
     router.post(route('admin.orders.update-status', order.id), statusData, {
       onSuccess: () => {
         setShowStatusForm(false);
         Swal.fire({
-          title: 'successful!',
-          text: 'Order status updated successfully.',
+          title: 'Status Updated',
+          text: 'Order fulfillment status successfully adjusted.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -73,14 +70,13 @@ export default function Show({ order, timeline, paymentInfo }) {
     });
   };
 
-  // Handle payment status update
   const handlePaymentUpdate = () => {
     router.post(route('admin.orders.update-payment', order.id), paymentData, {
       onSuccess: () => {
         setShowPaymentForm(false);
         Swal.fire({
-          title: 'successful!',
-          text: 'Payment status successfully updated.',
+          title: 'Escrow Updated',
+          text: 'Payment and Nodal Escrow state adjusted.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -89,14 +85,13 @@ export default function Show({ order, timeline, paymentInfo }) {
     });
   };
 
-  // Handle order cancellation
   const handleCancelOrder = () => {
     if (!cancelData.cancellation_reason) {
       Swal.fire({
-        title: 'Error!',
-        text: 'Please specify the reason for cancellation.',
-        icon: 'error',
-        confirmButtonColor: '#4F46E5'
+        title: 'Reason Required',
+        text: 'Please specify the reason for administrative order cancellation.',
+        icon: 'warning',
+        confirmButtonColor: '#0284c7'
       });
       return;
     }
@@ -105,8 +100,8 @@ export default function Show({ order, timeline, paymentInfo }) {
       onSuccess: () => {
         setShowCancelForm(false);
         Swal.fire({
-          title: 'cancel!',
-          text: 'Order successfully canceled.',
+          title: 'Order Cancelled',
+          text: 'Purchase order administratively cancelled and logged.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -115,390 +110,344 @@ export default function Show({ order, timeline, paymentInfo }) {
     });
   };
 
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
-
-  // Format date - Converts ISO date to readable format
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  // Get order status badge with appropriate styling
-  const getOrderStatusBadge = (status) => {
-    const badges = {
-      pending_confirmation: { color: 'bg-yellow-100 text-yellow-800', icon: MdPending, label: 'Awaiting' },
-      confirmed: { color: 'bg-blue-100 text-blue-800', icon: MdVerified, label: 'sure' },
-      processing: { color: 'bg-indigo-100 text-indigo-800', icon: FiClock, label: 'In process' },
-      shipped: { color: 'bg-purple-100 text-purple-800', icon: MdOutlineLocalShipping, label: 'Sent' },
-      delivered: { color: 'bg-green-100 text-green-800', icon: FiCheckCircle, label: 'Delivered' },
-      cancelled: { color: 'bg-red-100 text-red-800', icon: FiXCircle, label: 'cancel' },
-    };
-    const badge = badges[status] || badges.pending_confirmation;
-    const Icon = badge.icon;
-    return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${badge.color}`}>
-        <Icon className="w-4 h-4 mr-1" />
-        {badge.label}
-      </span>
-    );
-  };
-
-  // Get payment status badge with appropriate styling
-  const getPaymentStatusBadge = (status) => {
-    const badges = {
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: FiClock, label: 'Awaiting' },
-      paid: { color: 'bg-green-100 text-green-800', icon: FiCheckCircle, label: 'Paid' },
-    };
-    const badge = badges[status] || badges.pending;
-    const Icon = badge.icon;
-    return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${badge.color}`}>
-        <Icon className="w-4 h-4 mr-1" />
-        {badge.label}
-      </span>
-    );
+  const getStatusBadge = (status) => {
+    const s = (status || '').toLowerCase();
+    if (['delivered', 'confirmed', 'sure', 'paid'].includes(s)) {
+      return 'bg-emerald-50 text-emerald-700 border-emerald-200 ring-1 ring-emerald-500/10';
+    }
+    if (['processing', 'shipped'].includes(s)) {
+      return 'bg-sky-50 text-sky-700 border-sky-200 ring-1 ring-sky-500/10';
+    }
+    if (['pending_confirmation', 'pending', 'unpaid'].includes(s)) {
+      return 'bg-amber-50 text-amber-700 border-amber-200 ring-1 ring-amber-500/10';
+    }
+    if (['cancelled', 'cancel'].includes(s)) {
+      return 'bg-rose-50 text-rose-700 border-rose-200 ring-1 ring-rose-500/10';
+    }
+    return 'bg-slate-50 text-slate-700 border-slate-200';
   };
 
   return (
     <DashboardLayout>
-      <Head title={`Order #${order.order_number}`} />
+      <Head title={`Supervision: PO #${order.order_number} — Central Ops`} />
 
-      <div className="space-y-6">
-        {/* Header - Back button and page title */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+      <div className="space-y-6 pb-12 max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-6">
+          <div className="flex items-center gap-3">
             <Link
               href={route('admin.orders.index')}
-              className="p-2 hover:bg-gray-100 rounded-lg transition"
+              className="p-2 hover:bg-slate-100 rounded-xl text-slate-600 transition"
             >
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Order #{order.order_number}</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                Order Details and Management
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-display">
+                  PO #{order.order_number}
+                </h1>
+                <span className={`inline-flex px-2.5 py-0.5 text-xs font-semibold rounded-full border ${getStatusBadge(order.order_status)}`}>
+                  {formatOrderStatus(order.order_status)}
+                </span>
+                <span className="inline-flex px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  {formatPaymentStatus(order.payment_status)}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-1 font-mono">
+                Initiated: {formatIndianDate(order.created_at)} &bull; Buyer: {order.buyer?.name} &bull; Vendor: {order.supplier?.name}
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
+
+          <div className="flex items-center gap-2">
             <button
               onClick={() => window.print()}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 text-xs font-semibold shadow-sm transition"
             >
-              <FiPrinter className="w-4 h-4" />
-              <span>Print</span>
+              <FiPrinter className="w-4 h-4 text-slate-500" />
+              <span>Print Audit Slip</span>
             </button>
           </div>
         </div>
 
-        {/* Order Status Bar - Current status and action buttons */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-3">
-              {getOrderStatusBadge(order.order_status)}
-              {getPaymentStatusBadge(order.payment_status)}
-            </div>
-            <div className="flex gap-2">
+        {/* Action Controls Bar */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              Admin Operations:
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => setShowStatusForm(true)}
+              className="px-3.5 py-2 bg-slate-900 text-white rounded-xl hover:bg-slate-800 text-xs font-semibold shadow-sm transition"
+            >
+              Override Status
+            </button>
+            <button
+              onClick={() => setShowPaymentForm(true)}
+              className="px-3.5 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 text-xs font-semibold shadow-sm transition"
+            >
+              Update Escrow Settlement
+            </button>
+            {order.canBeCancelled && (
               <button
-                onClick={() => setShowStatusForm(true)}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
+                onClick={() => setShowCancelForm(true)}
+                className="px-3.5 py-2 bg-rose-50 text-rose-700 border border-rose-200 rounded-xl hover:bg-rose-100 text-xs font-semibold transition"
               >
-                Status Update
+                Cancel PO
               </button>
-              <button
-                onClick={() => setShowPaymentForm(true)}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm"
-              >
-                Payment Update
-              </button>
-              {order.canBeCancelled && (
-                <button
-                  onClick={() => setShowCancelForm(true)}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm"
-                >
-                  Cancel Order
-                </button>
-              )}
-            </div>
+            )}
           </div>
         </div>
 
-        {/* Status Update Form - Modal-like form for status changes */}
+        {/* Status Override Modal */}
         {showStatusForm && (
-          <div className="bg-white rounded-xl shadow-sm border border-indigo-200 p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Order Status Update</h3>
-            <div className="space-y-4">
+          <div className="bg-white rounded-2xl border border-brand-200 p-6 shadow-sm">
+            <h3 className="text-sm font-bold text-slate-900 font-display mb-3">Administrative Status Override</h3>
+            <div className="space-y-3 text-xs">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  New Status
-                </label>
+                <label className="block font-semibold text-slate-700 mb-1">New Order Status</label>
                 <select
                   value={statusData.order_status}
                   onChange={(e) => setStatusData({ ...statusData, order_status: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full border border-slate-200 rounded-xl p-2.5"
                 >
-                  <option value="pending_confirmation">Awaiting</option>
-                  <option value="confirmed">sure</option>
-                  <option value="processing">In process</option>
-                  <option value="shipped">Sent</option>
-                  <option value="delivered">Delivered</option>
-                  <option value="cancelled">cancel</option>
+                  <option value="pending_confirmation">Awaiting Confirmation</option>
+                  <option value="confirmed">PO Confirmed</option>
+                  <option value="processing">In Production</option>
+                  <option value="shipped">Dispatched (E-Way Bill)</option>
+                  <option value="delivered">Delivered & Accepted</option>
+                  <option value="cancelled">Cancelled</option>
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Notes (Optional)
-                </label>
+                <label className="block font-semibold text-slate-700 mb-1">Audit Log Note (Optional)</label>
                 <textarea
                   value={statusData.notes}
                   onChange={(e) => setStatusData({ ...statusData, notes: e.target.value })}
-                  rows="3"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  placeholder="to your contacts Add note about this status change..."
+                  rows="2"
+                  className="w-full border border-slate-200 rounded-xl p-3"
+                  placeholder="Reason for manual status modification..."
                 />
               </div>
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setShowStatusForm(false)}
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900"
+                  className="px-3.5 py-1.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50"
                 >
-                  cancel
+                  Cancel
                 </button>
                 <button
                   onClick={handleStatusUpdate}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                  className="px-4 py-1.5 bg-brand-600 text-white rounded-lg hover:bg-brand-700 font-semibold"
                 >
-                  Status Update
+                  Save Status
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Payment Update Form - Modal-like form for payment changes */}
+        {/* Payment Override Modal */}
         {showPaymentForm && (
-          <div className="bg-white rounded-xl shadow-sm border border-green-200 p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Payment status update</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Payment Status
-                </label>
-                <select
-                  value={paymentData.payment_status}
-                  onChange={(e) => setPaymentData({ ...paymentData, payment_status: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                >
-                  <option value="pending">Awaiting</option>
-                  <option value="paid">Paid</option>
-                </select>
+          <div className="bg-white rounded-2xl border border-emerald-200 p-6 shadow-sm">
+            <h3 className="text-sm font-bold text-slate-900 font-display mb-3">Nodal Escrow & Payment Update</h3>
+            <div className="space-y-3 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Settlement Status</label>
+                  <select
+                    value={paymentData.payment_status}
+                    onChange={(e) => setPaymentData({ ...paymentData, payment_status: e.target.value })}
+                    className="w-full border border-slate-200 rounded-xl p-2.5"
+                  >
+                    <option value="pending">Awaiting Settlement</option>
+                    <option value="paid">Paid (Nodal Escrow Held)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Payment Method</label>
+                  <input
+                    type="text"
+                    value={paymentData.payment_method}
+                    onChange={(e) => setPaymentData({ ...paymentData, payment_method: e.target.value })}
+                    className="w-full border border-slate-200 rounded-xl p-2.5"
+                    placeholder="e.g. RTGS / NEFT / Escrow Rail"
+                  />
+                </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Payment Method
-                </label>
-                <input
-                  type="text"
-                  value={paymentData.payment_method}
-                  onChange={(e) => setPaymentData({ ...paymentData, payment_method: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                  placeholder="Eg: Bank Transfer, Credit Card"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Payment reference
-                </label>
+                <label className="block font-semibold text-slate-700 mb-1">Bank UTR / Reference ID</label>
                 <input
                   type="text"
                   value={paymentData.payment_reference}
                   onChange={(e) => setPaymentData({ ...paymentData, payment_reference: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                  placeholder="Transaction ID or reference number"
+                  className="w-full border border-slate-200 rounded-xl p-2.5 font-mono"
+                  placeholder="Axis Bank / Nodal transaction reference"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Notes (Optional)
-                </label>
+                <label className="block font-semibold text-slate-700 mb-1">Settlement Note</label>
                 <textarea
                   value={paymentData.payment_notes}
                   onChange={(e) => setPaymentData({ ...paymentData, payment_notes: e.target.value })}
                   rows="2"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                  placeholder="Add note regarding payment..."
+                  className="w-full border border-slate-200 rounded-xl p-3"
+                  placeholder="Notes regarding bank reconciliation..."
                 />
               </div>
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setShowPaymentForm(false)}
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900"
+                  className="px-3.5 py-1.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50"
                 >
-                  cancel
+                  Cancel
                 </button>
                 <button
                   onClick={handlePaymentUpdate}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                  className="px-4 py-1.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-semibold"
                 >
-                  Payment Update
+                  Save Escrow Details
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Cancel Order Form - Modal-like form for order cancellation */}
+        {/* Cancellation Form */}
         {showCancelForm && (
-          <div className="bg-white rounded-xl shadow-sm border border-red-200 p-6">
-            <h3 className="font-semibold text-red-600 mb-4">Cancel Order</h3>
-            <div className="space-y-4">
+          <div className="bg-white rounded-2xl border border-rose-200 p-6 shadow-sm">
+            <h3 className="text-sm font-bold text-rose-700 font-display mb-3">Administrative Order Cancellation</h3>
+            <div className="space-y-3 text-xs">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Reason for cancellation *
-                </label>
+                <label className="block font-semibold text-slate-700 mb-1">Cancellation Rationale *</label>
                 <textarea
                   value={cancelData.cancellation_reason}
                   onChange={(e) => setCancelData({ ...cancelData, cancellation_reason: e.target.value })}
                   rows="3"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                  placeholder="Explain why this order is being canceled..."
+                  className="w-full border border-slate-200 rounded-xl p-3"
+                  placeholder="Provide detailed compliance or legal grounds for cancelling this order..."
                 />
               </div>
               {order.payment_status === 'paid' && (
-                <div>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={cancelData.refund_required}
-                      onChange={(e) => setCancelData({ ...cancelData, refund_required: e.target.checked })}
-                      className="rounded border-gray-300 text-red-600 focus:ring-red-500"
-                    />
-                    <span className="text-sm text-gray-700">Process a refund for this order</span>
-                  </label>
-                </div>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={cancelData.refund_required}
+                    onChange={(e) => setCancelData({ ...cancelData, refund_required: e.target.checked })}
+                    className="rounded border-slate-300 text-rose-600 focus:ring-rose-500"
+                  />
+                  <span className="text-slate-700 font-semibold">Initiate refund from Nodal Escrow back to buyer</span>
+                </label>
               )}
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setShowCancelForm(false)}
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900"
+                  className="px-3.5 py-1.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50"
                 >
-                  cancel
+                  Back
                 </button>
                 <button
                   onClick={handleCancelOrder}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                  className="px-4 py-1.5 bg-rose-600 text-white rounded-lg hover:bg-rose-700 font-semibold"
                 >
-                  Confirm Cancel
+                  Execute Cancellation
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Main Content - Order details grid */}
+        {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Main order content */}
+          {/* Left Column (Items & Milestones) */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Order Items - List of products in the order */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <FiPackage className="w-5 h-5 text-indigo-600" />
-                Order Item
-              </h3>
-              <div className="space-y-4">
-                {order.items.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            {/* Line Items Card */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <div className="flex items-center gap-2">
+                  <FiPackage className="w-5 h-5 text-brand-600" />
+                  <h2 className="font-bold text-slate-900 text-base">Purchased Line Items</h2>
+                </div>
+                <span className="text-xs font-mono text-slate-500">{order.items?.length || 0} Line Items</span>
+              </div>
+
+              <div className="divide-y divide-slate-100">
+                {order.items?.map((item, index) => (
+                  <div key={index} className="p-4 flex items-center justify-between gap-4 hover:bg-slate-50/50 transition">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-white rounded-lg border border-gray-200 flex items-center justify-center">
+                      <div className="w-11 h-11 bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-center shrink-0">
                         {item.product?.main_image ? (
                           <img
                             src={item.product.main_image}
                             alt={item.product_name}
-                            className="w-10 h-10 object-cover rounded"
+                            className="w-11 h-11 object-cover rounded-xl"
                           />
                         ) : (
-                          <BsBoxSeam className="w-6 h-6 text-gray-400" />
+                          <BsBoxSeam className="w-5 h-5 text-slate-400" />
                         )}
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{item.product_name}</p>
-                        <p className="text-sm text-gray-500">
-                          {item.quantity} x {formatCurrency(item.unit_price)}
+                        <p className="font-semibold text-slate-900 text-xs">{item.product_name}</p>
+                        <p className="text-[11px] text-slate-500 mt-0.5">
+                          {item.quantity} units &bull; {formatCurrency(item.unit_price)}/unit
                         </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-medium text-indigo-600">{formatCurrency(item.total_price)}</p>
+                    <div className="font-mono font-bold text-slate-900 text-xs">
+                      {formatCurrency(item.total_price)}
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Order Summary - Total calculations */}
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span className="font-medium">{formatCurrency(order.total_amount)}</span>
+              <div className="p-5 bg-slate-50/80 border-t border-slate-100 space-y-1.5 text-xs">
+                <div className="flex justify-between text-slate-600">
+                  <span>Subtotal:</span>
+                  <span className="font-mono font-semibold text-slate-900">{formatCurrency(order.total_amount)}</span>
                 </div>
-                <div className="flex justify-between items-center mt-2">
-                  <span className="text-gray-600">Shipping</span>
-                  <span className="font-medium">Includes</span>
+                <div className="flex justify-between text-slate-600">
+                  <span>Freight & Insurance:</span>
+                  <span className="font-mono text-emerald-600 font-semibold">Included in PO Rate</span>
                 </div>
-                <div className="flex justify-between items-center mt-2 pt-2 border-t border-gray-200">
-                  <span className="text-lg font-semibold text-gray-900">total</span>
-                  <span className="text-lg font-bold text-indigo-600">{formatCurrency(order.total_amount)}</span>
+                <div className="flex justify-between items-center pt-2 border-t border-slate-200 text-sm font-bold text-slate-900">
+                  <span>Total PO Value:</span>
+                  <span className="font-mono text-brand-600 text-base">{formatCurrency(order.total_amount)}</span>
                 </div>
               </div>
             </div>
 
-            {/* Shipping Information - Delivery address */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <FiMapPin className="w-5 h-5 text-indigo-600" />
-                Shipping information
+            {/* Consignee Address */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <h3 className="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                <FiMapPin className="w-4 h-4 text-brand-600" />
+                Consignee & Delivery Address
               </h3>
-              <p className="text-gray-700 whitespace-pre-line">{order.shipping_address}</p>
+              <p className="text-xs text-slate-700 whitespace-pre-line leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200/60">
+                {order.shipping_address || 'No address provided'}
+              </p>
             </div>
 
-            {/* Order Timeline - Status history */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <FiClock className="w-5 h-5 text-indigo-600" />
-                Order timeline
+            {/* Milestones Timeline */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <h3 className="font-bold text-slate-900 text-sm mb-4 flex items-center gap-2">
+                <FiClock className="w-4 h-4 text-brand-600" />
+                Procurement Milestones & History
               </h3>
-              <div className="space-y-4">
-                {timeline.map((event, index) => (
-                  <div key={index} className="flex gap-3">
-                    <div className="relative">
-                      <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                        <FiCheckCircle className="w-4 h-4 text-indigo-600" />
-                      </div>
-                      {index < timeline.length - 1 && (
-                        <div className="absolute top-8 left-4 w-0.5 h-12 bg-indigo-200"></div>
-                      )}
+              <div className="relative pl-6 space-y-5 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                {timeline?.map((event, index) => (
+                  <div key={index} className="relative flex items-start gap-4">
+                    <div className="absolute -left-6 w-6 h-6 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center text-xs">
+                      <FiCheckCircle className="w-3.5 h-3.5" />
                     </div>
-                    <div className="flex-1 pb-4">
-                      <p className="font-medium text-gray-900">
-                        {event.status === 'pending_confirmation' ? 'Awaiting' :
-                          event.status === 'confirmed' ? 'sure' :
-                            event.status === 'processing' ? 'In process' :
-                              event.status === 'shipped' ? 'Sent' :
-                                event.status === 'delivered' ? 'Delivered' :
-                                  event.status === 'cancelled' ? 'cancel' : event.status}
+                    <div className="flex-1">
+                      <p className="text-xs font-bold text-slate-900">
+                        {formatOrderStatus(event.status)}
                       </p>
-                      <p className="text-sm text-gray-500">{formatDate(event.date)}</p>
+                      <p className="text-[11px] text-slate-500 font-mono mt-0.5">
+                        {formatIndianDate(event.date)}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -506,114 +455,87 @@ export default function Show({ order, timeline, paymentInfo }) {
             </div>
           </div>
 
-          {/* Right Column - Sidebar with additional information */}
+          {/* Right Column (Parties & Escrow Ledger) */}
           <div className="space-y-6">
-            {/* Customer Information - Buyer details */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <FiUser className="w-5 h-5 text-indigo-600" />
-                Buyer information
+            {/* Buyer Details */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <h3 className="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                <FiUser className="w-4 h-4 text-brand-600" />
+                Procuring Buyer Enterprise
               </h3>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="font-medium text-blue-600">
-                      {order.buyer?.name?.charAt(0)}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">{order.buyer?.name}</p>
-                    <p className="text-sm text-gray-500">Buyer</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <FiMail className="w-4 h-4 text-gray-400" />
-                  <a href={`mailto:${order.buyer?.email}`} className="text-indigo-600 hover:text-indigo-700">
-                    {order.buyer?.email}
-                  </a>
-                </div>
+              <div className="space-y-1.5 text-xs">
+                <p className="font-bold text-slate-900">{order.buyer?.name}</p>
+                <p className="text-slate-500">{order.buyer?.email}</p>
+                <Link
+                  href={route('admin.orders.buyer', order.buyer_id)}
+                  className="mt-2 inline-block text-xs font-semibold text-brand-600 hover:text-brand-700"
+                >
+                  View All Orders by Buyer &rarr;
+                </Link>
               </div>
             </div>
 
-            {/* Supplier Information - Seller details */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <BsBuilding className="w-5 h-5 text-indigo-600" />
-                Supplier Information
+            {/* Supplier Details */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <h3 className="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                <BsBuilding className="w-4 h-4 text-brand-600" />
+                Manufacturing Vendor
               </h3>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                    <span className="font-medium text-purple-600">
-                      {order.supplier?.name?.charAt(0)}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">{order.supplier?.name}</p>
-                    <p className="text-sm text-gray-500">Supplier</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <FiMail className="w-4 h-4 text-gray-400" />
-                  <a href={`mailto:${order.supplier?.email}`} className="text-indigo-600 hover:text-indigo-700">
-                    {order.supplier?.email}
-                  </a>
-                </div>
+              <div className="space-y-1.5 text-xs">
+                <p className="font-bold text-slate-900">{order.supplier?.name}</p>
+                <p className="text-slate-500">{order.supplier?.email}</p>
+                <Link
+                  href={route('admin.orders.supplier', order.supplier_id)}
+                  className="mt-2 inline-block text-xs font-semibold text-brand-600 hover:text-brand-700"
+                >
+                  View All Orders by Vendor &rarr;
+                </Link>
               </div>
             </div>
 
-            {/* Payment Information - Payment details */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <MdOutlinePayment className="w-5 h-5 text-indigo-600" />
-                Payment information
+            {/* Payment & Escrow Settlement */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <h3 className="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                <FiShield className="w-4 h-4 text-emerald-600" />
+                Nodal Escrow Settlement
               </h3>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-500">Status</span>
-                  <span>{getPaymentStatusBadge(paymentInfo.status)}</span>
+              <div className="space-y-2.5 text-xs">
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span className="text-slate-500">Status:</span>
+                  <span className="font-semibold text-emerald-700">{formatPaymentStatus(paymentInfo?.status)}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-500">Procedure</span>
-                  <span className="text-sm font-medium text-gray-900">{paymentInfo.method}</span>
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span className="text-slate-500">Rail Method:</span>
+                  <span className="font-medium text-slate-800">{paymentInfo?.method || 'Nodal Escrow (Axis Bank)'}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-500">is closed Reference</span>
-                  <span className="text-sm font-mono text-gray-900">{paymentInfo.reference}</span>
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span className="text-slate-500">UTR / Reference:</span>
+                  <span className="font-mono text-slate-900 font-semibold">{paymentInfo?.reference || 'N/A'}</span>
                 </div>
-                {paymentInfo.paid_at && (
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">Date of Payment</span>
-                    <span className="text-sm text-gray-900">{formatDate(paymentInfo.paid_at)}</span>
+                {paymentInfo?.paid_at && (
+                  <div className="flex justify-between py-1">
+                    <span className="text-slate-500">Deposit Date:</span>
+                    <span className="font-mono text-slate-700">{formatIndianDate(paymentInfo.paid_at)}</span>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* RFQ Information - Related RFQ if any */}
+            {/* Linked RFQ */}
             {order.rfq && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <MdOutlineReceipt className="w-5 h-5 text-indigo-600" />
-                  RFQ Information
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <h3 className="font-bold text-slate-900 text-sm mb-2 flex items-center gap-2">
+                  <FiFileText className="w-4 h-4 text-brand-600" />
+                  Originating RFQ Tender
                 </h3>
-                <div className="space-y-2">
-                  <p className="text-sm">
-                    <span className="text-gray-500">RFQ Number:</span>{' '}
-                    <span className="font-medium text-gray-900">{order.rfq.rfq_number}</span>
-                  </p>
-                  <p className="text-sm">
-                    <span className="text-gray-500">Title:</span>{' '}
-                    <span className="text-gray-900">{order.rfq.title}</span>
-                  </p>
-                  <Link
-                    href={route('admin.rfqs.show', order.rfq.id)}
-                    className="inline-flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-700 mt-2"
-                  >
-                    RFQ for suppliers See details
-                    <FiArrowLeft className="w-3 h-3 rotate-180" />
-                  </Link>
-                </div>
+                <p className="text-xs font-semibold text-slate-800">{order.rfq.title}</p>
+                <p className="text-[11px] text-slate-500 font-mono mt-0.5">Tender #{order.rfq.rfq_number}</p>
+                <Link
+                  href={route('admin.rfqs.show', order.rfq.id)}
+                  className="mt-2.5 inline-block text-xs font-semibold text-brand-600 hover:text-brand-700"
+                >
+                  View Linked Tender Details &rarr;
+                </Link>
               </div>
             )}
           </div>

@@ -1,13 +1,8 @@
-// Pages/Buyer/Rfqs/Create.jsx
+// resources/js/Pages/Buyer/Rfqs/Create.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-
-// Layout - Buyer dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// Icons - Importing icon sets for UI elements
 import {
   FiPlus,
   FiTrash2,
@@ -16,16 +11,15 @@ import {
   FiFileText,
   FiInfo,
   FiAlertCircle,
-  FiArrowLeft
+  FiArrowLeft,
+  FiCheckCircle,
+  FiShield
 } from 'react-icons/fi';
 
 export default function RfqCreate({ recentProducts, categories }) {
-
-  // State management for form data, errors and submission status
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
-  // Form state - Initial form structure
   const [formData, setFormData] = useState({
     notes: '',
     title: '',
@@ -42,29 +36,24 @@ export default function RfqCreate({ recentProducts, categories }) {
     ],
   });
 
-  // Handle basic input field changes (non-product fields)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error for this field if it exists
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: null }));
     }
   };
 
-  // Handle product-specific field changes
   const handleProductChange = (index, field, value) => {
     const updatedProducts = [...formData.products_requested];
     updatedProducts[index][field] = value;
     setFormData(prev => ({ ...prev, products_requested: updatedProducts }));
 
-    // Clear product field errors
     if (errors[`products_requested.${index}.${field}`]) {
       setErrors(prev => ({ ...prev, [`products_requested.${index}.${field}`]: null }));
     }
   };
 
-  // Add new empty product row
   const addProduct = () => {
     setFormData(prev => ({
       ...prev,
@@ -81,7 +70,6 @@ export default function RfqCreate({ recentProducts, categories }) {
     }));
   };
 
-  // Remove product row (minimum one product must remain)
   const removeProduct = (index) => {
     if (formData.products_requested.length > 1) {
       setFormData(prev => ({
@@ -91,7 +79,6 @@ export default function RfqCreate({ recentProducts, categories }) {
     }
   };
 
-  // Quick select from recent products
   const useRecentProduct = (product) => {
     setFormData(prev => ({
       ...prev,
@@ -107,38 +94,34 @@ export default function RfqCreate({ recentProducts, categories }) {
     }));
   };
 
-  // Validate form before submission
   const validateForm = () => {
     const newErrors = {};
 
-    // Validate title
-    if (!formData.title) {
-      newErrors.title = 'Title required';
+    if (!formData.title?.trim()) {
+      newErrors.title = 'Tender title is required';
     }
 
-    // Validate required by date
     if (!formData.required_by_date) {
-      newErrors.required_by_date = 'Required date required';
+      newErrors.required_by_date = 'Target delivery date is required';
     } else {
       const selectedDate = new Date(formData.required_by_date);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
       if (selectedDate <= today) {
-        newErrors.required_by_date = 'The required date must be in the future';
+        newErrors.required_by_date = 'Target delivery date must be in the future';
       }
     }
 
-    // Validate each product
     formData.products_requested.forEach((product, index) => {
-      if (!product.name) {
-        newErrors[`products_requested.${index}.name`] = 'Product name required';
+      if (!product.name?.trim()) {
+        newErrors[`products_requested.${index}.name`] = 'Item name is required';
       }
       if (!product.quantity || product.quantity < 1) {
-        newErrors[`products_requested.${index}.quantity`] = 'Valid amount required';
+        newErrors[`products_requested.${index}.quantity`] = 'Valid positive quantity required';
       }
       if (!product.unit) {
-        newErrors[`products_requested.${index}.unit`] = 'Unit required';
+        newErrors[`products_requested.${index}.unit`] = 'Unit of measurement required';
       }
     });
 
@@ -146,7 +129,6 @@ export default function RfqCreate({ recentProducts, categories }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -160,8 +142,8 @@ export default function RfqCreate({ recentProducts, categories }) {
       onSuccess: () => {
         setSubmitting(false);
       },
-      onError: (errors) => {
-        setErrors(errors);
+      onError: (errs) => {
+        setErrors(errs);
         setSubmitting(false);
       }
     });
@@ -169,213 +151,181 @@ export default function RfqCreate({ recentProducts, categories }) {
 
   return (
     <DashboardLayout>
-      <Head title="Create new RFQ" />
+      <Head title="Publish RFQ Tender — Treadmesh" />
 
-      <div className="space-y-6">
-        {/* Header - Back button and page title */}
-        <div className="flex items-center space-x-4">
+      <div className="space-y-6 max-w-4xl mx-auto pb-12">
+        {/* Header */}
+        <div className="flex items-center space-x-3 border-b border-slate-200/80 pb-6">
           <Link
             href={route('buyer.rfqs.index')}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-slate-100 rounded-xl text-slate-600 transition"
           >
             <FiArrowLeft className="text-xl" />
           </Link>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Create new RFQ</h2>
-            <p className="text-gray-600 mt-1">Request Quotes from Verified Suppliers</p>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-display">
+              Publish Commercial RFQ Tender
+            </h1>
+            <p className="text-sm text-slate-500 mt-0.5">
+              Broadcast procurement specifications to verified Indian manufacturers and receive competitive quotes.
+            </p>
           </div>
         </div>
 
-        {/* Main Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Recent Products Quick Select - Optional feature */}
+          {/* Quick Select from Recent SKUs */}
           {recentProducts?.length > 0 && (
-            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6">
-              <h3 className="font-medium text-gray-700 mb-3 flex items-center">
-                <FiPackage className="mr-2" /> Quick selection from recent products
-              </h3>
+            <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-2">
+                Quick Selection from Catalog SKUs
+              </span>
               <div className="flex flex-wrap gap-2">
                 {recentProducts.map((product) => (
                   <button
                     key={product.id}
                     type="button"
                     onClick={() => useRecentProduct(product)}
-                    className="px-3 py-2 bg-white rounded-lg text-sm hover:bg-indigo-50 hover:text-indigo-600 transition-colors border"
+                    className="px-3 py-1.5 bg-white rounded-xl text-xs font-semibold text-slate-700 hover:border-brand-500 hover:text-brand-600 border border-slate-200 shadow-sm transition"
                   >
-                    {product.name}
+                    + {product.name}
                   </button>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Basic Information Section */}
-          <div className="bg-white rounded-xl border p-6">
-            <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-              <FiFileText className="mr-2" /> Basic information
-            </h3>
+          {/* Tender Overview */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+            <h2 className="font-bold text-slate-900 text-base flex items-center gap-2">
+              <FiFileText className="w-5 h-5 text-brand-600" />
+              Tender Overview & Purpose
+            </h2>
 
-            <div className="space-y-4">
-              {/* Title Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  RFQ Title <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  placeholder="Eg: Office stationery supplies required"
-                  className={`w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.title ? 'border-red-500' : ''
-                    }`}
-                />
-                {errors.title && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
-                    <FiAlertCircle className="mr-1" /> {errors.title}
-                  </p>
-                )}
-              </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                Tender Title / Requirement Summary <span className="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="e.g., Procurement of 5,000 units Industrial Nylon Spun Thread (White)"
+                className={`w-full text-xs border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 ${
+                  errors.title ? 'border-rose-500' : ''
+                }`}
+              />
+              {errors.title && (
+                <p className="mt-1 text-xs text-rose-600 flex items-center gap-1">
+                  <FiAlertCircle className="w-3.5 h-3.5" /> {errors.title}
+                </p>
+              )}
+            </div>
 
-              {/* Description Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Details (Optional)
-                </label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows="3"
-                  placeholder="Provide additional details about your requirements..."
-                  className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-                />
-              </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                Technical Specifications & Scope (Optional)
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                rows="3"
+                placeholder="Include industrial standards (ISO/BIS), tensile strength, packaging, or brand specifications..."
+                className="w-full text-xs border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+              />
             </div>
           </div>
 
-          {/* Products Requested Section */}
-          <div className="bg-white rounded-xl border p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-medium text-gray-700 flex items-center">
-                <FiPackage className="mr-2" /> Necessary products <span className="text-red-500 ml-1">*</span>
-              </h3>
+          {/* Bill of Materials (BOM) */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <FiPackage className="w-5 h-5 text-brand-600" />
+                Required Bill of Materials (BOM) <span className="text-rose-500">*</span>
+              </h2>
               <button
                 type="button"
                 onClick={addProduct}
-                className="px-3 py-1 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition-colors text-sm flex items-center"
+                className="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-xl transition"
               >
-                <FiPlus className="mr-1" /> Add product
+                <FiPlus className="w-3.5 h-3.5" /> Add Line Item
               </button>
             </div>
 
             <div className="space-y-4">
               {formData.products_requested.map((product, index) => (
-                <div key={index} className="p-4 bg-gray-50 rounded-lg relative">
-                  {/* Remove button - only shown if more than one product */}
+                <div key={index} className="p-4 bg-slate-50/80 rounded-xl border border-slate-200/80 relative">
                   {formData.products_requested.length > 1 && (
                     <button
                       type="button"
                       onClick={() => removeProduct(index)}
-                      className="absolute top-2 right-2 p-1 text-gray-400 hover:text-red-600 transition-colors"
+                      className="absolute top-3 right-3 p-1.5 text-slate-400 hover:text-rose-600 transition"
+                      title="Remove Item"
                     >
-                      <FiTrash2 />
+                      <FiTrash2 className="w-4 h-4" />
                     </button>
                   )}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {/* Product Name */}
-                    <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">
-                         <span className="text-red-500">*</span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                    <div className="lg:col-span-2">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                        Item / SKU Description <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="text"
                         value={product.name}
                         onChange={(e) => handleProductChange(index, 'name', e.target.value)}
-                        placeholder="For example: A4 paper"
-                        className={`w-full border rounded-lg px-3 py-2 text-sm ${errors[`products_requested.${index}.name`] ? 'border-red-500' : ''
-                          }`}
+                        placeholder="e.g., Poly-cotton Thread Spool 1000m"
+                        className={`w-full border border-slate-200 rounded-lg p-2 text-xs ${
+                          errors[`products_requested.${index}.name`] ? 'border-rose-500' : ''
+                        }`}
                       />
-                      {errors[`products_requested.${index}.name`] && (
-                        <p className="mt-1 text-xs text-red-600">{errors[`products_requested.${index}.name`]}</p>
-                      )}
                     </div>
 
-                    {/* Quantity */}
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">
-                        Amount <span className="text-red-500">*</span>
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                        Quantity <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="number"
                         value={product.quantity}
                         onChange={(e) => handleProductChange(index, 'quantity', parseInt(e.target.value) || 0)}
                         min="1"
-                        className={`w-full border rounded-lg px-3 py-2 text-sm ${errors[`products_requested.${index}.quantity`] ? 'border-red-500' : ''
-                          }`}
+                        className="w-full border border-slate-200 rounded-lg p-2 text-xs font-mono"
                       />
-                      {errors[`products_requested.${index}.quantity`] && (
-                        <p className="mt-1 text-xs text-red-600">{errors[`products_requested.${index}.quantity`]}</p>
-                      )}
                     </div>
 
-                    {/* Unit */}
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">
-                        Unit <span className="text-red-500">*</span>
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                        Unit <span className="text-rose-500">*</span>
                       </label>
                       <select
                         value={product.unit}
                         onChange={(e) => handleProductChange(index, 'unit', e.target.value)}
-                        className={`w-full border rounded-lg px-3 py-2 text-sm ${errors[`products_requested.${index}.unit`] ? 'border-red-500' : ''
-                          }`}
+                        className="w-full border border-slate-200 rounded-lg p-2 text-xs"
                       >
-                        <option value="pcs">Piece (pcs)</option>
-                        <option value="kg">Kilogram (kg)</option>
-                        <option value="g">the village (g)</option>
-                        <option value="ton">tons</option>
-                        <option value="m">meter (m)</option>
-                        <option value="cm">Centimeter (cm)</option>
-                        <option value="l">Liter (l)</option>
-                        <option value="ml">milliliter (ml)</option>
-                        <option value="box">Box</option>
-                        <option value="pack">pack</option>
-                        <option value="set">Set</option>
-                      </select>
-                      {errors[`products_requested.${index}.unit`] && (
-                        <p className="mt-1 text-xs text-red-600">{errors[`products_requested.${index}.unit`]}</p>
-                      )}
-                    </div>
-
-                    {/* Category */}
-                    <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1">
-                        Category (Optional)
-                      </label>
-                      <select
-                        value={product.category}
-                        onChange={(e) => handleProductChange(index, 'category', e.target.value)}
-                        className="w-full border rounded-lg px-3 py-2 text-sm"
-                      >
-                        <option value="">Category selection</option>
-                        {categories.map((category) => (
-                          <option key={category} value={category}>{category}</option>
-                        ))}
+                        <option value="pcs">Pieces (pcs)</option>
+                        <option value="kg">Kilograms (kg)</option>
+                        <option value="g">Grams (g)</option>
+                        <option value="ton">Metric Tons (MT)</option>
+                        <option value="m">Meters (m)</option>
+                        <option value="box">Boxes</option>
+                        <option value="pack">Packs</option>
+                        <option value="set">Sets</option>
                       </select>
                     </div>
 
-                    {/* Specifications */}
-                    <div className="md:col-span-4">
-                      <label className="block text-xs font-medium text-gray-500 mb-1">
-                        Details (Optional)
+                    <div className="lg:col-span-4">
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                        Specific Parameters / HSN / Tolerances (Optional)
                       </label>
-                      <textarea
+                      <input
+                        type="text"
                         value={product.specifications}
                         onChange={(e) => handleProductChange(index, 'specifications', e.target.value)}
-                        rows="2"
-                        placeholder="Ex: Size: A4, Weight: 80gsm, Brand: Any"
-                        className="w-full border rounded-lg px-3 py-2 text-sm"
+                        placeholder="e.g. Color Code #0044EE, HSN 5402, Max Shrinkage 1.5%"
+                        className="w-full border border-slate-200 rounded-lg p-2 text-xs"
                       />
                     </div>
                   </div>
@@ -384,78 +334,63 @@ export default function RfqCreate({ recentProducts, categories }) {
             </div>
           </div>
 
-          {/* Additional Information Section */}
-          <div className="bg-white rounded-xl border p-6">
-            <h3 className="font-medium text-gray-700 mb-4 flex items-center">
-              <FiInfo className="mr-2" /> Additional information
-            </h3>
+          {/* Delivery & Logistics */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+            <h2 className="font-bold text-slate-900 text-base flex items-center gap-2">
+              <FiCalendar className="w-5 h-5 text-brand-600" />
+              Delivery Schedule & Terms
+            </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Required By Date */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Required date <span className="text-red-500">*</span>
+                <label className="block font-bold text-slate-700 mb-1">
+                  Required By Date (Target Consignment Delivery) <span className="text-rose-500">*</span>
                 </label>
-                <div className="relative">
-                  <FiCalendar className="absolute left-3 top-3 text-gray-400" />
-                  <input
-                    type="date"
-                    name="required_by_date"
-                    value={formData.required_by_date}
-                    onChange={handleChange}
-                    min={new Date().toISOString().split('T')[0]}
-                    className={`w-full pl-10 border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.required_by_date ? 'border-red-500' : ''
-                      }`}
-                  />
-                </div>
+                <input
+                  type="date"
+                  name="required_by_date"
+                  value={formData.required_by_date}
+                  onChange={handleChange}
+                  min={new Date().toISOString().split('T')[0]}
+                  className={`w-full border border-slate-200 rounded-xl p-2.5 ${
+                    errors.required_by_date ? 'border-rose-500' : ''
+                  }`}
+                />
                 {errors.required_by_date && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
-                    <FiAlertCircle className="mr-1" /> {errors.required_by_date}
-                  </p>
+                  <p className="mt-1 text-xs text-rose-600">{errors.required_by_date}</p>
                 )}
               </div>
 
-              {/* Additional Notes */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Additional Notes (Optional)
+                <label className="block font-bold text-slate-700 mb-1">
+                  Special Dispatch / Commercial Instructions
                 </label>
                 <textarea
                   name="notes"
                   value={formData.notes}
                   onChange={handleChange}
-                  rows="3"
-                  placeholder="Special requirements or instructions for suppliers..."
-                  className="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  rows="2"
+                  placeholder="e.g., Doorstep delivery to warehouse in Bhiwandi; GST invoice required..."
+                  className="w-full border border-slate-200 rounded-xl p-2.5"
                 />
               </div>
             </div>
           </div>
 
-          {/* Form Actions - Submit and Cancel buttons */}
-          <div className="flex justify-end space-x-3">
+          {/* Form Actions */}
+          <div className="flex justify-end items-center gap-3 pt-2">
             <Link
               href={route('buyer.rfqs.index')}
-              className="px-6 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              className="px-5 py-2.5 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 text-xs font-semibold transition"
             >
-              cancel
+              Cancel
             </Link>
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+              className="px-6 py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 text-xs font-semibold shadow-sm transition disabled:opacity-50"
             >
-              {submitting ? (
-                <>
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Creating...
-                </>
-              ) : (
-                'Submit RFQ'
-              )}
+              {submitting ? 'Publishing Tender...' : 'Broadcast RFQ Tender'}
             </button>
           </div>
         </form>
