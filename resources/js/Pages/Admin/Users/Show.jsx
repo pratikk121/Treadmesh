@@ -1,16 +1,10 @@
 // Pages/Admin/Users/Show.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-
-// Layout - Admin dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// sweetalert - For beautiful alert messages
 import Swal from 'sweetalert2';
-
-// Icons - Importing icon sets for UI elements
+import { formatCurrency, formatIndianDate } from '@/Utils/formatters';
 import {
   FiArrowLeft,
   FiMail,
@@ -22,7 +16,12 @@ import {
   FiLock,
   FiPackage,
   FiShoppingCart,
-  FiClock
+  FiClock,
+  FiShield,
+  FiPhone,
+  FiMapPin,
+  FiCheckCircle,
+  FiXCircle
 } from 'react-icons/fi';
 import {
   MdVerified,
@@ -31,35 +30,35 @@ import {
   MdOutlineAdminPanelSettings,
   MdOutlineStorefront,
   MdOutlineShoppingCart,
-  MdOutlineAttachMoney
+  MdOutlineAccountBalanceWallet
 } from 'react-icons/md';
 import { BsBuilding, BsGraphUp, BsPeople } from 'react-icons/bs';
 
-export default function Show({ user, activity }) {
-  // State management for password reset form
+export default function Show({ user, activity = {} }) {
   const [passwordErrors, setPasswordErrors] = useState({});
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [passwordData, setPasswordData] = useState({ password: '', password_confirmation: '' });
+  const [resetting, setResetting] = useState(false);
 
   // Handle toggle user status (activate/deactivate)
   const handleToggleStatus = () => {
-    const action = user.is_active ? 'Inactive' : 'Active';
+    const action = user.is_active ? 'Deactivate' : 'Activate';
     Swal.fire({
-      title: `${user.is_active ? 'Inactive' : 'Active'} Do`,
-      text: `Are you sure you want to ${action} user "${user.name}"?`,
-      icon: 'question',
+      title: `${action} User Account?`,
+      text: `Are you sure you want to ${action.toLowerCase()} platform access for "${user.name}"?`,
+      icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: user.is_active ? '#EF4444' : '#10B981',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: `Yes, confirm, ${action} Do`,
+      confirmButtonText: `Yes, ${action} Account`,
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.post(route('admin.users.toggle-status', user.id), {}, {
           onSuccess: () => {
             Swal.fire({
-              title: 'successful!',
-              text: `User ${action} completed.`,
+              title: 'Status Updated',
+              text: `User account has been successfully ${user.is_active ? 'deactivated' : 'activated'}.`,
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -73,35 +72,38 @@ export default function Show({ user, activity }) {
   // Handle reset password
   const handleResetPassword = (e) => {
     e.preventDefault();
+    setResetting(true);
 
     router.post(route('admin.users.reset-password', user.id), passwordData, {
       onSuccess: () => {
         setShowResetPassword(false);
         setPasswordData({ password: '', password_confirmation: '' });
+        setPasswordErrors({});
         Swal.fire({
-          title: 'successful!',
-          text: 'Password successfully reset.',
+          title: 'Password Updated',
+          text: 'The password for this user has been reset successfully.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
         });
       },
-      onError: (errors) => {
-        setPasswordErrors(errors);
-      }
+      onError: (errs) => {
+        setPasswordErrors(errs);
+      },
+      onFinish: () => setResetting(false)
     });
   };
 
   // Handle delete user
   const handleDelete = () => {
     Swal.fire({
-      title: 'Delete user',
-      text: `Are you sure you want to delete user "${user.name}"? This action cannot be undone.`,
+      title: 'Delete User Account?',
+      text: `Are you sure you want to permanently delete "${user.name}"? All associated commercial permissions will be revoked. This action cannot be undone.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'Yes, delete',
+      confirmButtonText: 'Yes, Delete Permanently',
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -114,156 +116,170 @@ export default function Show({ user, activity }) {
     });
   };
 
-  // Format date - Converts ISO date to readable format
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
-
-  // Get role icon and color based on user role
+  // Get role info
   const getRoleInfo = (role) => {
     const roles = {
-      admin: { icon: MdOutlineAdminPanelSettings, color: 'purple', label: 'Admin' },
-      supplier: { icon: MdOutlineStorefront, color: 'blue', label: 'Supplier' },
-      buyer: { icon: MdOutlineShoppingCart, color: 'green', label: 'Buyer' },
+      admin: {
+        icon: MdOutlineAdminPanelSettings,
+        label: 'Administrator',
+        badge: 'bg-purple-50 text-purple-700 border-purple-200',
+        avatarBg: 'bg-purple-600',
+      },
+      supplier: {
+        icon: MdOutlineStorefront,
+        label: 'Verified Supplier',
+        badge: 'bg-blue-50 text-blue-700 border-blue-200',
+        avatarBg: 'bg-blue-600',
+      },
+      buyer: {
+        icon: MdOutlineShoppingCart,
+        label: 'Corporate Buyer',
+        badge: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+        avatarBg: 'bg-emerald-600',
+      },
     };
     return roles[role] || roles.buyer;
   };
 
-  // Get role info
   const roleInfo = getRoleInfo(user.role);
-
-  // Get role icon
   const RoleIcon = roleInfo.icon;
 
   return (
     <DashboardLayout>
-      <Head title={`${user.name} - profile`} />
+      <Head title={`User Dossier: ${user.name} | Treadmesh Admin`} />
 
       <div className="space-y-6">
-        {/* Header - Back button, title and action buttons */}
-        <div className="flex items-center justify-between">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Link
               href={route('admin.users.index')}
-              className="p-2 hover:bg-gray-100 rounded-lg transition"
+              className="p-2.5 bg-white border border-slate-200 hover:bg-slate-50 rounded-xl transition text-slate-600 shadow-sm"
             >
               <FiArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">User profile</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                View and manage user details
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl font-bold text-slate-900 font-plus-jakarta tracking-tight">
+                  User Account Dossier
+                </h1>
+                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${roleInfo.badge}`}>
+                  <RoleIcon className="w-3.5 h-3.5" />
+                  {roleInfo.label}
+                </span>
+              </div>
+              <p className="text-sm text-slate-500 mt-1 font-inter">
+                Detailed profile, platform engagement metrics, and credential management
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
+
+          <div className="flex items-center gap-2.5 flex-wrap">
             <button
               onClick={handleToggleStatus}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${user.is_active
-                ? 'bg-yellow-50 text-yellow-600 hover:bg-yellow-100'
-                : 'bg-green-50 text-green-600 hover:bg-green-100'
-                }`}
+              className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl border transition ${
+                user.is_active
+                  ? 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100'
+                  : 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+              }`}
             >
               {user.is_active ? <FiUserX className="w-4 h-4" /> : <FiUserCheck className="w-4 h-4" />}
-              <span>{user.is_active ? 'Inactive' : 'Active'}</span>
+              <span>{user.is_active ? 'Deactivate Account' : 'Activate Account'}</span>
             </button>
             <Link
               href={route('admin.users.edit', user.id)}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl transition shadow-sm"
             >
-              <FiEdit2 className="w-4 h-4" />
-              <span>editing</span>
+              <FiEdit2 className="w-4 h-4 text-slate-500" />
+              <span>Edit Account</span>
             </Link>
             <button
               onClick={handleDelete}
-              className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 rounded-xl transition"
             >
               <FiTrash2 className="w-4 h-4" />
-              <span>delete</span>
+              <span>Delete Account</span>
             </button>
           </div>
         </div>
 
-        {/* User Info Card - Main user information */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-6">
-            <div className="flex items-start gap-6">
+        {/* User Info Card */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+          <div className="p-6 md:p-8">
+            <div className="flex flex-col md:flex-row md:items-start gap-6">
               {/* User Avatar */}
-              <div className={`w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold bg-${roleInfo.color}-500`}>
-                {user.name.charAt(0)}
+              <div className={`w-20 h-20 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-md ${roleInfo.avatarBg} font-plus-jakarta`}>
+                {user.name.charAt(0).toUpperCase()}
               </div>
 
-              <div className="flex-1">
-                {/* User Name and Status */}
-                <div className="flex items-start justify-between">
+              <div className="flex-1 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
-                    <div className="flex items-center gap-4 mt-2">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-${roleInfo.color}-100 text-${roleInfo.color}-800`}>
-                        <RoleIcon className="w-4 h-4 mr-1" />
-                        {roleInfo.label}
+                    <h2 className="text-2xl font-bold text-slate-900 font-plus-jakarta">
+                      {user.name}
+                    </h2>
+                    <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${
+                        user.is_active
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : 'bg-rose-50 text-rose-700 border-rose-200'
+                      }`}>
+                        {user.is_active ? <FiCheckCircle className="w-3.5 h-3.5" /> : <FiXCircle className="w-3.5 h-3.5" />}
+                        {user.is_active ? 'Active User' : 'Suspended Account'}
                       </span>
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${user.is_active
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                        }`}>
-                        {user.is_active ? <FiUserCheck className="w-4 h-4 mr-1" /> : <FiUserX className="w-4 h-4 mr-1" />}
-                        {user.is_active ? 'Active' : 'Inactive'}
+                      <span className="text-xs text-slate-400 font-jetbrains">
+                        UID: #{user.id.toString().padStart(5, '0')}
                       </span>
                     </div>
                   </div>
+
                   {/* Reset Password Button */}
                   <button
                     onClick={() => setShowResetPassword(!showResetPassword)}
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
+                    className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition"
                   >
-                    <FiLock className="w-4 h-4" />
-                    <span>Reset password</span>
+                    <FiLock className="w-3.5 h-3.5" />
+                    <span>{showResetPassword ? 'Close Password Form' : 'Reset Password'}</span>
                   </button>
                 </div>
 
-                {/* User Contact and Dates */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                {/* Contact and Dates */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-3 border-t border-slate-100">
                   <div className="flex items-center gap-3">
-                    <FiMail className="w-5 h-5 text-gray-400" />
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-500">
+                      <FiMail className="w-4 h-4" />
+                    </div>
                     <div>
-                      <p className="text-sm text-gray-500">Email</p>
-                      <a href={`mailto:${user.email}`} className="text-indigo-600 hover:text-indigo-700">
+                      <p className="text-xs text-slate-400 font-medium">Email Address</p>
+                      <a href={`mailto:${user.email}`} className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 font-inter">
                         {user.email}
                       </a>
                     </div>
                   </div>
+
                   <div className="flex items-center gap-3">
-                    <FiCalendar className="w-5 h-5 text-gray-400" />
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-500">
+                      <FiCalendar className="w-4 h-4" />
+                    </div>
                     <div>
-                      <p className="text-sm text-gray-500">Date of Joining</p>
-                      <p className="text-gray-900">{formatDate(user.created_at)}</p>
+                      <p className="text-xs text-slate-400 font-medium">Onboarding Date</p>
+                      <p className="text-sm font-semibold text-slate-800 font-jetbrains">
+                        {formatIndianDate(user.created_at)}
+                      </p>
                     </div>
                   </div>
-                  {activity.last_login && (
-                    <div className="flex items-center gap-3">
-                      <FiClock className="w-5 h-5 text-gray-400" />
-                      <div>
-                        <p className="text-sm text-gray-500">Last login</p>
-                        <p className="text-gray-900">{formatDate(activity.last_login)}</p>
-                      </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-500">
+                      <FiClock className="w-4 h-4" />
                     </div>
-                  )}
+                    <div>
+                      <p className="text-xs text-slate-400 font-medium">Last Login Recorded</p>
+                      <p className="text-sm font-semibold text-slate-800 font-jetbrains">
+                        {activity.last_login ? formatIndianDate(activity.last_login) : 'Never Authenticated'}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -271,183 +287,243 @@ export default function Show({ user, activity }) {
 
           {/* Reset Password Form */}
           {showResetPassword && (
-            <div className="border-t border-gray-100 p-6 bg-gray-50">
-              <h3 className="font-semibold text-gray-900 mb-4">Reset password</h3>
-              <form onSubmit={handleResetPassword} className="max-w-md space-y-4">
+            <div className="border-t border-slate-100 p-6 md:p-8 bg-slate-50/80">
+              <div className="max-w-md space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    New Password *
-                  </label>
-                  <input
-                    type="password"
-                    value={passwordData.password}
-                    onChange={(e) => setPasswordData({ ...passwordData, password: e.target.value })}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${passwordErrors.password ? 'border-red-500' : 'border-gray-300'
+                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-jetbrains">
+                    Direct Administrative Password Reset
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-1">
+                    Assign a new secure authentication password directly for this user.
+                  </p>
+                </div>
+                <form onSubmit={handleResetPassword} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                      New Password <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="password"
+                      value={passwordData.password}
+                      onChange={(e) => setPasswordData({ ...passwordData, password: e.target.value })}
+                      placeholder="Minimum 8 characters"
+                      className={`w-full px-3.5 py-2 text-sm border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white transition ${
+                        passwordErrors.password ? 'border-rose-500' : 'border-slate-300'
                       }`}
-                  />
-                  {passwordErrors.password && (
-                    <p className="mt-1 text-sm text-red-600">{passwordErrors.password}</p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Confirm new password *
-                  </label>
-                  <input
-                    type="password"
-                    value={passwordData.password_confirmation}
-                    onChange={(e) => setPasswordData({ ...passwordData, password_confirmation: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  />
-                </div>
-                <div className="flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowResetPassword(false)}
-                    className="px-4 py-2 text-gray-700 hover:text-gray-900"
-                  >
-                    cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
-                  >
-                    Reset password
-                  </button>
-                </div>
-              </form>
+                    />
+                    {passwordErrors.password && (
+                      <p className="mt-1 text-xs text-rose-600 font-medium">{passwordErrors.password}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                      Confirm New Password <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="password"
+                      value={passwordData.password_confirmation}
+                      onChange={(e) => setPasswordData({ ...passwordData, password_confirmation: e.target.value })}
+                      placeholder="Repeat new password"
+                      className="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white transition"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-end gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowResetPassword(false)}
+                      className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={resetting}
+                      className="px-5 py-2 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-sm transition disabled:opacity-50"
+                    >
+                      {resetting ? 'Resetting Password...' : 'Save New Password'}
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           )}
         </div>
 
-        {/* Activity Stats - User activity metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        {/* Activity Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Created by RFQ</p>
-                <p className="text-2xl font-bold text-indigo-600 mt-1">{activity.rfqs_count}</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-jetbrains">
+                  Published RFQ Tenders
+                </p>
+                <p className="text-2xl font-bold text-slate-900 mt-1 font-jetbrains">
+                  {activity.rfqs_count ?? 0}
+                </p>
               </div>
-              <div className="p-3 bg-indigo-100 rounded-lg">
-                <FiPackage className="w-6 h-6 text-indigo-600" />
+              <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-indigo-600">
+                <FiPackage className="w-6 h-6" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Quotes Submitted</p>
-                <p className="text-2xl font-bold text-blue-600 mt-1">{activity.quotes_count}</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-jetbrains">
+                  Quotations Submitted
+                </p>
+                <p className="text-2xl font-bold text-slate-900 mt-1 font-jetbrains">
+                  {activity.quotes_count ?? 0}
+                </p>
               </div>
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <BsGraphUp className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-center text-blue-600">
+                <BsGraphUp className="w-6 h-6" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">order ( buyer)</p>
-                <p className="text-2xl font-bold text-green-600 mt-1">{activity.orders_as_buyer}</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-jetbrains">
+                  Purchase Orders (Buyer)
+                </p>
+                <p className="text-2xl font-bold text-slate-900 mt-1 font-jetbrains">
+                  {activity.orders_as_buyer ?? 0}
+                </p>
               </div>
-              <div className="p-3 bg-green-100 rounded-lg">
-                <FiShoppingCart className="w-6 h-6 text-green-600" />
+              <div className="w-12 h-12 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-center text-emerald-600">
+                <FiShoppingCart className="w-6 h-6" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">order ( supplier)</p>
-                <p className="text-2xl font-bold text-purple-600 mt-1">{activity.orders_as_supplier}</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-jetbrains">
+                  Orders Fulfilled (Supplier)
+                </p>
+                <p className="text-2xl font-bold text-slate-900 mt-1 font-jetbrains">
+                  {activity.orders_as_supplier ?? 0}
+                </p>
               </div>
-              <div className="p-3 bg-purple-100 rounded-lg">
-                <BsPeople className="w-6 h-6 text-purple-600" />
+              <div className="w-12 h-12 bg-purple-50 border border-purple-100 rounded-xl flex items-center justify-center text-purple-600">
+                <BsPeople className="w-6 h-6" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Financial Stats - Role-specific financial information */}
+        {/* Financial Stats */}
         {(user.role === 'buyer' || user.role === 'supplier') && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {user.role === 'buyer' && (
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <MdOutlineAttachMoney className="w-5 h-5 text-indigo-600" />
-                  total cost
-                </h3>
-                <p className="text-3xl font-bold text-green-600">{formatCurrency(activity.total_spent)}</p>
-                <p className="text-sm text-gray-500 mt-2">On All Paid Orders</p>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+                <div className="flex items-center gap-2 mb-2">
+                  <MdOutlineAccountBalanceWallet className="w-5 h-5 text-indigo-600" />
+                  <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider font-jetbrains">
+                    Cumulative Procurement Spend
+                  </h3>
+                </div>
+                <p className="text-3xl font-bold text-slate-900 font-jetbrains">
+                  {formatCurrency(activity.total_spent || 0)}
+                </p>
+                <p className="text-xs text-slate-400 mt-2 font-inter">
+                  Settled via RBI-compliant escrow for dispatched & accepted consignments
+                </p>
               </div>
             )}
             {user.role === 'supplier' && (
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <MdOutlineAttachMoney className="w-5 h-5 text-indigo-600" />
-                  Total income is
-                </h3>
-                <p className="text-3xl font-bold text-green-600">{formatCurrency(activity.total_earned)}</p>
-                <p className="text-sm text-gray-500 mt-2"></p>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+                <div className="flex items-center gap-2 mb-2">
+                  <MdOutlineAccountBalanceWallet className="w-5 h-5 text-emerald-600" />
+                  <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider font-jetbrains">
+                    Gross Revenue Fulfilled
+                  </h3>
+                </div>
+                <p className="text-3xl font-bold text-emerald-600 font-jetbrains">
+                  {formatCurrency(activity.total_earned || 0)}
+                </p>
+                <p className="text-xs text-slate-400 mt-2 font-inter">
+                  Disbursed payments across verified purchase orders and delivered lots
+                </p>
               </div>
             )}
           </div>
         )}
 
-        {/* Supplier Profile Info - Additional supplier details */}
+        {/* Supplier Profile Details */}
         {user.role === 'supplier' && user.supplier && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100">
-              <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                <BsBuilding className="w-5 h-5 text-indigo-600" />
-                Supplier Profile
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="font-semibold text-sm text-slate-900 flex items-center gap-2 font-plus-jakarta">
+                <BsBuilding className="w-4 h-4 text-indigo-600" />
+                Verified Supplier Enterprise Profile
               </h3>
+              <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${
+                user.supplier.verification_status === 'verified'
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : user.supplier.verification_status === 'pending'
+                    ? 'bg-amber-50 text-amber-700 border-amber-200'
+                    : 'bg-rose-50 text-rose-700 border-rose-200'
+              }`}>
+                {user.supplier.verification_status === 'verified' ? <MdVerified className="w-3.5 h-3.5 text-emerald-600" /> :
+                  user.supplier.verification_status === 'pending' ? <MdPending className="w-3.5 h-3.5 text-amber-600" /> :
+                    <MdWarning className="w-3.5 h-3.5 text-rose-600" />}
+                {user.supplier.verification_status === 'verified' ? 'KYC Verified Enterprise' :
+                  user.supplier.verification_status === 'pending' ? 'Verification Pending' : 'KYC Rejected'}
+              </span>
             </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-6 md:p-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div>
-                  <p className="text-sm text-gray-500">Company Name</p>
-                  <p className="font-medium text-gray-900">{user.supplier.company_name}</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-jetbrains">
+                    Registered Business Entity
+                  </p>
+                  <p className="font-bold text-slate-900 text-sm mt-1">
+                    {user.supplier.company_name}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Trade license</p>
-                  <p className="font-medium text-gray-900">{user.supplier.trade_license_number}</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-jetbrains">
+                    GSTIN / Trade License
+                  </p>
+                  <p className="font-bold text-slate-900 text-sm mt-1 font-jetbrains">
+                    {user.supplier.trade_license_number || 'Not Provided'}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Company Phone</p>
-                  <a href={`tel:${user.supplier.company_phone}`} className="text-indigo-600 hover:text-indigo-700">
-                    {user.supplier.company_phone}
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-jetbrains">
+                    Primary Contact Number
+                  </p>
+                  <a href={`tel:${user.supplier.company_phone}`} className="font-semibold text-indigo-600 hover:text-indigo-700 text-sm mt-1 block font-jetbrains">
+                    {user.supplier.company_phone || 'N/A'}
                   </a>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Company Email</p>
-                  <a href={`mailto:${user.supplier.company_email}`} className="text-indigo-600 hover:text-indigo-700">
-                    {user.supplier.company_email}
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-jetbrains">
+                    Official Procurement Email
+                  </p>
+                  <a href={`mailto:${user.supplier.company_email}`} className="font-semibold text-indigo-600 hover:text-indigo-700 text-sm mt-1 block">
+                    {user.supplier.company_email || 'N/A'}
                   </a>
                 </div>
                 <div className="md:col-span-2">
-                  <p className="text-sm text-gray-500">Address</p>
-                  <p className="text-gray-900">{user.supplier.company_address}</p>
-                  <p className="text-sm text-gray-500 mt-1">{user.supplier.city}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Verification Status</p>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user.supplier.verification_status === 'verified'
-                    ? 'bg-green-100 text-green-800'
-                    : user.supplier.verification_status === 'pending'
-                      ? 'bg-yellow-100 text-yellow-800'
-                      : 'bg-red-100 text-red-800'
-                    }`}>
-                    {user.supplier.verification_status === 'verified' ? <MdVerified className="w-3 h-3 mr-1" /> :
-                      user.supplier.verification_status === 'pending' ? <MdPending className="w-3 h-3 mr-1" /> :
-                        <MdWarning className="w-3 h-3 mr-1" />}
-                    {user.supplier.verification_status === 'verified' ? 'Verified' :
-                      user.supplier.verification_status === 'pending' ? 'Pending' :
-                        user.supplier.verification_status === 'rejected' ? 'Rejected' : user.supplier.verification_status}
-                  </span>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider font-jetbrains">
+                    Registered Facility & Warehouse Address
+                  </p>
+                  <p className="font-medium text-slate-800 text-sm mt-1">
+                    {user.supplier.company_address}
+                  </p>
+                  {user.supplier.city && (
+                    <p className="text-xs text-slate-500 mt-0.5 font-medium">
+                      Industrial Hub / Cluster: {user.supplier.city}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

@@ -1,16 +1,9 @@
 // Pages/Admin/Users/Index.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-
-// Layout - Admin dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// sweetalert - For beautiful alert messages
 import Swal from 'sweetalert2';
-
-// Icons - Importing icon sets for UI elements
 import {
   FiUsers,
   FiSearch,
@@ -22,13 +15,15 @@ import {
   FiUserPlus,
   FiUserCheck,
   FiUserX,
-  FiMoreVertical
+  FiMoreVertical,
+  FiShield
 } from 'react-icons/fi';
 import {
   MdOutlineAdminPanelSettings,
   MdOutlineStorefront,
   MdOutlineShoppingCart
 } from 'react-icons/md';
+import { formatIndianDate } from '@/Utils/formatters';
 
 export default function Index({ users, stats, filters }) {
   // State management for filters and UI controls
@@ -45,17 +40,17 @@ export default function Index({ users, stats, filters }) {
 
   // Role options for dropdown
   const roleOptions = [
-    { value: '', label: 'All roles' },
+    { value: '', label: 'All System Roles' },
     { value: 'admin', label: 'Admin', icon: MdOutlineAdminPanelSettings, color: 'text-purple-600' },
     { value: 'supplier', label: 'Supplier', icon: MdOutlineStorefront, color: 'text-blue-600' },
-    { value: 'buyer', label: 'Buyer', icon: MdOutlineShoppingCart, color: 'text-green-600' },
+    { value: 'buyer', label: 'Buyer', icon: MdOutlineShoppingCart, color: 'text-emerald-600' },
   ];
 
   // Status options for dropdown
   const statusOptions = [
-    { value: '', label: 'All statuses are' },
-    { value: 'true', label: 'Active', color: 'bg-green-100 text-green-800' },
-    { value: 'false', label: 'Inactive', color: 'bg-red-100 text-red-800' },
+    { value: '', label: 'All Account Statuses' },
+    { value: 'true', label: 'Active', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+    { value: 'false', label: 'Inactive', color: 'bg-rose-50 text-rose-700 border-rose-200' },
   ];
 
   // Handle search form submission
@@ -123,23 +118,23 @@ export default function Index({ users, stats, filters }) {
 
   // Handle toggle user status (activate/deactivate)
   const handleToggleStatus = (user) => {
-    const action = user.is_active ? 'Inactive' : 'Active';
+    const action = user.is_active ? 'Deactivate' : 'Activate';
     Swal.fire({
-      title: `${user.is_active ? 'Inactive' : 'Active'} Do`,
-      text: `Are you sure you want to ${action} user "${user.name}"?`,
+      title: `${action} User Account?`,
+      text: `Are you sure you want to ${action.toLowerCase()} access for "${user.name}" (${user.email})?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: user.is_active ? '#EF4444' : '#10B981',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: `Yes, confirm, ${action} Do`,
+      confirmButtonText: `Yes, ${action} Account`,
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.patch(route('admin.users.toggle-status', user.id), {}, {
           onSuccess: () => {
             Swal.fire({
-              title: 'successful!',
-              text: `User ${action} completed.`,
+              title: 'Status Updated',
+              text: `User account has been successfully ${user.is_active ? 'deactivated' : 'activated'}.`,
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -153,21 +148,21 @@ export default function Index({ users, stats, filters }) {
   // Handle delete single user
   const handleDelete = (user) => {
     Swal.fire({
-      title: 'Delete user',
-      text: `Are you sure you want to delete user "${user.name}"? This action cannot be undone.`,
+      title: 'Delete User Account?',
+      text: `Are you sure you want to permanently delete "${user.name}"? This action cannot be reversed.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#EF4444',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'Yes, delete',
+      confirmButtonText: 'Yes, Delete Account',
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('admin.users.destroy', user.id), {
           onSuccess: () => {
             Swal.fire({
-              title: 'Deleted!',
-              text: 'User Deleted.',
+              title: 'Account Deleted',
+              text: 'The user account has been permanently removed.',
               icon: 'success',
               timer: 2000,
               showConfirmButton: false
@@ -190,30 +185,21 @@ export default function Index({ users, stats, filters }) {
   // Sort indicator component for table headers
   const SortIndicator = ({ field }) => {
     if (sortField !== field) return null;
-    return <span className="ml-1">{sortDirection === 'asc' ? '↑' : '↓'}</span>;
-  };
-
-  // Format date - Converts ISO date to readable format
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    return <span className="ml-1 font-mono">{sortDirection === 'asc' ? '↑' : '↓'}</span>;
   };
 
   // Get role badge with appropriate styling
   const getRoleBadge = (role) => {
     const badges = {
-      admin: { color: 'bg-purple-100 text-purple-800', icon: MdOutlineAdminPanelSettings, label: 'Admin' },
-      supplier: { color: 'bg-blue-100 text-blue-800', icon: MdOutlineStorefront, label: 'Supplier' },
-      buyer: { color: 'bg-green-100 text-green-800', icon: MdOutlineShoppingCart, label: 'Buyer' },
+      admin: { color: 'bg-purple-50 text-purple-700 border-purple-200', icon: MdOutlineAdminPanelSettings, label: 'Admin' },
+      supplier: { color: 'bg-blue-50 text-blue-700 border-blue-200', icon: MdOutlineStorefront, label: 'Supplier' },
+      buyer: { color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: MdOutlineShoppingCart, label: 'Buyer' },
     };
     const badge = badges[role] || badges.buyer;
     const Icon = badge.icon;
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge.color}`}>
-        <Icon className="w-3 h-3 mr-1" />
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badge.color}`}>
+        <Icon className="w-3.5 h-3.5 mr-1" />
         {badge.label}
       </span>
     );
@@ -222,12 +208,12 @@ export default function Index({ users, stats, filters }) {
   // Get active status badge
   const getStatusBadge = (isActive) => {
     return isActive
-      ? <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-        <FiUserCheck className="w-3 h-3 mr-1" />
+      ? <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <FiUserCheck className="w-3.5 h-3.5 mr-1" />
         Active
       </span>
-      : <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-        <FiUserX className="w-3 h-3 mr-1" />
+      : <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+        <FiUserX className="w-3.5 h-3.5 mr-1" />
         Inactive
       </span>;
   };
@@ -242,96 +228,122 @@ export default function Index({ users, stats, filters }) {
 
   return (
     <DashboardLayout>
-      <Head title="User Management" />
+      <Head title="User Identity & Access Management - Treadmesh Admin" />
 
-      <div className="space-y-6">
-        {/* Header - Page title and action buttons */}
-        <div className="flex justify-between items-center">
+      <div className="space-y-6 pb-12">
+        {/* Header Banner */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
-            <p className="text-sm text-gray-600 mt-1">
-              Manage all users, roles and permissions
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                Access & Identity Control
+              </span>
+              <span className="text-xs text-gray-400">•</span>
+              <span className="text-xs text-gray-500 font-medium">Enterprise RBAC</span>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight mt-1">
+              User Identity & Access Control
+            </h1>
+            <p className="text-sm text-gray-500 mt-0.5">
+              Supervise all system roles, administrative permissions, and account lifecycle states
             </p>
           </div>
-          <div className="flex gap-2">
+
+          <div className="flex items-center gap-3">
             <button
               onClick={handleExport}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl text-xs font-semibold shadow-xs transition"
             >
-              <FiDownload className="w-4 h-4" />
-              <span>Export</span>
+              <FiDownload className="w-4 h-4 text-gray-500" />
+              <span>Export CSV</span>
             </button>
             <Link
               href={route('admin.users.create')}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-900 hover:bg-black text-white text-xs font-semibold rounded-xl shadow-sm transition"
             >
               <FiUserPlus className="w-4 h-4" />
-              <span>Add user</span>
+              <span>Create User Account</span>
             </Link>
           </div>
         </div>
 
-        {/* Stats Cards - Key metrics overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Total users</p>
-                <p className="text-2xl font-bold text-indigo-600 mt-1">{stats.total}</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Users</p>
+                <p className="text-2xl font-extrabold text-gray-900 mt-1.5 font-mono">{stats.total}</p>
+                <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-500">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+                  <span>Registered platform accounts</span>
+                </div>
               </div>
-              <div className="p-3 bg-indigo-100 rounded-lg">
-                <FiUsers className="w-6 h-6 text-indigo-600" />
+              <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-xl text-indigo-600">
+                <FiUsers className="w-6 h-6" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Active user</p>
-                <p className="text-2xl font-bold text-green-600 mt-1">{stats.active}</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Active Users</p>
+                <p className="text-2xl font-extrabold text-emerald-700 mt-1.5 font-mono">{stats.active}</p>
+                <div className="flex items-center gap-1.5 mt-2 text-xs text-emerald-600 font-medium">
+                  <FiUserCheck className="w-3.5 h-3.5" />
+                  <span>Authorized login access</span>
+                </div>
               </div>
-              <div className="p-3 bg-green-100 rounded-lg">
-                <FiUserCheck className="w-6 h-6 text-green-600" />
+              <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-xl text-emerald-600">
+                <FiUserCheck className="w-6 h-6" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Supplier</p>
-                <p className="text-2xl font-bold text-blue-600 mt-1">{stats.suppliers}</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Manufacturers & Vendors</p>
+                <p className="text-2xl font-extrabold text-blue-700 mt-1.5 font-mono">{stats.suppliers}</p>
+                <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-500">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                  <span>Catalog & RFQ suppliers</span>
+                </div>
               </div>
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <MdOutlineStorefront className="w-6 h-6 text-blue-600" />
+              <div className="p-3 bg-blue-50 border border-blue-100 rounded-xl text-blue-600">
+                <MdOutlineStorefront className="w-6 h-6" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Buyer</p>
-                <p className="text-2xl font-bold text-green-600 mt-1">{stats.buyers}</p>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Enterprise Buyers</p>
+                <p className="text-2xl font-extrabold text-purple-700 mt-1.5 font-mono">{stats.buyers}</p>
+                <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-500">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-purple-600"></span>
+                  <span>Procurement departments</span>
+                </div>
               </div>
-              <div className="p-3 bg-green-100 rounded-lg">
-                <MdOutlineShoppingCart className="w-6 h-6 text-green-600" />
+              <div className="p-3 bg-purple-50 border border-purple-100 rounded-xl text-purple-600">
+                <MdOutlineShoppingCart className="w-6 h-6" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Search and Filter Bar - Main search and filter controls */}
-        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-          <div className="flex flex-col md:flex-row gap-4">
+        {/* Search and Filter Bar */}
+        <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
+          <div className="flex flex-col md:flex-row gap-3">
             <form onSubmit={handleSearch} className="flex-1">
               <div className="relative">
-                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
                   type="text"
-                  placeholder="Search by name or email..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Search by name or email address..."
+                  className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition placeholder:text-gray-400"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -341,7 +353,7 @@ export default function Index({ users, stats, filters }) {
               <select
                 value={selectedRole}
                 onChange={(e) => setSelectedRole(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
               >
                 {roleOptions.map(option => (
                   <option key={option.value} value={option.value}>{option.label}</option>
@@ -350,7 +362,7 @@ export default function Index({ users, stats, filters }) {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
               >
                 {statusOptions.map(option => (
                   <option key={option.value} value={option.value}>{option.label}</option>
@@ -358,12 +370,12 @@ export default function Index({ users, stats, filters }) {
               </select>
               <button
                 onClick={() => setShowFilterModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                className="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-xs font-semibold text-slate-700 transition"
               >
-                <FiFilter className="w-4 h-4" />
-                <span>More filters</span>
+                <FiFilter className="w-3.5 h-3.5 text-slate-500" />
+                <span>Filters</span>
                 {activeFilterCount > 0 && (
-                  <span className="ml-1 px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full text-xs">
+                  <span className="ml-1 px-1.5 py-0.2 bg-indigo-50 text-indigo-700 rounded-full text-[10px] font-bold border border-indigo-200">
                     {activeFilterCount}
                   </span>
                 )}
@@ -371,36 +383,36 @@ export default function Index({ users, stats, filters }) {
               {activeFilterCount > 0 && (
                 <button
                   onClick={handleReset}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-900"
+                  className="px-3 py-2 text-xs text-slate-500 hover:text-slate-900 transition"
                 >
-                  delete
+                  Clear
                 </button>
               )}
             </div>
           </div>
 
-          {/* Bulk Actions - Show when users are selected */}
+          {/* Bulk Actions */}
           {selectedUsers.length > 0 && (
-            <div className="mt-4 flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
-              <span className="text-sm font-medium text-indigo-700">
+            <div className="mt-3 flex items-center justify-between p-3 bg-indigo-50/70 rounded-xl border border-indigo-100">
+              <span className="text-xs font-semibold text-indigo-900">
                 {selectedUsers.length} users selected
               </span>
               <div className="relative">
                 <button
                   onClick={() => setBulkActionMenu(!bulkActionMenu)}
-                  className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-900 text-white rounded-lg text-xs font-semibold hover:bg-black transition"
                 >
-                  <FiMoreVertical className="w-4 h-4" />
-                  Bulk Actions
+                  <FiMoreVertical className="w-3.5 h-3.5" />
+                  <span>Bulk Actions</span>
                 </button>
                 {bulkActionMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border z-10">
+                  <div className="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-xl py-1.5 border border-slate-200 z-20 text-xs">
                     <button
                       onClick={() => {
                         setBulkActionMenu(false);
                         handleExport();
                       }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="block w-full text-left px-3.5 py-2 text-slate-700 hover:bg-slate-50"
                     >
                       Export Selected
                     </button>
@@ -411,122 +423,120 @@ export default function Index({ users, stats, filters }) {
           )}
         </div>
 
-        {/* Users Table - Main data table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        {/* Users Table */}
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-50/75 border-b border-slate-200/80 text-[11px] uppercase tracking-wider text-slate-500">
                 <tr>
-                  <th className="px-6 py-3 text-left">
+                  <th className="px-5 py-3 w-10">
                     <input
                       type="checkbox"
                       checked={selectedUsers.length === users.data.length && users.data.length > 0}
                       onChange={handleSelectAll}
-                      className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    className="px-5 py-3 cursor-pointer hover:text-slate-900"
                     onClick={() => handleSort('name')}
                   >
-                    User <SortIndicator field="name" />
+                    User Name <SortIndicator field="name" />
                   </th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    className="px-5 py-3 cursor-pointer hover:text-slate-900"
                     onClick={() => handleSort('email')}
                   >
-                    Email <SortIndicator field="email" />
+                    Email Address <SortIndicator field="email" />
                   </th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    className="px-5 py-3 cursor-pointer hover:text-slate-900"
                     onClick={() => handleSort('role')}
                   >
-                    Introduction <SortIndicator field="role" />
+                    System Role <SortIndicator field="role" />
                   </th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    className="px-5 py-3 cursor-pointer hover:text-slate-900"
                     onClick={() => handleSort('is_active')}
                   >
                     Status <SortIndicator field="is_active" />
                   </th>
                   <th
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
+                    className="px-5 py-3 cursor-pointer hover:text-slate-900"
                     onClick={() => handleSort('created_at')}
                   >
-                    Date of Joining <SortIndicator field="created_at" />
+                    Member Since <SortIndicator field="created_at" />
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Activities
-                  </th>
+                  <th className="px-5 py-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-slate-100">
                 {users.data.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4">
+                  <tr key={user.id} className="hover:bg-slate-50/60 transition">
+                    <td className="px-5 py-3.5">
                       <input
                         type="checkbox"
                         checked={selectedUsers.includes(user.id)}
                         onChange={() => handleSelectUser(user.id)}
-                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
                       />
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-5 py-3.5">
                       <Link href={route('admin.users.show', user.id)} className="hover:text-indigo-600">
                         <div className="flex items-center gap-3">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-medium ${user.role === 'admin' ? 'bg-purple-500' :
-                            user.role === 'supplier' ? 'bg-blue-500' : 'bg-green-500'
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs ${user.role === 'admin' ? 'bg-purple-600' :
+                            user.role === 'supplier' ? 'bg-blue-600' : 'bg-emerald-600'
                             }`}>
-                            {user.name.charAt(0)}
+                            {user.name.charAt(0).toUpperCase()}
                           </div>
-                          <span className="font-medium text-gray-900">{user.name}</span>
+                          <span className="font-semibold text-slate-900">{user.name}</span>
                         </div>
                       </Link>
                     </td>
-                    <td className="px-6 py-4">
-                      <a href={`mailto:${user.email}`} className="text-sm text-gray-600 hover:text-indigo-600">
+                    <td className="px-5 py-3.5">
+                      <a href={`mailto:${user.email}`} className="text-slate-600 hover:text-indigo-600 font-mono text-[11px]">
                         {user.email}
                       </a>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-5 py-3.5">
                       {getRoleBadge(user.role)}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-5 py-3.5">
                       {getStatusBadge(user.is_active)}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-gray-500">{formatDate(user.created_at)}</div>
+                    <td className="px-5 py-3.5 font-mono text-slate-500 text-[11px]">
+                      {formatIndianDate(user.created_at)}
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="px-5 py-3.5 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
                         <Link
                           href={route('admin.users.show', user.id)}
-                          className="p-1 text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
-                          title="See"
+                          className="p-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 rounded-lg transition"
+                          title="View User Dossier"
                         >
                           <FiEye className="w-4 h-4" />
                         </Link>
                         <Link
                           href={route('admin.users.edit', user.id)}
-                          className="p-1 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                          title="editing"
+                          className="p-1.5 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded-lg transition"
+                          title="Edit User Account"
                         >
                           <FiEdit2 className="w-4 h-4" />
                         </Link>
                         <button
                           onClick={() => handleToggleStatus(user)}
-                          className={`p-1 rounded-lg transition ${user.is_active
-                            ? 'text-yellow-600 hover:bg-yellow-50'
-                            : 'text-green-600 hover:bg-green-50'
+                          className={`p-1.5 rounded-lg transition ${user.is_active
+                            ? 'text-slate-500 hover:text-amber-600 hover:bg-amber-50'
+                            : 'text-slate-500 hover:text-emerald-600 hover:bg-emerald-50'
                             }`}
-                          title={user.is_active ? 'Disable' : 'Activate'}
+                          title={user.is_active ? 'Deactivate Account' : 'Activate Account'}
                         >
                           {user.is_active ? <FiUserX className="w-4 h-4" /> : <FiUserCheck className="w-4 h-4" />}
                         </button>
                         <button
                           onClick={() => handleDelete(user)}
-                          className="p-1 text-red-600 hover:bg-red-50 rounded-lg transition"
-                          title="delete"
+                          className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                          title="Delete Account"
                         >
                           <FiTrash2 className="w-4 h-4" />
                         </button>
@@ -538,86 +548,86 @@ export default function Index({ users, stats, filters }) {
             </table>
           </div>
 
-          {/* Pagination - Navigation controls */}
+          {/* Pagination */}
           {users.links && (
-            <div className="px-6 py-4 border-t border-gray-100">
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-500">
-                  total {users.total} of the {users.from} from {users.to} Showing
-                </p>
-                <div className="flex gap-2">
-                  {users.links.map((link, index) => (
-                    <button
-                      key={index}
-                      onClick={() => router.get(link.url)}
-                      disabled={!link.url || link.active}
-                      className={`px-3 py-1 rounded-lg text-sm ${link.active
-                        ? 'bg-indigo-600 text-white'
-                        : link.url
-                          ? 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
-                          : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        }`}
-                      dangerouslySetInnerHTML={{
-                        __html: link.label
-                          .replace('Previous', 'previous')
-                          .replace('Next', 'next')
-                      }}
-                    />
-                  ))}
-                </div>
+            <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <p>
+                Showing {users.from || 0} to {users.to || 0} of {users.total || 0} users
+              </p>
+              <div className="flex gap-1">
+                {users.links.map((link, index) => (
+                  <button
+                    key={index}
+                    onClick={() => link.url && router.get(link.url)}
+                    disabled={!link.url || link.active}
+                    className={`px-3 py-1.5 rounded-lg border text-xs font-semibold ${link.active
+                      ? 'bg-slate-900 text-white border-slate-900'
+                      : link.url
+                        ? 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                        : 'bg-slate-50 text-slate-400 border-slate-100 cursor-not-allowed'
+                      }`}
+                    dangerouslySetInnerHTML={{
+                      __html: link.label
+                    }}
+                  />
+                ))}
               </div>
             </div>
           )}
         </div>
 
-        {/* Filter Modal - Advanced filtering options */}
+        {/* Filter Modal */}
         {showFilterModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-              <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-semibold text-gray-900">More filters</h3>
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto border border-slate-200">
+              <div className="p-6 border-b border-slate-100">
+                <h3 className="text-lg font-bold text-slate-900 font-display">Advanced Filter</h3>
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-6 space-y-4 text-xs">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Date range
+                  <label className="block font-semibold text-slate-700 mb-2">
+                    Registration Date Range
                   </label>
                   <div className="grid grid-cols-2 gap-2">
-                    <input
-                      type="date"
-                      value={dateFrom}
-                      onChange={(e) => setDateFrom(e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="from"
-                    />
-                    <input
-                      type="date"
-                      value={dateTo}
-                      onChange={(e) => setDateTo(e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="up to"
-                    />
+                    <div>
+                      <span className="text-[11px] text-slate-400 block mb-1">From</span>
+                      <input
+                        type="date"
+                        value={dateFrom}
+                        onChange={(e) => setDateFrom(e.target.value)}
+                        className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
+                      />
+                    </div>
+                    <div>
+                      <span className="text-[11px] text-slate-400 block mb-1">To</span>
+                      <input
+                        type="date"
+                        value={dateTo}
+                        onChange={(e) => setDateTo(e.target.value)}
+                        className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
+              <div className="p-6 border-t border-slate-100 flex justify-end gap-2.5">
                 <button
                   onClick={() => setShowFilterModal(false)}
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900"
+                  className="px-4 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 transition"
                 >
-                  cancel
+                  Cancel
                 </button>
                 <button
                   onClick={handleReset}
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900 border border-gray-300 rounded-lg"
+                  className="px-4 py-2 text-xs font-semibold text-slate-700 border border-slate-200 rounded-xl hover:bg-slate-50 transition"
                 >
                   Reset
                 </button>
                 <button
                   onClick={handleFilter}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                  className="px-4 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-xl hover:bg-indigo-700 transition"
                 >
-                  Apply Filter
+                  Apply Filters
                 </button>
               </div>
             </div>

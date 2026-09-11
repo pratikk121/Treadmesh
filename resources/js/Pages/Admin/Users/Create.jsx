@@ -1,22 +1,17 @@
 // Pages/Admin/Users/Create.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-
-// Layout - Admin dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
-
-// sweetalert - For beautiful alert messages
 import Swal from 'sweetalert2';
-
-// Icons - Importing icon sets for UI elements
 import {
   FiArrowLeft,
   FiUser,
   FiMail,
   FiLock,
-  FiAlertCircle
+  FiAlertCircle,
+  FiShield,
+  FiCheckCircle
 } from 'react-icons/fi';
 import {
   MdOutlineAdminPanelSettings,
@@ -25,7 +20,6 @@ import {
 } from 'react-icons/md';
 
 export default function Create() {
-  // State management for form data, errors and processing status
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -35,11 +29,9 @@ export default function Create() {
     password_confirmation: '',
   });
 
-  // State management for form data, errors and processing status
   const [errors, setErrors] = useState({});
   const [processing, setProcessing] = useState(false);
 
-  // Handle input field changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -48,7 +40,6 @@ export default function Create() {
     }));
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     setProcessing(true);
@@ -56,8 +47,8 @@ export default function Create() {
     router.post(route('admin.users.store'), formData, {
       onSuccess: () => {
         Swal.fire({
-          title: 'successful!',
-          text: 'User successfully created.',
+          title: 'Account Provisioned',
+          text: 'User account has been successfully created.',
           icon: 'success',
           timer: 2000,
           showConfirmButton: false
@@ -66,8 +57,8 @@ export default function Create() {
       onError: (errors) => {
         setErrors(errors);
         Swal.fire({
-          title: 'Error!',
-          text: 'There is an error in the form. Please check your inputs.',
+          title: 'Validation Error',
+          text: 'Please review and correct the highlighted fields in the form.',
           icon: 'error',
           confirmButtonColor: '#4F46E5'
         });
@@ -76,225 +67,250 @@ export default function Create() {
     });
   };
 
-  // Role options for user types
   const roleOptions = [
     {
       value: 'admin',
       label: 'Admin',
       icon: MdOutlineAdminPanelSettings,
-      description: 'Full System Access',
+      description: 'Full supervisory authority across all platform modules',
       color: 'purple'
     },
     {
       value: 'supplier',
       label: 'Supplier',
       icon: MdOutlineStorefront,
-      description: 'Product Management and Can Respond to RFQ',
+      description: 'Publish catalog SKUs and submit commercial bids on RFQs',
       color: 'blue'
     },
     {
       value: 'buyer',
       label: 'Buyer',
       icon: MdOutlineShoppingCart,
-      description: 'RFQ Can make and order',
-      color: 'green'
+      description: 'Publish RFQ tenders, compare quotes, and execute POs',
+      color: 'emerald'
     },
   ];
 
   return (
     <DashboardLayout>
-      <Head title="Create new user" />
+      <Head title="Provision New User Account - Treadmesh Admin" />
 
-      <div className="max-w-3xl mx-auto">
-        <div className="space-y-6">
-          {/* Header - Back button and page title */}
-          <div className="flex items-center gap-4">
-            <Link
-              href={route('admin.users.index')}
-              className="p-2 hover:bg-gray-100 rounded-lg transition"
-            >
-              <FiArrowLeft className="w-5 h-5" />
-            </Link>
+      <div className="max-w-3xl mx-auto space-y-6 pb-12">
+        {/* Header Banner */}
+        <div className="flex items-center gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+          <Link
+            href={route('admin.users.index')}
+            className="p-2.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-600 rounded-xl transition shadow-xs"
+          >
+            <FiArrowLeft className="w-5 h-5" />
+          </Link>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                Identity Provisioning
+              </span>
+              <span className="text-xs text-gray-400">•</span>
+              <span className="text-xs text-gray-500 font-medium">New Account</span>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight mt-1">
+              Provision User Account
+            </h1>
+            <p className="text-sm text-gray-500 mt-0.5">
+              Configure credentials and assign enterprise system role
+            </p>
+          </div>
+        </div>
+
+        {/* Main Form */}
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xs border border-slate-200/80 overflow-hidden">
+          <div className="p-6 space-y-6">
+            {/* Basic Information Section */}
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Create new user</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                Add a new user to the system
-              </p>
+              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                <FiUser className="w-4 h-4 text-indigo-600" />
+                <span>Account Credentials</span>
+              </h3>
+              <div className="space-y-4 text-xs">
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-1.5">
+                    Full Name *
+                  </label>
+                  <div className="relative">
+                    <FiUser className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className={`w-full pl-10 pr-4 py-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 ${
+                        errors.name ? 'border-rose-400' : 'border-slate-200'
+                      }`}
+                      placeholder="e.g. Rajesh Sharma"
+                    />
+                  </div>
+                  {errors.name && (
+                    <p className="mt-1 text-xs text-rose-600 font-medium">{errors.name}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-1.5">
+                    Official Email Address *
+                  </label>
+                  <div className="relative">
+                    <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={`w-full pl-10 pr-4 py-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 ${
+                        errors.email ? 'border-rose-400' : 'border-slate-200'
+                      }`}
+                      placeholder="e.g. rajesh@enterprise.in"
+                    />
+                  </div>
+                  {errors.email && (
+                    <p className="mt-1 text-xs text-rose-600 font-medium">{errors.email}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Password Section */}
+            <div className="border-t border-slate-100 pt-6">
+              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                <FiLock className="w-4 h-4 text-indigo-600" />
+                <span>Security Credentials</span>
+              </h3>
+              <div className="space-y-4 text-xs">
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-1.5">
+                    Account Password *
+                  </label>
+                  <div className="relative">
+                    <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <input
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className={`w-full pl-10 pr-4 py-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 ${
+                        errors.password ? 'border-rose-400' : 'border-slate-200'
+                      }`}
+                      placeholder="Create a strong password (min. 8 characters)"
+                    />
+                  </div>
+                  {errors.password && (
+                    <p className="mt-1 text-xs text-rose-600 font-medium">{errors.password}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-1.5">
+                    Confirm Password *
+                  </label>
+                  <div className="relative">
+                    <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <input
+                      type="password"
+                      name="password_confirmation"
+                      value={formData.password_confirmation}
+                      onChange={handleChange}
+                      className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
+                      placeholder="Repeat password"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Role Selection Section */}
+            <div className="border-t border-slate-100 pt-6">
+              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                <FiShield className="w-4 h-4 text-indigo-600" />
+                <span>System Role & Access Privileges</span>
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                {roleOptions.map((option) => {
+                  const Icon = option.icon;
+                  const isSelected = formData.role === option.value;
+                  const activeClasses = isSelected
+                    ? 'border-indigo-600 bg-indigo-50/50 ring-1 ring-indigo-600/20 shadow-xs'
+                    : 'border-slate-200 hover:border-slate-300 bg-white';
+
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, role: option.value }))}
+                      className={`p-4 border-2 rounded-xl text-left transition ${activeClasses}`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <Icon className={`w-6 h-6 ${isSelected ? 'text-indigo-600' : 'text-slate-400'}`} />
+                        {isSelected && (
+                          <FiCheckCircle className="w-4 h-4 text-indigo-600" />
+                        )}
+                      </div>
+                      <h4 className={`font-bold text-xs ${isSelected ? 'text-indigo-950' : 'text-slate-900'}`}>
+                        {option.label}
+                      </h4>
+                      <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                        {option.description}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+              {errors.role && (
+                <p className="mt-2 text-xs text-rose-600 font-medium">{errors.role}</p>
+              )}
+            </div>
+
+            {/* Active Status Toggle */}
+            <div className="border-t border-slate-100 pt-6">
+              <label className="flex items-center gap-3 cursor-pointer p-3 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200">
+                <input
+                  type="checkbox"
+                  name="is_active"
+                  checked={formData.is_active}
+                  onChange={handleChange}
+                  className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                />
+                <div>
+                  <span className="font-semibold text-xs text-gray-900">Active Account Status</span>
+                  <p className="text-[11px] text-gray-500">Allow this user to authenticate and interact with platform endpoints</p>
+                </div>
+              </label>
             </div>
           </div>
 
-          {/* Main Form */}
-          <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-6 space-y-6">
-              {/* Basic Information Section */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic information</h3>
-                <div className="space-y-4">
-                  {/* Name Field */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Full name *
-                    </label>
-                    <div className="relative">
-                      <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.name ? 'border-red-500' : 'border-gray-300'
-                          }`}
-                        placeholder="Enter full name"
-                      />
-                    </div>
-                    {errors.name && (
-                      <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-                    )}
-                  </div>
+          {/* Form Actions */}
+          <div className="px-6 py-4 bg-slate-50/75 border-t border-slate-100 flex justify-end gap-2.5">
+            <Link
+              href={route('admin.users.index')}
+              className="px-4 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 transition"
+            >
+              Cancel
+            </Link>
+            <button
+              type="submit"
+              disabled={processing}
+              className="px-5 py-2 bg-gray-900 hover:bg-black text-white text-xs font-semibold rounded-xl shadow-xs transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {processing ? 'Provisioning Account...' : 'Create User Account'}
+            </button>
+          </div>
+        </form>
 
-                  {/* Email Field */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email address *
-                    </label>
-                    <div className="relative">
-                      <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.email ? 'border-red-500' : 'border-gray-300'
-                          }`}
-                        placeholder="Enter email address"
-                      />
-                    </div>
-                    {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Password Section */}
-              <div className="border-t pt-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">The password is</h3>
-                <div className="space-y-4">
-                  {/* Password Field */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      The password is *
-                    </label>
-                    <div className="relative">
-                      <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                      <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${errors.password ? 'border-red-500' : 'border-gray-300'
-                          }`}
-                        placeholder="Enter the password"
-                      />
-                    </div>
-                    {errors.password && (
-                      <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-                    )}
-                  </div>
-
-                  {/* Confirm Password Field */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Confirm password *
-                    </label>
-                    <div className="relative">
-                      <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                      <input
-                        type="password"
-                        name="password_confirmation"
-                        value={formData.password_confirmation}
-                        onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        placeholder="Confirm password"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Role Selection Section */}
-              <div className="border-t pt-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">User Role</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {roleOptions.map((option) => {
-                    const Icon = option.icon;
-                    const isSelected = formData.role === option.value;
-                    const colorClass = isSelected ? `border-${option.color}-500 bg-${option.color}-50` : 'border-gray-200 hover:border-gray-300';
-
-                    return (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => setFormData(prev => ({ ...prev, role: option.value }))}
-                        className={`p-4 border-2 rounded-lg text-left transition ${colorClass}`}
-                      >
-                        <Icon className={`w-8 h-8 mb-2 ${isSelected ? `text-${option.color}-600` : 'text-gray-400'
-                          }`} />
-                        <h4 className={`font-medium ${isSelected ? `text-${option.color}-900` : 'text-gray-900'
-                          }`}>{option.label}</h4>
-                        <p className="text-sm text-gray-500 mt-1">{option.description}</p>
-                      </button>
-                    );
-                  })}
-                </div>
-                {errors.role && (
-                  <p className="mt-2 text-sm text-red-600">{errors.role}</p>
-                )}
-              </div>
-
-              {/* Active Status Toggle */}
-              <div className="border-t pt-6">
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="is_active"
-                    checked={formData.is_active}
-                    onChange={handleChange}
-                    className="w-5 h-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                  />
-                  <div>
-                    <span className="font-medium text-gray-900">Active Status</span>
-                    <p className="text-sm text-gray-500">User can access the system by logging in</p>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            {/* Form Actions - Submit and Cancel buttons */}
-            <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
-              <Link
-                href={route('admin.users.index')}
-                className="px-4 py-2 text-gray-700 hover:text-gray-900"
-              >
-                cancel
-              </Link>
-              <button
-                type="submit"
-                disabled={processing}
-                className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {processing ? 'Creating...' : 'User created'}
-              </button>
-            </div>
-          </form>
-
-          {/* Info Note - Important information */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
-            <FiAlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-            <div className="text-sm text-blue-700">
-              <p className="font-medium mb-1">Note:</p>
-              <p>If you create a supplier account, after creation you will be redirected to complete their supplier profile.</p>
-            </div>
+        {/* Info Note */}
+        <div className="bg-indigo-50/70 border border-indigo-200/80 rounded-2xl p-4 flex items-start gap-3">
+          <FiAlertCircle className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
+          <div className="text-xs text-indigo-950">
+            <p className="font-bold mb-0.5">Supplier Onboarding Workflow</p>
+            <p className="text-indigo-800 leading-relaxed">
+              When creating a <strong>Supplier</strong> account, you will be immediately routed to configure their industrial vendor dossier including GSTIN, company phone, and manufacturing facility address.
+            </p>
           </div>
         </div>
       </div>
