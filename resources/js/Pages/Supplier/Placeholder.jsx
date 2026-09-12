@@ -18,7 +18,7 @@ import {
 export default function SupplierPlaceholder({ title, description }) {
   return (
     <DashboardLayout>
-      <Head title={title || 'page' | 'Supplier'} />
+      <Head title={title ? `${title} - Supplier` : 'Supplier Workspace'} />
 
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
         {/* Icon */}
@@ -30,19 +30,19 @@ export default function SupplierPlaceholder({ title, description }) {
 
         {/* Title */}
         <h1 className="text-3xl font-bold text-gray-900 text-center mb-3">
-          {title || 'Relocating page'}
+          {title || 'Module Under Maintenance'}
         </h1>
 
         {/* Description */}
         <p className="text-lg text-gray-600 text-center max-w-2xl mb-8">
-          {description || 'This page is being updated and will be available soon.'}
+          {description || 'This supplier workspace module is being updated and will be available shortly.'}
         </p>
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
           <Link
             href={route('supplier.dashboard')}
-            className="inline-flex items-center justify-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+            className="inline-flex items-center justify-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
           >
             <FiHome className="mr-2 w-5 h-5" />
             Back to Dashboard
@@ -50,10 +50,10 @@ export default function SupplierPlaceholder({ title, description }) {
 
           <button
             onClick={() => window.history.back()}
-            className="inline-flex items-center justify-center px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+            className="inline-flex items-center justify-center px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
           >
             <FiArrowLeft className="mr-2 w-5 h-5" />
-            Go to previous page
+            Return to Previous Page
           </button>
         </div>
 
@@ -62,11 +62,10 @@ export default function SupplierPlaceholder({ title, description }) {
           <div className="flex items-start gap-3">
             <FiAlertCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-semibold text-blue-800 mb-2">Transfer process</h3>
+              <h3 className="font-semibold text-blue-800 mb-2">Platform Upgrade in Progress</h3>
               <p className="text-sm text-blue-700 leading-relaxed">
-                We are migrating our application to Inertia.js for better performance
-                This page is currently under development.
-                Please try again later.
+                We are upgrading this enterprise module with enhanced workflow capabilities and real-time synchronization.
+                Please check back momentarily or contact enterprise support if you need immediate assistance.
               </p>
             </div>
           </div>

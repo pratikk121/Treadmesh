@@ -97,40 +97,40 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
 
   // Tab configuration
   const tabs = [
-    { id: 'basic', name: 'Basic information' },
-    { id: 'business', name: 'Business Description' },
-    { id: 'documents', name: 'Documents' },
-    { id: 'password', name: 'Security' },
+    { id: 'basic', name: 'Basic Information' },
+    { id: 'business', name: 'Business & Tax Details' },
+    { id: 'documents', name: 'Compliance Documents' },
+    { id: 'password', name: 'Security & Access' },
   ];
 
   return (
     <DashboardLayout>
-      <Head title="Edit profile" />
+      <Head title="Edit Supplier Profile" />
 
       <div className="space-y-6">
         {/* Header - Page title and action buttons */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Edit profile</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Edit Supplier Profile</h1>
             <p className="text-sm text-gray-600 mt-1">
-              Update your company information and settings
+              Update your enterprise identity, compliance records, and operational settings
             </p>
           </div>
           <div className="flex gap-2">
             <Link
               href={route('supplier.profile.index')}
-              className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition text-gray-700 font-medium text-sm"
             >
               <FiX className="w-4 h-4" />
-              <span>cancel</span>
+              <span>Cancel</span>
             </Link>
             <button
               onClick={handleSubmit}
               disabled={processing}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 font-medium text-sm"
             >
               <FiSave className="w-4 h-4" />
-              <span>{processing ? 'Saving...' : 'Save changes'}</span>
+              <span>{processing ? 'Saving...' : 'Save Changes'}</span>
             </button>
           </div>
         </div>
@@ -158,9 +158,9 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
           {activeTab === 'basic' && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Basic information</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Basic Information</h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  Update your basic contact information and company details.
+                  Update your primary commercial identity, communications, and registered address.
                 </p>
               </div>
 
@@ -168,7 +168,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Company Name */}
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Company Name <span className="text-red-500">*</span>
+                    Company / Enterprise Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -185,7 +185,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Contact Person */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Name of contact person <span className="text-red-500">*</span>
+                    Primary Contact Person <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -200,7 +200,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Email */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email address <span className="text-red-500">*</span>
+                    Primary Email Address <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -215,7 +215,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Company Email */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Company Email <span className="text-red-500">*</span>
+                    Enterprise / Billing Email <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -232,7 +232,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Company Phone */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Company Phone <span className="text-red-500">*</span>
+                    Official Contact / WhatsApp Phone <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="tel"
@@ -249,7 +249,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Website */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    
+                    Official Website
                   </label>
                   <input
                     type="url"
@@ -264,7 +264,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Company Address */}
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    The street address is <span className="text-red-500">*</span>
+                    Registered Factory / Office Address <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     value={data.company_address}
@@ -296,7 +296,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* State */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    State / Province
+                    State / UT (e.g. Maharashtra, Gujarat)
                   </label>
                   <input
                     type="text"
@@ -309,12 +309,13 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Postal Code */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Postal Code
+                    PIN Code (6-digit)
                   </label>
                   <input
                     type="text"
                     value={data.postal_code}
                     onChange={e => setData('postal_code', e.target.value)}
+                    placeholder="e.g. 400001"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   />
                 </div>
@@ -322,7 +323,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Country */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Country
+                    Country / Jurisdiction
                   </label>
                   <select
                     value={data.country}
@@ -343,9 +344,9 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
           {activeTab === 'business' && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Business Description</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Business & Tax Details</h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  Provide additional information about your business.
+                  Provide statutory registration, operational scale, and commercial credentials.
                 </p>
               </div>
 
@@ -353,12 +354,13 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Trade License Number */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Trade License No. <span className="text-red-500">*</span>
+                    GSTIN / Trade License No. <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     value={data.trade_license_number}
                     onChange={e => setData('trade_license_number', e.target.value)}
+                    placeholder="e.g. 27AAAAA0000A1Z5"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                     required
                   />
@@ -370,12 +372,13 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Tax ID */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Tax ID / VAT Number
+                    PAN / Permanent Account Number
                   </label>
                   <input
                     type="text"
                     value={data.tax_id}
                     onChange={e => setData('tax_id', e.target.value)}
+                    placeholder="e.g. ABCDE1234F"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   />
                 </div>
@@ -415,7 +418,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Number of Employees */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Number of employees
+                    Workforce / Staff Strength
                   </label>
                   <input
                     type="number"
@@ -429,33 +432,33 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Annual Revenue */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Annual Income Range
+                    Annual Turnover Bracket (MSME Class)
                   </label>
                   <select
                     value={data.annual_revenue}
                     onChange={e => setData('annual_revenue', e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   >
-                    <option value="">Select the range</option>
-                    <option value="< 1M">$Less than 1M</option>
-                    <option value="1M - 5M">$1M - $5M</option>
-                    <option value="5M - 10M">$5M - $10M</option>
-                    <option value="10M - 50M">$10M - $50M</option>
-                    <option value="> 50M">$More than 50M</option>
+                    <option value="">Select turnover bracket</option>
+                    <option value="< 1M">Under ₹1 Crore (Micro MSME)</option>
+                    <option value="1M - 5M">₹1 Crore - ₹5 Crore (Small MSME)</option>
+                    <option value="5M - 10M">₹5 Crore - ₹25 Crore (Medium MSME)</option>
+                    <option value="10M - 50M">₹25 Crore - ₹100 Crore</option>
+                    <option value="> 50M">Above ₹100 Crore (Large Enterprise)</option>
                   </select>
                 </div>
 
                 {/* Description */}
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Company Details
+                    Company Overview & Capabilities
                   </label>
                   <textarea
                     value={data.description}
                     onChange={e => setData('description', e.target.value)}
                     rows="4"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-                    placeholder="Tell buyers about your company, your expertise and your specialty..."
+                    placeholder="Detail your manufacturing capacities, minimum batch sizes, logistics reach, and quality certifications..."
                   />
                   <p className="mt-1 text-xs text-gray-500">
                     Maximum 2,000 characters. This will appear on your public profile.
@@ -472,9 +475,9 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
           {activeTab === 'documents' && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Documents</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Compliance & Statutory Documents</h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  Upload required documents for verification. All documents must be clear and valid.
+                  Upload mandatory business verification documents. Ensure all records are clear, unexpired, and official.
                 </p>
               </div>
 
@@ -516,7 +519,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                       <button
                         type="button"
                         onClick={() => document.getElementById('logo').click()}
-                        className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
+                        className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition text-sm font-medium"
                       >
                         Select file
                       </button>
@@ -539,7 +542,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Trade License Document */}
                 <div className="border-2 border-gray-200 border-dashed rounded-lg p-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Trade License Document
+                    GSTIN / Trade License Certificate <span className="text-red-500">*</span>
                   </label>
                   <div className="flex items-start gap-6">
                     {licensePreview ? (
@@ -571,7 +574,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                       <button
                         type="button"
                         onClick={() => document.getElementById('trade_license_document').click()}
-                        className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
+                        className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition text-sm font-medium"
                       >
                         Select file
                       </button>
@@ -596,7 +599,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Certificate of Incorporation */}
                 <div className="border-2 border-gray-200 border-dashed rounded-lg p-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Certificate of Registration (Optional)
+                    Certificate of Incorporation / Udyam MSME (Optional)
                   </label>
                   <div className="flex items-start gap-6">
                     {certificatePreview ? (
@@ -628,7 +631,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                       <button
                         type="button"
                         onClick={() => document.getElementById('certificate_of_incorporation').click()}
-                        className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
+                        className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition text-sm font-medium"
                       >
                         Select file
                       </button>
@@ -654,12 +657,12 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
               <div className="bg-blue-50 rounded-lg p-4 flex items-start gap-3">
                 <FiInfo className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-blue-700 font-medium">Document Requirements</p>
-                  <ul className="mt-2 text-sm text-blue-600 list-disc list-inside">
-                    <li>Documents must be valid and not expired</li>
-                    <li>All information should be clearly visible</li>
-                    <li>Accepted formats: PDF, JPG, PNG (Maximum 5MB each))</li>
-                    <li>Verification usually takes 2-3 working days</li>
+                  <p className="text-sm text-blue-700 font-medium">Document & Verification Guidelines</p>
+                  <ul className="mt-2 text-sm text-blue-600 list-disc list-inside space-y-1">
+                    <li>Statutory documents must be valid, unexpired, and clearly legible</li>
+                    <li>GSTIN / Trade License must match the registered company name</li>
+                    <li>Accepted formats: PDF, JPG, PNG (Maximum 5MB each)</li>
+                    <li>Administrative verification turnaround is typically 1-2 business days</li>
                   </ul>
                 </div>
               </div>
@@ -670,9 +673,9 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
           {activeTab === 'password' && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Change password</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Change Password</h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  Update password to keep your account secure.
+                  Update your login password to ensure robust enterprise access security.
                 </p>
               </div>
 
@@ -680,7 +683,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Current Password */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Current password is
+                    Current Password
                   </label>
                   <input
                     type="password"
@@ -712,7 +715,7 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 {/* Confirm New Password */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Confirm new password
+                    Confirm New Password
                   </label>
                   <input
                     type="password"
@@ -725,12 +728,12 @@ export default function ProfileEdit({ user, supplier, countries, businessTypes }
                 <div className="bg-yellow-50 rounded-lg p-4 flex items-start gap-3">
                   <FiAlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm text-yellow-700 font-medium">Password requirements</p>
-                    <ul className="mt-2 text-sm text-yellow-600 list-disc list-inside">
-                      <li>Minimum 8 characters</li>
+                    <p className="text-sm text-yellow-700 font-medium">Password Security Policy</p>
+                    <ul className="mt-2 text-sm text-yellow-600 list-disc list-inside space-y-1">
+                      <li>Minimum 8 characters in length</li>
                       <li>Must contain at least one uppercase letter</li>
-                      <li>Must contain at least one number</li>
-                      <li>Must contain at least one special character</li>
+                      <li>Must contain at least one numerical digit</li>
+                      <li>Must contain at least one special character (!@#$%^&*)</li>
                     </ul>
                   </div>
                 </div>

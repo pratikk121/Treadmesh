@@ -1,8 +1,8 @@
 // Pages/Supplier/Profile/Show.jsx
 
-// React - Core React imports for component functionality
 import React, { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
+import { formatCurrency } from '@/Utils/formatters';
 
 // Icons - Importing icon sets for UI elements
 import {
@@ -35,16 +35,6 @@ export default function SupplierProfileShow({
 }) {
   // State management for category filter
   const [selectedCategory, setSelectedCategory] = useState('all');
-
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value);
-  };
 
   // Filter products by selected category
   const filteredProducts = selectedCategory === 'all'
@@ -111,7 +101,7 @@ export default function SupplierProfileShow({
                     {stats.member_since && (
                       <span className="flex items-center gap-1">
                         <FiCalendar className="w-4 h-4" />
-                        {stats.member_since} Member from
+                        Member since {stats.member_since}
                       </span>
                     )}
                   </div>
@@ -142,7 +132,7 @@ export default function SupplierProfileShow({
                     className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-lg"
                   >
                     <FiMessageSquare className="w-5 h-5" />
-                    <span>Communication with the supplier</span>
+                    <span>Contact Supplier</span>
                   </Link>
                 </div>
               </div>
@@ -152,19 +142,19 @@ export default function SupplierProfileShow({
             <div className="border-t border-gray-100 bg-gray-50 px-6 py-4">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div>
-                  <p className="text-sm text-gray-500">Active product</p>
+                  <p className="text-sm text-gray-500">Active Catalog SKUs</p>
                   <p className="text-xl font-bold text-gray-900">{stats.total_products}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Order Complete</p>
+                  <p className="text-sm text-gray-500">Orders Fulfilled</p>
                   <p className="text-xl font-bold text-gray-900">{stats.completed_orders}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">reaction time</p>
+                  <p className="text-sm text-gray-500">Avg Response Time</p>
                   <p className="text-xl font-bold text-gray-900">{stats.response_time}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Verified</p>
+                  <p className="text-sm text-gray-500">Verified Since</p>
                   <p className="text-xl font-bold text-gray-900">{stats.verified_since}</p>
                 </div>
               </div>
@@ -197,7 +187,7 @@ export default function SupplierProfileShow({
                     <div className="flex items-start gap-3">
                       <FiGlobe className="w-5 h-5 text-gray-400 mt-0.5" />
                       <div>
-                        <p className="text-sm text-gray-500"></p>
+                        <p className="text-sm text-gray-500">Corporate Website</p>
                         <a
                           href={supplier.website}
                           target="_blank"
@@ -226,7 +216,7 @@ export default function SupplierProfileShow({
 
               {/* Business Details */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Business Description</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Statutory & Corporate Credentials</h2>
                 <div className="space-y-4">
                   <div>
                     <p className="text-sm text-gray-500">Business Type</p>
@@ -237,12 +227,12 @@ export default function SupplierProfileShow({
                     <p className="font-medium text-gray-900">{supplier.year_established || 'Not mentioned'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Number of employees</p>
+                    <p className="text-sm text-gray-500">Workforce Size</p>
                     <p className="font-medium text-gray-900">{supplier.number_of_employees || 'Not mentioned'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Trade license</p>
-                    <p className="font-medium text-gray-900">{supplier.trade_license_number}</p>
+                    <p className="text-sm text-gray-500">GSTIN / Trade License</p>
+                    <p className="font-medium text-gray-900">{supplier.trade_license_number || 'Under Verification'}</p>
                   </div>
                 </div>
               </div>
@@ -250,7 +240,7 @@ export default function SupplierProfileShow({
               {/* Categories */}
               {categories.length > 0 && (
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-4">Product Category</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 mb-4">Manufacturing Sectors & Categories</h2>
                   <div className="flex flex-wrap gap-2">
                     {categories.map((category) => (
                       <span
@@ -270,7 +260,7 @@ export default function SupplierProfileShow({
               {/* Company Description */}
               {supplier.description && (
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-4">About the company</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 mb-4">About the Company</h2>
                   <p className="text-gray-700 leading-relaxed">{supplier.description}</p>
                 </div>
               )}
@@ -338,23 +328,23 @@ export default function SupplierProfileShow({
                               </p>
                               {product.stock_quantity !== null && (
                                 <p className="text-sm text-gray-600">
-                                  Stock: {product.stock_quantity} Unit
+                                  Stock: {product.stock_quantity} {product.unit || 'Units'}
                                 </p>
                               )}
                             </div>
 
                             <div className="flex items-center justify-between">
                               <div>
-                                <p className="text-sm text-gray-500">Starting price is</p>
+                                <p className="text-sm text-gray-500">Base Wholesale Price</p>
                                 <p className="text-xl font-bold text-indigo-600">
                                   {formatCurrency(product.base_price)}
                                 </p>
                               </div>
                               <Link
                                 href={route('buyer.products.show', product.slug)}
-                                className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition"
+                                className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition text-sm font-medium"
                               >
-                                for suppliers See details
+                                View Product Details
                               </Link>
                             </div>
 
@@ -363,7 +353,7 @@ export default function SupplierProfileShow({
                               <div className="mt-3 pt-3 border-t border-gray-100">
                                 <p className="text-xs text-gray-500 flex items-center gap-1">
                                   <FiDollarSign className="w-3 h-3" />
-                                  Bulk pricing available for larger quantities
+                                  Tiered volume pricing available for wholesale orders
                                 </p>
                               </div>
                             )}
@@ -400,7 +390,7 @@ export default function SupplierProfileShow({
                       <FiCheckCircle className="w-5 h-5 text-green-600" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Order execution</p>
+                      <p className="text-sm text-gray-500">Fulfillment Rate</p>
                       <p className="text-lg font-bold text-gray-900">98%</p>
                     </div>
                   </div>
@@ -411,7 +401,7 @@ export default function SupplierProfileShow({
                       <FiClock className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">On-Time Delivery</p>
+                      <p className="text-sm text-gray-500">On-Time Dispatch SLA</p>
                       <p className="text-lg font-bold text-gray-900">95%</p>
                     </div>
                   </div>

@@ -7,6 +7,9 @@ import { Head, Link, useForm, router } from '@inertiajs/react';
 // Layout - Supplier dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
 
+// Formatters
+import { formatIndianDate } from '@/Utils/formatters';
+
 // Icons - Importing icon sets for UI elements
 import {
   FiSave,
@@ -157,26 +160,26 @@ export default function EditProduct({ product, categories, units }) {
   const getStatusBadge = () => {
     const status = product.status;
     if (status === 'active') {
-      return <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">Active</span>;
+      return <span className="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-xs font-semibold">Active SKU</span>;
     } else if (status === 'pending') {
-      return <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">Approval pending</span>;
+      return <span className="px-3 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-full text-xs font-semibold">Verification Pending</span>;
     } else {
-      return <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">Inactive</span>;
+      return <span className="px-3 py-1 bg-slate-100 text-slate-700 border border-slate-200 rounded-full text-xs font-semibold">Delisted / Inactive</span>;
     }
   };
 
   return (
     <DashboardLayout>
-      <Head title={`${product.name} - editing`} />
+      <Head title={`Edit Product: ${product.name} | Treadmesh Supplier`} />
 
       <div className="space-y-6">
         {/* Header - Page title, status badge and action buttons */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-3">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Product editing</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                Update your product information
+              <h1 className="text-2xl font-bold text-slate-900 font-plus-jakarta">Edit Catalog SKU</h1>
+              <p className="text-sm text-slate-600 mt-1">
+                Manage specifications, wholesale pricing tiers, and inventory levels
               </p>
             </div>
             {getStatusBadge()}
@@ -184,33 +187,33 @@ export default function EditProduct({ product, categories, units }) {
           <div className="flex gap-2">
             <Link
               href={route('supplier.products.index')}
-              className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition text-slate-700 font-medium text-sm"
             >
               <FiX className="w-4 h-4" />
-              <span>cancel</span>
+              <span>Cancel</span>
             </Link>
             <button
               onClick={handleSubmit}
               disabled={processing}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 font-medium text-sm shadow-xs"
             >
               <FiSave className="w-4 h-4" />
-              <span>{processing ? 'Saving...' : 'Save changes'}</span>
+              <span>{processing ? 'Saving...' : 'Save Changes'}</span>
             </button>
           </div>
         </div>
 
         {/* Status Message for Pending Products */}
         {product.status === 'pending' && (
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
+          <div className="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-lg">
             <div className="flex items-start">
-              <FiClock className="w-5 h-5 text-yellow-400 mr-3 mt-0.5" />
+              <FiClock className="w-5 h-5 text-amber-500 mr-3 mt-0.5" />
               <div>
-                <p className="text-sm text-yellow-700 font-medium">
-                  This product is pending approval
+                <p className="text-sm text-amber-800 font-semibold font-plus-jakarta">
+                  SKU Pending Admin Verification
                 </p>
-                <p className="text-sm text-yellow-600 mt-1">
-                  Any changes will be reviewed by an administrator. The product will remain pending until approved.
+                <p className="text-xs text-amber-700 mt-1">
+                  Modifications will be reviewed by Treadmesh administration prior to live buyer catalog deployment. The SKU remains pending until verified.
                 </p>
               </div>
             </div>
@@ -223,20 +226,20 @@ export default function EditProduct({ product, categories, units }) {
             {/* Main Content - Left Column */}
             <div className="lg:col-span-2 space-y-6">
               {/* Basic Information Section */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic information</h2>
+              <div className="bg-white rounded-xl shadow-xs border border-slate-200/80 p-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 font-plus-jakarta">Basic Product Information</h2>
 
                 <div className="space-y-4">
                   {/* Product Name */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                       <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Product / SKU Name <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       value={data.name}
                       onChange={e => setData('name', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     />
                     {errors.name && (
@@ -246,13 +249,13 @@ export default function EditProduct({ product, categories, units }) {
 
                   {/* Category */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
                       Category <span className="text-red-500">*</span>
                     </label>
                     <select
                       value={data.category}
                       onChange={e => setData('category', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     >
                       <option value="">Select Category</option>
@@ -267,14 +270,14 @@ export default function EditProduct({ product, categories, units }) {
 
                   {/* Description */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Description <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Product Description & Technical Specifications <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       value={data.description}
                       onChange={e => setData('description', e.target.value)}
                       rows="6"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     />
                     {errors.description && (
@@ -285,14 +288,14 @@ export default function EditProduct({ product, categories, units }) {
               </div>
 
               {/* Pricing & Inventory Section */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Price and stock</h2>
+              <div className="bg-white rounded-xl shadow-xs border border-slate-200/80 p-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 font-plus-jakarta">Wholesale Pricing & Inventory</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Base Price */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Original Price ($) <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Wholesale Base Price (₹) <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
@@ -300,7 +303,7 @@ export default function EditProduct({ product, categories, units }) {
                       onChange={e => setData('base_price', e.target.value)}
                       min="0"
                       step="0.01"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent font-medium"
                       required
                     />
                     {errors.base_price && (
@@ -310,13 +313,13 @@ export default function EditProduct({ product, categories, units }) {
 
                   {/* Unit */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Unit <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Unit of Measure <span className="text-red-500">*</span>
                     </label>
                     <select
                       value={data.unit}
                       onChange={e => setData('unit', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     >
                       {units.map((unit) => (
@@ -327,15 +330,15 @@ export default function EditProduct({ product, categories, units }) {
 
                   {/* Minimum Order Quantity */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Minimum order quantity <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Minimum Order Quantity (MOQ) <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
                       value={data.minimum_order_quantity}
                       onChange={e => setData('minimum_order_quantity', e.target.value)}
                       min="1"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     />
                     {errors.minimum_order_quantity && (
@@ -345,15 +348,15 @@ export default function EditProduct({ product, categories, units }) {
 
                   {/* Stock Quantity */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Stock quantity <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Available Inventory (Stock) <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
                       value={data.stock_quantity}
                       onChange={e => setData('stock_quantity', e.target.value)}
                       min="0"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     />
                     {errors.stock_quantity && (
@@ -363,30 +366,33 @@ export default function EditProduct({ product, categories, units }) {
                 </div>
 
                 {/* Status Toggle */}
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <label className="flex items-center gap-2">
+                <div className="mt-4 pt-4 border-t border-slate-100">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={data.status === 'active'}
                       onChange={(e) => setData('status', e.target.checked ? 'active' : 'inactive')}
-                      className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-600"
                     />
-                    <span className="text-sm text-gray-700">The product is active and visible to buyers</span>
+                    <span className="text-sm text-slate-700 font-medium">SKU is active and accessible across buyer procurement catalogs</span>
                   </label>
                 </div>
               </div>
 
               {/* Bulk Pricing Section */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <div className="bg-white rounded-xl shadow-xs border border-slate-200/80 p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900">Bulk Price (optional)</h2>
+                  <div>
+                    <h2 className="text-lg font-semibold text-slate-900 font-plus-jakarta">Volume Discount Tiers (Optional)</h2>
+                    <p className="text-xs text-slate-500 mt-0.5">Incentivize bulk procurement with quantity-graded wholesale discounts</p>
+                  </div>
                   <button
                     type="button"
                     onClick={addBulkPrice}
-                    className="flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 font-medium text-xs rounded-lg hover:bg-indigo-100 transition"
                   >
-                    <FiPlus className="w-4 h-4" />
-                    Add layers
+                    <FiPlus className="w-3.5 h-3.5" />
+                    Add Tier
                   </button>
                 </div>
 
@@ -395,41 +401,42 @@ export default function EditProduct({ product, categories, units }) {
                     <div key={index} className="flex items-center gap-3">
                       <input
                         type="number"
-                        placeholder="The minimum amount is"
+                        placeholder="Min Qty"
                         value={price.min_quantity}
                         onChange={(e) => updateBulkPrice(index, 'min_quantity', e.target.value)}
-                        className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                        className="w-28 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       />
-                      <span className="text-gray-500">-</span>
+                      <span className="text-slate-400 font-medium">-</span>
                       <input
                         type="number"
-                        placeholder="Maximum amount"
+                        placeholder="Max Qty (Blank for +)"
                         value={price.max_quantity}
                         onChange={(e) => updateBulkPrice(index, 'max_quantity', e.target.value)}
-                        className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                        className="w-40 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       />
                       <input
                         type="number"
-                        placeholder="Price"
+                        placeholder="Price (₹)"
                         value={price.price}
                         onChange={(e) => updateBulkPrice(index, 'price', e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                        className="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent font-medium"
                       />
                       {bulkPrices.length > 1 && (
                         <button
                           type="button"
                           onClick={() => removeBulkPrice(index)}
-                          className="p-2 text-red-500 hover:text-red-700"
+                          className="p-2 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition"
+                          title="Remove Tier"
                         >
-                          <FiTrash2 className="w-5 h-5" />
+                          <FiTrash2 className="w-4 h-4" />
                         </button>
                       )}
                     </div>
                   ))}
                 </div>
 
-                <p className="text-xs text-gray-500 mt-3">
-                  Leaving the maximum amount blank indicates an unlimited range. Eg: 10-50, 50-100, 100+
+                <p className="text-xs text-slate-500 mt-3">
+                  Leaving max quantity blank indicates an open tier (e.g. 500+ units). Prices are specified in Indian Rupees (₹).
                 </p>
               </div>
             </div>
@@ -437,8 +444,8 @@ export default function EditProduct({ product, categories, units }) {
             {/* Sidebar - Right Column */}
             <div className="space-y-6">
               {/* Main Image */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Main image</h2>
+              <div className="bg-white rounded-xl shadow-xs border border-slate-200/80 p-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 font-plus-jakarta">Primary Product Image</h2>
 
                 <div className="space-y-4">
                   {imagePreview ? (
@@ -446,7 +453,7 @@ export default function EditProduct({ product, categories, units }) {
                       <img
                         src={imagePreview}
                         alt="Preview"
-                        className="w-full h-48 object-cover rounded-lg border border-gray-200"
+                        className="w-full h-48 object-cover rounded-lg border border-slate-200"
                         onError={(e) => {
                           e.currentTarget.src = NoImg;
                         }}
@@ -457,15 +464,17 @@ export default function EditProduct({ product, categories, units }) {
                           setData('main_image', null);
                           setImagePreview(null);
                         }}
-                        className="absolute top-2 right-2 p-1 bg-red-100 text-red-600 rounded-full hover:bg-red-200"
+                        className="absolute top-2 right-2 p-1.5 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition"
+                        title="Remove Image"
                       >
                         <FiTrash2 className="w-4 h-4" />
                       </button>
                     </div>
                   ) : (
-                    <div className="border-2 border-gray-200 border-dashed rounded-lg p-6 text-center">
-                      <FiUpload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-500 mb-2">Upload product main image</p>
+                    <div className="border-2 border-slate-200 border-dashed rounded-lg p-6 text-center hover:border-indigo-300 transition">
+                      <FiUpload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+                      <p className="text-sm font-medium text-slate-700 mb-1">Primary SKU Photo</p>
+                      <p className="text-xs text-slate-500 mb-3">Clear, white or neutral background recommended</p>
                       <input
                         type="file"
                         id="main_image"
@@ -476,15 +485,15 @@ export default function EditProduct({ product, categories, units }) {
                       <button
                         type="button"
                         onClick={() => document.getElementById('main_image').click()}
-                        className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
+                        className="px-4 py-2 bg-indigo-50 text-indigo-700 text-xs font-semibold rounded-lg hover:bg-indigo-100 transition"
                       >
-                        Image selection
+                        Browse Image
                       </button>
                     </div>
                   )}
 
                   {progress?.main_image && (
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-slate-200 rounded-full h-2">
                       <div
                         className="bg-indigo-600 h-2 rounded-full"
                         style={{ width: `${progress.main_image.percentage}%` }}
@@ -499,21 +508,21 @@ export default function EditProduct({ product, categories, units }) {
               </div>
 
               {/* Additional Images */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Additional photos</h2>
+              <div className="bg-white rounded-xl shadow-xs border border-slate-200/80 p-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 font-plus-jakarta">Gallery & Specifications</h2>
 
                 <div className="space-y-4">
                   {/* Existing Images */}
                   {additionalImages.length > 0 && (
                     <div>
-                      <p className="text-xs text-gray-500 mb-2">Existing image</p>
+                      <p className="text-xs font-medium text-slate-500 mb-2">Active Catalog Images</p>
                       <div className="grid grid-cols-2 gap-2">
                         {additionalImages.map((image, index) => (
                           <div key={index} className="relative">
                             <img
                               src={image.preview}
                               alt={`Additional ${index + 1}`}
-                              className="w-full h-20 object-cover rounded-lg border border-gray-200"
+                              className="w-full h-20 object-cover rounded-lg border border-slate-200"
                               onError={(e) => {
                                 e.currentTarget.src = NoImg;
                               }}
@@ -521,7 +530,8 @@ export default function EditProduct({ product, categories, units }) {
                             <button
                               type="button"
                               onClick={() => removeExistingImage(index)}
-                              className="absolute top-1 right-1 p-1 bg-red-100 text-red-600 rounded-full hover:bg-red-200"
+                              className="absolute top-1 right-1 p-1 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition"
+                              title="Delete Image"
                             >
                               <FiTrash2 className="w-3 h-3" />
                             </button>
@@ -534,14 +544,14 @@ export default function EditProduct({ product, categories, units }) {
                   {/* New Images */}
                   {newAdditionalImages.length > 0 && (
                     <div>
-                      <p className="text-xs text-gray-500 mb-2">New Image for Upload</p>
+                      <p className="text-xs font-medium text-slate-500 mb-2">Staged for Upload</p>
                       <div className="grid grid-cols-2 gap-2">
                         {newAdditionalImages.map((image, index) => (
                           <div key={index} className="relative">
                             <img
                               src={image.preview}
                               alt={`New ${index + 1}`}
-                              className="w-full h-20 object-cover rounded-lg border border-gray-200"
+                              className="w-full h-20 object-cover rounded-lg border border-slate-200"
                               onError={(e) => {
                                 e.currentTarget.src = NoImg;
                               }}
@@ -549,7 +559,8 @@ export default function EditProduct({ product, categories, units }) {
                             <button
                               type="button"
                               onClick={() => removeNewImage(index)}
-                              className="absolute top-1 right-1 p-1 bg-red-100 text-red-600 rounded-full hover:bg-red-200"
+                              className="absolute top-1 right-1 p-1 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition"
+                              title="Remove Staged Image"
                             >
                               <FiTrash2 className="w-3 h-3" />
                             </button>
@@ -559,7 +570,7 @@ export default function EditProduct({ product, categories, units }) {
                     </div>
                   )}
 
-                  <div className="border-2 border-gray-200 border-dashed rounded-lg p-4 text-center">
+                  <div className="border-2 border-slate-200 border-dashed rounded-lg p-4 text-center hover:border-indigo-300 transition">
                     <input
                       type="file"
                       id="additional_images"
@@ -571,12 +582,12 @@ export default function EditProduct({ product, categories, units }) {
                     <button
                       type="button"
                       onClick={() => document.getElementById('additional_images').click()}
-                      className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
+                      className="text-indigo-600 hover:text-indigo-700 text-sm font-semibold"
                     >
-                      + Add more images
+                      + Add Gallery Photos
                     </button>
-                    <p className="text-xs text-gray-500 mt-1">
-                      You can select multiple images
+                    <p className="text-xs text-slate-500 mt-1">
+                      Upload diagrams, engineering schematics, or packaging shots
                     </p>
                   </div>
 
@@ -587,27 +598,27 @@ export default function EditProduct({ product, categories, units }) {
               </div>
 
               {/* Product Info */}
-              <div className="bg-gray-50 rounded-xl p-4">
-                <h3 className="text-sm font-medium text-gray-700 mb-3">Product information</h3>
-                <div className="space-y-2 text-sm">
+              <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-600 mb-3 font-plus-jakarta">SKU Metadata & Audit Trail</h3>
+                <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Product ID</span>
-                    <span className="font-medium text-gray-900">{product.id}</span>
+                    <span className="text-slate-500">SKU Identifier</span>
+                    <span className="font-semibold text-slate-800 font-mono">{product.id}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Slug</span>
-                    <span className="font-medium text-gray-900">{product.slug}</span>
+                    <span className="text-slate-500">Catalog Slug</span>
+                    <span className="font-medium text-slate-800 font-mono">{product.slug}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Creation Date</span>
-                    <span className="font-medium text-gray-900">
-                      {new Date(product.created_at).toLocaleDateString('en-US')}
+                    <span className="text-slate-500">Listing Date</span>
+                    <span className="font-medium text-slate-800">
+                      {formatIndianDate(product.created_at)}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Latest update</span>
-                    <span className="font-medium text-gray-900">
-                      {new Date(product.updated_at).toLocaleDateString('en-US')}
+                    <span className="text-slate-500">Last Modified</span>
+                    <span className="font-medium text-slate-800">
+                      {formatIndianDate(product.updated_at)}
                     </span>
                   </div>
                 </div>

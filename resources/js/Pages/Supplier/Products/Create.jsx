@@ -124,32 +124,32 @@ export default function CreateProduct({ categories, units }) {
 
   return (
     <DashboardLayout>
-      <Head title="Creating new products" />
+      <Head title="Add New Product | Treadmesh Supplier" />
 
       <div className="space-y-6">
         {/* Header - Page title and action buttons */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Add New Product</h1>
-            <p className="text-sm text-gray-600 mt-1">
-              Create a new product for your catalog
+            <h1 className="text-2xl font-bold text-slate-900 font-plus-jakarta">Publish New SKU / Product</h1>
+            <p className="text-sm text-slate-600 mt-1">
+              List a new manufactured product or wholesale item to your B2B supplier catalog
             </p>
           </div>
           <div className="flex gap-2">
             <Link
               href={route('supplier.products.index')}
-              className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition text-slate-700 font-medium text-sm"
             >
               <FiX className="w-4 h-4" />
-              <span>cancel</span>
+              <span>Cancel</span>
             </Link>
             <button
               onClick={handleSubmit}
               disabled={processing}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 font-medium text-sm shadow-xs"
             >
               <FiSave className="w-4 h-4" />
-              <span>{processing ? 'Saving...' : 'Product storage'}</span>
+              <span>{processing ? 'Publishing...' : 'Publish Product'}</span>
             </button>
           </div>
         </div>
@@ -160,20 +160,21 @@ export default function CreateProduct({ categories, units }) {
             {/* Main Content - Left Column */}
             <div className="lg:col-span-2 space-y-6">
               {/* Basic Information Section */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic information</h2>
+              <div className="bg-white rounded-xl shadow-xs border border-slate-200/80 p-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 font-plus-jakarta">Basic Product Information</h2>
 
                 <div className="space-y-4">
                   {/* Product Name */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                       <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Product / SKU Name <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
                       value={data.name}
                       onChange={e => setData('name', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      placeholder="e.g. Industrial Heavy Duty Conveyor Belt (1000mm)"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     />
                     {errors.name && (
@@ -183,13 +184,13 @@ export default function CreateProduct({ categories, units }) {
 
                   {/* Category */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
                       Category <span className="text-red-500">*</span>
                     </label>
                     <select
                       value={data.category}
                       onChange={e => setData('category', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     >
                       <option value="">Select Category</option>
@@ -204,14 +205,15 @@ export default function CreateProduct({ categories, units }) {
 
                   {/* Description */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Description <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Product Description & Technical Specifications <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       value={data.description}
                       onChange={e => setData('description', e.target.value)}
                       rows="6"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      placeholder="Detail manufacturing grade, material specs, IS/BIS standards, load ratings, packaging format, and dispatch terms..."
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     />
                     {errors.description && (
@@ -222,14 +224,14 @@ export default function CreateProduct({ categories, units }) {
               </div>
 
               {/* Pricing & Inventory Section */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Price and stock</h2>
+              <div className="bg-white rounded-xl shadow-xs border border-slate-200/80 p-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 font-plus-jakarta">Wholesale Pricing & Inventory</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Base Price */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Original Price ($) <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Wholesale Base Price (₹) <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
@@ -237,7 +239,8 @@ export default function CreateProduct({ categories, units }) {
                       onChange={e => setData('base_price', e.target.value)}
                       min="0"
                       step="0.01"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      placeholder="e.g. 4500.00"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent font-medium"
                       required
                     />
                     {errors.base_price && (
@@ -247,13 +250,13 @@ export default function CreateProduct({ categories, units }) {
 
                   {/* Unit */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Unit <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Unit of Measure <span className="text-red-500">*</span>
                     </label>
                     <select
                       value={data.unit}
                       onChange={e => setData('unit', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     >
                       {units.map((unit) => (
@@ -264,15 +267,16 @@ export default function CreateProduct({ categories, units }) {
 
                   {/* Minimum Order Quantity */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Minimum order quantity <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Minimum Order Quantity (MOQ) <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
                       value={data.minimum_order_quantity}
                       onChange={e => setData('minimum_order_quantity', e.target.value)}
                       min="1"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      placeholder="e.g. 10"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     />
                     {errors.minimum_order_quantity && (
@@ -282,15 +286,16 @@ export default function CreateProduct({ categories, units }) {
 
                   {/* Stock Quantity */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Stock quantity <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Available Inventory (Stock) <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
                       value={data.stock_quantity}
                       onChange={e => setData('stock_quantity', e.target.value)}
                       min="0"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      placeholder="e.g. 500"
+                      className="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       required
                     />
                     {errors.stock_quantity && (
@@ -301,16 +306,19 @@ export default function CreateProduct({ categories, units }) {
               </div>
 
               {/* Bulk Pricing Section */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <div className="bg-white rounded-xl shadow-xs border border-slate-200/80 p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900">Bulk Price (optional)</h2>
+                  <div>
+                    <h2 className="text-lg font-semibold text-slate-900 font-plus-jakarta">Volume Discount Tiers (Optional)</h2>
+                    <p className="text-xs text-slate-500 mt-0.5">Incentivize bulk procurement with quantity-graded wholesale discounts</p>
+                  </div>
                   <button
                     type="button"
                     onClick={addBulkPrice}
-                    className="flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 font-medium text-xs rounded-lg hover:bg-indigo-100 transition"
                   >
-                    <FiPlus className="w-4 h-4" />
-                    Add layers
+                    <FiPlus className="w-3.5 h-3.5" />
+                    Add Tier
                   </button>
                 </div>
 
@@ -319,41 +327,42 @@ export default function CreateProduct({ categories, units }) {
                     <div key={index} className="flex items-center gap-3">
                       <input
                         type="number"
-                        placeholder="The minimum amount is"
+                        placeholder="Min Qty"
                         value={price.min_quantity}
                         onChange={(e) => updateBulkPrice(index, 'min_quantity', e.target.value)}
-                        className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                        className="w-28 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       />
-                      <span className="text-gray-500">-</span>
+                      <span className="text-slate-400 font-medium">-</span>
                       <input
                         type="number"
-                        placeholder="Maximum amount"
+                        placeholder="Max Qty (Blank for +)"
                         value={price.max_quantity}
                         onChange={(e) => updateBulkPrice(index, 'max_quantity', e.target.value)}
-                        className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                        className="w-40 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                       />
                       <input
                         type="number"
-                        placeholder="Price"
+                        placeholder="Price (₹)"
                         value={price.price}
                         onChange={(e) => updateBulkPrice(index, 'price', e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                        className="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent font-medium"
                       />
                       {bulkPrices.length > 1 && (
                         <button
                           type="button"
                           onClick={() => removeBulkPrice(index)}
-                          className="p-2 text-red-500 hover:text-red-700"
+                          className="p-2 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition"
+                          title="Remove Tier"
                         >
-                          <FiTrash2 className="w-5 h-5" />
+                          <FiTrash2 className="w-4 h-4" />
                         </button>
                       )}
                     </div>
                   ))}
                 </div>
 
-                <p className="text-xs text-gray-500 mt-3">
-                  Leaving the maximum amount blank indicates an unlimited range. Eg: 10-50, 50-100, 100+
+                <p className="text-xs text-slate-500 mt-3">
+                  Leaving max quantity blank indicates an open tier (e.g. 500+ units). Prices are specified in Indian Rupees (₹).
                 </p>
               </div>
             </div>
@@ -361,8 +370,8 @@ export default function CreateProduct({ categories, units }) {
             {/* Sidebar - Right Column */}
             <div className="space-y-6">
               {/* Main Image Upload */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Main image</h2>
+              <div className="bg-white rounded-xl shadow-xs border border-slate-200/80 p-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 font-plus-jakarta">Primary Product Image</h2>
 
                 <div className="space-y-4">
                   {imagePreview ? (
@@ -370,7 +379,7 @@ export default function CreateProduct({ categories, units }) {
                       <img
                         src={imagePreview}
                         alt="Preview"
-                        className="w-full h-48 object-cover rounded-lg border border-gray-200"
+                        className="w-full h-48 object-cover rounded-lg border border-slate-200"
                         onError={(e) => {
                           e.currentTarget.src = NoImg;
                         }}
@@ -381,15 +390,17 @@ export default function CreateProduct({ categories, units }) {
                           setData('main_image', null);
                           setImagePreview(null);
                         }}
-                        className="absolute top-2 right-2 p-1 bg-red-100 text-red-600 rounded-full hover:bg-red-200"
+                        className="absolute top-2 right-2 p-1.5 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition"
+                        title="Remove Image"
                       >
                         <FiTrash2 className="w-4 h-4" />
                       </button>
                     </div>
                   ) : (
-                    <div className="border-2 border-gray-200 border-dashed rounded-lg p-6 text-center">
-                      <FiUpload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-500 mb-2">Upload product main image</p>
+                    <div className="border-2 border-slate-200 border-dashed rounded-lg p-6 text-center hover:border-indigo-300 transition">
+                      <FiUpload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+                      <p className="text-sm font-medium text-slate-700 mb-1">Primary SKU Photo</p>
+                      <p className="text-xs text-slate-500 mb-3">Clear, white or neutral background recommended</p>
                       <input
                         type="file"
                         id="main_image"
@@ -400,15 +411,15 @@ export default function CreateProduct({ categories, units }) {
                       <button
                         type="button"
                         onClick={() => document.getElementById('main_image').click()}
-                        className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"
+                        className="px-4 py-2 bg-indigo-50 text-indigo-700 text-xs font-semibold rounded-lg hover:bg-indigo-100 transition"
                       >
-                        Image selection
+                        Browse Image
                       </button>
                     </div>
                   )}
 
                   {progress?.main_image && (
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-slate-200 rounded-full h-2">
                       <div
                         className="bg-indigo-600 h-2 rounded-full"
                         style={{ width: `${progress.main_image.percentage}%` }}
@@ -423,8 +434,8 @@ export default function CreateProduct({ categories, units }) {
               </div>
 
               {/* Additional Images Upload */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Additional photos</h2>
+              <div className="bg-white rounded-xl shadow-xs border border-slate-200/80 p-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 font-plus-jakarta">Gallery & Specifications</h2>
 
                 <div className="space-y-4">
                   {/* Image Previews */}
@@ -435,7 +446,7 @@ export default function CreateProduct({ categories, units }) {
                           <img
                             src={image.preview}
                             alt={`Additional ${index + 1}`}
-                            className="w-full h-20 object-cover rounded-lg border border-gray-200"
+                            className="w-full h-20 object-cover rounded-lg border border-slate-200"
                             onError={(e) => {
                               e.currentTarget.src = NoImg;
                             }}
@@ -443,7 +454,7 @@ export default function CreateProduct({ categories, units }) {
                           <button
                             type="button"
                             onClick={() => removeAdditionalImage(index)}
-                            className="absolute top-1 right-1 p-1 bg-red-100 text-red-600 rounded-full hover:bg-red-200"
+                            className="absolute top-1 right-1 p-1 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition"
                           >
                             <FiTrash2 className="w-3 h-3" />
                           </button>
@@ -452,7 +463,7 @@ export default function CreateProduct({ categories, units }) {
                     </div>
                   )}
 
-                  <div className="border-2 border-gray-200 border-dashed rounded-lg p-4 text-center">
+                  <div className="border-2 border-slate-200 border-dashed rounded-lg p-4 text-center hover:border-indigo-300 transition">
                     <input
                       type="file"
                       id="additional_images"
@@ -464,12 +475,12 @@ export default function CreateProduct({ categories, units }) {
                     <button
                       type="button"
                       onClick={() => document.getElementById('additional_images').click()}
-                      className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
+                      className="text-indigo-600 hover:text-indigo-700 text-sm font-semibold"
                     >
-                      + Add more images
+                      + Add Gallery Photos
                     </button>
-                    <p className="text-xs text-gray-500 mt-1">
-                      You can select multiple images
+                    <p className="text-xs text-slate-500 mt-1">
+                      Upload diagrams, engineering schematics, or packaging shots
                     </p>
                   </div>
 
@@ -480,14 +491,13 @@ export default function CreateProduct({ categories, units }) {
               </div>
 
               {/* Information Box - Product Approval Notice */}
-              <div className="bg-blue-50 rounded-xl p-4">
+              <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <FiInfo className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <FiInfo className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm text-blue-700 font-medium">Product approval</p>
-                    <p className="text-xs text-blue-600 mt-1">
-                      New products will be reviewed by an administrator before becoming visible to buyers.
-                      Review typically takes 1-2 business days.
+                    <p className="text-sm text-slate-900 font-semibold font-plus-jakarta">Compliance & Verification Notice</p>
+                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                      Newly listed B2B products undergo administrative compliance review (specifications, GSTIN legitimacy & pricing) before publishing across buyer catalogs. Verification typically completes within 12–24 business hours.
                     </p>
                   </div>
                 </div>

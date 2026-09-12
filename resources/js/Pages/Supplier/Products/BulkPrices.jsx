@@ -7,6 +7,9 @@ import { Head, Link, router } from '@inertiajs/react';
 // Layout - Supplier dashboard layout wrapper
 import DashboardLayout from '@/Layouts/DashboardLayout';
 
+// Formatters
+import { formatCurrency } from '@/Utils/formatters';
+
 // Icons - Importing icon sets for UI elements
 import {
   FiSave,
@@ -36,16 +39,6 @@ export default function BulkPrices({ product }) {
       }))
       : [{ min_quantity: '', max_quantity: '', price: '' }]
   );
-
-  // Format currency - Converts number to USD currency format
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value);
-  };
 
   // Add new bulk pricing tier
   const addBulkPrice = () => {
@@ -96,7 +89,7 @@ export default function BulkPrices({ product }) {
 
   return (
     <DashboardLayout>
-      <Head title={`${product.name} - Bulk price`} />
+      <Head title={`Volume Pricing: ${product.name} | Treadmesh Supplier`} />
 
       <div className="space-y-6">
         {/* Header - Back button, title and action buttons */}
@@ -106,38 +99,38 @@ export default function BulkPrices({ product }) {
               href={route('supplier.products.edit', product.id)}
               className="p-2 hover:bg-gray-100 rounded-lg"
             >
-              <FiArrowLeft className="w-5 h-5" />
+              <FiArrowLeft className="w-5 h-5 text-slate-600" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Bulk Pricing</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                {product.name} - Determine volume based pricing for
+              <h1 className="text-2xl font-bold text-slate-900 font-plus-jakarta">Bulk Volume Pricing</h1>
+              <p className="text-sm text-slate-600 mt-1">
+                Configure wholesale volume-based tiers and discount brackets for <span className="font-semibold text-slate-800">{product.name}</span>
               </p>
             </div>
           </div>
           <div className="flex gap-2">
             <Link
               href={route('supplier.products.edit', product.id)}
-              className="flex items-center gap-2 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 transition"
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition text-slate-700 font-medium text-sm"
             >
               <FiX className="w-4 h-4" />
-              <span>cancel</span>
+              <span>Cancel</span>
             </Link>
             <button
               onClick={handleSubmit}
               disabled={saving}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 font-medium text-sm shadow-xs"
             >
               <FiSave className="w-4 h-4" />
-              <span>{saving ? 'Saving...' : 'Save changes'}</span>
+              <span>{saving ? 'Saving...' : 'Save Changes'}</span>
             </button>
           </div>
         </div>
 
         {/* Product Information Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-xl shadow-xs border border-slate-200/80 p-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-lg flex items-center justify-center">
+            <div className="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center overflow-hidden border border-slate-200">
               <img
                 src={product.main_image ? `/storage/${product.main_image}` : NoImg}
                 alt={product.name}
@@ -148,18 +141,18 @@ export default function BulkPrices({ product }) {
               />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">{product.name}</h2>
-              <p className="text-sm text-gray-500 mt-1">Category: {product.category}</p>
+              <h2 className="text-lg font-semibold text-slate-900 font-plus-jakarta">{product.name}</h2>
+              <p className="text-sm text-slate-500 mt-0.5">Category: {product.category}</p>
               <div className="flex items-center gap-4 mt-2">
                 <p className="text-sm">
-                  <span className="text-gray-500">Original price:</span>{' '}
+                  <span className="text-slate-500">Base Wholesale Price:</span>{' '}
                   <span className="font-bold text-indigo-600">
                     {formatCurrency(product.base_price)} / {product.unit}
                   </span>
                 </p>
                 <p className="text-sm">
-                  <span className="text-gray-500">Minimum Order:</span>{' '}
-                  <span className="font-medium">{product.minimum_order_quantity} {product.unit}</span>
+                  <span className="text-slate-500">Minimum Order:</span>{' '}
+                  <span className="font-medium text-slate-800">{product.minimum_order_quantity} {product.unit}</span>
                 </p>
               </div>
             </div>
@@ -167,50 +160,50 @@ export default function BulkPrices({ product }) {
         </div>
 
         {/* Bulk Pricing Form */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-6 border-b border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs border border-slate-200/80 overflow-hidden">
+          <div className="p-6 border-b border-slate-100">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Price level</h2>
+              <h2 className="text-lg font-semibold text-slate-900 font-plus-jakarta">Wholesale Pricing Tiers</h2>
               <button
                 type="button"
                 onClick={addBulkPrice}
-                className="flex items-center gap-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition shadow-xs"
               >
                 <FiPlus className="w-4 h-4" />
-                Add layers
+                Add Tier
               </button>
             </div>
-            <p className="text-sm text-gray-500 mt-2">
-              Set different prices based on order quantity to encourage bulk purchasing.
+            <p className="text-sm text-slate-500 mt-1">
+              Set graduated discount prices based on order quantities to incentivize bulk wholesale procurement.
             </p>
           </div>
 
           <div className="p-6">
             {/* Price Comparison Preview */}
             {bulkPrices.some(bp => bp.min_quantity && bp.price) && (
-              <div className="mb-6 bg-indigo-50 rounded-lg p-4">
-                <h3 className="text-sm font-medium text-indigo-800 mb-3">Price Comparison</h3>
+              <div className="mb-6 bg-indigo-50/70 border border-indigo-100 rounded-lg p-4">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-indigo-900 mb-3 font-plus-jakarta">Wholesale Tier Breakdown</h3>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-indigo-600">Original price:</span>
-                    <span className="font-medium text-indigo-900">
+                    <span className="text-indigo-700">Base Wholesale Price:</span>
+                    <span className="font-semibold text-slate-900">
                       {formatCurrency(product.base_price)} / {product.unit}
                     </span>
                   </div>
                   {bulkPrices.filter(bp => bp.min_quantity && bp.price).map((bp, index) => {
                     const discount = calculateDiscount(bp.price);
                     return (
-                      <div key={index} className="flex items-center justify-between text-sm">
-                        <span className="text-indigo-600">
+                      <div key={index} className="flex items-center justify-between text-sm border-t border-indigo-100/60 pt-2">
+                        <span className="text-slate-600 font-medium">
                           {bp.min_quantity} - {bp.max_quantity || '∞'} {product.unit}:
                         </span>
                         <div className="text-right">
-                          <span className="font-medium text-indigo-900">
+                          <span className="font-bold text-indigo-700">
                             {formatCurrency(bp.price)} / {product.unit}
                           </span>
                           {discount > 0 && (
-                            <span className="ml-2 text-xs text-green-600">
-                              ({discount}% discount)
+                            <span className="ml-2 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                              ({discount}% savings)
                             </span>
                           )}
                         </div>
@@ -223,11 +216,11 @@ export default function BulkPrices({ product }) {
 
             {/* Bulk Price Tiers Input */}
             <div className="space-y-4">
-              <div className="grid grid-cols-12 gap-4 px-4 py-2 bg-gray-50 rounded-lg text-xs font-medium text-gray-500 uppercase">
-                <div className="col-span-3">The minimum amount is</div>
-                <div className="col-span-3">Maximum amount</div>
-                <div className="col-span-4">Price Per Unit ($)</div>
-                <div className="col-span-2">Activities</div>
+              <div className="grid grid-cols-12 gap-4 px-4 py-2.5 bg-slate-50 rounded-lg text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                <div className="col-span-3">Min Quantity</div>
+                <div className="col-span-3">Max Quantity</div>
+                <div className="col-span-4">Wholesale Price (₹)</div>
+                <div className="col-span-2 text-right">Actions</div>
               </div>
 
               {bulkPrices.map((price, index) => (
@@ -237,9 +230,9 @@ export default function BulkPrices({ product }) {
                       type="number"
                       value={price.min_quantity}
                       onChange={(e) => updateBulkPrice(index, 'min_quantity', e.target.value)}
-                      placeholder="Minimum"
+                      placeholder="e.g. 50"
                       min="1"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                     />
                   </div>
                   <div className="col-span-3">
@@ -247,9 +240,9 @@ export default function BulkPrices({ product }) {
                       type="number"
                       value={price.max_quantity}
                       onChange={(e) => updateBulkPrice(index, 'max_quantity', e.target.value)}
-                      placeholder="max (optional)"
+                      placeholder="Optional (e.g. 200)"
                       min={price.min_quantity || 1}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                     />
                   </div>
                   <div className="col-span-4">
@@ -257,20 +250,21 @@ export default function BulkPrices({ product }) {
                       type="number"
                       value={price.price}
                       onChange={(e) => updateBulkPrice(index, 'price', e.target.value)}
-                      placeholder="Price"
+                      placeholder="Price in ₹"
                       min="0"
                       step="0.01"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent font-medium"
                     />
                   </div>
-                  <div className="col-span-2">
+                  <div className="col-span-2 flex justify-end">
                     {bulkPrices.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeBulkPrice(index)}
-                        className="p-2 text-red-500 hover:text-red-700"
+                        className="p-2 text-slate-400 hover:text-red-600 transition rounded-lg hover:bg-red-50"
+                        title="Delete Tier"
                       >
-                        <FiTrash2 className="w-5 h-5" />
+                        <FiTrash2 className="w-4 h-4" />
                       </button>
                     )}
                   </div>
@@ -278,22 +272,22 @@ export default function BulkPrices({ product }) {
               ))}
 
               {bulkPrices.length === 0 && (
-                <div className="text-center py-8 text-gray-500">
-                  No bulk pricing tiers have been added yet. Click "Add Tier" to create one.
+                <div className="text-center py-8 text-slate-500">
+                  No bulk pricing tiers configured yet. Click "Add Tier" to create one.
                 </div>
               )}
             </div>
 
             {/* Information Box */}
-            <div className="mt-6 bg-blue-50 rounded-lg p-4 flex items-start gap-3">
-              <FiInfo className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <div className="mt-6 bg-slate-50 border border-slate-200/80 rounded-lg p-4 flex items-start gap-3">
+              <FiInfo className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm text-blue-700 font-medium">Information about bulk pricing</p>
-                <ul className="mt-2 text-sm text-blue-600 list-disc list-inside space-y-1">
-                  <li>To encourage bulk orders, the price must be lower than the price</li>
-                  <li>Leaving the maximum amount blank indicates an unlimited range (eg: 100+)</li>
-                  <li>Quantity Ranges Should Not Overlap</li>
-                  <li>The system will automatically apply the best price for the ordered quantity</li>
+                <p className="text-sm text-slate-900 font-semibold font-plus-jakarta">Wholesale Volume Pricing Guidelines</p>
+                <ul className="mt-2 text-xs text-slate-600 list-disc list-inside space-y-1">
+                  <li>Tiered prices should offer progressive discounts below the base wholesale price.</li>
+                  <li>Leaving the maximum amount blank indicates an open tier (e.g. 500+ units).</li>
+                  <li>Ensure quantity tiers do not overlap and remain contiguous.</li>
+                  <li>Buyer purchase orders and RFQs will automatically inherit tiered pricing for verified Indian businesses.</li>
                 </ul>
               </div>
             </div>
