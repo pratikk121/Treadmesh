@@ -43,8 +43,8 @@ export default function VerifyEmail({ status }) {
                         <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mb-4 shadow-lg">
                             <MdMarkEmailRead className="w-10 h-10 text-white" />
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-800">Verify your email</h2>
-                        <p className="text-gray-600 mt-2">Done! Check your inbox</p>
+                        <h2 className="text-3xl font-bold text-gray-800">Verify Your Email</h2>
+                        <p className="text-gray-600 mt-2">Check your inbox to complete account activation</p>
                     </div>
 
                     {/* Success Message - New verification link sent */}
@@ -52,7 +52,7 @@ export default function VerifyEmail({ status }) {
                         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center space-x-3">
                             <BsEnvelopeCheck className="w-5 h-5 text-green-600 flex-shrink-0" />
                             <span className="text-sm text-green-700">
-                                A new verification link Sent to your email.
+                                A new verification link has been sent to your registered email address.
                             </span>
                         </div>
                     )}
@@ -84,10 +84,9 @@ export default function VerifyEmail({ status }) {
                             <div className="flex items-start space-x-3">
                                 <BsShieldCheck className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                                 <div className="text-sm text-indigo-700 space-y-2">
-                                    <p className="font-medium">Thanks for registering! 🎉</p>
+                                    <p className="font-medium">Welcome to Treadmesh! 🎉</p>
                                     <p>
-                                        Before starting, verify your email address. We sent that link to your inbox
-                                        Click Resend.
+                                        Before getting started, please verify your email address by clicking on the link we just emailed to you. If you didn't receive the email, click below to request another.
                                     </p>
                                 </div>
                             </div>
@@ -96,7 +95,7 @@ export default function VerifyEmail({ status }) {
                         {/* Email Tips */}
                         <div className="bg-gray-50 rounded-lg p-4 space-y-3">
                             <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center">
-                                <FiMail className="mr-1" /> Email tips
+                                <FiMail className="mr-1" /> Email Tips
                             </h4>
                             <ul className="text-xs text-gray-600 space-y-2">
                                 <li className="flex items-start">
@@ -105,7 +104,7 @@ export default function VerifyEmail({ status }) {
                                 </li>
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
-                                    noreply@yourdomain.com Add
+                                    Add noreply@treadmesh.in to your trusted sender list
                                 </li>
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
@@ -124,7 +123,7 @@ export default function VerifyEmail({ status }) {
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-md"
                             >
                                 {processing ? (
                                     <span className="flex items-center justify-center">
@@ -135,7 +134,7 @@ export default function VerifyEmail({ status }) {
                                         Sending...
                                     </span>
                                 ) : (
-                                    'Resend the verification email'
+                                    'Resend Verification Email'
                                 )}
                             </button>
 
@@ -147,7 +146,7 @@ export default function VerifyEmail({ status }) {
                                 className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
                             >
                                 <FiLogOut className="mr-2 h-4 w-4" />
-                                Log out
+                                Log Out
                             </Link>
                         </form>
 
@@ -162,16 +161,16 @@ export default function VerifyEmail({ status }) {
                                     href={route('contact')}
                                     className="font-medium underline hover:text-yellow-900 transition-colors"
                                 >
-                                    Contact support
+                                    Contact Support
                                 </Link>
-                                {' '}Do.
+                                .
                             </p>
                         </div>
 
                         {/* Email Not Received Counter (Optional) */}
                         <div className="text-center text-xs text-gray-500">
-                            <p>Didn't get the email? Wait a few minutes and try again</p>
-                            <p className="mt-1">.You can request new links every 60 seconds</p>
+                            <p>Didn't get the email? Wait a few minutes and try again.</p>
+                            <p className="mt-1">You can request a new link every 60 seconds.</p>
                         </div>
                     </div>
                 </div>

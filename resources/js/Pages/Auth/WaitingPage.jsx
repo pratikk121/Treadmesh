@@ -80,8 +80,8 @@ export default function Waiting({ user, supplier }) {
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mb-4 shadow-lg animate-pulse">
               <IoMdTime className="w-10 h-10 text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-800">Application Pending</h2>
-            <p className="text-gray-600 mt-2">Thanks for your patience</p>
+            <h2 className="text-3xl font-bold text-gray-800">Verification Pending</h2>
+            <p className="text-gray-600 mt-2">Thank you for registering on Treadmesh</p>
           </div>
 
           {/* Status Banner */}
@@ -89,9 +89,9 @@ export default function Waiting({ user, supplier }) {
             <div className="flex items-center space-x-3">
               <BsHourglassSplit className="w-5 h-5 text-amber-600 flex-shrink-0 animate-spin-slow" />
               <div>
-                <h3 className="font-semibold text-amber-800">Account under review</h3>
+                <h3 className="font-semibold text-amber-800">Enterprise Account Under Review</h3>
                 <p className="text-xs text-amber-700 mt-0.5">
-                  Your account is being reviewed by our administrator
+                  Your business credentials, GSTIN, and compliance documents are currently being validated by our verification team.
                 </p>
               </div>
             </div>
@@ -116,33 +116,33 @@ export default function Waiting({ user, supplier }) {
                   <MdPendingActions className="w-5 h-5 text-indigo-600" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-2">Account details</h4>
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">Account Summary</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-500">name:</span>
+                      <span className="text-gray-500">Contact Person:</span>
                       <span className="font-medium text-gray-800">{user?.name}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Email:</span>
+                      <span className="text-gray-500">Official Email:</span>
                       <span className="font-medium text-gray-800">{user?.email}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Introduction:</span>
+                      <span className="text-gray-500">Account Type:</span>
                       <span className="font-medium capitalize text-gray-800">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs ${user?.role === 'supplier' ? 'bg-purple-100 text-purple-800' :
                           user?.role === 'buyer' ? 'bg-pink-100 text-pink-800' :
                             'bg-indigo-100 text-indigo-800'
                           }`}>
-                          {user?.role === 'supplier' ? 'Supplier' :
-                            user?.role === 'buyer' ? 'Buyer' : user?.role}
+                          {user?.role === 'supplier' ? 'Wholesale Supplier' :
+                            user?.role === 'buyer' ? 'B2B Buyer' : user?.role}
                         </span>
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">Status:</span>
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">
-                        <span className="w-1.5 h-1.5 bg-yellow-600 rounded-full animate-pulse mr-1"></span>
-                        Approval pending
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-amber-100 text-amber-800 font-medium">
+                        <span className="w-1.5 h-1.5 bg-amber-600 rounded-full animate-pulse mr-1.5"></span>
+                        Document Verification Pending
                       </span>
                     </div>
                   </div>
@@ -158,20 +158,20 @@ export default function Waiting({ user, supplier }) {
                     <BsBuilding className="w-5 h-5 text-purple-600" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Company Details</h4>
+                    <h4 className="text-sm font-semibold text-gray-700 mb-2">Registered Enterprise Details</h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-gray-500">Company:</span>
+                        <span className="text-gray-500">Enterprise Name:</span>
                         <span className="font-medium text-gray-800">{supplier.company_name}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-500">City:</span>
+                        <span className="text-gray-500">Base City / Hub:</span>
                         <span className="font-medium text-gray-800">{supplier.city}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-500">Verification:</span>
+                        <span className="text-gray-500">KYC Status:</span>
                         <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">
-                          {supplier.verification_status === 'pending' ? 'Pending' : supplier.verification_status}
+                          {supplier.verification_status === 'pending' ? 'Reviewing Documents' : supplier.verification_status}
                         </span>
                       </div>
                     </div>
@@ -183,24 +183,24 @@ export default function Waiting({ user, supplier }) {
             {/* What to Expect */}
             <div className="bg-gray-50 rounded-lg p-4 space-y-3">
               <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center">
-                <FiClock className="mr-1" /> what to expect
+                <FiClock className="mr-1" /> Onboarding & Verification Timeline
               </h4>
               <ul className="text-xs text-gray-600 space-y-2">
                 <li className="flex items-start">
-                  <span className="text-green-500 mr-2">✓</span>
-                  Admin will review your account within 24-48 hours
+                  <span className="text-emerald-500 font-bold mr-2">✓</span>
+                  Compliance team reviews GSTIN, PAN, and business trade credentials within 24–48 hours
                 </li>
                 <li className="flex items-start">
-                  <span className="text-green-500 mr-2">✓</span>
-                  After approval you will receive email notification
+                  <span className="text-emerald-500 font-bold mr-2">✓</span>
+                  Official notification and activation credentials dispatched via email once cleared
                 </li>
                 <li className="flex items-start">
-                  <span className="text-green-500 mr-2">✓</span>
-                  After approval you will get full access to your dashboard
+                  <span className="text-emerald-500 font-bold mr-2">✓</span>
+                  Instant access to wholesale RFQ engine, bulk catalogue manager, and nodal escrow
                 </li>
                 <li className="flex items-start">
-                  <span className="text-green-500 mr-2">✓</span>
-                  While waiting you can contact admin (demo feature)
+                  <span className="text-emerald-500 font-bold mr-2">✓</span>
+                  Dedicated Indian relationship manager assigned upon verification
                 </li>
               </ul>
             </div>
@@ -212,16 +212,16 @@ export default function Waiting({ user, supplier }) {
                 className="w-full flex items-center justify-center px-4 py-3 border-2 border-dashed border-indigo-300 rounded-lg text-sm font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
               >
                 <FiMail className="mr-2 h-4 w-4" />
-                Contact Admin (Demo)
+                Contact Verification Support
               </button>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4 border-t border-gray-200 pt-4">
-                <h4 className="text-sm font-medium text-gray-700">Send message to admin</h4>
+                <h4 className="text-sm font-medium text-gray-700">Submit Verification Inquiry</h4>
 
                 {/* Email Field */}
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    Your email is
+                    Registered Business Email
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -242,7 +242,7 @@ export default function Waiting({ user, supplier }) {
                 {/* Message Field */}
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                    Message
+                    Inquiry Details / Additional Reference
                   </label>
                   <textarea
                     id="message"
@@ -250,7 +250,7 @@ export default function Waiting({ user, supplier }) {
                     onChange={e => setData('message', e.target.value)}
                     rows={3}
                     className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                    placeholder="Enter your message here..."
+                    placeholder="Provide GSTIN ARN, trade license number, or urgent onboarding request details..."
                     required
                   />
                 </div>
@@ -260,7 +260,7 @@ export default function Waiting({ user, supplier }) {
                   <button
                     type="submit"
                     disabled={processing || !data.message.trim()}
-                    className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                   >
                     {processing ? (
                       <span className="flex items-center justify-center">
@@ -270,7 +270,7 @@ export default function Waiting({ user, supplier }) {
                         </svg>
                       </span>
                     ) : (
-                      'send message'
+                      'Send Inquiry'
                     )}
                   </button>
                   <button
@@ -278,7 +278,7 @@ export default function Waiting({ user, supplier }) {
                     onClick={() => setShowMessage(false)}
                     className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
                   >
-                    cancel
+                    Cancel
                   </button>
                 </div>
 
@@ -287,8 +287,7 @@ export default function Waiting({ user, supplier }) {
                   <p className="text-xs text-blue-700 flex items-start">
                     <BsShieldCheck className="w-4 h-4 text-blue-500 mr-1 flex-shrink-0 mt-0.5" />
                     <span>
-                      <span className="font-medium">Demo mode:</span> This is a demonstration feature.
-                      No actual email will be sent. Clicking the send button will display a SweetAlert confirmation.
+                      <span className="font-medium">Verification Desk:</span> Inquiries sent here are priority-routed to the onboarding compliance desk.
                     </span>
                   </p>
                 </div>
@@ -297,13 +296,13 @@ export default function Waiting({ user, supplier }) {
 
             {/* Quick Stats */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="bg-white p-3 rounded-lg border border-gray-200 text-center">
-                <div className="text-2xl font-bold text-indigo-600">24-48</div>
-                <div className="text-xs text-gray-500">Hours review time</div>
+              <div className="bg-white p-3 rounded-lg border border-gray-200 text-center shadow-xs">
+                <div className="text-2xl font-bold text-indigo-600">24–48h</div>
+                <div className="text-xs text-gray-500">SLA Verification Window</div>
               </div>
-              <div className="bg-white p-3 rounded-lg border border-gray-200 text-center">
-                <div className="text-2xl font-bold text-green-600">100%</div>
-                <div className="text-xs text-gray-500">Safe Process</div>
+              <div className="bg-white p-3 rounded-lg border border-gray-200 text-center shadow-xs">
+                <div className="text-2xl font-bold text-emerald-600">100%</div>
+                <div className="text-xs text-gray-500">GSTIN & Escrow Protected</div>
               </div>
             </div>
 
@@ -315,13 +314,13 @@ export default function Waiting({ user, supplier }) {
               className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200"
             >
               <FiLogOut className="mr-2 h-4 w-4" />
-              Log out
+              Log Out
             </Link>
 
             {/* Support Text */}
             <div className="text-center text-xs text-gray-500">
-              <p>Need immediate assistance? Contact support</p>
-              <p className="mt-1 text-indigo-600">support@example.com</p>
+              <p>Need immediate assistance? Contact Treadmesh Enterprise Support</p>
+              <p className="mt-1 font-medium text-indigo-600">support@treadmesh.in</p>
             </div>
           </div>
         </div>

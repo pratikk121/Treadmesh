@@ -39,7 +39,7 @@ export default function ResetPassword({ token, email }) {
 
     return (
         <>
-            <Head title="Reset password" />
+            <Head title="Reset Password" />
 
             <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
                 {/* Decorative elements - Background design */}
@@ -51,8 +51,8 @@ export default function ResetPassword({ token, email }) {
                         <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mb-4 shadow-lg">
                             <FiRefreshCw className="w-10 h-10 text-white" />
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-800">Reset password</h2>
-                        <p className="text-gray-600 mt-2">Enter Your New Password Below</p>
+                        <h2 className="text-3xl font-bold text-gray-800">Reset Password</h2>
+                        <p className="text-gray-600 mt-2">Enter your new enterprise password below</p>
                     </div>
 
                     {/* Error Message */}
@@ -73,7 +73,7 @@ export default function ResetPassword({ token, email }) {
                             <ul className="list-disc list-inside text-xs space-y-1">
                                 <li>At least 8 characters long</li>
                                 <li>Must contain at least one uppercase letter</li>
-                                <li>There must be at least one number</li>
+                                <li>Must include at least one numerical digit</li>
                                 <li>Must contain at least one special character</li>
                             </ul>
                         </div>
@@ -152,7 +152,7 @@ export default function ResetPassword({ token, email }) {
                         {/* Confirm Password Field */}
                         <div>
                             <label htmlFor="password_confirmation" className="block text-sm font-medium text-gray-700 mb-1">
-                                Confirm new password <span className="text-red-500">*</span>
+                                Confirm New Password <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -218,7 +218,7 @@ export default function ResetPassword({ token, email }) {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-md"
                         >
                             {processing ? (
                                 <span className="flex items-center justify-center">
@@ -226,10 +226,10 @@ export default function ResetPassword({ token, email }) {
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    Password resetting...
+                                    Updating credentials...
                                 </span>
                             ) : (
-                                'Reset password'
+                                'Reset Password'
                             )}
                         </button>
 
@@ -249,14 +249,14 @@ export default function ResetPassword({ token, email }) {
                                     href={route('login')}
                                     className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
                                 >
-                                    Back to login
+                                    Back to Sign In
                                 </Link>
                             </p>
                         </div>
 
                         {/* Help text */}
                         <div className="text-center text-xs text-gray-500">
-                            <p>Having problems? Contact support for assistance</p>
+                            <p>Need assistance? Contact Treadmesh Enterprise Support (support@treadmesh.in)</p>
                         </div>
                     </form>
                 </div>

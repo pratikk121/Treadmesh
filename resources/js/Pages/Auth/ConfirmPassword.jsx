@@ -35,7 +35,7 @@ export default function ConfirmPassword() {
 
     return (
         <>
-            <Head title="Confirm password" />
+            <Head title="Confirm Password | Treadmesh" />
 
             <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
                 {/* Decorative elements - Background design */}
@@ -47,7 +47,7 @@ export default function ConfirmPassword() {
                         <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full mb-4 shadow-lg">
                             <FiShield className="w-10 h-10 text-white" />
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-800">Confirm password</h2>
+                        <h2 className="text-3xl font-bold text-gray-800">Confirm Password</h2>
                         <p className="text-gray-600 mt-2">Secure Area Verification</p>
                     </div>
 
@@ -56,7 +56,7 @@ export default function ConfirmPassword() {
                         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-3">
                             <MdError className="w-5 h-5 text-red-600 flex-shrink-0" />
                             <span className="text-sm text-red-700">
-                                {errors.password || 'Verify your password'}
+                                {errors.password || 'Please enter your valid password'}
                             </span>
                         </div>
                     )}
@@ -65,8 +65,8 @@ export default function ConfirmPassword() {
                     <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg flex items-start space-x-3">
                         <BsShieldCheck className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                         <div className="text-sm text-indigo-700">
-                            <p className="font-medium mb-1">Safe area</p>
-                            <p>This is a safe area of ​​application. Confirm your password before continuing.</p>
+                            <p className="font-medium mb-1">Secure Enterprise Area</p>
+                            <p>This is a secure area of the Treadmesh platform. Please confirm your password to proceed.</p>
                         </div>
                     </div>
 
@@ -74,7 +74,7 @@ export default function ConfirmPassword() {
                         {/* Password Field */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                                The password is <span className="text-red-500">*</span>
+                                Password <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -87,7 +87,7 @@ export default function ConfirmPassword() {
                                     value={data.password}
                                     onChange={(e) => setData('password', e.target.value)}
                                     className="w-full pl-10 pr-12 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                    placeholder="is in stock Enter your password"
+                                    placeholder="Enter your account password"
                                     autoComplete="current-password"
                                     autoFocus
                                     required
@@ -126,25 +126,25 @@ export default function ConfirmPassword() {
                                     Confirming...
                                 </span>
                             ) : (
-                                'Confirm password'
+                                'Confirm Password'
                             )}
                         </button>
 
                         {/* Security Tips */}
                         <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Safety Tips</h4>
+                            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Security Best Practices</h4>
                             <ul className="text-xs text-gray-600 space-y-1">
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
-                                    Do not share your password with anyone
+                                    Do not share your credentials with unauthorized personnel
                                 </li>
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
-                                    Make sure you are on the right website
+                                    Ensure you are accessing official domain (*.treadmesh.com / *.onrender.com)
                                 </li>
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
-                                    Look for the padlock icon in your browser
+                                    Verify the SSL certificate padlock icon in your browser
                                 </li>
                             </ul>
                         </div>
@@ -155,19 +155,19 @@ export default function ConfirmPassword() {
                                 href={route('password.request')}
                                 className="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
                             >
-                                Forgot password?
+                                Forgot Password?
                             </Link>
                         </div>
 
                         {/* Back to Login Link */}
                         <div className="text-center mt-4 pt-4 border-t border-gray-200">
                             <p className="text-sm text-gray-600">
-                                Changed his mind?{' '}
+                                Need to return?{' '}
                                 <Link
                                     href={route('login')}
                                     className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
                                 >
-                                    Back to login
+                                    Back to Login
                                 </Link>
                             </p>
                         </div>

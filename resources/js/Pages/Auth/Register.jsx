@@ -128,12 +128,12 @@ export default function Register() {
                             )}
                         </div>
                         <h2 className="text-3xl font-bold text-gray-800">
-                            {userType === 'buyer' ? 'Open Buyer Account' : 'Register as a supplier'}
+                            {userType === 'buyer' ? 'Create Buyer Account' : 'Register as a Manufacturer / Supplier'}
                         </h2>
                         <p className="text-gray-600 mt-2">
                             {userType === 'buyer'
-                                ? '.Join our community and start shopping'
-                                : 'Partner with us and grow your business'}
+                                ? 'Source wholesale industrial components directly from verified Indian factories'
+                                : 'Expand your manufacturing distribution across Pan-India enterprise buyers'}
                         </p>
                     </div>
 
@@ -148,7 +148,7 @@ export default function Register() {
                                 }`}
                         >
                             <FiUser className="w-5 h-5" />
-                            <span>Register as a buyer</span>
+                            <span>Enterprise Buyer</span>
                         </button>
                         <button
                             type="button"
@@ -159,7 +159,7 @@ export default function Register() {
                                 }`}
                         >
                             <BsTruck className="w-5 h-5" />
-                            <span>Register as a supplier</span>
+                            <span>Manufacturer / Supplier</span>
                         </button>
                     </div>
 
@@ -189,10 +189,9 @@ export default function Register() {
                     {/* Role/Status Indicator for Buyer */}
                     {userType === 'buyer' && (
                         <div className="mb-6 p-3 bg-indigo-50 rounded-lg border border-indigo-100 flex items-center space-x-2">
-                            <BsShieldCheck className="w-5 h-5 text-indigo-600" />
+                            <BsShieldCheck className="w-5 h-5 text-indigo-600 shrink-0" />
                             <span className="text-sm text-indigo-800">
-                                You are <span className="font-semibold">Buyer</span> Registering as.
-                                Authorization will be required to activate your account.
+                                Registering as an <span className="font-semibold">Enterprise Buyer</span>. Instant access to wholesale catalog prices, GST invoices, and RFQ tenders.
                             </span>
                         </div>
                     )}
@@ -200,10 +199,9 @@ export default function Register() {
                     {/* Verification Notice for Supplier */}
                     {userType === 'supplier' && step === 3 && (
                         <div className="mb-6 p-3 bg-yellow-50 rounded-lg border border-yellow-100 flex items-center space-x-2">
-                            <MdPending className="w-5 h-5 text-yellow-600" />
+                            <MdPending className="w-5 h-5 text-yellow-600 shrink-0" />
                             <span className="text-sm text-yellow-800">
-                                Your supplier application will be reviewed by our team.
-                                You will receive an email once the verification is complete.
+                                Your supplier credentials and GSTIN will be reviewed by our compliance team within 1-2 business days.
                             </span>
                         </div>
                     )}
@@ -245,7 +243,7 @@ export default function Register() {
                                 {/* Name Field */}
                                 <div>
                                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                                        Full name <span className="text-red-500">*</span>
+                                        Full Name <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -258,7 +256,7 @@ export default function Register() {
                                             value={data.name}
                                             onChange={(e) => setData('name', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="Rahim Mia"
+                                            placeholder="Vikram Sharma"
                                             autoComplete="name"
                                             autoFocus
                                             required
@@ -274,7 +272,7 @@ export default function Register() {
                                 {/* Email Field */}
                                 <div>
                                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                                        Email address <span className="text-red-500">*</span>
+                                        Official Email Address <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -287,7 +285,7 @@ export default function Register() {
                                             value={data.email}
                                             onChange={(e) => setData('email', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="you@example.com"
+                                            placeholder="you@company.com"
                                             autoComplete="username"
                                             required
                                         />
@@ -302,7 +300,7 @@ export default function Register() {
                                 {/* Password Field */}
                                 <div>
                                     <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                                        The password is <span className="text-red-500">*</span>
+                                        Password <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -348,7 +346,7 @@ export default function Register() {
                                                 </span>
                                             </div>
                                             <p className="text-xs text-gray-500">
-                                                Use at least 8 characters (letters, numbers and the product name with the special symbol)
+                                                Use at least 8 characters (including uppercase letters, numbers, and special symbols)
                                             </p>
                                         </div>
                                     )}
@@ -363,7 +361,7 @@ export default function Register() {
                                 {/* Confirm Password Field */}
                                 <div>
                                     <label htmlFor="password_confirmation" className="block text-sm font-medium text-gray-700 mb-1">
-                                        Confirm password <span className="text-red-500">*</span>
+                                        Confirm Password <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -396,8 +394,8 @@ export default function Register() {
                                             : 'text-red-600'
                                             }`}>
                                             {data.password === data.password_confirmation
-                                                ? '✓ Password Matched'
-                                                : '✗ Password not found'}
+                                                ? '✓ Passwords Match'
+                                                : '✗ Passwords do not match'}
                                         </p>
                                     )}
 
@@ -431,7 +429,7 @@ export default function Register() {
                                             value={data.company_name}
                                             onChange={(e) => setData('company_name', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="Your company name is"
+                                            placeholder="e.g. Bharat Precision Engineering Pvt Ltd"
                                             required
                                         />
                                     </div>
@@ -443,7 +441,7 @@ export default function Register() {
                                 {/* Trade License Number */}
                                 <div>
                                     <label htmlFor="trade_license_number" className="block text-sm font-medium text-gray-700 mb-1">
-                                        Trade License No. <span className="text-red-500">*</span>
+                                        GSTIN / Trade License No. <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -456,7 +454,7 @@ export default function Register() {
                                             value={data.trade_license_number}
                                             onChange={(e) => setData('trade_license_number', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="TR-12345-2024"
+                                            placeholder="e.g. 27AAAAA0000A1Z5"
                                             required
                                         />
                                     </div>
@@ -468,7 +466,7 @@ export default function Register() {
                                 {/* Company Phone */}
                                 <div>
                                     <label htmlFor="company_phone" className="block text-sm font-medium text-gray-700 mb-1">
-                                        Company Phone <span className="text-red-500">*</span>
+                                        Official Contact / WhatsApp Phone <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -481,7 +479,7 @@ export default function Register() {
                                             value={data.company_phone}
                                             onChange={(e) => setData('company_phone', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="02-5551234"
+                                            placeholder="+91 98765 43210"
                                             required
                                         />
                                     </div>
@@ -493,7 +491,7 @@ export default function Register() {
                                 {/* Company Email */}
                                 <div>
                                     <label htmlFor="company_email" className="block text-sm font-medium text-gray-700 mb-1">
-                                        Company Email <span className="text-red-500">*</span>
+                                        Enterprise Billing Email <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -506,7 +504,7 @@ export default function Register() {
                                             value={data.company_email}
                                             onChange={(e) => setData('company_email', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="contact@yourcompany.com"
+                                            placeholder="billing@yourcompany.com"
                                             required
                                         />
                                     </div>
@@ -525,7 +523,7 @@ export default function Register() {
                                 {/* Company Address */}
                                 <div>
                                     <label htmlFor="company_address" className="block text-sm font-medium text-gray-700 mb-1">
-                                        Company Address <span className="text-red-500">*</span>
+                                        Registered Factory / Office Address <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute top-3 left-0 pl-3 flex items-start pointer-events-none">
@@ -538,7 +536,7 @@ export default function Register() {
                                             onChange={(e) => setData('company_address', e.target.value)}
                                             rows="3"
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="450 Commercial Blvd, Suite 100"
+                                            placeholder="Plot 42, MIDC Industrial Area, Phase II"
                                             required
                                         ></textarea>
                                     </div>
@@ -550,7 +548,7 @@ export default function Register() {
                                 {/* City */}
                                 <div>
                                     <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
-                                        City <span className="text-red-500">*</span>
+                                        City & State <span className="text-red-500">*</span>
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -563,7 +561,7 @@ export default function Register() {
                                             value={data.city}
                                             onChange={(e) => setData('city', e.target.value)}
                                             className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                            placeholder="Chicago"
+                                            placeholder="e.g. Pune, Maharashtra"
                                             required
                                         />
                                     </div>
@@ -582,13 +580,13 @@ export default function Register() {
                                         <div>
                                             <h4 className="font-semibold text-blue-800">Verification Process</h4>
                                             <p className="text-sm text-blue-600 mt-1">
-                                                Your supplier account will be reviewed within 2-3 business days.
+                                                Your supplier account will be reviewed within 1-2 business days.
                                                 Once verification is complete you will receive an email confirmation.
                                             </p>
                                             <ul className="mt-2 text-sm text-blue-600 list-disc list-inside">
-                                                <li>Trade License Verification</li>
-                                                <li>Company Address Confirmation</li>
-                                                <li>Business email validation</li>
+                                                <li>GSTIN & Statutory Trade License Verification</li>
+                                                <li>Company Address & Premises Confirmation</li>
+                                                <li>Enterprise Contact Validation</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -607,15 +605,14 @@ export default function Register() {
                                     required
                                 />
                                 <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
-                                    Me{' '}
+                                    I agree to the{' '}
                                     <Link href="/terms" className="text-indigo-600 hover:text-indigo-800 font-medium">
                                         Terms of Service
                                     </Link>{' '}
                                     and{' '}
                                     <Link href="/privacy" className="text-indigo-600 hover:text-indigo-800 font-medium">
                                         Privacy Policy
-                                    </Link>{' '}
-                                    Accepting
+                                    </Link>
                                 </label>
                             </div>
                         )}
@@ -629,7 +626,7 @@ export default function Register() {
                                     className="flex items-center space-x-2 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition duration-200"
                                 >
                                     <FiArrowLeft className="w-5 h-5" />
-                                    <span>previous</span>
+                                    <span>Previous</span>
                                 </button>
                             )}
 
@@ -651,10 +648,10 @@ export default function Register() {
                                         <>
                                             <span>
                                                 {userType === 'buyer'
-                                                    ? 'Open Account'
+                                                    ? 'Create Buyer Account'
                                                     : step === 3
-                                                        ? 'Submit application'
-                                                        : 'next'}
+                                                        ? 'Submit Supplier Registration'
+                                                        : 'Continue'}
                                             </span>
                                             {userType === 'supplier' && step < 3 && <FiArrowRight className="w-5 h-5" />}
                                         </>
@@ -666,12 +663,12 @@ export default function Register() {
                         {/* Login Link */}
                         <div className="text-center mt-6">
                             <p className="text-sm text-gray-600">
-                                Already have account?{' '}
+                                Already have an account?{' '}
                                 <Link
                                     href={route('login')}
                                     className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
                                 >
-                                    Sign in here
+                                    Sign In
                                 </Link>
                             </p>
                         </div>
@@ -679,8 +676,8 @@ export default function Register() {
                         {/* Account activation notice */}
                         {userType === 'buyer' && (
                             <div className="text-center text-xs text-gray-500 mt-4 border-t pt-4">
-                                <p>By opening the account you will get the buyer role.</p>
-                                <p className="mt-1">Your account will need to be activated by an administrator.</p>
+                                <p>Registering gives you instant access to India wholesale pricing and direct RFQ tenders.</p>
+                                <p className="mt-1">Enterprise compliance verification applies for large volume procurement.</p>
                             </div>
                         )}
                     </form>

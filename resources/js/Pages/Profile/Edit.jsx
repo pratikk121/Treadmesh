@@ -61,7 +61,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
         router.patch(route('profile.update'), profileData, {
             onSuccess: () => {
                 Swal.fire({
-                    title: 'successful!',
+                    title: 'Success!',
                     text: 'Profile updated successfully.',
                     icon: 'success',
                     timer: 2000,
@@ -71,8 +71,8 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
             onError: (errors) => {
                 setErrors(errors);
                 Swal.fire({
-                    title: 'Error!',
-                    text: 'There is an error in the form. Please check your inputs.',
+                    title: 'Update Failed',
+                    text: 'There was an error in the form. Please check your inputs.',
                     icon: 'error',
                     confirmButtonColor: '#4F46E5'
                 });
@@ -95,7 +95,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                     password_confirmation: '',
                 });
                 Swal.fire({
-                    title: 'successful!',
+                    title: 'Success!',
                     text: 'Password successfully updated.',
                     icon: 'success',
                     timer: 2000,
@@ -105,8 +105,8 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
             onError: (errors) => {
                 setErrors(errors);
                 Swal.fire({
-                    title: 'Error!',
-                    text: 'There is an error in the form. Please check your inputs.',
+                    title: 'Update Failed',
+                    text: 'There was an error in the form. Please check your inputs.',
                     icon: 'error',
                     confirmButtonColor: '#4F46E5'
                 });
@@ -127,8 +127,8 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
             confirmButtonText: 'Yes, delete my account',
             cancelButtonText: 'Cancel',
             input: 'password',
-            inputLabel: 'The password is',
-            inputPlaceholder: 'is in stock Enter your password',
+            inputLabel: 'Account Password',
+            inputPlaceholder: 'Enter your password to confirm',
             inputAttributes: {
                 autocapitalize: 'off',
                 type: 'password'
@@ -146,7 +146,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                         });
                     },
                     onError: () => {
-                        Swal.showValidationMessage('Wrong Password');
+                        Swal.showValidationMessage('Incorrect password. Please try again.');
                     }
                 });
             }
@@ -155,14 +155,14 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
 
     return (
         <DashboardLayout>
-            <Head title="profile" />
+            <Head title="User Profile Settings" />
 
             <div className="max-w-3xl mx-auto space-y-6">
                 {/* Header - Page title and description */}
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">Profile Settings</h1>
                     <p className="text-sm text-gray-600 mt-1">
-                        Manage your account settings and preferences
+                        Manage your enterprise credentials, contact information, and security preferences
                     </p>
                 </div>
 
@@ -205,7 +205,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                         {/* Name Field */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Full name
+                                Full Name
                             </label>
                             <input
                                 type="text"
@@ -222,7 +222,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                         {/* Email Field */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Email address
+                                Email Address
                             </label>
                             <input
                                 type="email"
@@ -263,10 +263,10 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
+                                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 font-medium text-sm"
                             >
                                 <FiSave className="w-4 h-4" />
-                                {processing ? 'Saving...' : 'Save changes'}
+                                {processing ? 'Saving...' : 'Save Changes'}
                             </button>
                         </div>
                     </form>
@@ -292,11 +292,11 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                                         : 'bg-red-100 text-red-800'
                                     }`}>
                                     {supplier.verification_status === 'verified' ? (
-                                        <><MdVerified className="w-4 h-4 mr-1" /> Verified</>
+                                        <><MdVerified className="w-4 h-4 mr-1" /> Verified Supplier</>
                                     ) : supplier.verification_status === 'pending' ? (
-                                        <><MdPending className="w-4 h-4 mr-1" /> Pending</>
+                                        <><MdPending className="w-4 h-4 mr-1" /> Pending Verification</>
                                     ) : (
-                                        <><FiAlertCircle className="w-4 h-4 mr-1" /> cancel</>
+                                        <><FiAlertCircle className="w-4 h-4 mr-1" /> Rejected / Unverified</>
                                     )}
                                 </span>
                             </div>
@@ -319,7 +319,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                                 {/* Trade License */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Trade License No.
+                                        GSTIN / Trade License No.
                                     </label>
                                     <input
                                         type="text"
@@ -386,7 +386,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
                                 <p className="text-sm text-blue-700 flex items-center gap-2">
                                     <FiAlertCircle className="w-4 h-4" />
-                                    Supplier profile information can only be updated by contacting support.
+                                    Statutory supplier profile details can be updated via Supplier Workspace or by contacting support.
                                 </p>
                             </div>
                         </div>
@@ -398,14 +398,14 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                     <div className="px-6 py-4 border-b border-gray-100">
                         <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                             <FiLock className="w-5 h-5 text-indigo-600" />
-                            Update password
+                            Change Password
                         </h3>
                     </div>
                     <form onSubmit={handlePasswordUpdate} className="p-6 space-y-4">
                         {/* Current Password */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Current password is
+                                Current Password
                             </label>
                             <input
                                 type="password"
@@ -439,7 +439,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                         {/* Confirm Password */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Confirm new password
+                                Confirm New Password
                             </label>
                             <input
                                 type="password"
@@ -454,10 +454,10 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
+                                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 font-medium text-sm"
                             >
                                 <FiSave className="w-4 h-4" />
-                                {processing ? 'Updating...' : 'Update password'}
+                                {processing ? 'Updating...' : 'Update Password'}
                             </button>
                         </div>
                     </form>

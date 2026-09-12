@@ -53,8 +53,8 @@ export default function ForgotPassword({ status }) {
                         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start space-x-3">
                             <FiSend className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                             <div className="text-sm text-green-700">
-                                <p className="font-medium mb-1">Reset link sent to!</p>
-                                <p>Check your email for the password reset link. Don't forget to check your spam folder as well.</p>
+                                <p className="font-medium mb-1">Reset Link Sent!</p>
+                                <p>Check your email for the password reset link. Please check your spam or promotions folder as well.</p>
                             </div>
                         </div>
                     )}
@@ -64,7 +64,7 @@ export default function ForgotPassword({ status }) {
                         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-3">
                             <MdError className="w-5 h-5 text-red-600 flex-shrink-0" />
                             <span className="text-sm text-red-700">
-                                {errors.email || 'Verify your information'}
+                                {errors.email || 'Please verify your registered email address'}
                             </span>
                         </div>
                     )}
@@ -72,7 +72,7 @@ export default function ForgotPassword({ status }) {
                     {/* Info Message */}
                     <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
                         <p className="text-sm text-indigo-700">
-                            Forgot your password? No problem. Just enter your email address and we'll send you a password reset link.
+                            Enter your registered email address and we'll send you an encrypted password reset link.
                         </p>
                     </div>
 
@@ -80,7 +80,7 @@ export default function ForgotPassword({ status }) {
                         {/* Email Field */}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                                Email address <span className="text-red-500">*</span>
+                                Email Address <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -93,7 +93,7 @@ export default function ForgotPassword({ status }) {
                                     value={data.email}
                                     onChange={(e) => setData('email', e.target.value)}
                                     className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition duration-200"
-                                    placeholder="you@example.com"
+                                    placeholder="you@company.com"
                                     autoComplete="email"
                                     autoFocus
                                     required
@@ -121,13 +121,13 @@ export default function ForgotPassword({ status }) {
                                     Sending Link...
                                 </span>
                             ) : (
-                                'Send password reset link'
+                                'Send Password Reset Link'
                             )}
                         </button>
 
                         {/* Quick Tips */}
                         <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Quick Tips</h4>
+                            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Security Notice</h4>
                             <ul className="text-xs text-gray-600 space-y-1">
                                 <li className="flex items-start">
                                     <span className="text-indigo-500 mr-2">•</span>
@@ -152,14 +152,14 @@ export default function ForgotPassword({ status }) {
                                     href={route('login')}
                                     className="font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
                                 >
-                                    Back to login
+                                    Back to Login
                                 </Link>
                             </p>
                         </div>
 
                         {/* Help text */}
                         <div className="text-center text-xs text-gray-500">
-                            <p>Having problems? Contact support for assistance</p>
+                            <p>Need assistance? Contact Treadmesh enterprise support</p>
                         </div>
                     </form>
                 </div>
